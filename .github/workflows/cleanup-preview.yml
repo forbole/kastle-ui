@@ -1,0 +1,45 @@
+name: Cleanup Preview
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup-preview:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout gh-pages
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        
+    - name: Remove preview directory
+      run: |
+        if [ -d "preview/pr-${{ github.event.number }}" ]; then
+          rm -rf "preview/pr-${{ github.event.number }}"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Clean up preview for PR #${{ github.event.number }}" || exit 0
+          git push
+        fi
+        
+    - name: Update PR Comment
+      uses: peter-evans/find-comment@v3
+      id: find-comment
+      with:
+        issue-number: ${{ github.event.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: 'Storybook Preview'
+        
+    - name: Add cleanup notice
+      if: steps.find-comment.outputs.comment-id
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: append
+        body: |
+          
+          ---
+          ✅ **Preview cleaned up** - PR has been ${{ github.event.pull_request.merged && 'merged' || 'closed' }}
