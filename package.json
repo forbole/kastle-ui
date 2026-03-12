@@ -1,0 +1,34 @@
+{
+  "name": "kastle-ui",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "preview": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "expo": "~55.0.6",
+    "expo-status-bar": "~55.0.4",
+    "react": "^19.2.4",
+    "react-native": "0.83.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@storybook/cli": "^10.2.17",
+    "@storybook/react-native-web-vite": "^10.2.17",
+    "@types/react": "~19.2.2",
+    "@vitejs/plugin-react": "^5.1.4",
+    "babel-loader": "^10.1.1",
+    "react-dom": "^19.2.4",
+    "react-native-safe-area-context": "^5.7.0",
+    "react-native-web": "^0.21.2",
+    "storybook": "^10.2.17",
+    "typescript": "~5.9.2",
+    "vite": "^7.3.1"
+  },
+  "private": true
+}
