@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ExplorerAppCard } from './ExplorerAppCard';
+import { ExploreAppCard } from './ExplorerAppCard';
 
-const ExplorerAppCardMeta: Meta<typeof ExplorerAppCard> = {
-  title: 'Example/ExplorerAppCard',
-  component: ExplorerAppCard,
+const ExploreAppCardMeta: Meta<typeof ExploreAppCard> = {
+  title: 'Example/ExploreAppCard',
+  component: ExploreAppCard,
   parameters: {
     backgrounds: {
       default: 'kastle',
@@ -42,9 +42,9 @@ const ExplorerAppCardMeta: Meta<typeof ExplorerAppCard> = {
   },
 };
 
-export default ExplorerAppCardMeta;
+export default ExploreAppCardMeta;
 
-type Story = StoryObj<typeof ExplorerAppCardMeta>;
+type Story = StoryObj<typeof ExploreAppCardMeta>;
 
 export const VerifiedApp: Story = {
   args: {

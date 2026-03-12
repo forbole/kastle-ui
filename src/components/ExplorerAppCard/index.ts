@@ -1,2 +1,2 @@
-export { ExplorerAppCard } from "./ExplorerAppCard";
-export type { ExplorerAppCardProps } from "./ExplorerAppCard";
+export { ExploreAppCard } from "./ExplorerAppCard";
+export type { ExploreAppCardProps } from "./ExplorerAppCard";

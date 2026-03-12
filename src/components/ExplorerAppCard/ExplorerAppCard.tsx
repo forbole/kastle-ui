@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ArrowUpRight, Check } from 'lucide-react-native';
 
-export interface ExplorerAppCardProps {
+export interface ExploreAppCardProps {
   appName: string;
   appCategory: string;
   appIcon?: string;
@@ -10,7 +10,7 @@ export interface ExplorerAppCardProps {
   onPress: () => void;
 }
 
-export const ExplorerAppCard: React.FC<ExplorerAppCardProps> = ({
+export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
   appName,
   appCategory,
   appIcon,
