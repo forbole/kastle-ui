@@ -21,9 +21,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          # Use --amend to avoid creating new commits, save space
-          git commit --amend --no-edit -m "Clean up preview for PR #${{ github.event.number }}" || git commit -m "Clean up preview for PR #${{ github.event.number }}"
-          git push --force-with-lease  # Use force push to avoid accumulating commit history
+          git commit -m "Clean up preview for PR #${{ github.event.number }}" || exit 0
+          git push
         fi
         
     - name: Update PR Comment
