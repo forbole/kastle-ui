@@ -37,6 +37,12 @@ export const ExploreAppDetailsScreen: React.FC<
   socialLinks,
   onVisitPress,
 }) => {
+  const truncateAppName = (name: string | undefined): string => {
+    if (!name) return "";
+    if (name.length <= 15) return name;
+    return name.substring(0, 12) + "...";
+  };
+
   const renderSocialIcon = (icon: ImageSourcePropType) => {
     return <Image source={icon} style={styles.socialIcon} />;
   };
@@ -69,13 +75,15 @@ export const ExploreAppDetailsScreen: React.FC<
               <Image source={{ uri: appIcon }} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>{appName?.charAt(0)}</Text>
+                <Text style={styles.appIconPlaceholderText}>
+                  {appName?.charAt(0)}
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.appTextContainer}>
             <View style={styles.appNameRow}>
-              <Text style={styles.appName}>{appName}</Text>
+              <Text style={styles.appName}>{truncateAppName(appName)}</Text>
               {renderVerifiedIcon()}
             </View>
             <Text style={styles.appCategory}>{category}</Text>
