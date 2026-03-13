@@ -21,9 +21,9 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          # 使用 --amend 避免創建新的 commit，節省空間
+          # Use --amend to avoid creating new commits, save space
           git commit --amend --no-edit -m "Clean up preview for PR #${{ github.event.number }}" || git commit -m "Clean up preview for PR #${{ github.event.number }}"
-          git push --force-with-lease  # 使用 force push 避免累積 commit 歷史
+          git push --force-with-lease  # Use force push to avoid accumulating commit history
         fi
         
     - name: Update PR Comment
