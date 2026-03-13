@@ -69,7 +69,7 @@ export const ExploreAppDetailsScreen: React.FC<
               <Image source={{ uri: appIcon }} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>ZS</Text>
+                <Text style={styles.appIconPlaceholderText}>{appName?.charAt(0)}</Text>
               </View>
             )}
           </View>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
-    gap: 24,
+    gap: 8,
   },
   appHeader: {
     flexDirection: "row",
