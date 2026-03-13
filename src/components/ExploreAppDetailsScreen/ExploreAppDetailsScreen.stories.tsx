@@ -46,3 +46,11 @@ export const WithoutSocialLinks: Story = {
     socialLinks: [],
   },
 };
+
+export const LongName: Story = {
+  args: {
+    appName: 'Super Long Application Name That Might Cause Layout Issues',
+    category: 'DeFi',
+    description: 'This story demonstrates how the component handles very long application names that might cause layout issues or text overflow problems in the UI.',
+  },
+};
