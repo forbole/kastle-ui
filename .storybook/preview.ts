@@ -9,6 +9,15 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    backgrounds: {
+      options: {
+        kastle: { name: "Kastle", value: "#051D27" },
+      },
+    },
+  },
+  initialGlobals: {
+    // 👇 Set the initial background color
+    backgrounds: { value: "kastle" },
   },
 };
 
