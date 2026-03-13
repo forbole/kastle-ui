@@ -33,6 +33,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./storybook-static
+        keep_files: true  # Keep preview directories
         
     - name: Deploy Preview (PRs)
       if: github.event_name == 'pull_request'
@@ -41,6 +42,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./storybook-static
         destination_dir: preview/pr-${{ github.event.number }}
+        keep_files: true
         
     - name: Find Previous Comment
       if: github.event_name == 'pull_request'
