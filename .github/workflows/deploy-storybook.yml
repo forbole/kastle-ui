@@ -33,6 +33,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./storybook-static
+        force_orphan: true  # 不保留 git commit 歷史記錄，節省空間
         
     - name: Deploy Preview (PRs)
       if: github.event_name == 'pull_request'
@@ -41,6 +42,8 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./storybook-static
         destination_dir: preview/pr-${{ github.event.number }}
+        force_orphan: true  # 不保留 git commit 歷史記錄，節省空間
+        keep_files: false   # 完全替換現有文件，不保留舊版本
         
     - name: Find Previous Comment
       if: github.event_name == 'pull_request'
