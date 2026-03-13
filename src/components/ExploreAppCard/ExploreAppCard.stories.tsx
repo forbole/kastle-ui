@@ -1,31 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ExploreAppCard } from './ExplorerAppCard';
+import { ExploreAppCard } from './ExploreAppCard';
 
 const ExploreAppCardMeta: Meta<typeof ExploreAppCard> = {
-  title: 'Example/ExploreAppCard',
+  title: 'Components/ExploreAppCard',
   component: ExploreAppCard,
-  parameters: {
-    backgrounds: {
-      default: 'kastle',
-      values: [
-        {
-          name: 'kastle',
-          value: '#051d27',
-        },
-        {
-          name: 'white',
-          value: '#ffffff',
-        },
-        {
-          name: 'dark',
-          value: '#333333',
-        },
-      ],
-    },
-    viewport: {
-      defaultViewport: 'mobile1',
-    },
-  },
   argTypes: {
     isVerified: {
       control: { type: 'boolean' },

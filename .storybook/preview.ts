@@ -14,6 +14,10 @@ const preview: Preview = {
         kastle: { name: "Kastle", value: "#051D27" },
       },
     },
+    viewport: {
+      defaultViewport: "largeMobile",
+    },
+    layout: "fullscreen", // Remove default padding
   },
   initialGlobals: {
     // 👇 Set the initial background color

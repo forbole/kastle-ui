@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
 import { ArrowUpRight, Check } from 'lucide-react-native';
 
 export interface ExploreAppCardProps {
   appName: string;
   appCategory: string;
-  appIcon?: string;
+  appIcon?: ImageSourcePropType;
   isVerified?: boolean;
   onPress: () => void;
 }
@@ -29,9 +29,7 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
         {/* App Icon */}
         <View style={styles.iconContainer}>
           <Image 
-            source={{ 
-              uri: appIcon || 'https://cms.forbole.com/uploads/Kastle_Symbolic_Logo_27731fc6bd.svg' 
-            }} 
+            source={appIcon || { uri: 'https://cms.forbole.com/uploads/Kastle_Symbolic_Logo_27731fc6bd.svg' }} 
             style={styles.appIcon} 
           />
         </View>
@@ -65,8 +63,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 12,
     minHeight: 88,
-    marginBottom: 8,
     position: 'relative',
+    flex: 1, // Allow flexible sizing
   },
   rightArrow: {
     position: 'absolute',
