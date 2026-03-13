@@ -1,22 +1,22 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { ExploreAppCard } from './ExploreAppCard';
+import type { Meta, StoryObj } from "@storybook/react";
+import { ExploreAppCard } from "./ExploreAppCard";
 
 const ExploreAppCardMeta: Meta<typeof ExploreAppCard> = {
-  title: 'Components/ExploreAppCard',
+  title: "Components/ExploreAppCard",
   component: ExploreAppCard,
   argTypes: {
     isVerified: {
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
     onPress: {
-      action: 'pressed',
+      action: "pressed",
     },
   },
   args: {
-    appName: 'Zealous Swap',
-    appCategory: 'zealousswap.com',
+    appName: "Zealous Swap",
+    appCategory: "zealousswap.com",
     isVerified: true,
-    onPress: () => console.log('App card pressed!'),
+    onPress: () => console.log("App card pressed!"),
   },
 };
 
@@ -26,48 +26,48 @@ type Story = StoryObj<typeof ExploreAppCardMeta>;
 
 export const VerifiedApp: Story = {
   args: {
-    appName: 'Zealous Swap',
-    appCategory: 'zealousswap.com',
+    appName: "Zealous Swap",
+    appCategory: "zealousswap.com",
     isVerified: true,
   },
 };
 
 export const UnverifiedApp: Story = {
   args: {
-    appName: 'DEX A',
-    appCategory: 'dex.com',
+    appName: "DEX A",
+    appCategory: "dex.com",
     isVerified: false,
   },
 };
 
 export const BridgeApp: Story = {
   args: {
-    appName: 'KAT Bridge',
-    appCategory: 'Bridge',
+    appName: "KAT Bridge",
+    appCategory: "Bridge",
     isVerified: true,
   },
 };
 
 export const FinanceApp: Story = {
   args: {
-    appName: 'Kaspa Finance',
-    appCategory: 'DeFi',
+    appName: "Kaspa Finance",
+    appCategory: "DeFi",
     isVerified: true,
   },
 };
 
 export const MoonboundApp: Story = {
   args: {
-    appName: 'Moonbound',
-    appCategory: 'DeFi',
+    appName: "Moonbound",
+    appCategory: "DeFi",
     isVerified: true,
   },
 };
 
 export const LongName: Story = {
   args: {
-    appName: 'Super Long Application Name That Should Be Truncated',
-    appCategory: 'Very Long Category Name',
+    appName: "Super Long Application Name That Should Be Truncated",
+    appCategory: "Very Long Category Name",
     isVerified: false,
   },
 };

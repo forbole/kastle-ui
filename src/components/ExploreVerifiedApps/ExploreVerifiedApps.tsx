@@ -1,7 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageSourcePropType } from 'react-native';
-import { ExternalLink } from 'lucide-react-native';
-import { ExploreAppCard, ExploreAppCardProps } from '../ExploreAppCard/ExploreAppCard';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ImageSourcePropType,
+} from "react-native";
+import { ExternalLink } from "lucide-react-native";
+import {
+  ExploreAppCard,
+  ExploreAppCardProps,
+} from "../ExploreAppCard/ExploreAppCard";
 
 export interface VerifiedApp {
   id: string;
@@ -17,8 +26,6 @@ export interface ExploreVerifiedAppsProps {
   onAppPress?: (app: VerifiedApp) => void;
   onSubmitAppPress?: () => void;
 }
-
-
 
 export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
   apps = [],
@@ -56,12 +63,20 @@ export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
       </View>
 
       {/* Submit Link */}
-      <TouchableOpacity style={styles.submitLinkContainer} onPress={handleSubmitPress}>
+      <TouchableOpacity
+        style={styles.submitLinkContainer}
+        onPress={handleSubmitPress}
+      >
         <Text style={styles.submitLinkText}>
           <Text style={styles.submitLinkNormal}>Want your app listed? </Text>
           <Text style={styles.submitLinkHighlight}>Submit it now!</Text>
         </Text>
-        <ExternalLink size={16} color="#13dcff" strokeWidth={2} style={styles.externalLinkIcon} />
+        <ExternalLink
+          size={16}
+          color="#13dcff"
+          strokeWidth={2}
+          style={styles.externalLinkIcon}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -69,7 +84,7 @@ export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 20,
   },
   header: {
@@ -78,25 +93,25 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#9eb7c4',
+    fontWeight: "600",
+    color: "#9eb7c4",
     lineHeight: 16,
   },
   appsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     gap: 8,
     marginBottom: 12,
   },
   appCardWrapper: {
-    width: '48%', // Ensure 2 cards per row
+    width: "48%", // Ensure 2 cards per row
     minWidth: 0, // Prevent overflow
   },
   submitLinkContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 12,
     gap: 4,
@@ -104,18 +119,18 @@ const styles = StyleSheet.create({
   submitLinkText: {
     fontSize: 14,
     lineHeight: 16,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   externalLinkIcon: {
     marginTop: -1, // Fine-tune vertical alignment with text
   },
   submitLinkNormal: {
-    color: '#4b7d92',
-    fontWeight: '400',
+    color: "#4b7d92",
+    fontWeight: "400",
   },
   submitLinkHighlight: {
-    color: '#13dcff',
-    fontWeight: '400',
-    textDecorationLine: 'underline',
+    color: "#13dcff",
+    fontWeight: "400",
+    textDecorationLine: "underline",
   },
 });

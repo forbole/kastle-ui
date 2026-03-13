@@ -72,7 +72,7 @@ export const ExploreAppDetailsScreen: React.FC<
         <View style={styles.appInfo}>
           <View style={styles.appIconContainer}>
             {appIcon ? (
-              <Image source={{ uri: appIcon }} style={styles.appIcon} />
+              <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
                 <Text style={styles.appIconPlaceholderText}>
