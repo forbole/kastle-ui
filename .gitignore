@@ -42,3 +42,8 @@ yarn-error.*
 
 *storybook.log
 storybook-static
+debug-storybook.log
+
+# Temporary files
+*.tmp
+*.temp

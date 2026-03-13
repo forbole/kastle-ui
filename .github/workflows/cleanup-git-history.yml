@@ -1,0 +1,48 @@
+name: Cleanup Git History
+
+on:
+  schedule:
+    # Run cleanup every Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch: # Allow manual execution
+
+jobs:
+  cleanup-git-history:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout gh-pages
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        fetch-depth: 0  # Fetch complete history
+        
+    - name: Cleanup git commits history
+      run: |
+        # Check current commit count
+        COMMIT_COUNT=$(git rev-list --count HEAD)
+        echo "Current commit count: $COMMIT_COUNT"
+        
+        # If more than 100 commits, keep only the recent 50
+        if [ $COMMIT_COUNT -gt 100 ]; then
+          echo "Too many commits ($COMMIT_COUNT), truncating to recent 50 commits"
+          
+          # Find the 50th commit from HEAD
+          TARGET_COMMIT=$(git rev-list HEAD | sed -n '50p')
+          
+          # Create new orphan branch starting from that commit
+          git checkout --orphan temp-cleanup $TARGET_COMMIT
+          git add -A
+          git commit -m "🔄 Truncate git history to reduce repository size (automated cleanup)"
+          
+          # Delete old gh-pages branch and rename current branch
+          git branch -D gh-pages
+          git branch -m gh-pages
+          
+          # Force push the new clean branch
+          git push --force origin gh-pages
+          
+          echo "Git history truncated successfully"
+        else
+          echo "Git history size is acceptable ($COMMIT_COUNT commits), no cleanup needed"
+        fi
