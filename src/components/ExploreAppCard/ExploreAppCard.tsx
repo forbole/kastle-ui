@@ -1,11 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { ArrowUpRight, Check } from 'lucide-react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageSourcePropType,
+} from "react-native";
+import { ArrowUpRight, Check } from "lucide-react-native";
 
 export interface ExploreAppCardProps {
   appName: string;
   appCategory: string;
-  appIcon?: string;
+  appIcon?: ImageSourcePropType;
   isVerified?: boolean;
   onPress: () => void;
 }
@@ -28,12 +35,15 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
       <View style={styles.content}>
         {/* App Icon */}
         <View style={styles.iconContainer}>
-          <Image 
-            source={{ 
-              uri: appIcon || 'https://cms.forbole.com/uploads/Kastle_Symbolic_Logo_27731fc6bd.svg' 
-            }} 
-            style={styles.appIcon} 
-          />
+          {appIcon ? (
+            <Image source={appIcon} style={styles.appIcon} />
+          ) : (
+            <View style={styles.appIconPlaceholder}>
+              <Text style={styles.appIconPlaceholderText}>
+                {appName?.charAt(0)?.toUpperCase()}
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* App Info */}
@@ -59,23 +69,22 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderColor: '#1a303a',
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    borderColor: "#1a303a",
     borderWidth: 1,
     borderRadius: 16,
     padding: 12,
     minHeight: 88,
-    marginBottom: 8,
-    position: 'relative',
+    position: "relative",
+    flex: 1, // Allow flexible sizing
   },
   rightArrow: {
-    position: 'absolute',
+    position: "absolute",
     top: 12,
     right: 13,
     zIndex: 1,
   },
   content: {
-    
     flex: 1,
     gap: 12,
     paddingRight: 24, // 為右上角的箭頭留出空間
@@ -89,32 +98,45 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
   },
+  appIconPlaceholder: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  appIconPlaceholderText: {
+    color: "#ffffff",
+    fontSize: 14,
+    fontWeight: "600",
+  },
   infoContainer: {
     flex: 1,
     gap: 6,
   },
   titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   appName: {
-    color: '#ffffff',
+    color: "#ffffff",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   verifiedBadge: {
     width: 16,
     height: 16,
-    backgroundColor: '#00c4e7',
+    backgroundColor: "#00c4e7",
     borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   appCategory: {
-    color: '#7b9aaa',
+    color: "#7b9aaa",
     fontSize: 12,
-    fontWeight: '400',
+    fontWeight: "400",
     letterSpacing: 0.06,
     lineHeight: 16,
   },
