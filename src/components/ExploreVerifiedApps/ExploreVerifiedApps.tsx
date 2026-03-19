@@ -7,6 +7,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { ExternalLink } from "lucide-react-native";
+import { colors } from "@/config/theme";
 import {
   ExploreAppCard,
   ExploreAppCardProps,
@@ -73,7 +74,7 @@ export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
         </Text>
         <ExternalLink
           size={16}
-          color="#13dcff"
+          color={colors.link}
           strokeWidth={2}
           style={styles.externalLinkIcon}
         />
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#9eb7c4",
+    color: colors.textSecondary,
     lineHeight: 16,
   },
   appsGrid: {
@@ -125,11 +126,11 @@ const styles = StyleSheet.create({
     marginTop: -1, // Fine-tune vertical alignment with text
   },
   submitLinkNormal: {
-    color: "#4b7d92",
+    color: colors.textDimmed,
     fontWeight: "400",
   },
   submitLinkHighlight: {
-    color: "#13dcff",
+    color: colors.link,
     fontWeight: "400",
     textDecorationLine: "underline",
   },
