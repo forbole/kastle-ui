@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { colors } from "@/config/theme";
+import { colors } from "@/config/theme";
 
 
 export interface RecentlyConnectedApp {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 2,
     borderRadius: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
   },
   appIcon: {
     width: 57,
