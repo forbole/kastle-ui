@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { ChevronLeft, MoreVertical, RotateCw } from "lucide-react-native";
 import { ExploreUrlBarMenu } from "./ExploreUrlBarMenu";
+import { colors } from "@/config/theme";
 
 export interface ExploreUrlBarProps {
   url?: string;
@@ -39,7 +40,7 @@ export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
       <View style={styles.container}>
         {/* Back Button */}
         <TouchableOpacity style={styles.iconWrapper} onPress={onBackPress}>
-          <ChevronLeft size={24} color="white" strokeWidth={2} />
+          <ChevronLeft size={24} color={colors.textPrimary} strokeWidth={2} />
         </TouchableOpacity>
 
         {/* Address Bar */}
@@ -51,7 +52,7 @@ export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
             style={styles.refreshButton}
             onPress={onRefreshPress}
           >
-            <RotateCw size={18} color="#9eb7c4" strokeWidth={2} />
+            <RotateCw size={18} color={colors.textSecondary} strokeWidth={2} />
           </TouchableOpacity>
         </View>
 
@@ -61,7 +62,7 @@ export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
             style={styles.iconWrapper}
             onPress={() => setMenuVisible((v) => !v)}
           >
-            <MoreVertical size={24} color="white" strokeWidth={2} />
+            <MoreVertical size={24} color={colors.textPrimary} strokeWidth={2} />
           </TouchableOpacity>
 
           <ExploreUrlBarMenu
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     height: 52,
     paddingHorizontal: 4,
     paddingVertical: 3,
-    backgroundColor: "#051d27",
+    backgroundColor: colors.backgroundScreen,
     zIndex: 60,
   },
   moreWrapper: {
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 36,
     borderRadius: 30,
-    backgroundColor: "#102832",
+    backgroundColor: colors.backgroundSecondary,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 16,
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
   urlText: {
     flex: 1,
     fontSize: 16,
-    color: "#9eb7c4",
+    color: colors.textSecondary,
     textAlign: "center",
     paddingRight: 36,
   },
