@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { colors } from "@/config/theme";
 
-
 export interface RecentlyConnectedApp {
   id: string;
   appName: string;
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   appCard: {
-    width: 110,
+    width: 120,
     backgroundColor: colors.backgroundSurface,
     borderColor: colors.border,
     borderWidth: 1,
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
     width: 10,
     height: 2,
     borderRadius: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
   },
   appIcon: {
     width: 57,
@@ -194,6 +193,5 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     height: 21,
     textAlign: "center",
-    width: "100%",
   },
 });
