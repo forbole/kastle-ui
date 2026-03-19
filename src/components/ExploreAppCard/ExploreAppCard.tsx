@@ -8,6 +8,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { ArrowUpRight, Check } from "lucide-react-native";
+import { colors } from "@/config/theme";
 
 export interface ExploreAppCardProps {
   appName: string;
@@ -28,7 +29,7 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
     <TouchableOpacity style={styles.container} onPress={onPress}>
       {/* Right Arrow - positioned absolutely */}
       <View style={styles.rightArrow}>
-        <ArrowUpRight size={18} color="#7b9aaa" strokeWidth={2} />
+        <ArrowUpRight size={18} color={colors.textMuted} strokeWidth={2} />
       </View>
 
       {/* Main Content */}
@@ -69,8 +70,8 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-    borderColor: "#1a303a",
+    backgroundColor: colors.backgroundSurface,
+    borderColor: colors.border,
     borderWidth: 1,
     borderRadius: 16,
     padding: 12,
@@ -102,12 +103,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "black",
+    backgroundColor: colors.black,
     justifyContent: "center",
     alignItems: "center",
   },
   appIconPlaceholderText: {
-    color: "#ffffff",
+    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -121,20 +122,20 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   appName: {
-    color: "#ffffff",
+    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: "600",
   },
   verifiedBadge: {
     width: 16,
     height: 16,
-    backgroundColor: "#00c4e7",
+    backgroundColor: colors.primary,
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
   },
   appCategory: {
-    color: "#7b9aaa",
+    color: colors.textMuted,
     fontSize: 12,
     fontWeight: "400",
     letterSpacing: 0.06,

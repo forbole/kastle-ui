@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
+import { colors } from "@/config/theme";
 
 export interface ExploreAppDetailsScreenProps {
   appName?: string;
@@ -138,7 +139,7 @@ export const ExploreAppDetailsScreen: React.FC<
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#051d27",
+    backgroundColor: colors.backgroundScreen,
   },
   contentContainer: {
     padding: 20,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#102832",
+    backgroundColor: colors.backgroundSecondary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -189,14 +190,14 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "white",
+    color: colors.textPrimary,
     lineHeight: 17,
   },
   verifiedIcon: {
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: "#00c4e7",
+    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -207,12 +208,12 @@ const styles = StyleSheet.create({
   },
   appCategory: {
     fontSize: 12,
-    color: "#7b9aaa",
+    color: colors.textMuted,
     letterSpacing: 0.06,
     lineHeight: 16,
   },
   visitButton: {
-    backgroundColor: "#00c4e7",
+    backgroundColor: colors.primary,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -239,24 +240,24 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#9eb7c4",
+    color: colors.textSecondary,
   },
   descriptionContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: colors.backgroundSurface,
     borderWidth: 1,
-    borderColor: "#1a303a",
+    borderColor: colors.border,
     borderRadius: 16,
     padding: 16,
   },
   descriptionText: {
     fontSize: 14,
-    color: "#9eb7c4",
+    color: colors.textSecondary,
     lineHeight: 21,
   },
   socialSection: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: colors.backgroundSurface,
     borderWidth: 1,
-    borderColor: "#1a303a",
+    borderColor: colors.border,
     borderRadius: 16,
     padding: 16,
   },
@@ -265,9 +266,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   socialButton: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: colors.backgroundSurface,
     borderWidth: 1,
-    borderColor: "#1a303a",
+    borderColor: colors.border,
     borderRadius: 9999,
     width: 32,
     height: 32,
@@ -279,9 +280,9 @@ const styles = StyleSheet.create({
     height: 16,
   },
   networkSection: {
-    backgroundColor: "#102832",
+    backgroundColor: colors.backgroundSecondary,
     borderWidth: 1,
-    borderColor: "#1a303a",
+    borderColor: colors.border,
     borderRadius: 16,
   },
   networkRow: {
@@ -305,11 +306,11 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: "black",
+    backgroundColor: colors.black,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#102832",
+    borderColor: colors.borderSecondary,
   },
   networkIconOverlap: {
     marginLeft: -8,
