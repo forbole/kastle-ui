@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   appCard: {
-    width: 110,
+    width: 120,
     backgroundColor: colors.backgroundSurface,
     borderColor: colors.border,
     borderWidth: 1,
@@ -193,6 +193,5 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     height: 21,
     textAlign: "center",
-    width: "100%",
   },
 });

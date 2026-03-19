@@ -47,6 +47,28 @@ export const Default: Story = {
   },
 };
 
+export const LongName: Story = {
+  args: {
+    apps: [
+      {
+        id: "0",
+        appName: "Super Long App Name That Should Truncate",
+        appIcon: iconImage,
+      },
+      {
+        id: "1",
+        appName: "Another Very Long Application Name",
+        appIcon: iconImage,
+      },
+      {
+        id: "2",
+        appName: "Short",
+        appIcon: iconImage,
+      },
+    ],
+  },
+};
+
 export const WithoutIcons: Story = {
   args: {
     apps: [
