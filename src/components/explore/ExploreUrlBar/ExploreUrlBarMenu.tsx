@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Share2, Unplug } from "lucide-react-native";
-import { colors } from "@/config/theme";
+import { colors } from "../../../config/theme";
 
 export interface ExploreUrlBarMenuProps {
   visible: boolean;

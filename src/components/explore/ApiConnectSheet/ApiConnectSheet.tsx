@@ -14,8 +14,8 @@ import {
   info,
   typography,
   white,
-} from "@/config/theme";
-import { ActionSheet } from "@/components/ActionSheet";
+} from "../../../config/theme";
+import { ActionSheet } from "../../ActionSheet";
 
 export interface ApiConnectAccount {
   id: string;

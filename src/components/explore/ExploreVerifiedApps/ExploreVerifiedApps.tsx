@@ -7,7 +7,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { ExternalLink } from "lucide-react-native";
-import { colors } from "@/config/theme";
+import { colors } from "../../../config/theme";
 import {
   ExploreAppCard,
   ExploreAppCardProps,

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { ApiConnectSheet } from "./ApiConnectSheet";
-import { background, primary, typography } from "@/config/theme";
+import { background, primary, typography } from "../../../config/theme";
 import iconImage from "../../../../assets/icon.png";
 
 const defaultAccounts = [

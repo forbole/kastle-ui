@@ -8,7 +8,7 @@ import {
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
-import { colors } from "@/config/theme";
+import { colors } from "../../../config/theme";
 
 export interface RecentlyConnectedApp {
   id: string;
