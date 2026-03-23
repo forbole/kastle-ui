@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     padding: 12,
     minHeight: 88,
     position: "relative",
-    flex: 1, // Allow flexible sizing
   },
   rightArrow: {
     position: "absolute",
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   content: {
-    flex: 1,
+    flexShrink: 1,
     gap: 12,
     paddingRight: 24, // 為右上角的箭頭留出空間
   },
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   infoContainer: {
-    flex: 1,
+    flexShrink: 1,
     gap: 6,
   },
   titleRow: {
