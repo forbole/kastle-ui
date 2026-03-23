@@ -11,7 +11,6 @@ import {
 import {
   background,
   border,
-  primary,
   info,
   typography,
   white,
@@ -23,7 +22,7 @@ import { InfoSheet } from "@/components/InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "@/components/EstFeeSheet";
 import { SwipeToConfirm } from "@/components/SwipeToConfirm";
 
-export interface KaspaSignTransactionRow {
+export interface EvmSignTransactionRow {
   label: string;
   value: string;
   subValue?: string;
@@ -34,7 +33,7 @@ export interface KaspaSignTransactionRow {
   };
 }
 
-export interface KaspaSignTxSheetProps {
+export interface EvmSignTxSheetProps {
   /** Controls sheet visibility */
   isOpen: boolean;
   /** Called when backdrop is pressed or action completes */
@@ -42,13 +41,15 @@ export interface KaspaSignTxSheetProps {
   appName: string;
   appUrl: string;
   appIcon?: ImageSourcePropType;
-  /** Network badge label shown on the "Send from" section */
+  /** Network badge label shown on the address cards */
   networkBadge?: string;
-  /** Sender address */
+  /** Sender address (hex) */
   fromAddress?: string;
+  /** Contract address (hex) */
+  contractAddress?: string;
   /** Transaction detail rows */
-  rows?: KaspaSignTransactionRow[];
-  /** Raw JSON string shown in the expandable "Raw Details" section */
+  rows?: EvmSignTransactionRow[];
+  /** Raw JSON / hex data shown in the expandable "Raw Details" section */
   rawDetails?: string;
   /** Fee breakdown shown in the Est. Fee sub-sheet */
   estFees?: EstFeeRow[];
@@ -60,9 +61,7 @@ export interface KaspaSignTxSheetProps {
 // Sub-components
 // ---------------------------------------------------------------------------
 
-const InfoIcon: React.FC = () => (
-  <Info size={16} color={typography.t600} />
-);
+const InfoIcon: React.FC = () => <Info size={16} color={typography.t600} />;
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.networkBadge}>
@@ -70,16 +69,27 @@ const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   </View>
 );
 
+const AddressCard: React.FC<{
+  label: string;
+  address: string;
+  networkBadge: string;
+}> = ({ label, address, networkBadge }) => (
+  <View style={styles.addressCard}>
+    <View style={styles.addressCardHeader}>
+      <Text style={styles.addressCardLabel}>{label}</Text>
+      <NetworkBadge label={networkBadge} />
+    </View>
+    <Text style={styles.addressCardAddress}>{address}</Text>
+  </View>
+);
+
 const TransactionRow: React.FC<{
-  row: KaspaSignTransactionRow;
+  row: EvmSignTransactionRow;
   hasBorderBottom?: boolean;
   onInfoPress?: () => void;
 }> = ({ row, hasBorderBottom = true, onInfoPress }) => (
   <TouchableOpacity
-    style={[
-      styles.tableRow,
-      hasBorderBottom && styles.tableRowBorder,
-    ]}
+    style={[styles.tableRow, hasBorderBottom && styles.tableRowBorder]}
     onPress={onInfoPress}
     activeOpacity={onInfoPress ? 0.6 : 1}
     disabled={!onInfoPress}
@@ -103,134 +113,147 @@ const TransactionRow: React.FC<{
 // Main component
 // ---------------------------------------------------------------------------
 
-export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
+export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
   isOpen,
   onClose,
   appName,
   appUrl,
   appIcon,
-  networkBadge = "Kaspa",
+  networkBadge = "Kasplex",
   fromAddress,
+  contractAddress,
   rows = [],
   rawDetails,
   estFees,
   onConfirm,
 }) => {
   const [rawExpanded, setRawExpanded] = useState(false);
-  const [activeInfoRow, setActiveInfoRow] = useState<KaspaSignTransactionRow | null>(null);
+  const [activeInfoRow, setActiveInfoRow] =
+    useState<EvmSignTransactionRow | null>(null);
   const [estFeeOpen, setEstFeeOpen] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
 
-  const handleSign = () => {
+  const handleConfirm = () => {
     setIsSigning(true);
     onConfirm?.();
   };
 
   return (
     <>
-      <ActionSheet isOpen={isOpen} onClose={onClose} closeOnBackdropPress={!isSigning}>
-      <View style={styles.container}>
-        {/* Drag handle */}
-        <View style={styles.handlebarWrapper}>
-          <View style={styles.handlebar} />
-        </View>
-
-        {/* App header — fixed, does not scroll */}
-        <View style={styles.appHeader}>
-          <View style={styles.appIconContainer}>
-            {appIcon ? (
-              <Image source={appIcon} style={styles.appIcon} />
-            ) : (
-              <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>
-                  {appName?.charAt(0)?.toUpperCase()}
-                </Text>
-              </View>
-            )}
+      <ActionSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        closeOnBackdropPress={!isSigning}
+      >
+        <View style={styles.container}>
+          {/* Drag handle */}
+          <View style={styles.handlebarWrapper}>
+            <View style={styles.handlebar} />
           </View>
-          <View style={styles.appMeta}>
-            <Text style={styles.appTitle}>{appName}</Text>
-            <Text style={styles.appUrl}>{appUrl}</Text>
-          </View>
-        </View>
 
-        {/* Divider — fixed */}
-        <View style={styles.divider} />
-
-        {/* Scrollable content */}
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {/* Content */}
-          <View style={styles.contentSection}>
-            {/* Send from */}
-            {fromAddress ? (
-              <View style={styles.sendFromCard}>
-                <View style={styles.sendFromHeader}>
-                  <Text style={styles.sendFromLabel}>Send from</Text>
-                  <NetworkBadge label={networkBadge} />
+          {/* App header — fixed, does not scroll */}
+          <View style={styles.appHeader}>
+            <View style={styles.appIconContainer}>
+              {appIcon ? (
+                <Image source={appIcon} style={styles.appIcon} />
+              ) : (
+                <View style={styles.appIconPlaceholder}>
+                  <Text style={styles.appIconPlaceholderText}>
+                    {appName?.charAt(0)?.toUpperCase()}
+                  </Text>
                 </View>
-                <Text style={styles.sendFromAddress}>{fromAddress}</Text>
-              </View>
-            ) : null}
-
-            {/* Transaction table */}
-            {rows.length > 0 ? (
-              <View style={styles.tableCard}>
-                {rows.map((row, index) => (
-                  <TransactionRow
-                    key={row.label}
-                    row={row}
-                    hasBorderBottom={index < rows.length - 1}
-                    onInfoPress={
-                      row.info
-                        ? row.label === "Est. Fee" && estFees
-                          ? () => setEstFeeOpen(true)
-                          : () => setActiveInfoRow(row)
-                        : undefined
-                    }
-                  />
-                ))}
-              </View>
-            ) : null}
-
-            {/* Raw Details accordion */}
-            {rawDetails ? (
-              <View style={styles.rawDetailsWrapper}>
-                <TouchableOpacity
-                  style={styles.rawDetailsAccordion}
-                  onPress={() => setRawExpanded((prev) => !prev)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.rawDetailsLabel}>Raw Details</Text>
-                  {rawExpanded
-                    ? <ChevronUp size={18} color={typography.t600} />
-                    : <ChevronDown size={18} color={typography.t600} />
-                  }
-                </TouchableOpacity>
-                {rawExpanded ? (
-                  <View style={styles.rawDetailsBody}>
-                    <Text style={styles.rawDetailsText}>{rawDetails}</Text>
-                  </View>
-                ) : null}
-              </View>
-            ) : null}
+              )}
+            </View>
+            <View style={styles.appMeta}>
+              <Text style={styles.appTitle}>{appName}</Text>
+              <Text style={styles.appUrl}>{appUrl}</Text>
+            </View>
           </View>
-        </ScrollView>
 
-        {/* Bottom action bar */}
-        <View style={styles.bottomBar}>
-          <SwipeToConfirm onConfirm={handleSign} isLoading={isSigning} />
+          {/* Divider — fixed */}
+          <View style={styles.divider} />
+
+          {/* Scrollable content */}
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.contentSection}>
+              {/* Send from */}
+              {fromAddress ? (
+                <AddressCard
+                  label="Send from"
+                  address={fromAddress}
+                  networkBadge={networkBadge}
+                />
+              ) : null}
+
+              {/* Contract address */}
+              {contractAddress ? (
+                <AddressCard
+                  label="Contract address"
+                  address={contractAddress}
+                  networkBadge={networkBadge}
+                />
+              ) : null}
+
+              {/* Transaction table */}
+              {rows.length > 0 ? (
+                <View style={styles.tableCard}>
+                  {rows.map((row, index) => (
+                    <TransactionRow
+                      key={row.label}
+                      row={row}
+                      hasBorderBottom={index < rows.length - 1}
+                      onInfoPress={
+                        row.info
+                          ? row.label === "Est. Fee" && estFees
+                            ? () => setEstFeeOpen(true)
+                            : () => setActiveInfoRow(row)
+                          : undefined
+                      }
+                    />
+                  ))}
+                </View>
+              ) : null}
+
+              {/* Raw Details accordion */}
+              {rawDetails ? (
+                <View style={styles.rawDetailsWrapper}>
+                  <TouchableOpacity
+                    style={styles.rawDetailsAccordion}
+                    onPress={() => setRawExpanded((prev) => !prev)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.rawDetailsLabel}>Raw Details</Text>
+                    {rawExpanded ? (
+                      <ChevronUp size={18} color={typography.t600} />
+                    ) : (
+                      <ChevronDown size={18} color={typography.t600} />
+                    )}
+                  </TouchableOpacity>
+                  {rawExpanded ? (
+                    <View style={styles.rawDetailsBody}>
+                      <Text style={styles.rawDetailsText}>{rawDetails}</Text>
+                    </View>
+                  ) : null}
+                </View>
+              ) : null}
+            </View>
+          </ScrollView>
+
+          {/* Bottom action bar */}
+          <View style={styles.bottomBar}>
+            <SwipeToConfirm onConfirm={handleConfirm} isLoading={isSigning} />
+          </View>
+
+          {/* iOS home indicator */}
+          <View style={styles.homeIndicator} />
         </View>
-
-        {/* iOS home indicator */}
-        <View style={styles.homeIndicator} />
-      </View>
       </ActionSheet>
 
-      {/* Info sub-sheet — opened when an info icon is tapped */}
+      {/* Info sub-sheet */}
       <InfoSheet
         isOpen={!!activeInfoRow}
         onClose={() => setActiveInfoRow(null)}
@@ -257,13 +280,13 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
-    backgroundColor: background.bg100, // #1A303A
-    borderTopLeftRadius: borderRadius["3xl"], // 24
+    backgroundColor: background.bg100,
+    borderTopLeftRadius: borderRadius["3xl"],
     borderTopRightRadius: borderRadius["3xl"],
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderColor: border.b300, // #1E3945
+    borderColor: border.b300,
     shadowColor: "#262626",
     shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.2,
@@ -280,8 +303,8 @@ const styles = StyleSheet.create({
   handlebar: {
     width: 64,
     height: 4,
-    backgroundColor: background.bg400, // #294E5E
-    borderRadius: borderRadius.xs, // 2
+    backgroundColor: background.bg400,
+    borderRadius: borderRadius.xs,
   },
   scrollView: {
     flex: 1,
@@ -300,7 +323,7 @@ const styles = StyleSheet.create({
   appIconContainer: {
     width: 40,
     height: 40,
-    borderRadius: borderRadius["2xl"], // 16 — matches Figma logo frame
+    borderRadius: borderRadius["2xl"],
     overflow: "hidden",
   },
   appIcon: {
@@ -325,12 +348,12 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   appTitle: {
-    color: typography.t900, // #FFFFFF
+    color: typography.t900,
     fontSize: 18,
     fontWeight: "600",
   },
   appUrl: {
-    color: typography.t500, // #7B9AAA
+    color: typography.t500,
     fontSize: 14,
     fontWeight: "400",
     lineHeight: 21,
@@ -339,7 +362,7 @@ const styles = StyleSheet.create({
   // Divider
   divider: {
     height: 1,
-    backgroundColor: border.b400, // #203C49
+    backgroundColor: border.b400,
     marginHorizontal: 12,
     marginTop: 16,
   },
@@ -352,29 +375,28 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
-  // Send from card
-  sendFromCard: {
-    backgroundColor: white["5%"], // rgba(255,255,255,0.05)
+  // Address card (Send from / Contract address)
+  addressCard: {
+    backgroundColor: white["5%"],
     borderWidth: 1,
-    borderColor: border.b200, // #1A303A
-    borderRadius: borderRadius["2xl"], // 16
+    borderColor: border.b200,
+    borderRadius: borderRadius["2xl"],
     paddingHorizontal: 16,
     paddingVertical: 12,
     gap: 8,
-    marginBottom: 0,
   },
-  sendFromHeader: {
+  addressCardHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  sendFromLabel: {
-    color: typography.t900, // #FFFFFF
+  addressCardLabel: {
+    color: typography.t900,
     fontSize: 14,
     fontWeight: "600",
   },
-  sendFromAddress: {
-    color: typography.t600, // #9EB7C4
+  addressCardAddress: {
+    color: typography.t600,
     fontSize: 14,
     fontWeight: "400",
     lineHeight: 21,
@@ -382,15 +404,15 @@ const styles = StyleSheet.create({
 
   // Network badge
   networkBadge: {
-    backgroundColor: info.background, // #1A282E
+    backgroundColor: info.background,
     borderWidth: 1,
-    borderColor: info.i300, // #0A7694
-    borderRadius: borderRadius.full, // 9999
+    borderColor: info.i300,
+    borderRadius: borderRadius.full,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   networkBadgeText: {
-    color: info.i800, // #A2F5FF
+    color: info.i800,
     fontSize: 12,
     fontWeight: "400",
   },
@@ -399,8 +421,8 @@ const styles = StyleSheet.create({
   tableCard: {
     backgroundColor: white["5%"],
     borderWidth: 1,
-    borderColor: border.b200, // #1A303A
-    borderRadius: borderRadius["2xl"], // 16
+    borderColor: border.b200,
+    borderRadius: borderRadius["2xl"],
     overflow: "hidden",
   },
   tableRow: {
@@ -412,7 +434,7 @@ const styles = StyleSheet.create({
   },
   tableRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: border.b200, // #1A303A
+    borderBottomColor: border.b200,
   },
   tableLabel: {
     flex: 1,
@@ -421,7 +443,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   tableLabelText: {
-    color: typography.t900, // #FFFFFF
+    color: typography.t900,
     fontSize: 14,
     fontWeight: "400",
     lineHeight: 21,
@@ -430,14 +452,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   tableValueText: {
-    color: typography.t900, // #FFFFFF
+    color: typography.t900,
     fontSize: 14,
     fontWeight: "400",
     lineHeight: 21,
     textAlign: "right",
   },
   tableSubValueText: {
-    color: typography.t600, // #9EB7C4
+    color: typography.t600,
     fontSize: 12,
     fontWeight: "400",
     textAlign: "right",
@@ -455,7 +477,7 @@ const styles = StyleSheet.create({
   },
   rawDetailsLabel: {
     flex: 1,
-    color: typography.t600, // #9EB7C4
+    color: typography.t600,
     fontSize: 14,
     fontWeight: "600",
   },
@@ -467,7 +489,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   rawDetailsText: {
-    color: typography.t600, // #9EB7C4
+    color: typography.t600,
     fontSize: 12,
     fontWeight: "400",
     fontFamily: "monospace",
@@ -480,6 +502,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     backgroundColor: background.bg100,
   },
+
   // iOS home indicator
   homeIndicator: {
     height: 34,
