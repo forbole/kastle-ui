@@ -582,7 +582,7 @@
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.8s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.0s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -979,11 +979,6 @@ appName: string
 appUrl: string
 
 /**
- * Contract address (hex)
- */
-contractAddress?: string
-
-/**
  * Fee breakdown shown in the Est. Fee sub-sheet
  */
 estFees?: EstFeeRow[]
@@ -1021,7 +1016,12 @@ rawDetails?: string
 /**
  * Transaction detail rows
  */
-rows?: EvmSignTransactionRow[] = []</code></pre>
+rows?: EvmSignTransactionRow[] = []
+
+/**
+ * To address (hex) — can be a contract or a plain recipient
+ */
+toAddress?: string</code></pre>
           </div>
         </div>
     
@@ -1053,7 +1053,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     appIcon={{ uri: iconImage }}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
-    contractAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
+    toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
     rows={defaultRows}
     rawDetails={sampleRawDetails}
     estFees={[
@@ -1076,13 +1076,14 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     appIcon={{ uri: iconImage }}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
-    contractAddress={undefined}
+    toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
     rows={defaultRows}
     rawDetails={sampleRawDetails}
     estFees={[
       { networkName: &quot;Kaspa&quot;, fee: &quot;0.00023 KAS&quot;, feeUsd: &quot;≈ $0.01 USD&quot; },
       { networkName: &quot;Kasplex&quot;, fee: &quot;0.00150 KAS&quot;, feeUsd: &quot;≈ $0.05 USD&quot; },
-    ]} /&gt;;</code></pre>
+    ]}
+    contractAddress={undefined} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -1099,7 +1100,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     appIcon={{ uri: iconImage }}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
-    contractAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
+    toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
     rows={defaultRows}
     rawDetails={undefined}
     estFees={[
@@ -1122,7 +1123,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     appIcon={undefined}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
-    contractAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
+    toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
     rows={defaultRows}
     rawDetails={sampleRawDetails}
     estFees={[
