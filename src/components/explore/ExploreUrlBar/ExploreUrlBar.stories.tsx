@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ExploreUrlBar } from "./ExploreUrlBar";
 
 const meta: Meta<typeof ExploreUrlBar> = {
-  title: "Components/ExploreUrlBar",
+  title: "Explore/Components/ExploreUrlBar",
   component: ExploreUrlBar,
   argTypes: {
     onBackPress: { action: "back pressed" },

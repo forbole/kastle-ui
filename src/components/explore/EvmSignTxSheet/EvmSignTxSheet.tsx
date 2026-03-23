@@ -45,8 +45,8 @@ export interface EvmSignTxSheetProps {
   networkBadge?: string;
   /** Sender address (hex) */
   fromAddress?: string;
-  /** Contract address (hex) */
-  contractAddress?: string;
+  /** To address (hex) — can be a contract or a plain recipient */
+  toAddress?: string;
   /** Transaction detail rows */
   rows?: EvmSignTransactionRow[];
   /** Raw JSON / hex data shown in the expandable "Raw Details" section */
@@ -121,7 +121,7 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
   appIcon,
   networkBadge = "Kasplex",
   fromAddress,
-  contractAddress,
+  toAddress,
   rows = [],
   rawDetails,
   estFees,
@@ -189,11 +189,11 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
                 />
               ) : null}
 
-              {/* Contract address */}
-              {contractAddress ? (
+              {/* To address */}
+              {toAddress ? (
                 <AddressCard
-                  label="Contract address"
-                  address={contractAddress}
+                  label="To"
+                  address={toAddress}
                   networkBadge={networkBadge}
                 />
               ) : null}

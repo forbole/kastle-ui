@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { RecentlyConnectedApps } from "./RecentlyConnectedApps";
-import iconImage from "../../../assets/icon.png";
+import iconImage from "../../../../assets/icon.png";
 
 const meta: Meta<typeof RecentlyConnectedApps> = {
-  title: "Components/RecentlyConnectedApps",
+  title: "Explore/Components/RecentlyConnectedApps",
   component: RecentlyConnectedApps,
   argTypes: {
     onAppPress: { action: "app pressed" },
