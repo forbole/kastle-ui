@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/react-native-web-vite";
+import { INITIAL_VIEWPORTS } from "storybook/viewport";
 
 // Global font setup
 if (typeof document !== "undefined") {
@@ -35,13 +36,13 @@ const preview: Preview = {
       },
     },
     viewport: {
-      defaultViewport: "largeMobile",
+      options: INITIAL_VIEWPORTS,
     },
     layout: "fullscreen", // Remove default padding
   },
   initialGlobals: {
-    // 👇 Set the initial background color
     backgrounds: { value: "kastle" },
+    viewport: { value: "iphone14", isRotated: false },
   },
 };
 
