@@ -80,7 +80,7 @@ const meta: Meta<typeof EvmSignTxSheet> = {
     appIcon: { uri: iconImage },
     networkBadge: "Kasplex",
     fromAddress: "0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3",
-    contractAddress: "0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B",
+    toAddress: "0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B",
     rows: defaultRows,
     rawDetails: sampleRawDetails,
     estFees: [
