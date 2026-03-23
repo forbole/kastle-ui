@@ -16,12 +16,12 @@ import {
   typography,
   white,
   borderRadius,
-} from "@/config/theme";
+} from "../../../config/theme";
 import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
-import { ActionSheet } from "@/components/ActionSheet";
-import { InfoSheet } from "@/components/InfoSheet";
-import { EstFeeSheet, EstFeeRow } from "@/components/EstFeeSheet";
-import { SwipeToConfirm } from "@/components/SwipeToConfirm";
+import { ActionSheet } from "../../ActionSheet";
+import { InfoSheet } from "../../InfoSheet";
+import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
+import { SwipeToConfirm } from "../../SwipeToConfirm";
 
 export interface KaspaSignTransactionRow {
   label: string;

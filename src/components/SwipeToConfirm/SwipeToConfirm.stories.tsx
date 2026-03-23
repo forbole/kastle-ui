@@ -2,7 +2,7 @@ import React, { useRef, useState, useCallback } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { SwipeToConfirm, SwipeToConfirmRef } from "./SwipeToConfirm";
-import { background, primary, typography } from "@/config/theme";
+import { background, primary, typography } from "../../config/theme";
 
 const storyStyles = StyleSheet.create({
   container: {

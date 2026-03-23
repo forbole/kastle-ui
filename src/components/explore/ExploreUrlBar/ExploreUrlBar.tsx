@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { ChevronLeft, MoreVertical, RotateCw } from "lucide-react-native";
 import { ExploreUrlBarMenu } from "./ExploreUrlBarMenu";
-import { colors } from "@/config/theme";
+import { colors } from "../../../config/theme";
 
 export interface ExploreUrlBarProps {
   url?: string;

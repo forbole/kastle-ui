@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { ActionSheet } from "./ActionSheet";
-import { background, primary, typography } from "@/config/theme";
+import { background, primary, typography } from "../../config/theme";
 
 const DemoSheet = () => {
   const [isOpen, setIsOpen] = useState(false);

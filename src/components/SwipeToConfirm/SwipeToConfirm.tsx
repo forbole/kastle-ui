@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import RnSwipeButton from "rn-swipe-button/src/components/SwipeButton";
 import { ArrowRight } from "lucide-react-native";
-import { primary, background, border, typography } from "@/config/theme";
+import { primary, background, border, typography } from "../../config/theme";
 
 export interface SwipeToConfirmRef {
   reset: () => void;

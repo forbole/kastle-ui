@@ -11,9 +11,9 @@ import {
   typography,
   white,
   borderRadius,
-} from "@/config/theme";
+} from "../../config/theme";
 import { ExternalLink } from "lucide-react-native";
-import { ActionSheet } from "@/components/ActionSheet";
+import { ActionSheet } from "../ActionSheet";
 
 export interface EstFeeRow {
   /** Network name, e.g. "Kaspa", "Kasplex" */

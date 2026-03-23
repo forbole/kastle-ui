@@ -8,7 +8,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { ArrowUpRight, Check } from "lucide-react-native";
-import { colors } from "@/config/theme";
+import { colors } from "../../../config/theme";
 
 export interface ExploreAppCardProps {
   appName: string;

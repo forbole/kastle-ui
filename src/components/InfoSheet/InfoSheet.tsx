@@ -10,8 +10,8 @@ import {
   border,
   typography,
   borderRadius,
-} from "@/config/theme";
-import { ActionSheet } from "@/components/ActionSheet";
+} from "../../config/theme";
+import { ActionSheet } from "../ActionSheet";
 
 export interface InfoSheetProps {
   /** Controls sheet visibility */

@@ -8,7 +8,7 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
-import { colors } from "@/config/theme";
+import { colors } from "../../../config/theme";
 
 export interface ExploreAppDetailsScreenProps {
   appName?: string;
