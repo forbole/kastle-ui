@@ -86,7 +86,6 @@ export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    paddingHorizontal: 20,
   },
   header: {
     paddingTop: 12,
