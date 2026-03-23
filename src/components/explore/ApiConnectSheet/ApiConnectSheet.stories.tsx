@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { ApiConnectSheet } from "./ApiConnectSheet";
 import { background, primary, typography } from "@/config/theme";
-import iconImage from "../../../assets/icon.png";
+import iconImage from "../../../../assets/icon.png";
 
 const defaultAccounts = [
   {
@@ -61,7 +61,7 @@ const storyStyles = StyleSheet.create({
 });
 
 const meta: Meta<typeof ApiConnectSheet> = {
-  title: "Components/ApiConnectSheet",
+  title: "Explore/Components/ApiConnectSheet",
   component: ApiConnectSheet,
   parameters: {
     layout: "fullscreen",

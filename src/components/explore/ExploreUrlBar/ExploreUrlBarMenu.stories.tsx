@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ExploreUrlBarMenu } from "./ExploreUrlBarMenu";
 
 const meta: Meta<typeof ExploreUrlBarMenu> = {
-  title: "Components/ExploreUrlBarMenu",
+  title: "Explore/Components/ExploreUrlBarMenu",
   component: ExploreUrlBarMenu,
   argTypes: {
     onClose: { action: "closed" },

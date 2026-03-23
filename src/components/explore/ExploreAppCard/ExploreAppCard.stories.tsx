@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ExploreAppCard } from "./ExploreAppCard";
 
 const ExploreAppCardMeta: Meta<typeof ExploreAppCard> = {
-  title: "Components/ExploreAppCard",
+  title: "Explore/Components/ExploreAppCard",
   component: ExploreAppCard,
   argTypes: {
     isVerified: {

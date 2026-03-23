@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ExploreVerifiedApps } from "./ExploreVerifiedApps";
-import iconImage from "../../../assets/icon.png";
+import iconImage from "../../../../assets/icon.png";
 
 const meta: Meta<typeof ExploreVerifiedApps> = {
-  title: "Components/ExploreVerifiedApps",
+  title: "Explore/Components/ExploreVerifiedApps",
   component: ExploreVerifiedApps,
   argTypes: {
     onAppPress: { action: "app pressed" },

@@ -1,33 +1,58 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { EvmSignTxSheet } from "./EvmSignTxSheet";
+import { KaspaSignTxSheet } from "./KaspaSignTxSheet";
 import { background, primary, typography } from "@/config/theme";
-import iconImage from "../../../assets/icon.png";
+import iconImage from "../../../../assets/icon.png";
 
 const defaultRows = [
   {
     label: "Amount",
-    value: "0.05 KAS",
-    subValue: "≈ $150.00 USD",
+    value: "1,608.32787 KAS",
+    subValue: "≈ $24,000 USD",
   },
   {
     label: "Est. Fee",
-    value: "0.0012 KAS",
-    subValue: "≈ $3.60 USD",
+    value: "0.00023 KAS",
     info: {
       title: "Est. Fee",
       description:
-        "The estimated network fee required to process this transaction. The actual fee may vary based on network conditions.",
+        "The estimated network fee required to process this transaction on the Kaspa blockchain. The actual fee may vary slightly based on network conditions.",
+    },
+  },
+  {
+    label: "Change to your balance",
+    value: "2.321 KAS",
+    subValue: "≈ $0.02 USD",
+    info: {
+      title: "Change to your balance",
+      description:
+        "Just like paying with cash, any extra amount from this transaction will be sent back to your wallet.\n\nThis happens when your wallet spends more than the exact amount needed.",
     },
   },
 ];
 
-const sampleRawDetails =
-  "0x095ea7b3000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc20000000000000000000000000000000000000000000000000de0b6b3a7640000";
+const sampleRawDetails = JSON.stringify(
+  {
+    transaction: {
+      version: 0,
+      inputs: [
+        {
+          previousOutpoint: {
+            transactionId:
+              "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            index: 0,
+          },
+        },
+      ],
+    },
+  },
+  null,
+  2
+);
 
 /** Wrapper to provide open/close state for interactive stories */
-const SheetDemo = (props: React.ComponentProps<typeof EvmSignTxSheet>) => {
+const SheetDemo = (props: React.ComponentProps<typeof KaspaSignTxSheet>) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <View style={storyStyles.container}>
@@ -35,9 +60,9 @@ const SheetDemo = (props: React.ComponentProps<typeof EvmSignTxSheet>) => {
         style={storyStyles.trigger}
         onPress={() => setIsOpen(true)}
       >
-        <Text style={storyStyles.triggerText}>Open EVM Sign Sheet</Text>
+        <Text style={storyStyles.triggerText}>Open Sign Sheet</Text>
       </TouchableOpacity>
-      <EvmSignTxSheet
+      <KaspaSignTxSheet
         {...props}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -66,30 +91,30 @@ const storyStyles = StyleSheet.create({
   },
 });
 
-const meta: Meta<typeof EvmSignTxSheet> = {
-  title: "Components/EvmSignTxSheet",
-  component: EvmSignTxSheet,
+const meta: Meta<typeof KaspaSignTxSheet> = {
+  title: "Explore/Components/KaspaSignTxSheet",
+  component: KaspaSignTxSheet,
   parameters: {
     layout: "fullscreen",
   },
   args: {
     isOpen: false,
     onClose: () => {},
-    appName: "Zealous Swap",
-    appUrl: "app.zealousswap.io",
+    appName: "Kaspa Finance",
+    appUrl: "app.kaspafinance.io",
     appIcon: { uri: iconImage },
-    networkBadge: "Kasplex",
-    fromAddress: "0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3",
-    contractAddress: "0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B",
+    networkBadge: "Kaspa",
+    fromAddress:
+      "kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7",
     rows: defaultRows,
     rawDetails: sampleRawDetails,
     estFees: [
       { networkName: "Kaspa", fee: "0.00023 KAS", feeUsd: "≈ $0.01 USD" },
-      { networkName: "Kasplex", fee: "0.00150 KAS", feeUsd: "≈ $0.05 USD" },
     ],
   },
   argTypes: {
     onConfirm: { action: "confirm" },
+    onCancel: { action: "cancel" },
     onClose: { action: "close" },
   },
 };
@@ -101,10 +126,10 @@ export const Default: Story = {
   render: (args) => <SheetDemo {...args} />,
 };
 
-export const WithoutContractAddress: Story = {
+export const WithoutFromAddress: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
-    contractAddress: undefined,
+    fromAddress: undefined,
   },
 };
 

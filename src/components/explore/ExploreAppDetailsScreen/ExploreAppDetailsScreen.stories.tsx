@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { ExploreAppDetailsScreen } from "./ExploreAppDetailsScreen";
-import iconImage from "../../../assets/icon.png";
+import iconImage from "../../../../assets/icon.png";
 
 const meta: Meta<typeof ExploreAppDetailsScreen> = {
-  title: "Screens/ExploreAppDetailsScreen",
+  title: "Explore/Screens/ExploreAppDetailsScreen",
   component: ExploreAppDetailsScreen,
   parameters: {
     layout: "fullscreen",
