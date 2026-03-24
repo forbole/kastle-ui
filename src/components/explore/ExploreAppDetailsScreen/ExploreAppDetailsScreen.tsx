@@ -25,6 +25,7 @@ export interface ExploreAppDetailsScreenProps {
     url: string;
   }>;
   onVisitPress?: () => void;
+  onSocialLinkPress?: (url: string) => void;
 }
 
 export const ExploreAppDetailsScreen: React.FC<
@@ -37,6 +38,7 @@ export const ExploreAppDetailsScreen: React.FC<
   supportedNetworks,
   socialLinks,
   onVisitPress,
+  onSocialLinkPress,
 }) => {
   const truncateAppName = (name: string | undefined): string => {
     if (!name) return "";
@@ -111,7 +113,7 @@ export const ExploreAppDetailsScreen: React.FC<
         <View style={styles.socialSection}>
           <View style={styles.socialContainer}>
             {socialLinks.map((link, index) => (
-              <TouchableOpacity key={index} style={styles.socialButton}>
+              <TouchableOpacity key={index} style={styles.socialButton} onPress={() => onSocialLinkPress?.(link.url)}>
                 {renderSocialIcon(link.icon)}
               </TouchableOpacity>
             ))}
