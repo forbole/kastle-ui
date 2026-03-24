@@ -279,7 +279,7 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexShrink: 1,
+    flex: 1,
     backgroundColor: background.bg100,
     borderTopLeftRadius: borderRadius["3xl"],
     borderTopRightRadius: borderRadius["3xl"],

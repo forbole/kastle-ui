@@ -159,7 +159,6 @@ export const ApiConnectSheet: React.FC<ApiConnectSheetProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: "100%",
     backgroundColor: background.bg100,    // #1A303A
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
