@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -21,7 +21,7 @@ import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
-import { SwipeToConfirm } from "../../SwipeToConfirm";
+import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
 
 export interface KaspaSignTransactionRow {
   label: string;
@@ -120,6 +120,14 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
   const [activeInfoRow, setActiveInfoRow] = useState<KaspaSignTransactionRow | null>(null);
   const [estFeeOpen, setEstFeeOpen] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
+  const swipeRef = useRef<SwipeToConfirmRef>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIsSigning(false);
+      swipeRef.current?.reset();
+    }
+  }, [isOpen]);
 
   const handleSign = () => {
     setIsSigning(true);
@@ -222,7 +230,7 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
 
         {/* Bottom action bar */}
         <View style={styles.bottomBar}>
-          <SwipeToConfirm onConfirm={handleSign} isLoading={isSigning} />
+          <SwipeToConfirm ref={swipeRef} onConfirm={handleSign} isLoading={isSigning} />
         </View>
 
         {/* iOS home indicator */}
