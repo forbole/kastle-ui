@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    maxHeight: SCREEN_HEIGHT * 0.9,
+    maxHeight: SCREEN_HEIGHT * 0.8,
     justifyContent: "flex-end",
   },
 });
