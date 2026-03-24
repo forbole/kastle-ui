@@ -256,7 +256,7 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexShrink: 1,
+    flex: 1,
     backgroundColor: background.bg100, // #1A303A
     borderTopLeftRadius: borderRadius["3xl"], // 24
     borderTopRightRadius: borderRadius["3xl"],
