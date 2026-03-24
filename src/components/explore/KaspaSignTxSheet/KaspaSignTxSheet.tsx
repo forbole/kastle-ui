@@ -235,25 +235,25 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
 
         {/* iOS home indicator */}
         <View style={styles.homeIndicator} />
+
+        {/* Info sub-sheet — rendered inside the modal to avoid nested-Modal issues on iOS */}
+        <InfoSheet
+          isOpen={!!activeInfoRow}
+          onClose={() => setActiveInfoRow(null)}
+          title={activeInfoRow?.info?.title ?? ""}
+          description={activeInfoRow?.info?.description ?? ""}
+        />
+
+        {/* Est. Fee sub-sheet */}
+        {estFees ? (
+          <EstFeeSheet
+            isOpen={estFeeOpen}
+            onClose={() => setEstFeeOpen(false)}
+            fees={estFees}
+          />
+        ) : null}
       </View>
       </ActionSheet>
-
-      {/* Info sub-sheet — opened when an info icon is tapped */}
-      <InfoSheet
-        isOpen={!!activeInfoRow}
-        onClose={() => setActiveInfoRow(null)}
-        title={activeInfoRow?.info?.title ?? ""}
-        description={activeInfoRow?.info?.description ?? ""}
-      />
-
-      {/* Est. Fee sub-sheet */}
-      {estFees ? (
-        <EstFeeSheet
-          isOpen={estFeeOpen}
-          onClose={() => setEstFeeOpen(false)}
-          fees={estFees}
-        />
-      ) : null}
     </>
   );
 };
