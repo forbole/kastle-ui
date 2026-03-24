@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -20,7 +20,7 @@ import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
-import { SwipeToConfirm } from "../../SwipeToConfirm";
+import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
 
 export interface EvmSignTransactionRow {
   label: string;
@@ -132,6 +132,14 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
     useState<EvmSignTransactionRow | null>(null);
   const [estFeeOpen, setEstFeeOpen] = useState(false);
   const [isSigning, setIsSigning] = useState(false);
+  const swipeRef = useRef<SwipeToConfirmRef>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIsSigning(false);
+      swipeRef.current?.reset();
+    }
+  }, [isOpen]);
 
   const handleConfirm = () => {
     setIsSigning(true);
@@ -245,7 +253,7 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
 
           {/* Bottom action bar */}
           <View style={styles.bottomBar}>
-            <SwipeToConfirm onConfirm={handleConfirm} isLoading={isSigning} />
+            <SwipeToConfirm ref={swipeRef} onConfirm={handleConfirm} isLoading={isSigning} />
           </View>
 
           {/* iOS home indicator */}
