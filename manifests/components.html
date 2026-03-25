@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">13 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">13/13 infos</a><span class="filter-pill ok" aria-disabled="true">36 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">16 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">16/16 infos</a><span class="filter-pill ok" aria-disabled="true">45 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.3s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.9s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -1142,14 +1142,162 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
   no-story-error
   no-doc-error"
   role="listitem"
+  aria-label="EvmSwitchNetworkSheet">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> EvmSwitchNetworkSheet</h2>
+      <div class="badges">
+        <label for="c-4-explore-components-evmswitchnetworksheet-props" class="badge ok as-toggle">9 prop types</label>
+        <label for="c-4-explore-components-evmswitchnetworksheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-4-explore-components-evmswitchnetworksheet-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/explore/SwitchNetworkSheet/EvmSwitchNetworkSheet.stories.tsx">explore-components-evmswitchnetworksheet · ./src/components/explore/SwitchNetworkSheet/EvmSwitchNetworkSheet.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-4-explore-components-evmswitchnetworksheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-4-explore-components-evmswitchnetworksheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-4-explore-components-evmswitchnetworksheet-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">9 prop types</span>
+            </div>
+            <pre><code>Component: src/components/explore/SwitchNetworkSheet/EvmSwitchNetworkSheet.tsx::EvmSwitchNetworkSheet</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>appIcon?: ImageSourcePropType
+
+appName: string
+
+appUrl: string
+
+/**
+ * Controls sheet visibility
+ */
+isOpen: boolean
+
+/**
+ * Called when backdrop is pressed or cancel is tapped
+ */
+onClose: () =&gt; void
+
+/**
+ * Called when user confirms the switch
+ */
+onConfirm?: () =&gt; void
+
+targetNetworkChainId?: string
+
+targetNetworkIcon?: ImageSourcePropType
+
+/**
+ * The target network the dApp is requesting to switch to
+ */
+targetNetworkName: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { EvmSwitchNetworkSheet } from "kastle-ui";
+import { Text, TouchableOpacity, View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={{ uri: iconImage }}
+    targetNetworkName=&quot;Polygon&quot;
+    targetNetworkChainId=&quot;Chain ID: 137&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">No Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const NoIcon = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={undefined}
+    targetNetworkName=&quot;Polygon&quot;
+    targetNetworkChainId=&quot;Chain ID: 137&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Network Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithNetworkIcon = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={{ uri: iconImage }}
+    targetNetworkName=&quot;Polygon&quot;
+    targetNetworkChainId=&quot;Chain ID: 137&quot;
+    targetNetworkIcon={{ uri: iconImage }} /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
   aria-label="ExploreAppCard">
   <div class="head">
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreAppCard</h2>
       <div class="badges">
-        <label for="c-4-explore-components-exploreappcard-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-4-explore-components-exploreappcard-info" class="badge info as-toggle">1 info</label>
-        <label for="c-4-explore-components-exploreappcard-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-5-explore-components-exploreappcard-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-5-explore-components-exploreappcard-info" class="badge info as-toggle">1 info</label>
+        <label for="c-5-explore-components-exploreappcard-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -1161,10 +1309,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-4-explore-components-exploreappcard-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-4-explore-components-exploreappcard-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-5-explore-components-exploreappcard-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-5-explore-components-exploreappcard-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-4-explore-components-exploreappcard-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-5-explore-components-exploreappcard-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1303,9 +1451,9 @@ onPress: () =&gt; void</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreAppDetailsScreen</h2>
       <div class="badges">
-        <label for="c-5-explore-screens-exploreappdetailsscreen-props" class="badge ok as-toggle">8 prop types</label>
-        <label for="c-5-explore-screens-exploreappdetailsscreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-5-explore-screens-exploreappdetailsscreen-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-6-explore-screens-exploreappdetailsscreen-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-6-explore-screens-exploreappdetailsscreen-info" class="badge info as-toggle">1 info</label>
+        <label for="c-6-explore-screens-exploreappdetailsscreen-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -1317,10 +1465,10 @@ onPress: () =&gt; void</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-5-explore-screens-exploreappdetailsscreen-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-5-explore-screens-exploreappdetailsscreen-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-6-explore-screens-exploreappdetailsscreen-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-6-explore-screens-exploreappdetailsscreen-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-5-explore-screens-exploreappdetailsscreen-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-6-explore-screens-exploreappdetailsscreen-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1497,9 +1645,9 @@ supportedNetworks?: Array&lt;{
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreUrlBar</h2>
       <div class="badges">
-        <label for="c-6-explore-components-exploreurlbar-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-6-explore-components-exploreurlbar-info" class="badge info as-toggle">1 info</label>
-        <label for="c-6-explore-components-exploreurlbar-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-7-explore-components-exploreurlbar-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-7-explore-components-exploreurlbar-info" class="badge info as-toggle">1 info</label>
+        <label for="c-7-explore-components-exploreurlbar-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -1511,10 +1659,10 @@ supportedNetworks?: Array&lt;{
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-6-explore-components-exploreurlbar-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-6-explore-components-exploreurlbar-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-7-explore-components-exploreurlbar-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-7-explore-components-exploreurlbar-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-6-explore-components-exploreurlbar-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-7-explore-components-exploreurlbar-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1593,9 +1741,9 @@ url?: string = &quot;&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreUrlBarMenu</h2>
       <div class="badges">
-        <label for="c-7-explore-components-exploreurlbarmenu-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-7-explore-components-exploreurlbarmenu-info" class="badge info as-toggle">1 info</label>
-        <label for="c-7-explore-components-exploreurlbarmenu-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-8-explore-components-exploreurlbarmenu-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-8-explore-components-exploreurlbarmenu-info" class="badge info as-toggle">1 info</label>
+        <label for="c-8-explore-components-exploreurlbarmenu-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -1607,10 +1755,10 @@ url?: string = &quot;&quot;</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-7-explore-components-exploreurlbarmenu-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-7-explore-components-exploreurlbarmenu-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-8-explore-components-exploreurlbarmenu-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-8-explore-components-exploreurlbarmenu-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-7-explore-components-exploreurlbarmenu-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-8-explore-components-exploreurlbarmenu-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1678,9 +1826,9 @@ visible: boolean</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreVerifiedApps</h2>
       <div class="badges">
-        <label for="c-8-explore-components-exploreverifiedapps-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-8-explore-components-exploreverifiedapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-8-explore-components-exploreverifiedapps-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-9-explore-components-exploreverifiedapps-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-9-explore-components-exploreverifiedapps-info" class="badge info as-toggle">1 info</label>
+        <label for="c-9-explore-components-exploreverifiedapps-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -1692,10 +1840,10 @@ visible: boolean</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-8-explore-components-exploreverifiedapps-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-8-explore-components-exploreverifiedapps-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-9-explore-components-exploreverifiedapps-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-9-explore-components-exploreverifiedapps-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-8-explore-components-exploreverifiedapps-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-9-explore-components-exploreverifiedapps-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1784,9 +1932,9 @@ onSubmitAppPress?: () =&gt; void</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> InfoSheet</h2>
       <div class="badges">
-        <label for="c-9-components-infosheet-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-9-components-infosheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-9-components-infosheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-10-components-infosheet-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-10-components-infosheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-10-components-infosheet-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -1798,10 +1946,10 @@ onSubmitAppPress?: () =&gt; void</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-9-components-infosheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-9-components-infosheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-10-components-infosheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-10-components-infosheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-9-components-infosheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-10-components-infosheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1899,9 +2047,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> KaspaSignTxSheet</h2>
       <div class="badges">
-        <label for="c-10-explore-components-kaspasigntxsheet-props" class="badge ok as-toggle">11 prop types</label>
-        <label for="c-10-explore-components-kaspasigntxsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-10-explore-components-kaspasigntxsheet-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-11-explore-components-kaspasigntxsheet-props" class="badge ok as-toggle">11 prop types</label>
+        <label for="c-11-explore-components-kaspasigntxsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-11-explore-components-kaspasigntxsheet-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -1913,10 +2061,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-10-explore-components-kaspasigntxsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-10-explore-components-kaspasigntxsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-11-explore-components-kaspasigntxsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-11-explore-components-kaspasigntxsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-10-explore-components-kaspasigntxsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-11-explore-components-kaspasigntxsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2093,14 +2241,168 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
   no-story-error
   no-doc-error"
   role="listitem"
+  aria-label="KaspaSwitchNetworkSheet">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> KaspaSwitchNetworkSheet</h2>
+      <div class="badges">
+        <label for="c-12-explore-components-kaspaswitchnetworksheet-props" class="badge ok as-toggle">9 prop types</label>
+        <label for="c-12-explore-components-kaspaswitchnetworksheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-12-explore-components-kaspaswitchnetworksheet-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/explore/SwitchNetworkSheet/KaspaSwitchNetworkSheet.stories.tsx">explore-components-kaspaswitchnetworksheet · ./src/components/explore/SwitchNetworkSheet/KaspaSwitchNetworkSheet.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-12-explore-components-kaspaswitchnetworksheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-12-explore-components-kaspaswitchnetworksheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-12-explore-components-kaspaswitchnetworksheet-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">9 prop types</span>
+            </div>
+            <pre><code>Component: src/components/explore/SwitchNetworkSheet/KaspaSwitchNetworkSheet.tsx::KaspaSwitchNetworkSheet</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>appIcon?: ImageSourcePropType
+
+appName: string
+
+appUrl: string
+
+/**
+ * Controls sheet visibility
+ */
+isOpen: boolean
+
+/**
+ * Called when backdrop is pressed or cancel is tapped
+ */
+onClose: () =&gt; void
+
+/**
+ * Called when user confirms the switch
+ */
+onConfirm?: () =&gt; void
+
+/**
+ * Badge shown on the network row, e.g. &quot;Mainnet&quot; | &quot;Testnet&quot;
+ */
+targetNetworkBadge?: string
+
+targetNetworkIcon?: ImageSourcePropType
+
+/**
+ * The L1 network the dApp is requesting to switch to.
+ * e.g. &quot;Mainnet&quot; or &quot;Testnet&quot;
+ */
+targetNetworkName: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { KaspaSwitchNetworkSheet } from "kastle-ui";
+import { Text, TouchableOpacity, View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mainnet</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Mainnet = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={{ uri: iconImage }}
+    targetNetworkName=&quot;Kaspa&quot;
+    targetNetworkBadge=&quot;Mainnet&quot;
+    targetNetworkIcon={{ uri: iconImage }} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Testnet</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Testnet = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={{ uri: iconImage }}
+    targetNetworkName=&quot;Kaspa&quot;
+    targetNetworkBadge=&quot;Testnet&quot;
+    targetNetworkIcon={undefined} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">No Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const NoIcon = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={undefined}
+    targetNetworkName=&quot;Kaspa&quot;
+    targetNetworkBadge=&quot;Mainnet&quot;
+    targetNetworkIcon={{ uri: iconImage }} /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
   aria-label="RecentlyConnectedApps">
   <div class="head">
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RecentlyConnectedApps</h2>
       <div class="badges">
-        <label for="c-11-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-11-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-11-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-13-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-13-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
+        <label for="c-13-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -2112,10 +2414,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-11-explore-components-recentlyconnectedapps-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-11-explore-components-recentlyconnectedapps-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-13-explore-components-recentlyconnectedapps-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-13-explore-components-recentlyconnectedapps-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-11-explore-components-recentlyconnectedapps-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-13-explore-components-recentlyconnectedapps-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2252,14 +2554,154 @@ onRemoveApp: (app: RecentlyConnectedApp) =&gt; void</code></pre>
   no-story-error
   no-doc-error"
   role="listitem"
+  aria-label="SignMessageSheet">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> SignMessageSheet</h2>
+      <div class="badges">
+        <label for="c-14-explore-components-signmessagesheet-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-14-explore-components-signmessagesheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-14-explore-components-signmessagesheet-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/explore/SignMessageSheet/SignMessageSheet.stories.tsx">explore-components-signmessagesheet · ./src/components/explore/SignMessageSheet/SignMessageSheet.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-14-explore-components-signmessagesheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-14-explore-components-signmessagesheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-14-explore-components-signmessagesheet-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">7 prop types</span>
+            </div>
+            <pre><code>Component: src/components/explore/SignMessageSheet/SignMessageSheet.tsx::SignMessageSheet</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>appIcon?: ImageSourcePropType
+
+appName: string
+
+appUrl: string
+
+/**
+ * Controls sheet visibility
+ */
+isOpen: boolean
+
+/**
+ * The raw message string to be signed
+ */
+message?: string
+
+/**
+ * Called when backdrop is pressed or action completes
+ */
+onClose: () =&gt; void
+
+/**
+ * Called when user confirms signing
+ */
+onConfirm?: () =&gt; void</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { SignMessageSheet } from "kastle-ui";
+import { Text, TouchableOpacity, View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={{ uri: iconImage }}
+    message={sampleMessage} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">No Icon</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const NoIcon = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={undefined}
+    message={sampleMessage} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Short Message</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ShortMessage = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.io&quot;
+    appIcon={{ uri: iconImage }}
+    message=&quot;Hello Kastle!&quot; /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
   aria-label="SwipeToConfirm">
   <div class="head">
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SwipeToConfirm</h2>
       <div class="badges">
-        <label for="c-12-components-swipetoconfirm-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-12-components-swipetoconfirm-info" class="badge info as-toggle">1 info</label>
-        <label for="c-12-components-swipetoconfirm-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-15-components-swipetoconfirm-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-15-components-swipetoconfirm-info" class="badge info as-toggle">1 info</label>
+        <label for="c-15-components-swipetoconfirm-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -2271,10 +2713,10 @@ onRemoveApp: (app: RecentlyConnectedApp) =&gt; void</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-12-components-swipetoconfirm-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-12-components-swipetoconfirm-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-15-components-swipetoconfirm-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-15-components-swipetoconfirm-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-12-components-swipetoconfirm-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-15-components-swipetoconfirm-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
