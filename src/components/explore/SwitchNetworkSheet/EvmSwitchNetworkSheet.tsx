@@ -55,7 +55,6 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
 }) => {
   const handleConfirm = () => {
     onConfirm?.();
-    onClose();
   };
 
   return (
