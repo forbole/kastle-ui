@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">17 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">17/17 infos</a><span class="filter-pill ok" aria-disabled="true">51 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">17 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">17/17 infos</a><span class="filter-pill ok" aria-disabled="true">52 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.2s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.6s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -704,7 +704,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
       <div class="badges">
         <label for="c-1-explore-components-apiconnectsheet-props" class="badge ok as-toggle">8 prop types</label>
         <label for="c-1-explore-components-apiconnectsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-1-explore-components-apiconnectsheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-1-explore-components-apiconnectsheet-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -806,6 +806,34 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     appUrl=&quot;app.zealousswap.com&quot;
     appIcon={undefined}
     accounts={defaultAccounts} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Address</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LongAddress = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Zealous Swap&quot;
+    appUrl=&quot;app.zealousswap.com&quot;
+    appIcon={{ uri: iconImage }}
+    accounts={[
+      {
+        id: &quot;1&quot;,
+        name: &quot;Account 1&quot;,
+        address: &quot;kaspa:qr4wkdz5raktmfusl6qqyxz0ej0pzu2ruzs29gqvwk83l28y7e3rfqnmyypkm&quot;,
+        networkBadge: &quot;Kaspa&quot;,
+      },
+      {
+        id: &quot;2&quot;,
+        name: &quot;Account 2&quot;,
+        address: &quot;0x47dG5F3b8c1aA92e4E0bD67fC301234567890AbCdEf&quot;,
+        networkBadge: &quot;EVM&quot;,
+      },
+    ]} /&gt;;</code></pre>
             </div>
         </div>
     
