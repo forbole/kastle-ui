@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: border.b200, // #1A303A
     borderRadius: 16,
-    height: 68,
+    minHeight: 68,
     overflow: "hidden",
   },
   accountLeft: {
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingLeft: 12,
     paddingRight: 8,
-    height: "100%",
+    paddingVertical: 12,
   },
   avatar: {
     width: 40,
@@ -304,10 +304,10 @@ const styles = StyleSheet.create({
   accountRight: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "stretch",
     gap: 8,
     paddingLeft: 10,
     paddingRight: 12,
-    height: "100%",
   },
   networkBadge: {
     backgroundColor: info.background, // #1A282E

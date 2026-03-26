@@ -95,3 +95,23 @@ export const NoIcon: Story = {
     appIcon: undefined,
   },
 };
+
+export const LongAddress: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    accounts: [
+      {
+        id: "1",
+        name: "Account 1",
+        address: "kaspa:qr4wkdz5raktmfusl6qqyxz0ej0pzu2ruzs29gqvwk83l28y7e3rfqnmyypkm",
+        networkBadge: "Kaspa",
+      },
+      {
+        id: "2",
+        name: "Account 2",
+        address: "0x47dG5F3b8c1aA92e4E0bD67fC301234567890AbCdEf",
+        networkBadge: "EVM",
+      },
+    ],
+  },
+};
