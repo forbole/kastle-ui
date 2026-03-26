@@ -72,7 +72,6 @@ export const KaspaSwitchNetworkSheet: React.FC<KaspaSwitchNetworkSheetProps> =
   }) => {
     const handleConfirm = () => {
       onConfirm?.();
-      onClose();
     };
 
     return (
