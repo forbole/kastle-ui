@@ -10,7 +10,6 @@ import { ExternalLink } from "lucide-react-native";
 import { colors } from "../../../config/theme";
 import {
   ExploreAppCard,
-  ExploreAppCardProps,
 } from "../ExploreAppCard/ExploreAppCard";
 
 export interface VerifiedApp {
@@ -25,20 +24,19 @@ export interface VerifiedApp {
 export interface ExploreVerifiedAppsProps {
   apps?: VerifiedApp[];
   onAppPress?: (app: VerifiedApp) => void;
+  /** @default false */
+  showSubmitLink?: boolean;
   onSubmitAppPress?: () => void;
 }
 
 export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
   apps = [],
   onAppPress,
+  showSubmitLink = false,
   onSubmitAppPress,
 }) => {
   const handleAppPress = (app: VerifiedApp) => {
     onAppPress?.(app);
-  };
-
-  const handleSubmitPress = () => {
-    onSubmitAppPress?.();
   };
 
   return (
@@ -64,21 +62,23 @@ export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
       </View>
 
       {/* Submit Link */}
-      <TouchableOpacity
-        style={styles.submitLinkContainer}
-        onPress={handleSubmitPress}
-      >
-        <Text style={styles.submitLinkText}>
-          <Text style={styles.submitLinkNormal}>Want your app listed? </Text>
-          <Text style={styles.submitLinkHighlight}>Submit it now!</Text>
-        </Text>
-        <ExternalLink
-          size={16}
-          color={colors.link}
-          strokeWidth={2}
-          style={styles.externalLinkIcon}
-        />
-      </TouchableOpacity>
+      {showSubmitLink && (
+        <TouchableOpacity
+          style={styles.submitLinkContainer}
+          onPress={onSubmitAppPress}
+        >
+          <Text style={styles.submitLinkText}>
+            <Text style={styles.submitLinkNormal}>Want your app listed? </Text>
+            <Text style={styles.submitLinkHighlight}>Submit it now!</Text>
+          </Text>
+          <ExternalLink
+            size={16}
+            color={colors.link}
+            strokeWidth={2}
+            style={styles.externalLinkIcon}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -111,9 +111,8 @@ const styles = StyleSheet.create({
   submitLinkContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
     paddingVertical: 12,
-    paddingHorizontal: 12,
+    paddingHorizontal: 0,
     gap: 4,
   },
   submitLinkText: {
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   externalLinkIcon: {
-    marginTop: -1, // Fine-tune vertical alignment with text
+    marginTop: -1,
   },
   submitLinkNormal: {
     color: colors.textDimmed,

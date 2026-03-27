@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
+import { ChevronRight } from "lucide-react-native";
 import { colors } from "../../../config/theme";
 
 export interface ExploreAppDetailsScreenProps {
@@ -94,7 +95,7 @@ export const ExploreAppDetailsScreen: React.FC<
         </View>
         <TouchableOpacity style={styles.visitButton} onPress={onVisitPress}>
           <Text style={styles.visitButtonText}>Visit</Text>
-          <Text style={styles.visitButtonIcon}>→</Text>
+          <ChevronRight size={16} color="white" strokeWidth={2} />
         </TouchableOpacity>
       </View>
 
@@ -229,10 +230,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
   },
-  visitButtonIcon: {
-    color: "white",
-    fontSize: 16,
-  },
   section: {
     gap: 8,
   },
@@ -308,18 +305,16 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: colors.black,
-    justifyContent: "center",
-    alignItems: "center",
     borderWidth: 2,
     borderColor: colors.borderSecondary,
+    overflow: "hidden",
   },
   networkIconOverlap: {
     marginLeft: -8,
   },
   networkIconImage: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
   },
 });

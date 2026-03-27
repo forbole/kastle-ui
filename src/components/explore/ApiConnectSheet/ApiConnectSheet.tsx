@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,
-    marginTop: 8,
+    marginTop: 16,
   },
   cancelButton: {
     flex: 1,
