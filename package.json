@@ -12,16 +12,16 @@
     "prettier:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "dependencies": {
-    "expo": "^55.0.8",
+    "expo": "~55.0.6",
     "expo-status-bar": "~55.0.4",
     "lucide-react-native": "^0.577.0",
-    "react": "^19.2.0",
-    "react-native": "^0.75.5",
+    "react": "^19.2.4",
+    "react-native": "0.83.2",
     "rn-swipe-button": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
-    "@storybook/cli": "^8.2.10",
+    "@storybook/cli": "^10.3.2",
     "@storybook/react-native-web-vite": "^10.3.2",
     "@types/react": "~19.2.2",
     "@vitejs/plugin-react": "^5.1.4",
