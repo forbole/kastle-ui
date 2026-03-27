@@ -313,9 +313,9 @@ const styles = StyleSheet.create({
     marginLeft: -8,
   },
   networkIconImage: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     resizeMode: "cover",
   },
 });
