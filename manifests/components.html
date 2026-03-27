@@ -576,7 +576,7 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">17 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">17/17 infos</a><span class="filter-pill ok" aria-disabled="true">52 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">17 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">17/17 infos</a><span class="filter-pill ok" aria-disabled="true">53 stories ok</span></div>
   </div>
 </header>
 <main>
@@ -2042,7 +2042,7 @@ url?: string = &quot;&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreUrlBarMenu</h2>
       <div class="badges">
-        <label for="c-9-explore-components-exploreurlbarmenu-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-9-explore-components-exploreurlbarmenu-props" class="badge ok as-toggle">5 prop types</label>
         <label for="c-9-explore-components-exploreurlbarmenu-info" class="badge info as-toggle">1 info</label>
         <label for="c-9-explore-components-exploreurlbarmenu-stories" class="badge ok as-toggle">1 story</label>
         
@@ -2076,7 +2076,7 @@ url?: string = &quot;&quot;</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">4 prop types</span>
+              <span class="badge ok">5 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/ExploreUrlBar/ExploreUrlBarMenu.tsx::ExploreUrlBarMenu</code></pre>
             <pre><code>Props:</code></pre>
@@ -2085,6 +2085,11 @@ url?: string = &quot;&quot;</code></pre>
 onDisconnectPress?: () =&gt; void
 
 onSharePress?: () =&gt; void
+
+/**
+ * @default false
+ */
+showShare?: boolean = false
 
 visible: boolean</code></pre>
           </div>
@@ -2127,9 +2132,9 @@ visible: boolean</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreVerifiedApps</h2>
       <div class="badges">
-        <label for="c-10-explore-components-exploreverifiedapps-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-10-explore-components-exploreverifiedapps-props" class="badge ok as-toggle">4 prop types</label>
         <label for="c-10-explore-components-exploreverifiedapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-10-explore-components-exploreverifiedapps-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-10-explore-components-exploreverifiedapps-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -2161,7 +2166,7 @@ visible: boolean</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">3 prop types</span>
+              <span class="badge ok">4 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/ExploreVerifiedApps/ExploreVerifiedApps.tsx::ExploreVerifiedApps</code></pre>
             <pre><code>Props:</code></pre>
@@ -2169,7 +2174,12 @@ visible: boolean</code></pre>
 
 onAppPress?: (app: VerifiedApp) =&gt; void
 
-onSubmitAppPress?: () =&gt; void</code></pre>
+onSubmitAppPress?: () =&gt; void
+
+/**
+ * @default false
+ */
+showSubmitLink?: boolean = false</code></pre>
           </div>
         </div>
     
@@ -2216,6 +2226,15 @@ onSubmitAppPress?: () =&gt; void</code></pre>
         isVerified: true,
       },
     ]} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Submit Link</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithSubmitLink = () =&gt; &lt;ExploreVerifiedApps showSubmitLink /&gt;;</code></pre>
             </div>
         </div>
     
