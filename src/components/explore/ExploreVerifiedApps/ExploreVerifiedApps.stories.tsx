@@ -41,3 +41,10 @@ export const Default: Story = {
     ],
   },
 };
+
+export const WithSubmitLink: Story = {
+  args: {
+    ...Default.args,
+    showSubmitLink: true,
+  },
+};

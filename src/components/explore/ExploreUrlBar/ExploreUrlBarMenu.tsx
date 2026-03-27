@@ -6,6 +6,8 @@ import { colors } from "../../../config/theme";
 export interface ExploreUrlBarMenuProps {
   visible: boolean;
   onClose: () => void;
+  /** @default false */
+  showShare?: boolean;
   onSharePress?: () => void;
   onDisconnectPress?: () => void;
 }
@@ -13,6 +15,7 @@ export interface ExploreUrlBarMenuProps {
 export const ExploreUrlBarMenu: React.FC<ExploreUrlBarMenuProps> = ({
   visible,
   onClose,
+  showShare = false,
   onSharePress,
   onDisconnectPress,
 }) => {
@@ -31,10 +34,12 @@ export const ExploreUrlBarMenu: React.FC<ExploreUrlBarMenuProps> = ({
   return (
     <View style={styles.menu}>
       {/* Share */}
-      <TouchableOpacity style={styles.menuItem} onPress={handleShare}>
-        <Text style={styles.menuText}>Share</Text>
-        <Share2 size={16} color={colors.textSecondary} strokeWidth={2} />
-      </TouchableOpacity>
+      {showShare && (
+        <TouchableOpacity style={styles.menuItem} onPress={handleShare}>
+          <Text style={styles.menuText}>Share</Text>
+          <Share2 size={16} color={colors.textSecondary} strokeWidth={2} />
+        </TouchableOpacity>
+      )}
 
       {/* Disconnect App */}
       <TouchableOpacity style={styles.menuItem} onPress={handleDisconnect}>
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
     top: 52,
     right: 0,
     backgroundColor: colors.border,
-    borderRadius: 12,
+    borderRadius: 24,
     borderWidth: 1,
     borderColor: colors.backgroundSecondary,
     paddingHorizontal: 4,
