@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   Image,
   ImageSourcePropType,
-  ScrollView,
+  FlatList,
 } from "react-native";
 import { colors } from "../../../config/theme";
+
+const CARD_WIDTH = 120;
+const CARD_GAP = 8;
 
 export interface RecentlyConnectedApp {
   id: string;
@@ -20,43 +23,44 @@ export interface RecentlyConnectedAppsProps {
   apps: RecentlyConnectedApp[];
   onAppPress: (app: RecentlyConnectedApp) => void;
   onRemoveApp: (app: RecentlyConnectedApp) => void;
+  containerPaddingHorizontal?: number;
 }
 
 export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
   apps = [],
   onAppPress,
   onRemoveApp,
+  containerPaddingHorizontal = 20,
 }) => {
   const [isManaging, setIsManaging] = useState(false);
 
-  const handleManagePress = () => {
-    setIsManaging((prev) => !prev);
-  };
-
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.sectionTitle}>Recently Connected</Text>
-        <TouchableOpacity onPress={handleManagePress}>
-          <Text style={styles.manageText}>{isManaging ? "Done" : "Manage"}</Text>
+        <TouchableOpacity onPress={() => setIsManaging((prev) => !prev)}>
+          <Text style={styles.manageText}>
+            {isManaging ? "Done" : "Manage"}
+          </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Horizontally Scrollable App List */}
-      <ScrollView
+      <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-      >
-        {apps.map((app) => (
-          <View key={app.id} style={styles.appCardWrapper}>
+        data={apps}
+        keyExtractor={(item) => item.id}
+        style={{ marginHorizontal: -containerPaddingHorizontal }}
+        contentContainerStyle={[styles.listContent, { paddingHorizontal: containerPaddingHorizontal }]}
+        snapToInterval={CARD_WIDTH + CARD_GAP}
+        decelerationRate="fast"
+        renderItem={({ item: app }) => (
+          <View style={styles.appCardWrapper}>
             <TouchableOpacity
               style={styles.appCard}
               onPress={() => !isManaging && onAppPress?.(app)}
               activeOpacity={isManaging ? 1 : 0.7}
             >
-              {/* App Icon */}
               <View style={styles.iconFrame}>
                 {app.appIcon ? (
                   <Image source={app.appIcon} style={styles.appIcon} />
@@ -68,14 +72,15 @@ export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
                   </View>
                 )}
               </View>
-
-              {/* App Name */}
-              <Text style={styles.appName} numberOfLines={1} ellipsizeMode="tail">
+              <Text
+                style={styles.appName}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
                 {app.appName}
               </Text>
             </TouchableOpacity>
 
-            {/* Remove badge — top-right of the entire card */}
             {isManaging && (
               <TouchableOpacity
                 style={styles.removeBadge}
@@ -88,8 +93,8 @@ export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
               </TouchableOpacity>
             )}
           </View>
-        ))}
-      </ScrollView>
+        )}
+      />
     </View>
   );
 };
@@ -118,7 +123,6 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
   listContent: {
-    flexDirection: "row",
     gap: 8,
     paddingTop: 10,
   },
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   appCard: {
-    width: 120,
+    width: CARD_WIDTH,
     backgroundColor: colors.backgroundSurface,
     borderColor: colors.border,
     borderWidth: 1,
