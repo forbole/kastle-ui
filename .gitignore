@@ -47,3 +47,7 @@ debug-storybook.log
 # Temporary files
 *.tmp
 *.temp
+
+# Claude Code
+CLAUDE.md
+kastle-ui-context.md
