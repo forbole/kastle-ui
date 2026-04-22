@@ -12,7 +12,7 @@ import {
   ExploreAppCard,
 } from "../ExploreAppCard/ExploreAppCard";
 
-export interface VerifiedApp {
+export interface ExploreApp {
   id: string;
   appName: string;
   appCategory: string;
@@ -21,21 +21,24 @@ export interface VerifiedApp {
   isVerified?: boolean;
 }
 
-export interface ExploreVerifiedAppsProps {
-  apps?: VerifiedApp[];
-  onAppPress?: (app: VerifiedApp) => void;
+export interface ExploreAppsProps {
+  apps?: ExploreApp[];
+  onAppPress?: (app: ExploreApp) => void;
   /** @default false */
   showSubmitLink?: boolean;
   onSubmitAppPress?: () => void;
+  /** @default "Verified Apps" */
+  title?: string;
 }
 
-export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
+export const ExploreApps: React.FC<ExploreAppsProps> = ({
   apps = [],
   onAppPress,
   showSubmitLink = false,
   onSubmitAppPress,
+  title = "Verified Apps",
 }) => {
-  const handleAppPress = (app: VerifiedApp) => {
+  const handleAppPress = (app: ExploreApp) => {
     onAppPress?.(app);
   };
 
@@ -43,7 +46,7 @@ export const ExploreVerifiedApps: React.FC<ExploreVerifiedAppsProps> = ({
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.header}>
-        <Text style={styles.sectionTitle}>Verified Apps</Text>
+        <Text style={styles.sectionTitle}>{title}</Text>
       </View>
 
       {/* Apps Grid */}
