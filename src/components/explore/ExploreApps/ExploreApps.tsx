@@ -16,7 +16,7 @@ export interface ExploreApp {
   id: string;
   appName: string;
   appCategory: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   url?: string;
   isVerified?: boolean;
 }

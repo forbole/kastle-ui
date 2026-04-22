@@ -4,16 +4,16 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
 } from "react-native";
+import { Image } from "expo-image";
 import { ArrowUpRight, Check } from "lucide-react-native";
 import { colors } from "../../../config/theme";
 
 export interface ExploreAppCardProps {
   appName: string;
   appCategory: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   isVerified?: boolean;
   onPress: () => void;
 }
