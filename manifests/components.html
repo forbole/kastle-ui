@@ -742,7 +742,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
             <pre><code>Props:</code></pre>
             <pre><code>accounts?: ApiConnectAccount[] = []
 
-appIcon?: ImageSourcePropType
+appIcon?: ImageSourcePropType | string
 
 appName: string
 
@@ -889,7 +889,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
             </div>
             <pre><code>Component: src/components/explore/CommitRevealSheet/CommitRevealSheet.tsx::CommitRevealSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName: string
 
@@ -1273,7 +1273,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
             </div>
             <pre><code>Component: src/components/explore/EvmSignTxSheet/EvmSignTxSheet.tsx::EvmSignTxSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName: string
 
@@ -1486,7 +1486,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
             </div>
             <pre><code>Component: src/components/explore/SwitchNetworkSheet/EvmSwitchNetworkSheet.tsx::EvmSwitchNetworkSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName: string
 
@@ -1509,7 +1509,7 @@ onConfirm?: () =&gt; void
 
 targetNetworkChainId?: string
 
-targetNetworkIcon?: ImageSourcePropType
+targetNetworkIcon?: ImageSourcePropType | string
 
 /**
  * The target network the dApp is requesting to switch to
@@ -1790,7 +1790,7 @@ onPress: () =&gt; void</code></pre>
             </div>
             <pre><code>Component: src/components/explore/ExploreAppDetailsScreen/ExploreAppDetailsScreen.tsx::ExploreAppDetailsScreen</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName?: string
 
@@ -1804,13 +1804,13 @@ onVisitPress?: () =&gt; void
 
 socialLinks?: Array&lt;{
   name: string;
-  icon: ImageSourcePropType;
+  icon: ImageSourcePropType | string;
   url: string;
 }&gt;
 
 supportedNetworks?: Array&lt;{
   name: string;
-  icon: ImageSourcePropType;
+  icon: ImageSourcePropType | string;
 }&gt;</code></pre>
           </div>
         </div>
@@ -2410,7 +2410,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
             </div>
             <pre><code>Component: src/components/explore/KaspaSignTxSheet/KaspaSignTxSheet.tsx::KaspaSignTxSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName: string
 
@@ -2609,7 +2609,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
             </div>
             <pre><code>Component: src/components/explore/SwitchNetworkSheet/KaspaSwitchNetworkSheet.tsx::KaspaSwitchNetworkSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName: string
 
@@ -2635,7 +2635,7 @@ onConfirm?: () =&gt; void
  */
 targetNetworkBadge?: string
 
-targetNetworkIcon?: ImageSourcePropType
+targetNetworkIcon?: ImageSourcePropType | string
 
 /**
  * The L1 network the dApp is requesting to switch to.
@@ -2922,7 +2922,7 @@ onRemoveApp: (app: RecentlyConnectedApp) =&gt; void</code></pre>
             </div>
             <pre><code>Component: src/components/explore/SignMessageSheet/SignMessageSheet.tsx::SignMessageSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>appIcon?: ImageSourcePropType
+            <pre><code>appIcon?: ImageSourcePropType | string
 
 appName: string
 
