@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ExploreVerifiedApps } from "./ExploreVerifiedApps";
+import { ExploreApps } from "./ExploreApps";
 import iconImage from "../../../../assets/icon.png";
 
-const meta: Meta<typeof ExploreVerifiedApps> = {
-  title: "Explore/Components/ExploreVerifiedApps",
-  component: ExploreVerifiedApps,
+const meta: Meta<typeof ExploreApps> = {
+  title: "Explore/Components/ExploreApps",
+  component: ExploreApps,
   argTypes: {
     onAppPress: { action: "app pressed" },
     onSubmitAppPress: { action: "submit app pressed" },
