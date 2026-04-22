@@ -576,7 +576,7 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">17 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">17/17 infos</a><span class="filter-pill ok" aria-disabled="true">53 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">17 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">17/17 infos</a><span class="filter-pill ok" aria-disabled="true">55 stories ok</span></div>
   </div>
 </header>
 <main>
@@ -2725,9 +2725,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RecentlyConnectedApps</h2>
       <div class="badges">
-        <label for="c-14-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-14-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">4 prop types</label>
         <label for="c-14-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-14-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-14-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -2759,11 +2759,13 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">3 prop types</span>
+              <span class="badge ok">4 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/RecentlyConnectedApps/RecentlyConnectedApps.tsx::RecentlyConnectedApps</code></pre>
             <pre><code>Props:</code></pre>
             <pre><code>apps?: RecentlyConnectedApp[] = []
+
+containerPaddingHorizontal?: number = 20
 
 onAppPress: (app: RecentlyConnectedApp) =&gt; void
 
@@ -2779,7 +2781,8 @@ onRemoveApp: (app: RecentlyConnectedApp) =&gt; void</code></pre>
                 <div class="row">
                   <span class="ex-name">Imports</span>
                 </div>
-                <pre><code>import { RecentlyConnectedApps } from "kastle-ui";</code></pre>
+                <pre><code>import { RecentlyConnectedApps } from "kastle-ui";
+import { View } from "react-native";</code></pre>
               </div>
           
           
@@ -2792,31 +2795,18 @@ onRemoveApp: (app: RecentlyConnectedApp) =&gt; void</code></pre>
               
               <pre><code>const Default = () =&gt; &lt;RecentlyConnectedApps
     apps={[
-      {
-        id: &quot;0&quot;,
-        appName: &quot;Moonbound&quot;,
-        appIcon: iconImage,
-      },
-      {
-        id: &quot;1&quot;,
-        appName: &quot;Kaspa Finance&quot;,
-        appIcon: iconImage,
-      },
-      {
-        id: &quot;2&quot;,
-        appName: &quot;Zealous Swap&quot;,
-        appIcon: iconImage,
-      },
-      {
-        id: &quot;3&quot;,
-        appName: &quot;KaspaCom&quot;,
-        appIcon: iconImage,
-      },
-      {
-        id: &quot;4&quot;,
-        appName: &quot;Another App&quot;,
-        appIcon: iconImage,
-      },
+      { id: &quot;0&quot;, appName: &quot;Moonbound&quot;, appIcon: iconImage },
+      { id: &quot;1&quot;, appName: &quot;Kaspa Finance&quot;, appIcon: iconImage },
+      { id: &quot;2&quot;, appName: &quot;Zealous Swap&quot;, appIcon: iconImage },
+      { id: &quot;3&quot;, appName: &quot;KaspaCom&quot;, appIcon: iconImage },
+      { id: &quot;4&quot;, appName: &quot;Another App&quot;, appIcon: iconImage },
+      { id: &quot;5&quot;, appName: &quot;DeFi Hub&quot;, appIcon: iconImage },
+      { id: &quot;6&quot;, appName: &quot;KasWallet&quot;, appIcon: iconImage },
+      { id: &quot;7&quot;, appName: &quot;SpeedSwap&quot;, appIcon: iconImage },
+      { id: &quot;8&quot;, appName: &quot;NanoTrade&quot;, appIcon: iconImage },
+      { id: &quot;9&quot;, appName: &quot;Kaspa DEX&quot;, appIcon: iconImage },
+      { id: &quot;10&quot;, appName: &quot;BlockBridge&quot;, appIcon: iconImage },
+      { id: &quot;11&quot;, appName: &quot;ChainVault&quot;, appIcon: iconImage },
     ]} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -2865,6 +2855,43 @@ onRemoveApp: (app: RecentlyConnectedApp) =&gt; void</code></pre>
       {
         id: &quot;2&quot;,
         appName: &quot;Zealous Swap&quot;,
+      },
+    ]} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Single App</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SingleApp = () =&gt; &lt;RecentlyConnectedApps
+    apps={[
+      {
+        id: &quot;0&quot;,
+        appName: &quot;Moonbound&quot;,
+        appIcon: iconImage,
+      },
+    ]} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Two Apps</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const TwoApps = () =&gt; &lt;RecentlyConnectedApps
+    apps={[
+      {
+        id: &quot;0&quot;,
+        appName: &quot;Moonbound&quot;,
+        appIcon: iconImage,
+      },
+      {
+        id: &quot;1&quot;,
+        appName: &quot;Kaspa Finance&quot;,
+        appIcon: iconImage,
       },
     ]} /&gt;;</code></pre>
             </div>
