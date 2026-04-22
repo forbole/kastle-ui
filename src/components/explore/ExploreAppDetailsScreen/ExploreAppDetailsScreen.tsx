@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ScrollView,
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
+import { Image } from "expo-image";
 import { ChevronRight } from "lucide-react-native";
 import { colors } from "../../../config/theme";
 
@@ -15,14 +15,14 @@ export interface ExploreAppDetailsScreenProps {
   appName?: string;
   category?: string;
   description?: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   supportedNetworks?: Array<{
     name: string;
-    icon: ImageSourcePropType;
+    icon: ImageSourcePropType | string;
   }>;
   socialLinks?: Array<{
     name: string;
-    icon: ImageSourcePropType;
+    icon: ImageSourcePropType | string;
     url: string;
   }>;
   onVisitPress?: () => void;
@@ -47,7 +47,7 @@ export const ExploreAppDetailsScreen: React.FC<
     return name.substring(0, 12) + "...";
   };
 
-  const renderSocialIcon = (icon: ImageSourcePropType) => {
+  const renderSocialIcon = (icon: ImageSourcePropType | string) => {
     return <Image source={icon} style={styles.socialIcon} />;
   };
 
@@ -62,7 +62,7 @@ export const ExploreAppDetailsScreen: React.FC<
       key={index}
       style={[styles.networkIcon, index > 0 && styles.networkIconOverlap]}
     >
-      <Image source={network.icon} style={styles.networkIconImage} />
+      <Image source={network.icon} style={styles.networkIconImage} contentFit="cover" />
     </View>
   );
 
@@ -316,6 +316,5 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    resizeMode: "cover",
   },
 });

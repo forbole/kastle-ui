@@ -3,10 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -28,7 +28,7 @@ export interface SignMessageSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   /** The raw message string to be signed */
   message?: string;
   /** Called when user confirms signing */

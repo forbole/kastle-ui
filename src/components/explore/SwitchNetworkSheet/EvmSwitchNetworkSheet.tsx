@@ -4,9 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -29,11 +29,11 @@ export interface EvmSwitchNetworkSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   /** The target network the dApp is requesting to switch to */
   targetNetworkName: string;
   targetNetworkChainId?: string;
-  targetNetworkIcon?: ImageSourcePropType;
+  targetNetworkIcon?: ImageSourcePropType | string;
   /** Called when user confirms the switch */
   onConfirm?: () => void;
 }

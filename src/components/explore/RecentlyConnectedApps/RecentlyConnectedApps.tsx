@@ -4,16 +4,16 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
+import { Image } from "expo-image";
 import { colors } from "../../../config/theme";
 
 export interface RecentlyConnectedApp {
   id: string;
   appName: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
 }
 
 export interface RecentlyConnectedAppsProps {

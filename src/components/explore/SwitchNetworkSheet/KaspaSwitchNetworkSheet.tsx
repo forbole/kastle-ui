@@ -4,9 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -29,7 +29,7 @@ export interface KaspaSwitchNetworkSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   /**
    * The L1 network the dApp is requesting to switch to.
    * e.g. "Mainnet" or "Testnet"
@@ -37,7 +37,7 @@ export interface KaspaSwitchNetworkSheetProps {
   targetNetworkName: string;
   /** Badge shown on the network row, e.g. "Mainnet" | "Testnet" */
   targetNetworkBadge?: string;
-  targetNetworkIcon?: ImageSourcePropType;
+  targetNetworkIcon?: ImageSourcePropType | string;
   /** Called when user confirms the switch */
   onConfirm?: () => void;
 }

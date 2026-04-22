@@ -4,10 +4,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -40,7 +40,7 @@ export interface EvmSignTxSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   /** Network badge label shown on the address cards */
   networkBadge?: string;
   /** Sender address (hex) */

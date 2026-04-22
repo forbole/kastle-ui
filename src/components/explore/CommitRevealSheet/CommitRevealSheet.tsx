@@ -4,10 +4,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -34,7 +34,7 @@ export interface CommitRevealSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   /** Network badge label, e.g. "Kasplex" */
   networkBadge?: string;
   /**

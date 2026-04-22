@@ -4,10 +4,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -41,7 +41,7 @@ export interface KaspaSignTxSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   /** Network badge label shown on the "Send from" section */
   networkBadge?: string;
   /** Sender address */

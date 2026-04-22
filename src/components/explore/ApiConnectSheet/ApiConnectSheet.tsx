@@ -4,9 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageSourcePropType,
 } from "react-native";
+import { Image } from "expo-image";
 import {
   background,
   border,
@@ -31,7 +31,7 @@ export interface ApiConnectSheetProps {
   onClose: () => void;
   appName: string;
   appUrl: string;
-  appIcon?: ImageSourcePropType;
+  appIcon?: ImageSourcePropType | string;
   accounts?: ApiConnectAccount[];
   onCancel?: () => void;
   onConnect?: () => void;
