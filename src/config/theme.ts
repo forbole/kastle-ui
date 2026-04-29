@@ -1,9 +1,11 @@
 /**
  * Kastle UI Design Tokens (Dark mode)
  *
- * Auto-generated from Figma variable export:
- * https://www.figma.com/design/bd49NycFuloqaJvXaib8wx/Kastle-Component--GluesStack-
+ * Canonical source of truth for all visual values.
+ * Figma reference: https://www.figma.com/design/bd49NycFuloqaJvXaib8wx/Kastle-Component--GluesStack-
  * Variable set ID: 605-2019
+ *
+ * All style values — colours, spacing, typography, shadows — must come from this file.
  */
 
 // ---------------------------------------------------------------------------
@@ -355,6 +357,122 @@ export const opacity = {
   o90: 0.9,
   o95: 0.95,
   o100: 1,
+} as const;
+
+// ---------------------------------------------------------------------------
+// Typography
+// ---------------------------------------------------------------------------
+
+/** Font size scale — matches Figma text style sizes (2xs → 6xl) */
+export const fontSize = {
+  "2xs": 10,
+  xs: 12,
+  sm: 14,
+  md: 16,
+  lg: 18,
+  xl: 20,
+  "2xl": 24,
+  "3xl": 30,
+  "4xl": 36,
+  "5xl": 48,
+  "6xl": 60,
+} as const;
+
+/** Font weight — matches Figma text style families */
+export const fontWeight = {
+  normal: "400",   // Text-normal
+  medium: "500",   // Text-medium
+  semibold: "600", // Text-semibold
+  bold: "700",     // Text-bold / Heading
+} as const;
+
+/** Letter spacing — headings carry +0.2 tracking per Figma */
+export const letterSpacing = {
+  normal: 0,
+  heading: 0.2,
+} as const;
+
+/** Font family — Figtree across all text styles */
+export const fontFamily = {
+  default: "Figtree",
+} as const;
+
+/**
+ * Convenience text style presets — matches 📌 Figma named styles.
+ * Spread directly into a StyleSheet rule: `...textStyles.headingLG`
+ *
+ * Line heights:
+ *   Per Figma, almost all styles use Auto (RN platform default ≈ 1.2×).
+ *   Only three styles have explicit line height set in Figma:
+ *     - bodyNormalSM        → 21 (Text-normal/sm)
+ *     - bodyNormalMDRelaxed → 24 (Text-normal/md - 150% variant, paragraph use)
+ *     - bodyNormalLG        → 27 (Text-normal/lg, 150%)
+ */
+export const textStyles = {
+  // Headings — Bold (700), Auto line height, +0.2 letter spacing
+  headingXS:  { fontFamily: fontFamily.default, fontSize: fontSize.sm,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  headingSM:  { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  headingMD:  { fontFamily: fontFamily.default, fontSize: fontSize.lg,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  headingLG:  { fontFamily: fontFamily.default, fontSize: fontSize.xl,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  headingXL:  { fontFamily: fontFamily.default, fontSize: fontSize["2xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  heading2XL: { fontFamily: fontFamily.default, fontSize: fontSize["3xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  heading3XL: { fontFamily: fontFamily.default, fontSize: fontSize["4xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  heading4XL: { fontFamily: fontFamily.default, fontSize: fontSize["5xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  heading5XL: { fontFamily: fontFamily.default, fontSize: fontSize["6xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+
+  // Body Normal — Regular (400), Auto line height except sm/lg per Figma
+  bodyNormal2XS:        { fontFamily: fontFamily.default, fontSize: fontSize["2xs"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormalXS:         { fontFamily: fontFamily.default, fontSize: fontSize.xs,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormalSM:         { fontFamily: fontFamily.default, fontSize: fontSize.sm,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal, lineHeight: 21 },
+  bodyNormalMD:         { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormalMDRelaxed:  { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal, lineHeight: 24 },
+  bodyNormalLG:         { fontFamily: fontFamily.default, fontSize: fontSize.lg,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal, lineHeight: 27 },
+  bodyNormalXL:         { fontFamily: fontFamily.default, fontSize: fontSize.xl,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormal2XL:        { fontFamily: fontFamily.default, fontSize: fontSize["2xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormal3XL:        { fontFamily: fontFamily.default, fontSize: fontSize["3xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormal4XL:        { fontFamily: fontFamily.default, fontSize: fontSize["4xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormal5XL:        { fontFamily: fontFamily.default, fontSize: fontSize["5xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormal6XL:        { fontFamily: fontFamily.default, fontSize: fontSize["6xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+
+  // Body Semibold — SemiBold (600), Auto line height
+  bodySemibold2XS: { fontFamily: fontFamily.default, fontSize: fontSize["2xs"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemiboldXS:  { fontFamily: fontFamily.default, fontSize: fontSize.xs,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemiboldSM:  { fontFamily: fontFamily.default, fontSize: fontSize.sm,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemiboldMD:  { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemiboldLG:  { fontFamily: fontFamily.default, fontSize: fontSize.lg,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemiboldXL:  { fontFamily: fontFamily.default, fontSize: fontSize.xl,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemibold2XL: { fontFamily: fontFamily.default, fontSize: fontSize["2xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemibold3XL: { fontFamily: fontFamily.default, fontSize: fontSize["3xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemibold4XL: { fontFamily: fontFamily.default, fontSize: fontSize["4xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemibold5XL: { fontFamily: fontFamily.default, fontSize: fontSize["5xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemibold6XL: { fontFamily: fontFamily.default, fontSize: fontSize["6xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+} as const;
+
+// ---------------------------------------------------------------------------
+// Shadows
+// React Native: shadowRadius = blur equivalent (iOS); elevation = Android.
+// ---------------------------------------------------------------------------
+
+/**
+ * Shadow presets — exact values from Figma local styles.
+ * Spread into a View style: `...shadows.soft1`
+ *
+ * Soft: ambient glow (no direction) — use for floating cards, modals, bottom sheets.
+ * Hard: directional — use for buttons, active elements that need lift.
+ */
+export const shadows = {
+  // Soft Shadows (softShadow 1–4) — symmetric blur, no offset
+  soft1: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 2 },
+  soft2: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowRadius: 20, elevation: 5 },
+  soft3: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowRadius: 30, elevation: 8 },
+  soft4: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.2, shadowRadius: 40, elevation: 12 },
+
+  // Hard Shadows (hardShadow 1–5) — directional, simulate light source
+  hard1: { shadowColor: "#262626", shadowOffset: { width: -2, height: 2  }, shadowOpacity: 0.2, shadowRadius: 8,  elevation: 4 },
+  hard2: { shadowColor: "#262626", shadowOffset: { width:  0, height: 3  }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 5 },
+  hard3: { shadowColor: "#262626", shadowOffset: { width:  2, height: 2  }, shadowOpacity: 0.2, shadowRadius: 8,  elevation: 4 },
+  hard4: { shadowColor: "#262626", shadowOffset: { width:  0, height: -3 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 5 },
+  hard5: { shadowColor: "#262626", shadowOffset: { width:  0, height: 2  }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 4 },
 } as const;
 
 // ---------------------------------------------------------------------------
