@@ -51,6 +51,7 @@ export interface BannerProps {
 }
 
 export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
+
   const inner = (
     <View style={styles.inner}>
       <View style={styles.iconWrapper}>
@@ -78,11 +79,7 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
           ) : null}
         </View>
         {banner.cta ? (
-          <LinkButton
-            label={banner.cta.text}
-            onPress={onCtaPress}
-            paddingH={0}
-          />
+          <LinkButton label={banner.cta.text} onPress={onCtaPress} paddingH={0} />
         ) : null}
       </View>
     </View>
@@ -116,20 +113,14 @@ const styles = StyleSheet.create({
     backgroundColor: background.bg50,
     borderColor: border.b100,
     borderWidth: borderWidth.bw1,
-    height: 113,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
   },
   inner: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "stretch",
     gap: spacing.s3,
     paddingTop: spacing.s4,
-    paddingBottom: spacing.s2,
+    paddingBottom: spacing.s4,
     paddingHorizontal: spacing.s4,
   },
   imageBgImage: {
@@ -149,14 +140,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
-    alignSelf: "stretch",
     justifyContent: "space-between",
+    gap: spacing.s2,
     paddingRight: spacing.s8,
   },
   textGroup: {
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: spacing.s1, // 4px gap — Figma gap-[4px]
+    gap: spacing.s1,
   },
   title: {
     fontSize: 14,
