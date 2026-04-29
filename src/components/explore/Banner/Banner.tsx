@@ -131,6 +131,8 @@ const styles = StyleSheet.create({
     height: 18,
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "flex-start",
+    marginTop: 2,
   },
   icon: {
     fontSize: 18,
