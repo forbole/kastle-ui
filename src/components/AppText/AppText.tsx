@@ -38,6 +38,8 @@ export const AppText: React.FC<AppTextProps> = ({
   ...props
 }) => (
   <Text
+    allowFontScaling={false}
+    maxFontSizeMultiplier={1}
     style={[{ fontFamily: fontFamilyMap[weight], fontWeight: weight }, style]}
     {...props}
   />
