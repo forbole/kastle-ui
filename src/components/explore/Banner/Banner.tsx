@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
+    lineHeight: 20,
     color: typography.t900,
     letterSpacing: 0.2,
   },
