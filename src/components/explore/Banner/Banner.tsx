@@ -51,7 +51,6 @@ export interface BannerProps {
 }
 
 export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
-
   const inner = (
     <View style={styles.inner}>
       <View style={styles.iconWrapper}>
@@ -79,7 +78,11 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
           ) : null}
         </View>
         {banner.cta ? (
-          <LinkButton label={banner.cta.text} onPress={onCtaPress} paddingH={0} />
+          <LinkButton
+            label={banner.cta.text}
+            onPress={onCtaPress}
+            paddingH={0}
+          />
         ) : null}
       </View>
     </View>
@@ -106,6 +109,7 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: spacing.s3,
     borderRadius: borderRadius["2xl"],
     overflow: "hidden",
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
   textGroup: {
     flexDirection: "column",
     alignItems: "flex-start",
-    gap: spacing.s1,               // 4px gap — Figma gap-[4px]
+    gap: spacing.s1, // 4px gap — Figma gap-[4px]
   },
   title: {
     fontSize: 14,
@@ -164,5 +168,4 @@ const styles = StyleSheet.create({
     color: typography.t500,
     lineHeight: 16,
   },
-
 });
