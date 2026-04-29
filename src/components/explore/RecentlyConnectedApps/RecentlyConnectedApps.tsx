@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { colors } from "../../../config/theme";
+import { AppText } from "../../AppText";
 
 const CARD_WIDTH = 120;
 const CARD_GAP = 8;
@@ -37,11 +37,11 @@ export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.sectionTitle}>Recently Connected</Text>
+        <AppText weight="600" style={styles.sectionTitle}>Recently Connected</AppText>
         <TouchableOpacity onPress={() => setIsManaging((prev) => !prev)}>
-          <Text style={styles.manageText}>
+          <AppText weight="500" style={styles.manageText}>
             {isManaging ? "Done" : "Manage"}
-          </Text>
+          </AppText>
         </TouchableOpacity>
       </View>
 
@@ -66,19 +66,20 @@ export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
                   <Image source={app.appIcon} style={styles.appIcon} />
                 ) : (
                   <View style={styles.appIconPlaceholder}>
-                    <Text style={styles.appIconPlaceholderText}>
+                    <AppText weight="600" style={styles.appIconPlaceholderText}>
                       {app.appName?.charAt(0)?.toUpperCase()}
-                    </Text>
+                    </AppText>
                   </View>
                 )}
               </View>
-              <Text
+              <AppText
+                weight="400"
                 style={styles.appName}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
                 {app.appName}
-              </Text>
+              </AppText>
             </TouchableOpacity>
 
             {isManaging && (
@@ -112,13 +113,11 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
     color: colors.textSecondary,
     lineHeight: 16,
   },
   manageText: {
     fontSize: 14,
-    fontWeight: "500",
     color: colors.primary,
     lineHeight: 14,
   },
@@ -187,12 +186,10 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     fontSize: 20,
-    fontWeight: "600",
     color: colors.textSecondary,
   },
   appName: {
     fontSize: 14,
-    fontWeight: "400",
     color: colors.textSecondary,
     lineHeight: 21,
     height: 21,

@@ -6,6 +6,7 @@ import {
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
+import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import {
   background,
@@ -78,15 +79,15 @@ export const SignMessageSheet: React.FC<SignMessageSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>
+                <AppText weight="600" style={styles.appIconPlaceholderText}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </Text>
+                </AppText>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <Text style={styles.appTitle}>{appName}</Text>
-            <Text style={styles.appUrl}>{appUrl}</Text>
+            <AppText weight="600" style={styles.appTitle}>{appName}</AppText>
+            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
           </View>
         </View>
 
@@ -101,7 +102,7 @@ export const SignMessageSheet: React.FC<SignMessageSheetProps> = ({
         >
           <View style={styles.contentSection}>
             {/* Title */}
-            <Text style={styles.sectionTitle}>Message</Text>
+            <AppText weight="600" style={styles.sectionTitle}>Message</AppText>
 
             {/* Message card */}
             <View style={styles.messageCard}>
@@ -192,7 +193,6 @@ const styles = StyleSheet.create({
   appIconPlaceholderText: {
     color: typography.t900,
     fontSize: 16,
-    fontWeight: "600",
   },
   appMeta: {
     flex: 1,
@@ -201,12 +201,10 @@ const styles = StyleSheet.create({
   appTitle: {
     color: typography.t900,
     fontSize: 18,
-    fontWeight: "600",
   },
   appUrl: {
     color: typography.t500,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
 
@@ -228,7 +226,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: typography.t600,
     fontSize: 14,
-    fontWeight: "600",
   },
 
   // Message card
@@ -242,7 +239,6 @@ const styles = StyleSheet.create({
   messageText: {
     color: typography.t900,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
     fontFamily: "monospace",
   },

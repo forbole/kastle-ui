@@ -1,11 +1,11 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
 } from "react-native";
+import { AppText } from "../../AppText";
 import { ExternalLink } from "lucide-react-native";
 import { colors } from "../../../config/theme";
 import {
@@ -46,7 +46,7 @@ export const ExploreApps: React.FC<ExploreAppsProps> = ({
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.header}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <AppText weight="600" style={styles.sectionTitle}>{title}</AppText>
       </View>
 
       {/* Apps Grid */}
@@ -70,10 +70,10 @@ export const ExploreApps: React.FC<ExploreAppsProps> = ({
           style={styles.submitLinkContainer}
           onPress={onSubmitAppPress}
         >
-          <Text style={styles.submitLinkText}>
-            <Text style={styles.submitLinkNormal}>Want your app listed? </Text>
-            <Text style={styles.submitLinkHighlight}>Submit it now!</Text>
-          </Text>
+          <AppText style={styles.submitLinkText}>
+            <AppText weight="400" style={styles.submitLinkNormal}>Want your app listed? </AppText>
+            <AppText weight="400" style={styles.submitLinkHighlight}>Submit it now!</AppText>
+          </AppText>
           <ExternalLink
             size={16}
             color={colors.link}
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
     color: colors.textSecondary,
     lineHeight: 16,
   },
@@ -128,11 +127,9 @@ const styles = StyleSheet.create({
   },
   submitLinkNormal: {
     color: colors.textDimmed,
-    fontWeight: "400",
   },
   submitLinkHighlight: {
     color: colors.link,
-    fontWeight: "400",
     textDecorationLine: "underline",
   },
 });
