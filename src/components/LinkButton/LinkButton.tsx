@@ -1,9 +1,13 @@
-import React from "react";
-import { Pressable, PressableProps, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native";
 import { AppText } from "../AppText";
 import { borderRadius, opacity, primary, spacing } from "../../config/theme";
 
-export interface LinkButtonProps extends PressableProps {
+export interface LinkButtonProps extends TouchableOpacityProps {
   label: string;
   paddingH?: number;
 }
@@ -15,23 +19,26 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
   paddingH = spacing.s4,
   ...props
 }) => {
+  const [pressed, setPressed] = useState(false);
+
   return (
-    <Pressable
-      style={({ pressed }) => [
+    <TouchableOpacity
+      style={[
         styles.button,
         { paddingHorizontal: paddingH },
         disabled && styles.buttonDisabled,
-        typeof style === "function" ? style({ pressed }) : style,
+        typeof style === "function" ? undefined : style,
       ]}
       disabled={disabled}
+      activeOpacity={1}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
       {...props}
     >
-      {({ pressed }) => (
-        <AppText weight="500" style={[styles.label, pressed && styles.labelPressed]}>
-          {label}
-        </AppText>
-      )}
-    </Pressable>
+      <AppText weight="500" style={[styles.label, pressed && styles.labelPressed]}>
+        {label}
+      </AppText>
+    </TouchableOpacity>
   );
 };
 
