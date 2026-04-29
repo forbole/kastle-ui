@@ -1,7 +1,6 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
@@ -9,6 +8,7 @@ import {
 import { Image } from "expo-image";
 import { ArrowUpRight, Check } from "lucide-react-native";
 import { colors } from "../../../config/theme";
+import { AppText } from "../../AppText";
 
 export interface ExploreAppCardProps {
   appName: string;
@@ -40,9 +40,9 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
             <Image source={appIcon} style={styles.appIcon} />
           ) : (
             <View style={styles.appIconPlaceholder}>
-              <Text style={styles.appIconPlaceholderText}>
+              <AppText weight="600" style={styles.appIconPlaceholderText}>
                 {appName?.charAt(0)?.toUpperCase()}
-              </Text>
+              </AppText>
             </View>
           )}
         </View>
@@ -50,18 +50,18 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
         {/* App Info */}
         <View style={styles.infoContainer}>
           <View style={styles.titleRow}>
-            <Text style={styles.appName} numberOfLines={1}>
+            <AppText weight="600" style={styles.appName} numberOfLines={1}>
               {appName}
-            </Text>
+            </AppText>
             {isVerified && (
               <View style={styles.verifiedBadge}>
                 <Check size={10} color="#ffffff" strokeWidth={2.5} />
               </View>
             )}
           </View>
-          <Text style={styles.appCategory} numberOfLines={1}>
+          <AppText weight="400" style={styles.appCategory} numberOfLines={1}>
             {appCategory}
-          </Text>
+          </AppText>
         </View>
       </View>
     </TouchableOpacity>
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   appIconPlaceholderText: {
     color: colors.textPrimary,
     fontSize: 14,
-    fontWeight: "600",
   },
   infoContainer: {
     flexShrink: 1,
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
   appName: {
     color: colors.textPrimary,
     fontSize: 14,
-    fontWeight: "600",
   },
   verifiedBadge: {
     width: 16,
@@ -136,7 +134,6 @@ const styles = StyleSheet.create({
   appCategory: {
     color: colors.textMuted,
     fontSize: 12,
-    fontWeight: "400",
     letterSpacing: 0.06,
     lineHeight: 16,
   },

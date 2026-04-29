@@ -1,11 +1,11 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
 } from "react-native";
+import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import {
   background,
@@ -72,15 +72,15 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>
+                <AppText weight="600" style={styles.appIconPlaceholderText}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </Text>
+                </AppText>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <Text style={styles.appTitle}>Switch Network</Text>
-            <Text style={styles.appUrl}>{appUrl}</Text>
+            <AppText weight="600" style={styles.appTitle}>Switch Network</AppText>
+            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
           </View>
         </View>
 
@@ -94,16 +94,16 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
               <Image source={targetNetworkIcon} style={styles.networkIcon} />
             ) : (
               <View style={styles.networkIconPlaceholder}>
-                <Text style={styles.networkIconPlaceholderText}>
+                <AppText weight="700" style={styles.networkIconPlaceholderText}>
                   {targetNetworkName?.charAt(0)?.toUpperCase()}
-                </Text>
+                </AppText>
               </View>
             )}
           </View>
           <View style={styles.networkInfo}>
-            <Text style={styles.networkName}>{targetNetworkName}</Text>
+            <AppText weight="600" style={styles.networkName}>{targetNetworkName}</AppText>
             {targetNetworkChainId ? (
-              <Text style={styles.networkChainId}>{targetNetworkChainId}</Text>
+              <AppText weight="400" style={styles.networkChainId}>{targetNetworkChainId}</AppText>
             ) : null}
           </View>
         </View>
@@ -115,14 +115,14 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <AppText weight="600" style={styles.cancelButtonText}>Cancel</AppText>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.confirmButton}
             onPress={handleConfirm}
             activeOpacity={0.8}
           >
-            <Text style={styles.confirmButtonText}>Switch</Text>
+            <AppText weight="600" style={styles.confirmButtonText}>Switch</AppText>
           </TouchableOpacity>
         </View>
 
@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
   appIconPlaceholderText: {
     color: typography.t900,
     fontSize: 16,
-    fontWeight: "600",
   },
   appMeta: {
     flex: 1,
@@ -204,12 +203,10 @@ const styles = StyleSheet.create({
   appTitle: {
     color: typography.t900,
     fontSize: 18,
-    fontWeight: "600",
   },
   appUrl: {
     color: typography.t500,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
 
@@ -258,7 +255,6 @@ const styles = StyleSheet.create({
   networkIconPlaceholderText: {
     color: info.i800,
     fontSize: 16,
-    fontWeight: "700",
   },
   networkInfo: {
     flex: 1,
@@ -267,12 +263,10 @@ const styles = StyleSheet.create({
   networkName: {
     color: typography.t900,
     fontSize: 15,
-    fontWeight: "600",
   },
   networkChainId: {
     color: typography.t500,
     fontSize: 12,
-    fontWeight: "400",
   },
 
   // Bottom bar
@@ -294,7 +288,6 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: typography.t900,
     fontSize: 16,
-    fontWeight: "600",
   },
   confirmButton: {
     flex: 1,
@@ -307,7 +300,6 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     color: "#ffffff",
     fontSize: 16,
-    fontWeight: "600",
   },
 
   // iOS home indicator

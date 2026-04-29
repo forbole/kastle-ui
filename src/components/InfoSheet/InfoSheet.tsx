@@ -1,10 +1,10 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { AppText } from "../AppText";
 import {
   background,
   border,
@@ -46,13 +46,13 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
         >
           {/* Title + divider */}
           <View style={styles.titleSection}>
-            <Text style={styles.title}>{title}</Text>
+            <AppText weight="600" style={styles.title}>{title}</AppText>
             <View style={styles.divider} />
           </View>
 
           {/* Description */}
           <View style={styles.descriptionSection}>
-            <Text style={styles.description}>{description}</Text>
+            <AppText weight="400" style={styles.description}>{description}</AppText>
           </View>
         </ScrollView>
 
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   title: {
     color: typography.t900, // #FFFFFF
     fontSize: 18,
-    fontWeight: "600",
     lineHeight: 22,
   },
   divider: {
@@ -126,7 +125,6 @@ const styles = StyleSheet.create({
   description: {
     color: typography.t700, // #C1D5DE
     fontSize: 16,
-    fontWeight: "400",
     lineHeight: 24,
   },
 

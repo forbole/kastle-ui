@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Share2, Unplug } from "lucide-react-native";
 import { colors } from "../../../config/theme";
+import { AppText } from "../../AppText";
 
 export interface ExploreUrlBarMenuProps {
   visible: boolean;
@@ -36,14 +37,14 @@ export const ExploreUrlBarMenu: React.FC<ExploreUrlBarMenuProps> = ({
       {/* Share */}
       {showShare && (
         <TouchableOpacity style={styles.menuItem} onPress={handleShare}>
-          <Text style={styles.menuText}>Share</Text>
+          <AppText weight="400" style={styles.menuText}>Share</AppText>
           <Share2 size={16} color={colors.textSecondary} strokeWidth={2} />
         </TouchableOpacity>
       )}
 
       {/* Disconnect App */}
       <TouchableOpacity style={styles.menuItem} onPress={handleDisconnect}>
-        <Text style={styles.menuText}>Disconnect App</Text>
+        <AppText weight="400" style={styles.menuText}>Disconnect App</AppText>
         <Unplug size={16} color={colors.textSecondary} strokeWidth={2} />
       </TouchableOpacity>
     </View>
@@ -78,7 +79,6 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 16,
-    fontWeight: "400",
     color: colors.textSecondary,
   },
 });

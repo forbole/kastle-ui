@@ -1,24 +1,13 @@
 import type { Preview } from "@storybook/react-native-web-vite";
 import { INITIAL_VIEWPORTS } from "storybook/viewport";
 
-// Global font setup
+// Load Figtree from Google Fonts — AppText references this family by name on web.
 if (typeof document !== "undefined") {
   const link = document.createElement("link");
   link.href =
     "https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap";
   link.rel = "stylesheet";
   document.head.appendChild(link);
-
-  setTimeout(() => {
-    document.head.insertAdjacentHTML(
-      "beforeend",
-      `
-      <style>
-        * { font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif !important; }
-      </style>
-    `,
-    );
-  }, 500);
 }
 
 const preview: Preview = {

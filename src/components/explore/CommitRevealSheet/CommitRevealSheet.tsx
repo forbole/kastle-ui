@@ -21,6 +21,7 @@ import {
 } from "../../../config/theme";
 import { ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
+import { AppText } from "../../AppText";
 import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
 
 // ---------------------------------------------------------------------------
@@ -80,7 +81,7 @@ function formatScriptData(raw: string): string {
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.networkBadge}>
-    <Text style={styles.networkBadgeText}>{label}</Text>
+    <AppText weight="400" style={styles.networkBadgeText}>{label}</AppText>
   </View>
 );
 
@@ -92,13 +93,13 @@ const TableRow: React.FC<{
   hasBorderBottom?: boolean;
 }> = ({ label, value, subValue, valueColor, hasBorderBottom = true }) => (
   <View style={[styles.tableRow, hasBorderBottom && styles.tableRowBorder]}>
-    <Text style={styles.tableLabelText}>{label}</Text>
+    <AppText weight="400" style={styles.tableLabelText}>{label}</AppText>
     <View style={styles.tableValue}>
-      <Text style={[styles.tableValueText, valueColor ? { color: valueColor } : undefined]}>
+      <AppText weight="600" style={[styles.tableValueText, valueColor ? { color: valueColor } : undefined]}>
         {value}
-      </Text>
+      </AppText>
       {subValue ? (
-        <Text style={styles.tableSubValueText}>{subValue}</Text>
+        <AppText weight="400" style={styles.tableSubValueText}>{subValue}</AppText>
       ) : null}
     </View>
   </View>
@@ -166,15 +167,15 @@ export const CommitRevealSheet: React.FC<CommitRevealSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>
+                <AppText weight="600" style={styles.appIconPlaceholderText}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </Text>
+                </AppText>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <Text style={styles.appTitle}>{appName}</Text>
-            <Text style={styles.appUrl}>{appUrl}</Text>
+            <AppText weight="600" style={styles.appTitle}>{appName}</AppText>
+            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
           </View>
           {networkBadge ? <NetworkBadge label={networkBadge} /> : null}
         </View>
@@ -225,9 +226,9 @@ export const CommitRevealSheet: React.FC<CommitRevealSheetProps> = ({
                   onPress={() => setScriptExpanded((prev) => !prev)}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.scriptAccordionLabel}>
+                  <AppText weight="600" style={styles.scriptAccordionLabel}>
                     Script Details
-                  </Text>
+                  </AppText>
                   {scriptExpanded ? (
                     <ChevronUp size={18} color={typography.t600} />
                   ) : (
@@ -328,7 +329,6 @@ const styles = StyleSheet.create({
   appIconPlaceholderText: {
     color: typography.t900,
     fontSize: 16,
-    fontWeight: "600",
   },
   appMeta: {
     flex: 1,
@@ -337,12 +337,10 @@ const styles = StyleSheet.create({
   appTitle: {
     color: typography.t900,
     fontSize: 18,
-    fontWeight: "600",
   },
   appUrl: {
     color: typography.t500,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
 
@@ -358,7 +356,6 @@ const styles = StyleSheet.create({
   networkBadgeText: {
     color: info.i800,
     fontSize: 12,
-    fontWeight: "400",
   },
 
   // Divider
@@ -400,7 +397,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: typography.t900,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
   tableValue: {
@@ -409,14 +405,12 @@ const styles = StyleSheet.create({
   tableValueText: {
     color: typography.t900,
     fontSize: 14,
-    fontWeight: "600",
     lineHeight: 21,
     textAlign: "right",
   },
   tableSubValueText: {
     color: typography.t600,
     fontSize: 12,
-    fontWeight: "400",
     textAlign: "right",
   },
 
@@ -434,7 +428,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: typography.t600,
     fontSize: 14,
-    fontWeight: "600",
   },
   scriptBody: {
     backgroundColor: white["5%"],
@@ -446,7 +439,6 @@ const styles = StyleSheet.create({
   scriptText: {
     color: typography.t600,
     fontSize: 12,
-    fontWeight: "400",
     fontFamily: "monospace",
     lineHeight: 18,
   },

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
+import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import { ChevronRight } from "lucide-react-native";
 import { colors } from "../../../config/theme";
@@ -79,22 +80,22 @@ export const ExploreAppDetailsScreen: React.FC<
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <Text style={styles.appIconPlaceholderText}>
+                <AppText weight="600" style={styles.appIconPlaceholderText}>
                   {appName?.charAt(0)}
-                </Text>
+                </AppText>
               </View>
             )}
           </View>
           <View style={styles.appTextContainer}>
             <View style={styles.appNameRow}>
-              <Text style={styles.appName}>{truncateAppName(appName)}</Text>
+              <AppText weight="600" style={styles.appName}>{truncateAppName(appName)}</AppText>
               {renderVerifiedIcon()}
             </View>
-            <Text style={styles.appCategory}>{category}</Text>
+            <AppText style={styles.appCategory}>{category}</AppText>
           </View>
         </View>
         <TouchableOpacity style={styles.visitButton} onPress={onVisitPress}>
-          <Text style={styles.visitButtonText}>Visit</Text>
+          <AppText weight="500" style={styles.visitButtonText}>Visit</AppText>
           <ChevronRight size={16} color="white" strokeWidth={2} />
         </TouchableOpacity>
       </View>
@@ -102,10 +103,10 @@ export const ExploreAppDetailsScreen: React.FC<
       {/* Description Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Description</Text>
+          <AppText weight="600" style={styles.sectionTitle}>Description</AppText>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionText}>{description}</Text>
+          <AppText style={styles.descriptionText}>{description}</AppText>
         </View>
       </View>
 
@@ -126,7 +127,7 @@ export const ExploreAppDetailsScreen: React.FC<
       {supportedNetworks && supportedNetworks.length > 0 && (
         <View style={styles.networkSection}>
           <View style={styles.networkRow}>
-            <Text style={styles.networkLabel}>Supported Network</Text>
+            <AppText weight="600" style={styles.networkLabel}>Supported Network</AppText>
             <View style={styles.networkIcons}>
               {supportedNetworks.map((network, index) =>
                 renderNetworkIcon(network, index),
@@ -179,7 +180,6 @@ const styles = StyleSheet.create({
   appIconPlaceholderText: {
     color: "white",
     fontSize: 14,
-    fontWeight: "600",
   },
   appTextContainer: {
     gap: 6,
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 16,
-    fontWeight: "600",
     color: colors.textPrimary,
     lineHeight: 17,
   },
@@ -207,7 +206,7 @@ const styles = StyleSheet.create({
   verifiedIconText: {
     color: "white",
     fontSize: 10,
-    fontWeight: "bold",
+    fontWeight: "700",
   },
   appCategory: {
     fontSize: 12,
@@ -228,7 +227,6 @@ const styles = StyleSheet.create({
   visitButtonText: {
     color: "white",
     fontSize: 14,
-    fontWeight: "500",
   },
   section: {
     gap: 8,
@@ -238,7 +236,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
     color: colors.textSecondary,
   },
   descriptionContainer: {

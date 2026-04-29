@@ -1,10 +1,10 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { AppText } from "../AppText";
 import {
   background,
   border,
@@ -60,10 +60,10 @@ export const EstFeeSheet: React.FC<EstFeeSheetProps> = ({
         >
           {/* Title section */}
           <View style={styles.titleSection}>
-            <Text style={styles.title}>Est. Fee</Text>
-            <Text style={styles.subtitle}>
+            <AppText weight="600" style={styles.title}>Est. Fee</AppText>
+            <AppText weight="400" style={styles.subtitle}>
               The estimated total cost for this transfer
-            </Text>
+            </AppText>
             <View style={styles.divider} />
           </View>
 
@@ -73,18 +73,18 @@ export const EstFeeSheet: React.FC<EstFeeSheetProps> = ({
               <View key={index} style={styles.feeRow}>
                 {/* Label + external link icon */}
                 <View style={styles.feeLabel}>
-                  <Text style={styles.feeLabelText}>
+                  <AppText weight="400" style={styles.feeLabelText}>
                     {fee.networkName} network fees
-                  </Text>
+                  </AppText>
                   {fee.infoUrl ? (
                     <ExternalLink size={14} color={typography.t600} />
                   ) : null}
                 </View>
                 {/* Amount */}
                 <View style={styles.feeAmount}>
-                  <Text style={styles.feeAmountText}>{fee.fee}</Text>
+                  <AppText weight="400" style={styles.feeAmountText}>{fee.fee}</AppText>
                   {fee.feeUsd ? (
-                    <Text style={styles.feeAmountUsd}>{fee.feeUsd}</Text>
+                    <AppText weight="400" style={styles.feeAmountUsd}>{fee.feeUsd}</AppText>
                   ) : null}
                 </View>
               </View>
@@ -149,12 +149,10 @@ const styles = StyleSheet.create({
   title: {
     color: typography.t900,
     fontSize: 18,
-    fontWeight: "600",
   },
   subtitle: {
     color: typography.t700, // #C1D5DE
     fontSize: 16,
-    fontWeight: "400",
   },
   divider: {
     height: 1,
@@ -182,7 +180,6 @@ const styles = StyleSheet.create({
   feeLabelText: {
     color: typography.t700, // #C1D5DE
     fontSize: 16,
-    fontWeight: "400",
   },
   feeAmount: {
     alignItems: "flex-end",
@@ -190,13 +187,11 @@ const styles = StyleSheet.create({
   feeAmountText: {
     color: typography.t600, // #9EB7C4
     fontSize: 16,
-    fontWeight: "400",
     textAlign: "right",
   },
   feeAmountUsd: {
     color: typography.t500, // #7B9AAA
     fontSize: 12,
-    fontWeight: "400",
     textAlign: "right",
   },
 

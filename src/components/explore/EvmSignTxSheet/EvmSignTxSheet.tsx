@@ -18,6 +18,7 @@ import {
 } from "../../../config/theme";
 import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
+import { AppText } from "../../AppText";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
@@ -65,7 +66,7 @@ const InfoIcon: React.FC = () => <Info size={16} color={typography.t600} />;
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.networkBadge}>
-    <Text style={styles.networkBadgeText}>{label}</Text>
+    <AppText weight="400" style={styles.networkBadgeText}>{label}</AppText>
   </View>
 );
 
@@ -76,10 +77,10 @@ const AddressCard: React.FC<{
 }> = ({ label, address, networkBadge }) => (
   <View style={styles.addressCard}>
     <View style={styles.addressCardHeader}>
-      <Text style={styles.addressCardLabel}>{label}</Text>
+      <AppText weight="600" style={styles.addressCardLabel}>{label}</AppText>
       <NetworkBadge label={networkBadge} />
     </View>
-    <Text style={styles.addressCardAddress}>{address}</Text>
+    <AppText weight="400" style={styles.addressCardAddress}>{address}</AppText>
   </View>
 );
 
@@ -96,14 +97,14 @@ const TransactionRow: React.FC<{
   >
     {/* Label column */}
     <View style={styles.tableLabel}>
-      <Text style={styles.tableLabelText}>{row.label}</Text>
+      <AppText weight="400" style={styles.tableLabelText}>{row.label}</AppText>
       {row.info && <InfoIcon />}
     </View>
     {/* Value column */}
     <View style={styles.tableValue}>
-      <Text style={styles.tableValueText}>{row.value}</Text>
+      <AppText weight="400" style={styles.tableValueText}>{row.value}</AppText>
       {row.subValue ? (
-        <Text style={styles.tableSubValueText}>{row.subValue}</Text>
+        <AppText weight="400" style={styles.tableSubValueText}>{row.subValue}</AppText>
       ) : null}
     </View>
   </TouchableOpacity>
@@ -166,15 +167,15 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
                 <Image source={appIcon} style={styles.appIcon} />
               ) : (
                 <View style={styles.appIconPlaceholder}>
-                  <Text style={styles.appIconPlaceholderText}>
+                  <AppText weight="600" style={styles.appIconPlaceholderText}>
                     {appName?.charAt(0)?.toUpperCase()}
-                  </Text>
+                  </AppText>
                 </View>
               )}
             </View>
             <View style={styles.appMeta}>
-              <Text style={styles.appTitle}>{appName}</Text>
-              <Text style={styles.appUrl}>{appUrl}</Text>
+              <AppText weight="600" style={styles.appTitle}>{appName}</AppText>
+              <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
             </View>
           </View>
 
@@ -234,7 +235,7 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
                     onPress={() => setRawExpanded((prev) => !prev)}
                     activeOpacity={0.7}
                   >
-                    <Text style={styles.rawDetailsLabel}>Raw Details</Text>
+                    <AppText weight="600" style={styles.rawDetailsLabel}>Raw Details</AppText>
                     {rawExpanded ? (
                       <ChevronUp size={18} color={typography.t600} />
                     ) : (
@@ -349,7 +350,6 @@ const styles = StyleSheet.create({
   appIconPlaceholderText: {
     color: typography.t900,
     fontSize: 16,
-    fontWeight: "600",
   },
   appMeta: {
     flex: 1,
@@ -358,12 +358,10 @@ const styles = StyleSheet.create({
   appTitle: {
     color: typography.t900,
     fontSize: 18,
-    fontWeight: "600",
   },
   appUrl: {
     color: typography.t500,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
 
@@ -401,12 +399,10 @@ const styles = StyleSheet.create({
   addressCardLabel: {
     color: typography.t900,
     fontSize: 14,
-    fontWeight: "600",
   },
   addressCardAddress: {
     color: typography.t600,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
 
@@ -422,7 +418,6 @@ const styles = StyleSheet.create({
   networkBadgeText: {
     color: info.i800,
     fontSize: 12,
-    fontWeight: "400",
   },
 
   // Transaction table card
@@ -453,7 +448,6 @@ const styles = StyleSheet.create({
   tableLabelText: {
     color: typography.t900,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
   },
   tableValue: {
@@ -462,14 +456,12 @@ const styles = StyleSheet.create({
   tableValueText: {
     color: typography.t900,
     fontSize: 14,
-    fontWeight: "400",
     lineHeight: 21,
     textAlign: "right",
   },
   tableSubValueText: {
     color: typography.t600,
     fontSize: 12,
-    fontWeight: "400",
     textAlign: "right",
   },
 
@@ -487,7 +479,6 @@ const styles = StyleSheet.create({
     flex: 1,
     color: typography.t600,
     fontSize: 14,
-    fontWeight: "600",
   },
   rawDetailsBody: {
     backgroundColor: white["5%"],
@@ -499,7 +490,6 @@ const styles = StyleSheet.create({
   rawDetailsText: {
     color: typography.t600,
     fontSize: 12,
-    fontWeight: "400",
     fontFamily: "monospace",
     lineHeight: 18,
   },
