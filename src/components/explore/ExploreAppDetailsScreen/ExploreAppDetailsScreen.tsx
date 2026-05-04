@@ -77,14 +77,14 @@ export const ExploreAppDetailsScreen: React.FC<
             )}
           </View>
           <View style={styles.appTextContainer}>
-            <AppText weight="600" style={styles.appName}>
-              {appName} {" "}
+            <View style={styles.titleRow}>
+              <AppText weight="600" style={styles.appName}>{appName}</AppText>
               {isVerified && (
                 <View style={styles.verifiedBadge}>
                   <Check size={10} color="#ffffff" strokeWidth={2.5} />
                 </View>
               )}
-            </AppText>
+            </View>
             <AppText style={styles.appCategory}>{category?.toUpperCase()}</AppText>
           </View>
         </View>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
   titleRow: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     gap: 8,
     flexShrink: 1,
   },
