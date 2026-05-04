@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { AppText } from "../../AppText";
 import { Image } from "expo-image";
-import { ChevronRight } from "lucide-react-native";
+import { ChevronRight, Check } from "lucide-react-native";
 import { colors } from "../../../config/theme";
 
 export interface ExploreAppDetailsScreenProps {
@@ -28,6 +28,7 @@ export interface ExploreAppDetailsScreenProps {
   }>;
   onVisitPress?: () => void;
   onSocialLinkPress?: (url: string) => void;
+  isVerified?: boolean;
 }
 
 export const ExploreAppDetailsScreen: React.FC<
@@ -37,26 +38,15 @@ export const ExploreAppDetailsScreen: React.FC<
   category,
   description,
   appIcon,
+  isVerified = false,
   supportedNetworks,
   socialLinks,
   onVisitPress,
   onSocialLinkPress,
 }) => {
-  const truncateAppName = (name: string | undefined): string => {
-    if (!name) return "";
-    if (name.length <= 15) return name;
-    return name.substring(0, 12) + "...";
-  };
-
   const renderSocialIcon = (icon: ImageSourcePropType | string) => {
     return <Image source={icon} style={styles.socialIcon} />;
   };
-
-  const renderVerifiedIcon = () => (
-    <View style={styles.verifiedIcon}>
-      <Text style={styles.verifiedIconText}>✓</Text>
-    </View>
-  );
 
   const renderNetworkIcon = (network: any, index: number) => (
     <View
@@ -87,11 +77,15 @@ export const ExploreAppDetailsScreen: React.FC<
             )}
           </View>
           <View style={styles.appTextContainer}>
-            <View style={styles.appNameRow}>
-              <AppText weight="600" style={styles.appName}>{truncateAppName(appName)}</AppText>
-              {renderVerifiedIcon()}
-            </View>
-            <AppText style={styles.appCategory}>{category}</AppText>
+            <AppText weight="600" style={styles.appName}>
+              {appName} {" "}
+              {isVerified && (
+                <View style={styles.verifiedBadge}>
+                  <Check size={10} color="#ffffff" strokeWidth={2.5} />
+                </View>
+              )}
+            </AppText>
+            <AppText style={styles.appCategory}>{category?.toUpperCase()}</AppText>
           </View>
         </View>
         <TouchableOpacity style={styles.visitButton} onPress={onVisitPress}>
@@ -152,13 +146,16 @@ const styles = StyleSheet.create({
   appHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     paddingVertical: 7,
   },
   appInfo: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 8,
+    flex: 1,
+    flexShrink: 1,
+    marginRight: 12,
   },
   appIconContainer: {
     width: 40,
@@ -183,30 +180,27 @@ const styles = StyleSheet.create({
   },
   appTextContainer: {
     gap: 6,
-  },
-  appNameRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    height: 17,
+    flexShrink: 1,
   },
   appName: {
     fontSize: 16,
     color: colors.textPrimary,
-    lineHeight: 17,
+    lineHeight: 20,
+    flexShrink: 1,
   },
-  verifiedIcon: {
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 8,
+    flexShrink: 1,
+  },
+  verifiedBadge: {
     width: 16,
     height: 16,
-    borderRadius: 8,
     backgroundColor: colors.primary,
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-  },
-  verifiedIconText: {
-    color: "white",
-    fontSize: 10,
-    fontWeight: "700",
   },
   appCategory: {
     fontSize: 12,

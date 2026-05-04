@@ -48,3 +48,16 @@ export const WithSubmitLink: Story = {
     showSubmitLink: true,
   },
 };
+
+export const Loading: Story = {
+  args: {
+    isLoading: true,
+  },
+};
+
+export const LoadingCustomCount: Story = {
+  args: {
+    isLoading: true,
+    skeletonCount: 4,
+  },
+};

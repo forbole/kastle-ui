@@ -60,7 +60,7 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
             )}
           </View>
           <AppText weight="400" style={styles.appCategory} numberOfLines={1}>
-            {appCategory}
+            {appCategory?.toUpperCase()}
           </AppText>
         </View>
       </View>
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
   appName: {
     color: colors.textPrimary,
     fontSize: 14,
+    flexShrink: 1,
   },
   verifiedBadge: {
     width: 16,

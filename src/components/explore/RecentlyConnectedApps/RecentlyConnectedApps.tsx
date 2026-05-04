@@ -10,7 +10,7 @@ import { Image } from "expo-image";
 import { colors } from "../../../config/theme";
 import { AppText } from "../../AppText";
 
-const CARD_WIDTH = 120;
+const CARD_WIDTH = 136;
 const CARD_GAP = 8;
 
 export interface RecentlyConnectedApp {

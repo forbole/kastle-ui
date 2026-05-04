@@ -14,6 +14,7 @@ const meta: Meta<typeof ExploreAppDetailsScreen> = {
     description:
       "Zealous Swap is the pioneering AMM-based decentralized exchange (DEX) on the Kaspa ecosystem, enabling fast token swaps, liquidity provision, and staking with innovative features like an NFT-based fee system, protocol-owned liquidity, and an insurance fund for enhanced security.",
     appIcon: { uri: iconImage },
+    isVerified: true,
     supportedNetworks: [
       { name: "Kaspa", icon: { uri: iconImage } },
       { name: "KRC-20", icon: { uri: iconImage } },
