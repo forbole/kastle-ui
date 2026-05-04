@@ -576,7 +576,7 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">18 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">18/18 infos</a><span class="filter-pill ok" aria-disabled="true">60 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">18 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">18/18 infos</a><span class="filter-pill ok" aria-disabled="true">62 stories ok</span></div>
   </div>
 </header>
 <main>
@@ -1903,7 +1903,7 @@ onPress: () =&gt; void</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreAppDetailsScreen</h2>
       <div class="badges">
-        <label for="c-8-explore-screens-exploreappdetailsscreen-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-8-explore-screens-exploreappdetailsscreen-props" class="badge ok as-toggle">9 prop types</label>
         <label for="c-8-explore-screens-exploreappdetailsscreen-info" class="badge info as-toggle">1 info</label>
         <label for="c-8-explore-screens-exploreappdetailsscreen-stories" class="badge ok as-toggle">4 stories</label>
         
@@ -1937,7 +1937,7 @@ onPress: () =&gt; void</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">8 prop types</span>
+              <span class="badge ok">9 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/ExploreAppDetailsScreen/ExploreAppDetailsScreen.tsx::ExploreAppDetailsScreen</code></pre>
             <pre><code>Props:</code></pre>
@@ -1948,6 +1948,8 @@ appName?: string
 category?: string
 
 description?: string
+
+isVerified?: boolean = false
 
 onSocialLinkPress?: (url: string) =&gt; void
 
@@ -1990,6 +1992,7 @@ supportedNetworks?: Array&lt;{
     category=&quot;Defi&quot;
     description=&quot;Zealous Swap is the pioneering AMM-based decentralized exchange (DEX) on the Kaspa ecosystem, enabling fast token swaps, liquidity provision, and staking with innovative features like an NFT-based fee system, protocol-owned liquidity, and an insurance fund for enhanced security.&quot;
     appIcon={{ uri: iconImage }}
+    isVerified
     supportedNetworks={[
       { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
       { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
@@ -2018,6 +2021,7 @@ supportedNetworks?: Array&lt;{
     category=&quot;DeFi&quot;
     description=&quot;A revolutionary DeFi protocol that enables seamless token swaps and liquidity mining with advanced yield farming strategies.&quot;
     appIcon={{ uri: iconImage }}
+    isVerified
     supportedNetworks={[
       { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
       { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
@@ -2046,6 +2050,7 @@ supportedNetworks?: Array&lt;{
     category=&quot;Defi&quot;
     description=&quot;Zealous Swap is the pioneering AMM-based decentralized exchange (DEX) on the Kaspa ecosystem, enabling fast token swaps, liquidity provision, and staking with innovative features like an NFT-based fee system, protocol-owned liquidity, and an insurance fund for enhanced security.&quot;
     appIcon={{ uri: iconImage }}
+    isVerified
     supportedNetworks={[
       { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
       { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
@@ -2065,6 +2070,7 @@ supportedNetworks?: Array&lt;{
     category=&quot;DeFi&quot;
     description=&quot;This story demonstrates how the component handles very long application names that might cause layout issues or text overflow problems in the UI.&quot;
     appIcon={{ uri: iconImage }}
+    isVerified
     supportedNetworks={[
       { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
       { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
@@ -2097,9 +2103,9 @@ supportedNetworks?: Array&lt;{
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreApps</h2>
       <div class="badges">
-        <label for="c-9-explore-components-exploreapps-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-9-explore-components-exploreapps-props" class="badge ok as-toggle">7 prop types</label>
         <label for="c-9-explore-components-exploreapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-9-explore-components-exploreapps-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-9-explore-components-exploreapps-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -2131,11 +2137,16 @@ supportedNetworks?: Array&lt;{
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">5 prop types</span>
+              <span class="badge ok">7 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/ExploreApps/ExploreApps.tsx::ExploreApps</code></pre>
             <pre><code>Props:</code></pre>
             <pre><code>apps?: ExploreApp[] = []
+
+/**
+ * @default false
+ */
+isLoading?: boolean = false
 
 onAppPress?: (app: ExploreApp) =&gt; void
 
@@ -2145,6 +2156,11 @@ onSubmitAppPress?: () =&gt; void
  * @default false
  */
 showSubmitLink?: boolean = false
+
+/**
+ * @default 6
+ */
+skeletonCount?: number = 6
 
 /**
  * @default &quot;Verified Apps&quot;
@@ -2205,6 +2221,24 @@ title?: string = &quot;Verified Apps&quot;</code></pre>
               
               
               <pre><code>const WithSubmitLink = () =&gt; &lt;ExploreApps showSubmitLink /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Loading</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Loading = () =&gt; &lt;ExploreApps isLoading /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Loading Custom Count</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LoadingCustomCount = () =&gt; &lt;ExploreApps isLoading skeletonCount={4} /&gt;;</code></pre>
             </div>
         </div>
     
