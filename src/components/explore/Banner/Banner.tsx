@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between",
     gap: spacing.s2,
-    paddingRight: spacing.s8,
   },
   textGroup: {
     flexDirection: "column",
