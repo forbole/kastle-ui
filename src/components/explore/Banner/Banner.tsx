@@ -127,15 +127,15 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   iconWrapper: {
-    width: 18,
-    height: 18,
+    width: 24,
+    height: 20,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "flex-start",
   },
   icon: {
     fontSize: 18,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   content: {
     flex: 1,
