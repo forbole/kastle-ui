@@ -3,7 +3,6 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import * as LucideIcons from "lucide-react-native";
@@ -86,11 +85,7 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
   );
 
   return (
-    <TouchableOpacity
-      activeOpacity={banner.cta ? 0.85 : 1}
-      onPress={banner.cta ? onCtaPress : undefined}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       {banner.image?.url ? (
         <ImageBackground
           source={{ uri: banner.image.url }}
@@ -100,7 +95,7 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
         />
       ) : null}
       {inner}
-    </TouchableOpacity>
+    </View>
   );
 };
 
