@@ -60,7 +60,7 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
             )}
           </View>
           <AppText weight="400" style={styles.appCategory} numberOfLines={1}>
-            {appCategory?.toUpperCase()}
+            {appCategory}
           </AppText>
         </View>
       </View>
