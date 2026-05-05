@@ -58,13 +58,13 @@ export const ExploreAppDetailsScreen: React.FC<
   );
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-    >
-      {/* App Header */}
-      <View style={styles.appHeader}>
-        <View style={styles.appInfo}>
+    <View style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.contentContainer}
+      >
+        {/* App Header */}
+        <View style={styles.appHeader}>
           <View style={styles.appIconContainer}>
             {appIcon ? (
               <Image source={appIcon} style={styles.appIcon} />
@@ -85,52 +85,56 @@ export const ExploreAppDetailsScreen: React.FC<
                 </View>
               )}
             </View>
-            <AppText style={styles.appCategory}>{category?.toUpperCase()}</AppText>
+            <AppText style={styles.appCategory}>{category}</AppText>
           </View>
         </View>
-        <TouchableOpacity style={styles.visitButton} onPress={onVisitPress}>
-          <AppText weight="500" style={styles.visitButtonText}>Visit</AppText>
-          <ChevronRight size={16} color="white" strokeWidth={2} />
-        </TouchableOpacity>
-      </View>
 
-      {/* Description Section */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <AppText weight="600" style={styles.sectionTitle}>Description</AppText>
-        </View>
-        <View style={styles.descriptionContainer}>
-          <AppText style={styles.descriptionText}>{description}</AppText>
-        </View>
-      </View>
-
-      {/* Social Links */}
-      {socialLinks && socialLinks.length > 0 && (
-        <View style={styles.socialSection}>
-          <View style={styles.socialContainer}>
-            {socialLinks.map((link, index) => (
-              <TouchableOpacity key={index} style={styles.socialButton} onPress={() => onSocialLinkPress?.(link.url)}>
-                {renderSocialIcon(link.icon)}
-              </TouchableOpacity>
-            ))}
+        {/* Description Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <AppText weight="600" style={styles.sectionTitle}>Description</AppText>
+          </View>
+          <View style={styles.descriptionContainer}>
+            <AppText style={styles.descriptionText}>{description}</AppText>
           </View>
         </View>
-      )}
 
-      {/* Supported Networks */}
-      {supportedNetworks && supportedNetworks.length > 0 && (
-        <View style={styles.networkSection}>
-          <View style={styles.networkRow}>
-            <AppText weight="600" style={styles.networkLabel}>Supported Network</AppText>
-            <View style={styles.networkIcons}>
-              {supportedNetworks.map((network, index) =>
-                renderNetworkIcon(network, index),
-              )}
+        {/* Social Links */}
+        {socialLinks && socialLinks.length > 0 && (
+          <View style={styles.socialSection}>
+            <View style={styles.socialContainer}>
+              {socialLinks.map((link, index) => (
+                <TouchableOpacity key={index} style={styles.socialButton} onPress={() => onSocialLinkPress?.(link.url)}>
+                  {renderSocialIcon(link.icon)}
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
-        </View>
-      )}
-    </ScrollView>
+        )}
+
+        {/* Supported Networks */}
+        {supportedNetworks && supportedNetworks.length > 0 && (
+          <View style={styles.networkSection}>
+            <View style={styles.networkRow}>
+              <AppText style={styles.networkLabel}>Supported Network</AppText>
+              <View style={styles.networkIcons}>
+                {supportedNetworks.map((network, index) =>
+                  renderNetworkIcon(network, index),
+                )}
+              </View>
+            </View>
+          </View>
+        )}
+      </ScrollView>
+
+      {/* Bottom Action Bar */}
+      <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.visitButton} onPress={onVisitPress} activeOpacity={0.8}>
+          <AppText weight="500" style={styles.visitButtonText}>Visit</AppText>
+          <ChevronRight size={20} color="white" strokeWidth={2} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
@@ -139,23 +143,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundScreen,
   },
+  scrollView: {
+    flex: 1,
+  },
   contentContainer: {
     padding: 20,
     gap: 8,
   },
   appHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "flex-start",
     paddingVertical: 7,
-  },
-  appInfo: {
-    flexDirection: "row",
-    alignItems: "flex-start",
     gap: 8,
-    flex: 1,
-    flexShrink: 1,
-    marginRight: 12,
   },
   appIconContainer: {
     width: 40,
@@ -208,19 +207,24 @@ const styles = StyleSheet.create({
     letterSpacing: 0.06,
     lineHeight: 16,
   },
+  bottomBar: {
+    backgroundColor: colors.backgroundScreen,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 24,
+  },
   visitButton: {
     backgroundColor: colors.primary,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 16,
-    height: 36,
-    borderRadius: 18,
-    gap: 8,
+    height: 48,
+    borderRadius: 9999,
+    gap: 12,
   },
   visitButtonText: {
     color: "white",
-    fontSize: 14,
+    fontSize: 18,
   },
   section: {
     gap: 8,
@@ -285,7 +289,7 @@ const styles = StyleSheet.create({
   },
   networkLabel: {
     fontSize: 14,
-    color: "white",
+    color: colors.textPrimary,
     lineHeight: 21,
   },
   networkIcons: {
