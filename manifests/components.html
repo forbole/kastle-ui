@@ -576,7 +576,7 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">20 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">20/20 infos</a><span class="filter-pill ok" aria-disabled="true">75 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">20 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">20/20 infos</a><span class="filter-pill ok" aria-disabled="true">76 stories ok</span></div>
   </div>
 </header>
 <main>
@@ -3530,9 +3530,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> TokenSelectSheet</h2>
       <div class="badges">
-        <label for="c-19-swap-tokenselectsheet-props" class="badge ok as-toggle">11 prop types</label>
+        <label for="c-19-swap-tokenselectsheet-props" class="badge ok as-toggle">10 prop types</label>
         <label for="c-19-swap-tokenselectsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-19-swap-tokenselectsheet-stories" class="badge ok as-toggle">7 stories</label>
+        <label for="c-19-swap-tokenselectsheet-stories" class="badge ok as-toggle">8 stories</label>
         
       </div>
     </div>
@@ -3564,11 +3564,11 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">11 prop types</span>
+              <span class="badge ok">10 prop types</span>
             </div>
             <pre><code>Component: src/components/swap/TokenSelectSheet/TokenSelectSheet.tsx::TokenSelectSheet</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>chainFilter?: string | null = null
+            <pre><code>chainFilter?: ChainFilter[] = []
 
 chainFilters?: ChainFilterConfig[] = []
 
@@ -3576,17 +3576,18 @@ isLoading?: boolean = false
 
 isOpen: boolean
 
-onChainFilterChange?: (key: ChainFilter) =&gt; void
+onChainFilterChange?: (keys: ChainFilter[]) =&gt; void
 
 onClose: () =&gt; void
 
 onSearchChange?: (query: string) =&gt; void
 
-onTokenSelect?: (token: TokenInfo) =&gt; void
+/**
+ * Custom renderer for each token row.
+ */
+renderItem: (token: TokenInfo, params: RenderItemParams) =&gt; React.ReactNode
 
 searchQuery?: string = &quot;&quot;
-
-selectedToken?: TokenInfo | null
 
 tokens?: TokenInfo[] = []</code></pre>
           </div>
@@ -3600,7 +3601,7 @@ tokens?: TokenInfo[] = []</code></pre>
                 <div class="row">
                   <span class="ex-name">Imports</span>
                 </div>
-                <pre><code>import { AppText, TokenSelectSheet } from "kastle-ui";
+                <pre><code>import { AppText, TokenItem, TokenSelectSheet } from "kastle-ui";
 import { TouchableOpacity, View } from "react-native";</code></pre>
               </div>
           
@@ -3611,26 +3612,35 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Select mode: shows tokens the user owns</div>
+              <div class="hint">Default: shows all tokens</div>
               <pre><code>const Default = () =&gt; &lt;SheetDemo
     isOpen
     onClose={() =&gt; {}}
     tokens={SAMPLE_TOKENS}
-    chainFilters={CHAIN_FILTERS} /&gt;;</code></pre>
+    chainFilters={CHAIN_FILTERS}
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+    )} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Swap Mode</span>
+                <span class="ex-name">With Disabled</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Swap mode: shows all tokens on the selected chain, with one disabled</div>
-              <pre><code>const SwapMode = () =&gt; &lt;SheetDemo
+              <div class="hint">With a disabled token (first token)</div>
+              <pre><code>const WithDisabled = () =&gt; &lt;SheetDemo
     isOpen
     onClose={() =&gt; {}}
     tokens={SAMPLE_TOKENS}
     chainFilters={CHAIN_FILTERS}
-    selectedToken={SAMPLE_TOKENS[0]} /&gt;;</code></pre>
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem
+        token={token}
+        isDisabled={token.symbol === SAMPLE_TOKENS[0].symbol}
+        onPress={onPress}
+      /&gt;
+    )} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -3640,7 +3650,7 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
               
               <div class="hint">With a chain filter pre-selected (controlled)</div>
               <pre><code>const WithChainFilter = () =&gt; {
-    const [chainFilter, setChainFilter] = useState&lt;ChainFilter&gt;(&quot;kasplex&quot;);
+    const [chainFilter, setChainFilter] = useState&lt;ChainFilter[]&gt;([&quot;kasplex&quot;]);
 
     return (
         &lt;SheetDemo
@@ -3648,6 +3658,9 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
             onClose={() =&gt; {}}
             tokens={SAMPLE_TOKENS}
             chainFilters={CHAIN_FILTERS}
+            renderItem={(token, { onPress }) =&gt; (
+              &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+            )}
             chainFilter={chainFilter}
             onChainFilterChange={setChainFilter} /&gt;
     );
@@ -3665,6 +3678,9 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     tokens={[]}
     chainFilters={CHAIN_FILTERS}
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+    )}
     isLoading /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -3679,6 +3695,9 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     tokens={[]}
     chainFilters={CHAIN_FILTERS}
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+    )}
     isLoading={false} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -3692,7 +3711,10 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
     isOpen
     onClose={() =&gt; {}}
     tokens={SAMPLE_TOKENS.map((t) =&gt; ({ ...t, logo: undefined }))}
-    chainFilters={CHAIN_FILTERS} /&gt;;</code></pre>
+    chainFilters={CHAIN_FILTERS}
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+    )} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -3711,7 +3733,40 @@ import { TouchableOpacity, View } from "react-native";</code></pre>
         chainLogo: placeholderLogo,
       },
     ]}
-    chainFilters={CHAIN_FILTERS} /&gt;;</code></pre>
+    chainFilters={CHAIN_FILTERS}
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+    )} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Names With Amount</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Long token name with a large balance amount</div>
+              <pre><code>const LongNamesWithAmount = () =&gt; &lt;SheetDemo
+    isOpen
+    onClose={() =&gt; {}}
+    tokens={[
+      {
+        name: &quot;SuperLongTokenNameThatMightOverflow&quot;,
+        symbol: &quot;VERYLONGSYMBOL&quot;,
+        amount: &quot;9999999.123456&quot;,
+        logo: placeholderLogo,
+        chainLogo: placeholderLogo,
+      },
+      {
+        name: &quot;AnotherExtremelyLongTokenNameForEdgeCaseTesting&quot;,
+        symbol: &quot;AELTFECT&quot;,
+        amount: &quot;0.000001&quot;,
+        chainLogo: placeholderLogo,
+      },
+    ]}
+    chainFilters={CHAIN_FILTERS}
+    renderItem={(token, { onPress }) =&gt; (
+      &lt;TokenItem token={token} isDisabled={false} onPress={onPress} /&gt;
+    )} /&gt;;</code></pre>
             </div>
         </div>
     
