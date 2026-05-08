@@ -7,13 +7,13 @@ import {
 } from "react-native";
 import { background } from "../../config/theme";
 
-const kaspaFallback = require("../../../assets/icon.png");
-
 export interface Layer2AssetImageProps {
   /** Source for the main token image */
   tokenImage?: ImageSourcePropType;
   /** Source for the chain badge image */
   chainImage?: ImageSourcePropType;
+  /** Fallback image used when tokenImage or chainImage is undefined or fails to load */
+  fallback?: ImageSourcePropType;
   /** Diameter of the main token image (default: 40) */
   tokenImageSize?: number;
   /** Diameter of the chain badge image (default: 18) */
@@ -28,23 +28,25 @@ export interface Layer2AssetImageProps {
 export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
   tokenImage,
   chainImage,
+  fallback,
   tokenImageSize = 40,
   chainImageSize = 18,
   chainImageRightPosition = -5,
 }) => {
+  const [tokenError, setTokenError] = useState(false);
+
+  useEffect(() => {
+    setTokenError(false);
+  }, [tokenImage]);
+
+  const resolvedTokenImage = tokenError ? fallback : (tokenImage ?? fallback);
+  const resolvedChainImage = chainImage ?? fallback;
+
   // Badge outer size includes the 1px border on each side
   const badgeSize = chainImageSize + 1;
   // Extra width the wrapper needs so the badge isn't clipped
   const rightOverflow = Math.max(0, -chainImageRightPosition);
   const wrapperWidth = tokenImageSize + rightOverflow;
-
-  const [imageError, setImageError] = useState(false);
-
-  useEffect(() => {
-    setImageError(false);
-  }, [tokenImage]);
-
-  const source = !imageError && tokenImage ? tokenImage : kaspaFallback;
 
   return (
     // Wrapper is tall as the token; wide enough to show the badge overflow
@@ -63,10 +65,10 @@ export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
           ]}
         />
         <Image
-          source={source}
+          source={resolvedTokenImage}
           style={{ width: tokenImageSize, height: tokenImageSize, borderRadius: tokenImageSize / 2 }}
           resizeMode="cover"
-          onError={() => setImageError(true)}
+          onError={() => setTokenError(true)}
         />
       </View>
 
@@ -84,7 +86,7 @@ export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
         ]}
       >
         <Image
-          source={chainImage ?? kaspaFallback}
+          source={resolvedChainImage}
           style={{ width: chainImageSize, height: chainImageSize, borderRadius: chainImageSize / 2 }}
           resizeMode="cover"
         />

@@ -80,9 +80,11 @@ export interface TokenItemProps {
   token: TokenInfo;
   isDisabled: boolean;
   onPress: (token: TokenInfo) => void;
+  /** Fallback image for token/chain logo when undefined or fails to load */
+  fallback?: ImageSourcePropType;
 }
 
-export const TokenItem = memo(({ token, isDisabled, onPress }: TokenItemProps) => {
+export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenItemProps) => {
   const handlePress = useCallback(() => {
     onPress(token);
   }, [token, onPress]);
@@ -100,6 +102,7 @@ export const TokenItem = memo(({ token, isDisabled, onPress }: TokenItemProps) =
       <Layer2AssetImage
         tokenImage={token.logo}
         chainImage={token.chainLogo}
+        fallback={fallback}
         tokenImageSize={40}
         chainImageSize={18}
       />
