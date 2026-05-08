@@ -321,7 +321,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexShrink: 1,
     backgroundColor: background.bg100,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
