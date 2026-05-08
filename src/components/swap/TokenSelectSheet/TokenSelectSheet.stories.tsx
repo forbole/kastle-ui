@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { TokenSelectSheet, TokenInfo, ChainFilter } from "./TokenSelectSheet";
+import { TokenSelectSheet, TokenItem, TokenInfo, ChainFilter } from "./TokenSelectSheet";
 import { background, primary, typography } from "../../../config/theme";
 import { AppText } from "../../AppText";
 
@@ -91,11 +91,13 @@ const meta: Meta<typeof TokenSelectSheet> = {
     onClose: () => {},
     tokens: SAMPLE_TOKENS,
     chainFilters: CHAIN_FILTERS,
+    renderItem: (token, { onPress }) => (
+      <TokenItem token={token} isDisabled={false} onPress={onPress} />
+    ),
   },
   argTypes: {
     isOpen: { control: { type: "boolean" } },
     onClose: { action: "close" },
-    onTokenSelect: { action: "tokenSelected" },
     onChainFilterChange: { action: "chainFilterChanged" },
     onSearchChange: { action: "searchChanged" },
   },
@@ -115,23 +117,31 @@ type Story = StoryObj<typeof meta>;
 // Stories
 // ---------------------------------------------------------------------------
 
-/** Select mode: shows tokens the user owns */
+/** Default: shows all tokens */
 export const Default: Story = {
   render: (args) => <SheetDemo {...args} />,
 };
 
-/** Swap mode: shows all tokens on the selected chain, with one disabled */
-export const SwapMode: Story = {
-  render: (args) => <SheetDemo {...args} />,
-  args: {
-    selectedToken: SAMPLE_TOKENS[0],
-  },
+/** With a disabled token (first token) */
+export const WithDisabled: Story = {
+  render: (args) => (
+    <SheetDemo
+      {...args}
+      renderItem={(token, { onPress }) => (
+        <TokenItem
+          token={token}
+          isDisabled={token.symbol === SAMPLE_TOKENS[0].symbol}
+          onPress={onPress}
+        />
+      )}
+    />
+  ),
 };
 
 /** With a chain filter pre-selected (controlled) */
 export const WithChainFilter: Story = {
   render: (args) => {
-    const [chainFilter, setChainFilter] = useState<ChainFilter>("kasplex");
+    const [chainFilter, setChainFilter] = useState<ChainFilter[]>(["kasplex"]);
     return (
       <SheetDemo
         {...args}
@@ -176,6 +186,28 @@ export const LongNames: Story = {
       {
         name: "SuperLongTokenNameThatMightOverflow",
         symbol: "SLTN",
+        chainLogo: placeholderLogo,
+      },
+    ],
+  },
+};
+
+/** Long token name with a large balance amount */
+export const LongNamesWithAmount: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    tokens: [
+      {
+        name: "SuperLongTokenNameThatMightOverflow",
+        symbol: "VERYLONGSYMBOL",
+        amount: "9999999.123456",
+        logo: placeholderLogo,
+        chainLogo: placeholderLogo,
+      },
+      {
+        name: "AnotherExtremelyLongTokenNameForEdgeCaseTesting",
+        symbol: "AELTFECT",
+        amount: "0.000001",
         chainLogo: placeholderLogo,
       },
     ],

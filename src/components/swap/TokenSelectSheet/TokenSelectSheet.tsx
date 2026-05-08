@@ -1,5 +1,6 @@
-import React, { useState, useCallback, memo } from "react";
+import React, { useState, useCallback, useRef, memo } from "react";
 import {
+  Dimensions,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -8,6 +9,8 @@ import {
   Image,
   ImageSourcePropType,
 } from "react-native";
+
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 import { Search } from "lucide-react-native";
 import {
   background,
@@ -40,18 +43,22 @@ export interface ChainFilterConfig {
   logo: ImageSourcePropType;
 }
 
+export interface RenderItemParams {
+  onPress: (token: TokenInfo) => void;
+}
+
 export interface TokenSelectSheetProps {
   isOpen: boolean;
   onClose: () => void;
   tokens?: TokenInfo[];
-  selectedToken?: TokenInfo | null;
-  onTokenSelect?: (token: TokenInfo) => void;
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
-  chainFilter?: ChainFilter;
-  onChainFilterChange?: (key: ChainFilter) => void;
+  chainFilter?: ChainFilter[];
+  onChainFilterChange?: (keys: ChainFilter[]) => void;
   isLoading?: boolean;
   chainFilters?: ChainFilterConfig[];
+  /** Custom renderer for each token row. */
+  renderItem: (token: TokenInfo, params: RenderItemParams) => React.ReactNode;
 }
 
 // ---------------------------------------------------------------------------
@@ -69,13 +76,13 @@ function formatBalance(balance?: string): string {
 // TokenItem
 // ---------------------------------------------------------------------------
 
-interface TokenItemProps {
+export interface TokenItemProps {
   token: TokenInfo;
   isDisabled: boolean;
   onPress: (token: TokenInfo) => void;
 }
 
-const TokenItem = memo(({ token, isDisabled, onPress }: TokenItemProps) => {
+export const TokenItem = memo(({ token, isDisabled, onPress }: TokenItemProps) => {
   const handlePress = useCallback(() => {
     onPress(token);
   }, [token, onPress]);
@@ -99,11 +106,11 @@ const TokenItem = memo(({ token, isDisabled, onPress }: TokenItemProps) => {
 
       {/* Name + symbol */}
       <View style={styles.tokenMeta}>
-        <AppText weight="600" style={styles.tokenName}>
+        <AppText weight="600" style={styles.tokenName} numberOfLines={1} ellipsizeMode="tail">
           {token.name}
         </AppText>
         {token.symbol ? (
-          <AppText weight="400" style={styles.tokenAddress}>
+          <AppText weight="400" style={styles.tokenAddress} numberOfLines={1} ellipsizeMode="tail">
             {token.symbol}
           </AppText>
         ) : null}
@@ -111,7 +118,7 @@ const TokenItem = memo(({ token, isDisabled, onPress }: TokenItemProps) => {
 
       {/* Amount */}
       {formattedAmount ? (
-        <AppText weight="500" style={styles.tokenBalance}>
+        <AppText weight="500" style={styles.tokenBalance} numberOfLines={1} ellipsizeMode="tail">
           {formattedAmount}
         </AppText>
       ) : null}
@@ -156,22 +163,25 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
   isOpen,
   onClose,
   tokens = [],
-  selectedToken,
-  onTokenSelect,
   searchQuery = "",
   onSearchChange,
-  chainFilter = null,
+  chainFilter = [],
   onChainFilterChange,
   isLoading = false,
   chainFilters = [],
+  renderItem: renderItemProp,
 }) => {
   // If consumer doesn't control search/filter, manage internally
   const [internalSearch, setInternalSearch] = useState("");
-  const [internalChainFilter, setInternalChainFilter] = useState<ChainFilter>(null);
+  const [internalChainFilter, setInternalChainFilter] = useState<ChainFilter[]>([]);
 
   const activeSearch = onSearchChange !== undefined ? searchQuery : internalSearch;
-  const activeChainFilter =
-    onChainFilterChange !== undefined ? chainFilter : internalChainFilter;
+  const activeChainFilter: ChainFilter[] =
+    onChainFilterChange !== undefined ? (chainFilter ?? []) : internalChainFilter;
+
+  // Always keep a ref to the latest activeChainFilter to avoid stale closures
+  const activeChainFilterRef = useRef(activeChainFilter);
+  activeChainFilterRef.current = activeChainFilter;
 
   const handleSearchChange = useCallback(
     (q: string) => {
@@ -186,41 +196,31 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
   const handleChainFilterPress = useCallback(
     (key: ChainFilter) => {
-      const next = activeChainFilter === key ? null : key;
+      const current = activeChainFilterRef.current;
+      const next = current.includes(key)
+        ? current.filter((k) => k !== key)
+        : [...current, key];
       if (onChainFilterChange) {
         onChainFilterChange(next);
       } else {
         setInternalChainFilter(next);
       }
     },
-    [activeChainFilter, onChainFilterChange],
+    [onChainFilterChange],
   );
 
   const handleTokenSelect = useCallback(
     (token: TokenInfo) => {
-      onTokenSelect?.(token);
       onClose();
     },
-    [onTokenSelect, onClose],
-  );
-
-  const isTokenSelected = useCallback(
-    (token: TokenInfo) => {
-      if (!selectedToken) return false;
-      return token.name === selectedToken.name && token.symbol === selectedToken.symbol;
-    },
-    [selectedToken],
+    [onClose],
   );
 
   const renderItem = useCallback(
     ({ item }: { item: TokenInfo }) => (
-      <TokenItem
-        token={item}
-        isDisabled={isTokenSelected(item)}
-        onPress={handleTokenSelect}
-      />
+      <>{renderItemProp(item, { onPress: handleTokenSelect })}</>
     ),
-    [isTokenSelected, handleTokenSelect],
+    [renderItemProp, handleTokenSelect],
   );
 
   const keyExtractor = useCallback(
@@ -286,7 +286,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
                   key={key}
                   label={label}
                   logo={logo}
-                  isActive={activeChainFilter === key}
+                  isActive={activeChainFilter.includes(key)}
                   onPress={() => handleChainFilterPress(key)}
                 />
               ))}
@@ -321,7 +321,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexShrink: 1,
+    height: SCREEN_HEIGHT * 0.8,
     backgroundColor: background.bg100,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -451,6 +451,7 @@ const styles = StyleSheet.create({
   tokenBalance: {
     color: typography.t900,
     fontSize: 14,
+    maxWidth: 100,
   },
   emptyContainer: {
     paddingVertical: 32,
