@@ -2910,7 +2910,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Layer2AssetImage</h2>
       <div class="badges">
-        <label for="c-15-components-layer2assetimage-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-15-components-layer2assetimage-props" class="badge ok as-toggle">6 prop types</label>
         <label for="c-15-components-layer2assetimage-info" class="badge info as-toggle">1 info</label>
         <label for="c-15-components-layer2assetimage-stories" class="badge ok as-toggle">6 stories</label>
         
@@ -2944,7 +2944,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">5 prop types</span>
+              <span class="badge ok">6 prop types</span>
             </div>
             <pre><code>Component: src/components/Layer2AssetImage/Layer2AssetImage.tsx::Layer2AssetImage</code></pre>
             <pre><code>Props:</code></pre>
@@ -2963,6 +2963,11 @@ chainImageRightPosition?: number = -5
  * Diameter of the chain badge image (default: 18)
  */
 chainImageSize?: number = 18
+
+/**
+ * Fallback image used when tokenImage or chainImage is undefined or fails to load
+ */
+fallback?: ImageSourcePropType
 
 /**
  * Source for the main token image
