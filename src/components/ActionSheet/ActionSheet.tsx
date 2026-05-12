@@ -4,9 +4,9 @@ import {
   Dimensions,
   Keyboard,
   Modal,
+  Platform,
   StyleSheet,
   TouchableWithoutFeedback,
-  View,
 } from "react-native";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -34,6 +34,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 }) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const keyboardOffset = useRef(new Animated.Value(0)).current;
 
   const animateIn = useCallback(() => {
     Keyboard.dismiss();
@@ -53,6 +54,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 
   const animateOut = useCallback(
     (onFinish?: () => void) => {
+      keyboardOffset.setValue(0);
       Animated.parallel([
         Animated.timing(translateY, {
           toValue: SCREEN_HEIGHT,
@@ -66,7 +68,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
         }),
       ]).start(() => onFinish?.());
     },
-    [translateY, backdropOpacity],
+    [translateY, backdropOpacity, keyboardOffset],
   );
 
   useEffect(() => {
@@ -76,6 +78,26 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
       animateOut();
     }
   }, [isOpen, animateIn, animateOut]);
+
+  // Android: Modal hardcodes adjustResize, so the keyboard shrinks the modal
+  // view and pushes the sheet upward. Counteract by translating it back down.
+  useEffect(() => {
+    if (!isOpen || Platform.OS !== 'android') return;
+    const show = Keyboard.addListener('keyboardDidShow', (e) => {
+      Animated.timing(keyboardOffset, {
+        toValue: e.endCoordinates.height,
+        duration: 250,
+        useNativeDriver: true,
+      }).start();
+    });
+    const hide = Keyboard.addListener('keyboardDidHide', () => {
+      // On Android the Modal view has already been restored to full height by
+      // the time keyboardDidHide fires, so animating back causes a double-move.
+      // Reset synchronously instead.
+      keyboardOffset.setValue(0);
+    });
+    return () => { show.remove(); hide.remove(); };
+  }, [isOpen, keyboardOffset]);
 
   const handleClose = useCallback(() => {
     if (!closeOnBackdropPress) return;
@@ -99,7 +121,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 
       {/* Sheet */}
       <Animated.View
-        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }] }]}
+        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }, { translateY: keyboardOffset }] }]}
         pointerEvents="box-none"
       >
         {children}
