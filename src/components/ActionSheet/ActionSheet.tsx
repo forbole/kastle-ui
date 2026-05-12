@@ -21,6 +21,8 @@ export interface ActionSheetProps {
   children: React.ReactNode;
   /** Dismiss when pressing the backdrop (default: true) */
   closeOnBackdropPress?: boolean;
+  /** Max height as a ratio of screen height (0–1). Default: 0.86 */
+  heightRatio?: number;
 }
 
 export const ActionSheet: React.FC<ActionSheetProps> = ({
@@ -28,6 +30,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
   onClose,
   children,
   closeOnBackdropPress = true,
+  heightRatio = 0.86,
 }) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -96,7 +99,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 
       {/* Sheet */}
       <Animated.View
-        style={[styles.sheetWrapper, { transform: [{ translateY }] }]}
+        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }] }]}
         pointerEvents="box-none"
       >
         {children}
@@ -115,7 +118,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    maxHeight: SCREEN_HEIGHT * 0.86,
     justifyContent: "flex-end",
   },
 });

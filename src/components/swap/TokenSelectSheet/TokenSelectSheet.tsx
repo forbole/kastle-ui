@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, memo } from "react";
 import {
   Dimensions,
+  Keyboard,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -10,8 +11,9 @@ import {
   ImageSourcePropType,
 } from "react-native";
 
-const SCREEN_HEIGHT = Dimensions.get("window").height;
 import { Search } from "lucide-react-native";
+
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 import {
   background,
   border,
@@ -186,6 +188,8 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
   const activeChainFilterRef = useRef(activeChainFilter);
   activeChainFilterRef.current = activeChainFilter;
 
+  const searchInputRef = useRef<TextInput>(null);
+
   const handleSearchChange = useCallback(
     (q: string) => {
       if (onSearchChange) {
@@ -243,7 +247,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
   );
 
   return (
-    <ActionSheet isOpen={isOpen} onClose={onClose}>
+    <ActionSheet isOpen={isOpen} onClose={onClose} heightRatio={0.92}>
       <View style={styles.container}>
         {/* Drag handle */}
         <View style={styles.handlebarWrapper}>
@@ -270,6 +274,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
               style={styles.searchIcon}
             />
             <TextInput
+              ref={searchInputRef}
               style={styles.searchInput}
               value={activeSearch}
               onChangeText={handleSearchChange}
@@ -307,6 +312,11 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
           maxToRenderPerBatch={10}
           windowSize={5}
           removeClippedSubviews
+          keyboardShouldPersistTaps="handled"
+          onScrollBeginDrag={() => {
+            searchInputRef.current?.blur();
+            Keyboard.dismiss();
+          }}
           style={styles.list}
           contentContainerStyle={styles.listContent}
         />
@@ -324,7 +334,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: SCREEN_HEIGHT * 0.8,
+    height: SCREEN_HEIGHT * 0.92,
     backgroundColor: background.bg100,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -362,6 +372,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: border.b400,
+    marginHorizontal: 16,
   },
   filterArea: {
     paddingHorizontal: 16,
