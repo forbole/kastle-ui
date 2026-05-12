@@ -70,7 +70,7 @@ export interface TokenSelectSheetProps {
 function formatBalance(balance?: string): string {
   if (!balance) return "";
   const num = parseFloat(balance);
-  if (isNaN(num) || num === 0) return "";
+  if (isNaN(num)) return "";
   return num.toLocaleString("en-US", { maximumFractionDigits: 6 });
 }
 
