@@ -412,11 +412,10 @@ const styles = StyleSheet.create({
     height: 36,
     paddingHorizontal: 12,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: border.b300,
     backgroundColor: white["10%"],
   },
   chipActive: {
+    borderWidth: 1,
     borderColor: primary.p400,
     backgroundColor: white["20%"],
   },
