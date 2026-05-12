@@ -604,7 +604,7 @@
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ActionSheet</h2>
       <div class="badges">
-        <label for="c-0-components-actionsheet-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-0-components-actionsheet-props" class="badge ok as-toggle">5 prop types</label>
         <label for="c-0-components-actionsheet-info" class="badge info as-toggle">1 info</label>
         <label for="c-0-components-actionsheet-stories" class="badge ok as-toggle">1 story</label>
         
@@ -638,7 +638,7 @@
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">4 prop types</span>
+              <span class="badge ok">5 prop types</span>
             </div>
             <pre><code>Component: src/components/ActionSheet/ActionSheet.tsx::ActionSheet</code></pre>
             <pre><code>Props:</code></pre>
@@ -651,6 +651,11 @@ children: React.ReactNode
  * Dismiss when pressing the backdrop (default: true)
  */
 closeOnBackdropPress?: boolean = true
+
+/**
+ * Max height as a ratio of screen height (0–1). Default: 0.86
+ */
+heightRatio?: number = 0.86
 
 /**
  * Controls visibility
