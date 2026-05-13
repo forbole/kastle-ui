@@ -126,6 +126,8 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 
       {/* Sheet */}
       <Animated.View
+        renderToHardwareTextureAndroid
+        collapsable={false}
         style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }, { translateY: keyboardOffset }] }]}
         pointerEvents="box-none"
       >
