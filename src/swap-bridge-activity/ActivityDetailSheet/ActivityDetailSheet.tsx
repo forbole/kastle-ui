@@ -1,9 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { ActionSheet } from "../../ActionSheet";
-import { AppText } from "../../AppText";
+import { ActionSheet } from "../../components/ActionSheet";
+import { AppText } from "../../components/AppText";
 import { DetailKVRow, DetailKVRowProps } from "../DetailKVRow";
-import { background, border, borderRadius, borderWidth, colors, shadows, spacing } from "../../../config/theme";
+import { background, border, borderRadius, borderWidth, colors, shadows, spacing } from "../../config/theme";
 
 export interface ActivityDetailSheetProps {
   visible: boolean;

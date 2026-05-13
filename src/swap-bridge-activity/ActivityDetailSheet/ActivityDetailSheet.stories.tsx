@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ActivityDetailSheet } from "./ActivityDetailSheet";
-import { AppText } from "../../AppText";
-import { colors, spacing } from "../../../config/theme";
+import { AppText } from "../../components/AppText";
+import { colors, spacing } from "../../config/theme";
 
 const meta: Meta<typeof ActivityDetailSheet> = {
   title: "Components/ActivityDetailSheet",
@@ -50,10 +50,10 @@ export const SwapSuccess: Story = {
       title="Swap KAS →NACHO"
       subtitle="8 Oct, 2025 | 02:03"
       details={[
-        { label: "Swap from", value: "-1000 KAS", valueColor: colors.danger },
-        { label: "Swap to", value: "+1,232.4456 NACHO", valueColor: colors.success },
+        { label: "Swap From", value: "-1000 KAS", valueColor: colors.danger },
+        { label: "Swap To", value: "+1,232.4456 NACHO", valueColor: colors.success },
         { label: "Rate", value: "1 KAS ≈ 0.032799 NACHO" },
-        { label: "Network fees", value: "0.00023 KAS" },
+        { label: "Network Fee", value: "0.00023 KAS" },
         { label: "TX Hash", value: "9dhd...432ds", onPressValue: () => console.log("open explorer") },
       ]}
     />
@@ -67,9 +67,9 @@ export const BridgeSuccess: Story = {
       title="Bridge Kaspa→Igra"
       subtitle="5 Oct, 2025 | 09:15"
       details={[
-        { label: "Bridge from", value: "-240 KAS (Kaspa)", valueColor: colors.danger },
-        { label: "Bridge to", value: "+240 iKAS (Igra)", valueColor: colors.success },
-        { label: "Network fees", value: "0 KAS (Kaspa)" },
+        { label: "Bridge From", value: "-240 KAS (Kaspa)", valueColor: colors.danger },
+        { label: "Bridge To", value: "+240 iKAS (Igra)", valueColor: colors.success },
+        { label: "Network Fee", value: "0 KAS (Kaspa)" },
         { label: "Provider", value: "iKAS Bridge" },
         { label: "TX Hash", value: "kas7...j2k9", onPressValue: () => console.log("open explorer") },
       ]}
@@ -86,7 +86,7 @@ export const Plain: Story = {
       details={[
         { label: "From", value: "1 KAS" },
         { label: "To", value: "1,234 ZEAL" },
-        { label: "Network fees", value: "0.001 KAS" },
+        { label: "Network Fee", value: "0.001 KAS" },
       ]}
     />
   ),

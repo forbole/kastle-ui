@@ -4,7 +4,8 @@ import { View, StyleSheet } from "react-native";
 import { EmptyState } from "./EmptyState";
 import { background } from "../../config/theme";
 
-const placeholderImage = require("../../../assets/icon.png");
+const emptyImage = require("../../../assets/empty-activity.png");
+const errorImage = require("../../../assets/error-activity.png");
 
 const meta: Meta<typeof EmptyState> = {
   title: "Components/EmptyState",
@@ -25,19 +26,19 @@ const meta: Meta<typeof EmptyState> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** First-time user — no transactions yet. Real asset: magnifying-glass illustration. */
+/** First-time user — no transactions yet. */
 export const Empty: Story = {
   args: {
-    image: placeholderImage,
+    image: emptyImage,
     heading: "No activity yet",
     subtext: "Your swaps will appear here once you make one.",
   },
 };
 
-/** Fetch failed — show retry CTA. Real asset: broken-blocks illustration. */
+/** Fetch failed — show retry CTA. */
 export const Error: Story = {
   args: {
-    image: placeholderImage,
+    image: errorImage,
     heading: "Couldn't load activity",
     subtext: "Check your connection and try again.",
     cta: {

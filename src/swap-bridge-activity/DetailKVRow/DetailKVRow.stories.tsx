@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { DetailKVRow } from "./DetailKVRow";
-import { background, colors } from "../../../config/theme";
+import { background, colors } from "../../config/theme";
 
 const meta: Meta<typeof DetailKVRow> = {
   title: "Components/DetailKVRow",
@@ -23,7 +23,7 @@ const meta: Meta<typeof DetailKVRow> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Neutral label / value — matches Figma "Rate" / "Network fees" rows */
+/** Neutral label / value — matches Figma "Rate" / "Network Fee" rows */
 export const Default: Story = {
   args: {
     label: "Rate",
@@ -31,19 +31,19 @@ export const Default: Story = {
   },
 };
 
-/** Coloured value — green (positive). Matches Figma "Swap to" row */
+/** Coloured value — green (positive). Matches Figma "Swap To" row */
 export const ValuePositive: Story = {
   args: {
-    label: "Swap to",
+    label: "Swap To",
     value: "+1,232.4456 NACHO",
     valueColor: colors.success,
   },
 };
 
-/** Coloured value — red (negative). Matches Figma "Swap from" row */
+/** Coloured value — red (negative). Matches Figma "Swap From" row */
 export const ValueNegative: Story = {
   args: {
-    label: "Swap from",
+    label: "Swap From",
     value: "-1000 KAS",
     valueColor: colors.danger,
   },

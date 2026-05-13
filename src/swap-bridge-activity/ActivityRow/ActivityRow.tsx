@@ -4,9 +4,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { AppText } from "../../AppText";
-import { DualAssetImage, DualAssetImageProps } from "../../DualAssetImage";
-import { borderRadius, borderWidth, colors, spacing } from "../../../config/theme";
+import { AppText } from "../../components/AppText";
+import { DualAssetImage, DualAssetImageProps } from "../../components/DualAssetImage";
+import { borderRadius, borderWidth, colors, spacing } from "../../config/theme";
 
 export interface ActivityRowProps {
   /** Caller-formatted title. e.g. "Swap KAS →NACHO" or "Bridge Kaspa→Kasplex" */
