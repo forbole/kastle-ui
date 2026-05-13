@@ -42,6 +42,7 @@ const SheetHarness = (
   );
 };
 
+
 /** Swap success — coloured swap from/to + pressable TX Hash */
 export const SwapSuccess: Story = {
   render: () => (
@@ -93,17 +94,20 @@ export const Plain: Story = {
 
 const styles = StyleSheet.create({
   harness: {
-    backgroundColor: colors.backgroundScreen,
+    flex: 1,
     height: 700,
-    padding: spacing.s4,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.backgroundScreen,
   },
   openButton: {
-    padding: spacing.s3,
     backgroundColor: colors.primary,
-    borderRadius: 8,
+    paddingHorizontal: spacing.s6,
+    paddingVertical: spacing.s3,
+    borderRadius: 9999,
   },
   openButtonText: {
     color: "#fff",
-    textAlign: "center",
+    fontSize: 16,
   },
 });

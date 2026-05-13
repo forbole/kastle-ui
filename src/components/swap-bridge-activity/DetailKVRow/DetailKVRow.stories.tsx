@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { DetailKVRow } from "./DetailKVRow";
-import { background, colors, spacing } from "../../config/theme";
+import { background, colors, spacing } from "../../../config/theme";
 
 const meta: Meta<typeof DetailKVRow> = {
   title: "Components/DetailKVRow",

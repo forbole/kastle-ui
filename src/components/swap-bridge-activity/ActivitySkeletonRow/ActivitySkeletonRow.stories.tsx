@@ -29,12 +29,12 @@ export const SingleRow: Story = {};
 /** List of 4 skeleton rows */
 export const ListOfFour: Story = {
   render: () => (
-    <View style={styles.decorator}>
+    <>
       <ActivitySkeletonRow />
       <ActivitySkeletonRow />
       <ActivitySkeletonRow />
       <ActivitySkeletonRow />
-    </View>
+    </>
   ),
 };
 

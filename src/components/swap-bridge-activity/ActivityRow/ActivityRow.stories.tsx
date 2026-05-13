@@ -16,7 +16,9 @@ const meta: Meta<typeof ActivityRow> = {
   args: {
     pair: {
       fromImage: placeholderLogo,
+      fromSymbol: "KAS",
       toImage: placeholderLogo,
+      toSymbol: "NACHO",
       chainImage: placeholderLogo,
       fallback: placeholderLogo,
     },
@@ -56,29 +58,18 @@ export const Bridge: Story = {
   },
 };
 
-/** Long amount — number truncates with ellipsis, token symbol preserved */
+/** Long amount — single line, truncates with ellipsis */
 export const LongAmount: Story = {
   args: {
     title: "Swap KAS →NACHO",
     dateTime: "8 Oct | 02:03",
-    amountText: "+1,000,000.87... NACHO",
+    amountText: "+1,000,000,000.888888 NACHO",
     amountUsd: "≈ $9,486.17 USD",
     isPositive: true,
   },
 };
 
-/** Neutral amount (no positive flag) — uses textPrimary colour */
-export const Neutral: Story = {
-  args: {
-    title: "Swap KAS →NACHO",
-    dateTime: "8 Oct | 02:03",
-    amountText: "Bridged",
-    amountUsd: "≈ $240.00 USD",
-    isPositive: false,
-  },
-};
-
-/** Without logos — both tokens fall back to default image */
+/** Without images — both tokens fall back to initial-letter placeholder */
 export const WithoutImages: Story = {
   args: {
     title: "Swap KAS →NACHO",
@@ -88,9 +79,11 @@ export const WithoutImages: Story = {
     isPositive: true,
     pair: {
       fromImage: undefined,
+      fromSymbol: "KAS",
       toImage: undefined,
+      toSymbol: "NACHO",
       chainImage: undefined,
-      fallback: placeholderLogo,
+      fallback: undefined,
     },
   },
 };

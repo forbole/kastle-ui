@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ExternalLink } from "lucide-react-native";
-import { AppText } from "../AppText";
-import { colors, spacing } from "../../config/theme";
+import { AppText } from "../../AppText";
+import { colors, spacing } from "../../../config/theme";
 
 export interface DetailKVRowProps {
   label: string;

@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { AppText } from "../../AppText";
-import { DetailKVRow, DetailKVRowProps } from "../../DetailKVRow";
+import { DetailKVRow, DetailKVRowProps } from "../DetailKVRow";
 import { background, border, borderRadius, borderWidth, colors, shadows, spacing } from "../../../config/theme";
 
 export interface ActivityDetailSheetProps {

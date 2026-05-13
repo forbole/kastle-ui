@@ -5,14 +5,14 @@ import {
   View,
 } from "react-native";
 import { AppText } from "../../AppText";
-import { TokenPair, TokenPairProps } from "../../TokenPair";
+import { DualAssetImage, DualAssetImageProps } from "../../DualAssetImage";
 import { borderRadius, borderWidth, colors, spacing } from "../../../config/theme";
 
 export interface ActivityRowProps {
   /** Caller-formatted title. e.g. "Swap KAS →NACHO" or "Bridge Kaspa→Kasplex" */
   title: string;
-  /** Token pair config — passed straight to TokenPair. */
-  pair: TokenPairProps;
+  /** Asset images config — passed straight to DualAssetImage. */
+  pair: DualAssetImageProps;
   /** Caller-formatted date + time. e.g. "8 Oct | 02:03" (regular pipe) */
   dateTime: string;
   /** Caller-formatted amount. Truncate on number side only; never truncate token symbol. */
@@ -44,7 +44,7 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
       disabled={!onPress}
     >
       <View style={styles.tokenPairWrap}>
-        <TokenPair {...pair} chainSize={pair.chainSize ?? 12} />
+        <DualAssetImage {...pair} />
       </View>
 
       <View style={styles.middle}>
@@ -57,10 +57,19 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
       </View>
 
       <View style={styles.right}>
-        <AppText weight="600" style={[styles.amount, { color: amountColor }]}>
+        <AppText
+          weight="600"
+          style={[styles.amount, { color: amountColor }]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
           {amountText}
         </AppText>
-        <AppText weight="400" style={styles.amountUsd}>
+        <AppText
+          weight="400"
+          style={styles.amountUsd}
+          numberOfLines={1}
+        >
           {amountUsd}
         </AppText>
       </View>
@@ -82,7 +91,7 @@ const styles = StyleSheet.create({
     gap: spacing.s3,
   },
   tokenPairWrap: {
-    // TokenPair determines its own width
+    // DualAssetImage determines its own width
   },
   middle: {
     flex: 1,
