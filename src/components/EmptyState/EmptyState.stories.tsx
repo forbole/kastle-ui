@@ -4,8 +4,8 @@ import { View, StyleSheet } from "react-native";
 import { EmptyState } from "./EmptyState";
 import { background } from "../../config/theme";
 
-const emptyImage = require("../../../assets/empty-activity.png");
-const errorImage = require("../../../assets/error-activity.png");
+import emptyImage from "../../../assets/empty-activity.png";
+import errorImage from "../../../assets/error-activity.png";
 
 const meta: Meta<typeof EmptyState> = {
   title: "Components/EmptyState",
@@ -41,10 +41,13 @@ export const Error: Story = {
     image: errorImage,
     heading: "Couldn't load activity",
     subtext: "Check your connection and try again.",
+
     cta: {
       label: "Retry",
       onPress: () => console.log("retry"),
     },
+
+    imageSize: 190
   },
 };
 
