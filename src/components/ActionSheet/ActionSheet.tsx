@@ -54,7 +54,6 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 
   const animateOut = useCallback(
     (onFinish?: () => void) => {
-      keyboardOffset.setValue(0);
       Animated.parallel([
         Animated.timing(translateY, {
           toValue: SCREEN_HEIGHT,
@@ -62,6 +61,11 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
           useNativeDriver: true,
         }),
         Animated.timing(backdropOpacity, {
+          toValue: 0,
+          duration: ANIMATION_DURATION,
+          useNativeDriver: true,
+        }),
+        Animated.timing(keyboardOffset, {
           toValue: 0,
           duration: ANIMATION_DURATION,
           useNativeDriver: true,
@@ -86,15 +90,16 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
     const show = Keyboard.addListener('keyboardDidShow', (e) => {
       Animated.timing(keyboardOffset, {
         toValue: e.endCoordinates.height,
-        duration: 250,
+        duration: 200,
         useNativeDriver: true,
       }).start();
     });
     const hide = Keyboard.addListener('keyboardDidHide', () => {
-      // On Android the Modal view has already been restored to full height by
-      // the time keyboardDidHide fires, so animating back causes a double-move.
-      // Reset synchronously instead.
-      keyboardOffset.setValue(0);
+      Animated.timing(keyboardOffset, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
     });
     return () => { show.remove(); hide.remove(); };
   }, [isOpen, keyboardOffset]);
