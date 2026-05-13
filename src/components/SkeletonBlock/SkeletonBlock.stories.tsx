@@ -23,19 +23,29 @@ const meta: Meta<typeof SkeletonBlock> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Rectangle — text line placeholder */
+/** Rectangle — text line placeholder. Only width is adjustable. */
 export const Rect: Story = {
   args: { width: 120, height: 14, borderRadius: 4 },
+  argTypes: {
+    width: { control: { type: "range", min: 40, max: 320, step: 4 } },
+  },
 };
 
-/** Pill — chip / badge placeholder */
+/** Pill — chip / badge placeholder. Only width is adjustable. */
 export const Pill: Story = {
   args: { width: 80, height: 20, borderRadius: 9999 },
+  argTypes: {
+    width: { control: { type: "range", min: 40, max: 320, step: 4 } },
+  },
 };
 
-/** Circle — avatar placeholder */
+/** Circle — avatar placeholder. Width and height locked together via the slider. */
 export const Circle: Story = {
   args: { width: 40, height: 40, borderRadius: 9999 },
+  argTypes: {
+    width: { control: { type: "range", min: 16, max: 120, step: 2 } },
+    height: { control: { type: "range", min: 16, max: 120, step: 2 } },
+  },
 };
 
 const styles = StyleSheet.create({

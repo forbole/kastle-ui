@@ -20,13 +20,13 @@ const meta: Meta<typeof DualAssetImage> = {
     toSymbol: "NACHO",
     chainImage: placeholderLogo,
     fallback: placeholderLogo,
-    tokenSize: 40,
-    chainSize: 18,
+    size: 40,
   },
   argTypes: {
-    tokenSize: { control: { type: "range", min: 24, max: 80, step: 2 } },
-    chainSize: { control: { type: "range", min: 12, max: 32, step: 2 } },
-    overlapRatio: { control: { type: "range", min: 0.2, max: 0.6, step: 0.05 } },
+    size: { control: { type: "range", min: 24, max: 96, step: 2 } },
+    tokenSize: { control: { type: "range", min: 12, max: 64, step: 2 } },
+    chainSize: { control: { type: "range", min: 8, max: 32, step: 2 } },
+    overlapRatio: { control: { type: "range", min: 0.2, max: 0.7, step: 0.05 } },
   },
   decorators: [
     (Story) => (
@@ -40,23 +40,17 @@ const meta: Meta<typeof DualAssetImage> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default — both tokens + chain badge */
+/** Default — 40x40 bounding box */
 export const Default: Story = {};
 
 /** Larger size */
 export const Large: Story = {
-  args: {
-    tokenSize: 56,
-    chainSize: 22,
-  },
+  args: { size: 64 },
 };
 
 /** Smaller size */
 export const Small: Story = {
-  args: {
-    tokenSize: 28,
-    chainSize: 12,
-  },
+  args: { size: 28 },
 };
 
 /** No from-image — initial letter fallback */
@@ -97,7 +91,7 @@ export const NoImages: Story = {
 export const SizeComparison: Story = {
   render: () => (
     <View style={styles.row}>
-      {([28, 36, 40, 48, 56] as const).map((size) => (
+      {([24, 32, 40, 56, 72] as const).map((size) => (
         <DualAssetImage
           key={size}
           fromImage={placeholderLogo}
@@ -105,8 +99,7 @@ export const SizeComparison: Story = {
           toImage={placeholderLogo}
           toSymbol="NACHO"
           chainImage={placeholderLogo}
-          tokenSize={size}
-          chainSize={Math.round(size * 0.45)}
+          size={size}
         />
       ))}
     </View>

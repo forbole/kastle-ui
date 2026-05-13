@@ -1,9 +1,10 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { Search, AlertTriangle } from "lucide-react-native";
 import { EmptyState } from "./EmptyState";
 import { background } from "../../config/theme";
+
+const placeholderImage = require("../../../assets/icon.png");
 
 const meta: Meta<typeof EmptyState> = {
   title: "Components/EmptyState",
@@ -24,25 +25,23 @@ const meta: Meta<typeof EmptyState> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** First-time user — no transactions yet */
+/** First-time user — no transactions yet. Real asset: magnifying-glass illustration. */
 export const Empty: Story = {
   args: {
-    icon: Search,
-    iconTone: "muted",
+    image: placeholderImage,
     heading: "No activity yet",
-    subtext: "Your swap and bridge transactions will appear here.",
+    subtext: "Your swaps will appear here once you make one.",
   },
 };
 
-/** Fetch failed — show retry CTA */
+/** Fetch failed — show retry CTA. Real asset: broken-blocks illustration. */
 export const Error: Story = {
   args: {
-    icon: AlertTriangle,
-    iconTone: "warning",
+    image: placeholderImage,
     heading: "Couldn't load activity",
     subtext: "Something went wrong. Check your connection and try again.",
     cta: {
-      label: "Try again",
+      label: "Retry",
       onPress: () => console.log("retry"),
     },
   },
@@ -51,7 +50,7 @@ export const Error: Story = {
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,
-    height: 400,
+    height: 600,
     backgroundColor: background.bg0,
   },
 });

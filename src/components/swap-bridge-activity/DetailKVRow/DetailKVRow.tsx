@@ -7,9 +7,13 @@ import { colors, spacing } from "../../../config/theme";
 export interface DetailKVRowProps {
   label: string;
   value: string;
-  /** Override value text colour. Default: colors.textPrimary */
+  /**
+   * Override value text colour. Default behaviour:
+   *   - `onPressValue` set → `colors.primary` (blue link)
+   *   - otherwise → `colors.textPrimary`
+   */
   valueColor?: string;
-  /** If set: value becomes pressable and renders external link icon after the text. */
+  /** If set: the whole row becomes pressable and appends an external-link icon. */
   onPressValue?: () => void;
 }
 
@@ -19,41 +23,45 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   valueColor,
   onPressValue,
 }) => {
-  const resolvedValueColor = valueColor ?? colors.textPrimary;
+  const defaultValueColor = onPressValue ? colors.primary : colors.textPrimary;
+  const resolvedValueColor = valueColor ?? defaultValueColor;
 
-  const valueText = (
-    <AppText
-      weight="500"
-      numberOfLines={2}
-      style={[styles.value, { color: resolvedValueColor }]}
-    >
-      {value}
-    </AppText>
-  );
-
-  return (
-    <View style={styles.row}>
+  const content = (
+    <>
       <AppText style={styles.label}>{label}</AppText>
-
-      {onPressValue ? (
-        <TouchableOpacity
-          style={styles.pressableValue}
-          onPress={onPressValue}
-          activeOpacity={0.7}
+      <View style={styles.valueWrap}>
+        <AppText
+          weight="500"
+          numberOfLines={2}
+          style={[styles.value, { color: resolvedValueColor }]}
         >
-          {valueText}
+          {value}
+        </AppText>
+        {onPressValue && (
           <ExternalLink
             size={14}
             color={resolvedValueColor}
             strokeWidth={2}
             style={styles.linkIcon}
           />
-        </TouchableOpacity>
-      ) : (
-        valueText
-      )}
-    </View>
+        )}
+      </View>
+    </>
   );
+
+  if (onPressValue) {
+    return (
+      <TouchableOpacity
+        style={styles.row}
+        onPress={onPressValue}
+        activeOpacity={0.7}
+      >
+        {content}
+      </TouchableOpacity>
+    );
+  }
+
+  return <View style={styles.row}>{content}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -70,17 +78,17 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     flexShrink: 0,
   },
+  valueWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s1,
+    flexShrink: 1,
+  },
   value: {
     fontSize: 14,
     lineHeight: 20,
     flexShrink: 1,
     textAlign: "right",
-  },
-  pressableValue: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.s1,
-    flexShrink: 1,
   },
   linkIcon: {
     marginTop: 1,

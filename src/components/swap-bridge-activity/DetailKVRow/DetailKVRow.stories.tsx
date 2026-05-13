@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 /** Default — neutral label / value */
 export const Default: Story = {
   args: {
-    label: "Network fee",
+    label: "Network Fee",
     value: "0.001 KAS",
   },
 };
@@ -34,7 +34,7 @@ export const Default: Story = {
 /** Coloured value — green (positive) */
 export const ValuePositive: Story = {
   args: {
-    label: "Swap to",
+    label: "Swap To",
     value: "+1,232.4456 NACHO",
     valueColor: colors.success,
   },
@@ -43,7 +43,7 @@ export const ValuePositive: Story = {
 /** Coloured value — red (negative) */
 export const ValueNegative: Story = {
   args: {
-    label: "Swap from",
+    label: "Swap From",
     value: "-1000 KAS",
     valueColor: colors.danger,
   },

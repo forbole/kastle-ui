@@ -21,13 +21,20 @@ export interface DualAssetImageProps {
   chainImage?: ImageSourcePropType;
   /** Default image used when any of the above is missing. */
   fallback?: ImageSourcePropType;
-  /** Token diameter (default: 40). */
+  /** Total bounding-box size (width = height). Default 40. */
+  size?: number;
+  /**
+   * Individual token diameter. Auto-computed from `size` (60%) if omitted.
+   * Use to override token vs total proportion.
+   */
   tokenSize?: number;
-  /** Chain badge diameter (default: 18). */
+  /**
+   * Chain badge diameter. Auto-computed from `size` (30%) if omitted.
+   */
   chainSize?: number;
   /**
    * Overlap of to-token onto from-token, as fraction of tokenSize.
-   * 0.4 = to-token overlaps left 40% of its width onto from-token. (default: 0.4)
+   * 0.5 = to-token overlaps left half of its width onto from-token. (default: 0.5)
    */
   overlapRatio?: number;
 }
@@ -138,20 +145,25 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
   toSymbol,
   chainImage,
   fallback,
-  tokenSize = 40,
-  chainSize = 18,
-  overlapRatio = 0.4,
+  size = 40,
+  tokenSize: tokenSizeProp,
+  chainSize: chainSizeProp,
+  overlapRatio = 0.5,
 }) => {
+  const tokenSize = tokenSizeProp ?? Math.round(size * 0.6);
+  const chainSize = chainSizeProp ?? Math.round(size * 0.3);
   const overlap = Math.round(tokenSize * overlapRatio);
   const toLeftOffset = tokenSize - overlap;
-  const badgeOverflow = 5;
-  const containerWidth = toLeftOffset + tokenSize + badgeOverflow;
-  const containerHeight = tokenSize;
+
+  // Centre the two-token cluster horizontally inside the bounding box
+  const clusterWidth = toLeftOffset + tokenSize;
+  const clusterLeft = Math.max(0, Math.round((size - clusterWidth) / 2));
+  const tokenTop = Math.round((size - tokenSize) / 2);
 
   return (
-    <View style={{ width: containerWidth, height: containerHeight }}>
-      {/* From-token — positioned at left */}
-      <View style={[styles.absolute, { left: 0, top: 0 }]}>
+    <View style={{ width: size, height: size }}>
+      {/* From-token */}
+      <View style={[styles.absolute, { left: clusterLeft, top: tokenTop }]}>
         <TokenCircle
           image={fromImage}
           fallback={fallback}
@@ -160,28 +172,23 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
         />
       </View>
 
-      {/* To-token — positioned with overlap on from-token */}
-      <View style={[styles.absolute, { left: toLeftOffset, top: 0 }]}>
+      {/* To-token + chain badge — overlaps from-token */}
+      <View style={[styles.absolute, { left: clusterLeft + toLeftOffset, top: tokenTop }]}>
         <TokenCircle
           image={toImage}
           fallback={fallback}
           symbol={toSymbol}
           size={tokenSize}
         />
+      </View>
 
-        {/* Chain badge — bottom-right of to-token */}
-        <View
-          style={[
-            styles.chainBadgeWrapper,
-            { right: -badgeOverflow, bottom: 0 },
-          ]}
-        >
-          <ChainBadge
-            image={chainImage}
-            fallback={fallback}
-            size={chainSize}
-          />
-        </View>
+      {/* Chain badge — bottom-right corner of bounding box */}
+      <View style={[styles.absolute, { right: 0, bottom: 0 }]}>
+        <ChainBadge
+          image={chainImage}
+          fallback={fallback}
+          size={chainSize}
+        />
       </View>
     </View>
   );
@@ -202,9 +209,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: background.bg300,
-  },
-  chainBadgeWrapper: {
-    position: "absolute",
   },
   chainBadge: {
     overflow: "hidden",
