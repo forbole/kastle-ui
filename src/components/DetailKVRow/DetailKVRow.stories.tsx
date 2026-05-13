@@ -1,0 +1,74 @@
+import React from "react";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
+import { View, StyleSheet } from "react-native";
+import { DetailKVRow } from "./DetailKVRow";
+import { background, colors, spacing } from "../../config/theme";
+
+const meta: Meta<typeof DetailKVRow> = {
+  title: "Components/DetailKVRow",
+  component: DetailKVRow,
+  parameters: {
+    backgrounds: { default: "kastle" },
+    viewport: { defaultViewport: "iphone14" },
+  },
+  decorators: [
+    (Story) => (
+      <View style={styles.decorator}>
+        <Story />
+      </View>
+    ),
+  ],
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/** Default — neutral label / value */
+export const Default: Story = {
+  args: {
+    label: "Network fee",
+    value: "0.001 KAS",
+  },
+};
+
+/** Coloured value — green (positive) */
+export const ValuePositive: Story = {
+  args: {
+    label: "Swap to",
+    value: "+1,232.4456 NACHO",
+    valueColor: colors.success,
+  },
+};
+
+/** Coloured value — red (negative) */
+export const ValueNegative: Story = {
+  args: {
+    label: "Swap from",
+    value: "-1000 KAS",
+    valueColor: colors.danger,
+  },
+};
+
+/** Pressable value — external link icon (e.g. TX Hash → explorer) */
+export const Pressable: Story = {
+  args: {
+    label: "TX Hash",
+    value: "9dhd...432ds",
+    onPressValue: () => console.log("open explorer"),
+  },
+};
+
+/** Long value — wraps onto second line */
+export const LongValue: Story = {
+  args: {
+    label: "From",
+    value: "240,000,000.123456 KAS (Kaspa Mainnet)",
+  },
+};
+
+const styles = StyleSheet.create({
+  decorator: {
+    backgroundColor: background.bg100,
+    padding: spacing.s4,
+  },
+});
