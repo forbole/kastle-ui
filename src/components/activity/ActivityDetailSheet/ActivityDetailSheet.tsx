@@ -1,25 +1,22 @@
 import React from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ExternalLink } from "lucide-react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { AppText } from "../../AppText";
 import { DetailKVRow, DetailKVRowProps } from "../../DetailKVRow";
 import { background, border, borderRadius, borderWidth, colors, shadows, spacing } from "../../../config/theme";
 
-export interface ExplorerLink {
-  label: string;
-  /** Caller handles navigation (e.g. Linking.openURL). Pure UI component. */
-  onPress: () => void;
-}
-
 export interface ActivityDetailSheetProps {
   visible: boolean;
   onClose: () => void;
+  /** Sheet title — mirrors row title format, e.g. "Swap KAS →NACHO" */
   title: string;
-  /** Secondary line under title, e.g. "8 Oct, 2026 · 14:32". */
+  /** Secondary line under title, e.g. "8 Oct, 2025 | 02:03" */
   subtitle: string;
+  /**
+   * Detail rows — caller passes coloured + pressable rows as needed.
+   * TX Hash row should use `onPressValue` for explorer navigation.
+   */
   details: DetailKVRowProps[];
-  explorerLink?: ExplorerLink;
 }
 
 export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
@@ -28,7 +25,6 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
   title,
   subtitle,
   details,
-  explorerLink,
 }) => (
   <ActionSheet isOpen={visible} onClose={onClose}>
     <View style={styles.container}>
@@ -50,25 +46,15 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
 
         <View style={styles.detailsSection}>
           {details.map((d, idx) => (
-            <DetailKVRow key={`${d.label}-${idx}`} label={d.label} value={d.value} />
+            <DetailKVRow
+              key={`${d.label}-${idx}`}
+              label={d.label}
+              value={d.value}
+              valueColor={d.valueColor}
+              onPressValue={d.onPressValue}
+            />
           ))}
         </View>
-
-        {explorerLink && (
-          <>
-            <View style={styles.divider} />
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={explorerLink.onPress}
-              style={styles.explorerRow}
-            >
-              <AppText weight="500" style={styles.explorerLabel}>
-                {explorerLink.label}
-              </AppText>
-              <ExternalLink size={16} color={colors.primary} strokeWidth={2} />
-            </TouchableOpacity>
-          </>
-        )}
       </ScrollView>
 
       <View style={styles.homeIndicator} />
@@ -129,18 +115,6 @@ const styles = StyleSheet.create({
   },
   detailsSection: {
     paddingHorizontal: spacing.s3,
-  },
-  explorerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: spacing.s3,
-    paddingVertical: spacing.s3,
-  },
-  explorerLabel: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: colors.primary,
   },
   homeIndicator: {
     height: 34,

@@ -1,2 +1,2 @@
 export { ActivityDetailSheet } from "./ActivityDetailSheet";
-export type { ActivityDetailSheetProps, ExplorerLink } from "./ActivityDetailSheet";
+export type { ActivityDetailSheetProps } from "./ActivityDetailSheet";
