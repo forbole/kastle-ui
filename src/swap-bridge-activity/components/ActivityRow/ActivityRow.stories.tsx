@@ -2,9 +2,9 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { ActivityRow } from "./ActivityRow";
-import { background } from "../../config/theme";
+import { background } from "../../../config/theme";
 
-const placeholderLogo = require("../../../assets/icon.png");
+const placeholderLogo = require("../../../../assets/icon.png");
 
 const meta: Meta<typeof ActivityRow> = {
   title: "Swap-bridge-activity/ActivityRow",
@@ -39,7 +39,8 @@ export const Swap: Story = {
   args: {
     title: "Swap KAS → NACHO",
     dateTime: "8 Oct | 02:03",
-    amountText: "+1,234 NACHO",
+    amountNumber: "+1,234",
+    amountSymbol: "NACHO",
     amountUsd: "≈ $12.34 USD",
     isPositive: true,
   },
@@ -50,18 +51,20 @@ export const Bridge: Story = {
   args: {
     title: "Bridge Kaspa → Kasplex",
     dateTime: "8 Oct | 03:45",
-    amountText: "+240 KAS",
+    amountNumber: "+240",
+    amountSymbol: "KAS",
     amountUsd: "≈ $240.00 USD",
     isPositive: true,
   },
 };
 
-/** Long amount — middle ellipsis preserves token symbol */
+/** Long amount — number truncates with tail ellipsis, token symbol stays visible */
 export const LongAmount: Story = {
   args: {
     title: "Swap KAS → NACHO",
     dateTime: "8 Oct | 02:03",
-    amountText: "+1,000,000,000.888888 NACHO",
+    amountNumber: "+1,000,000,000.888888",
+    amountSymbol: "NACHO",
     amountUsd: "≈ $9,486.17 USD",
     isPositive: true,
   },
@@ -72,7 +75,8 @@ export const WithoutImages: Story = {
   args: {
     title: "Swap KAS → NACHO",
     dateTime: "8 Oct | 02:03",
-    amountText: "+1,234 NACHO",
+    amountNumber: "+1,234",
+    amountSymbol: "NACHO",
     amountUsd: "≈ $12.34 USD",
     isPositive: true,
     pair: {

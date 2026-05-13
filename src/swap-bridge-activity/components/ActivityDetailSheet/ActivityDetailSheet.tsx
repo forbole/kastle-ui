@@ -1,21 +1,32 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { ActionSheet } from "../../components/ActionSheet";
-import { AppText } from "../../components/AppText";
+import { ActionSheet } from "../../../components/ActionSheet";
+import { AppText } from "../../../components/AppText";
+import { StatusPill, StatusPillStatus } from "../../../components/StatusPill";
+import {
+  background,
+  border,
+  borderRadius,
+  borderWidth,
+  colors,
+  shadows,
+  spacing,
+} from "../../../config/theme";
+import { AssetTransferCard, AssetTransferCardProps } from "../AssetTransferCard";
 import { DetailKVRow, DetailKVRowProps } from "../DetailKVRow";
-import { background, border, borderRadius, borderWidth, colors, shadows, spacing } from "../../config/theme";
 
 export interface ActivityDetailSheetProps {
   visible: boolean;
   onClose: () => void;
-  /** Sheet title — mirrors row title format, e.g. "Swap KAS →NACHO" */
+  /** Sheet title — mirrors row title format, e.g. "Swap KAS → NACHO" or "Bridge KAS (Kaspa → Kasplex)" */
   title: string;
   /** Secondary line under title, e.g. "8 Oct, 2025 | 02:03" */
   subtitle: string;
-  /**
-   * Detail rows — caller passes coloured + pressable rows as needed.
-   * TX Hash row should use `onPressValue` for explorer navigation.
-   */
+  /** Optional transaction status pill rendered next to the subtitle. */
+  status?: StatusPillStatus;
+  /** Boxed From → To + Sent / Received card. */
+  transfer: AssetTransferCardProps;
+  /** Standalone label/value rows below the transfer card (Fees, Rate, Slippage, Provider, TX links). */
   details: DetailKVRowProps[];
 }
 
@@ -24,6 +35,8 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
   onClose,
   title,
   subtitle,
+  status,
+  transfer,
   details,
 }) => (
   <ActionSheet isOpen={visible} onClose={onClose}>
@@ -37,12 +50,21 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.titleSection}>
-          <AppText weight="600" style={styles.title}>{title}</AppText>
-          <AppText style={styles.subtitle}>{subtitle}</AppText>
+        <View style={styles.headerSection}>
+          <AppText weight="600" style={styles.title}>
+            {title}
+          </AppText>
+          <View style={styles.subtitleRow}>
+            <AppText style={styles.subtitle}>{subtitle}</AppText>
+            {status && <StatusPill status={status} />}
+          </View>
         </View>
 
         <View style={styles.divider} />
+
+        <View style={styles.cardSection}>
+          <AssetTransferCard {...transfer} />
+        </View>
 
         <View style={styles.detailsSection}>
           {details.map((d, idx) => (
@@ -51,6 +73,7 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
               label={d.label}
               value={d.value}
               valueColor={d.valueColor}
+              valuePrefix={d.valuePrefix}
               onPressValue={d.onPressValue}
             />
           ))}
@@ -62,6 +85,8 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
   </ActionSheet>
 );
 
+const PAGE_MARGIN = 20;
+
 const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
@@ -72,7 +97,6 @@ const styles = StyleSheet.create({
     borderLeftWidth: borderWidth.bw1,
     borderRightWidth: borderWidth.bw1,
     borderColor: border.b300,
-    paddingHorizontal: spacing.s2,
     paddingTop: spacing.s2,
     ...shadows.soft4,
   },
@@ -92,29 +116,39 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: spacing.s4,
   },
-  titleSection: {
-    paddingHorizontal: spacing.s3,
+  headerSection: {
+    paddingHorizontal: PAGE_MARGIN,
     paddingTop: spacing.s2,
     gap: spacing.s1,
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 18,
-    lineHeight: 22,
+    fontSize: 20,
+    lineHeight: 24,
+  },
+  subtitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.s2,
   },
   subtitle: {
     color: colors.textMuted,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 14,
+    lineHeight: 20,
   },
   divider: {
     height: borderWidth.bw1,
     backgroundColor: border.b400,
     marginVertical: spacing.s3,
-    marginHorizontal: spacing.s3,
+    marginHorizontal: PAGE_MARGIN,
+  },
+  cardSection: {
+    paddingHorizontal: PAGE_MARGIN,
   },
   detailsSection: {
-    paddingHorizontal: spacing.s3,
+    paddingHorizontal: PAGE_MARGIN,
+    paddingTop: spacing.s2,
   },
   homeIndicator: {
     height: 34,

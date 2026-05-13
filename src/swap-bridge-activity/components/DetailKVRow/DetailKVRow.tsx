@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ExternalLink } from "lucide-react-native";
-import { AppText } from "../../components/AppText";
-import { colors, spacing } from "../../config/theme";
+import { AppText } from "../../../components/AppText";
+import { colors, spacing } from "../../../config/theme";
 
 export interface DetailKVRowProps {
   label: string;
@@ -13,6 +13,8 @@ export interface DetailKVRowProps {
    *   - otherwise → `colors.textPrimary`
    */
   valueColor?: string;
+  /** Optional node rendered immediately to the left of the value (e.g. provider logo). */
+  valuePrefix?: React.ReactNode;
   /** If set: the whole row becomes pressable and appends an external-link icon. */
   onPressValue?: () => void;
 }
@@ -21,6 +23,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   label,
   value,
   valueColor,
+  valuePrefix,
   onPressValue,
 }) => {
   const defaultValueColor = onPressValue ? colors.primary : colors.textPrimary;
@@ -30,6 +33,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
     <>
       <AppText style={styles.label}>{label}</AppText>
       <View style={styles.valueWrap}>
+        {valuePrefix}
         <AppText
           weight="500"
           numberOfLines={2}

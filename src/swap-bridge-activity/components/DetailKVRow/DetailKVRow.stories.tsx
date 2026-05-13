@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { DetailKVRow } from "./DetailKVRow";
-import { background, colors } from "../../config/theme";
+import { background, colors } from "../../../config/theme";
 
 const meta: Meta<typeof DetailKVRow> = {
   title: "Swap-bridge-activity/DetailKVRow",

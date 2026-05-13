@@ -4,19 +4,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { AppText } from "../../components/AppText";
-import { DualAssetImage, DualAssetImageProps } from "../../components/DualAssetImage";
-import { borderRadius, borderWidth, colors, spacing } from "../../config/theme";
+import { AppText } from "../../../components/AppText";
+import { DualAssetImage, DualAssetImageProps } from "../../../components/DualAssetImage";
+import { borderRadius, borderWidth, colors, spacing } from "../../../config/theme";
 
 export interface ActivityRowProps {
-  /** Caller-formatted title. e.g. "Swap KAS →NACHO" or "Bridge Kaspa→Kasplex" */
+  /** Caller-formatted title. e.g. "Swap KAS → NACHO" or "Bridge Kaspa → Kasplex" */
   title: string;
   /** Asset images config — passed straight to DualAssetImage. */
   pair: DualAssetImageProps;
   /** Caller-formatted date + time. e.g. "8 Oct | 02:03" (regular pipe) */
   dateTime: string;
-  /** Caller-formatted amount. Truncate on number side only; never truncate token symbol. */
-  amountText: string;
+  /** Numeric portion of the amount, e.g. "+1,000,000.87". Truncates with tail ellipsis if long. */
+  amountNumber: string;
+  /** Token symbol — always visible, never truncated. */
+  amountSymbol?: string;
   /** USD equivalent. e.g. "≈ $9,486.17 USD" */
   amountUsd: string;
   /** True renders amount in success colour (green). Default false uses textPrimary. */
@@ -29,7 +31,8 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
   title,
   pair,
   dateTime,
-  amountText,
+  amountNumber,
+  amountSymbol,
   amountUsd,
   isPositive = false,
   onPress,
@@ -57,14 +60,26 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
       </View>
 
       <View style={styles.right}>
-        <AppText
-          weight="600"
-          style={[styles.amount, { color: amountColor }]}
-          numberOfLines={1}
-          ellipsizeMode="middle"
-        >
-          {amountText}
-        </AppText>
+        <View style={styles.amountRow}>
+          <AppText
+            weight="600"
+            style={[styles.amountNumber, { color: amountColor }]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {amountNumber}
+          </AppText>
+          {amountSymbol && (
+            <AppText
+              weight="600"
+              style={[styles.amountSymbol, { color: amountColor }]}
+              numberOfLines={1}
+            >
+              {" "}
+              {amountSymbol}
+            </AppText>
+          )}
+        </View>
         <AppText
           weight="400"
           style={styles.amountUsd}
@@ -112,9 +127,19 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
     maxWidth: "45%",
   },
-  amount: {
+  amountRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
+  amountNumber: {
     fontSize: 14,
     lineHeight: 18,
+    flexShrink: 1,
+  },
+  amountSymbol: {
+    fontSize: 14,
+    lineHeight: 18,
+    flexShrink: 0,
   },
   amountUsd: {
     fontSize: 12,
