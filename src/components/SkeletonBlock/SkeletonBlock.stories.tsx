@@ -39,13 +39,20 @@ export const Pill: Story = {
   },
 };
 
-/** Circle — avatar placeholder. Width and height locked together via the slider. */
+/** Circle — avatar placeholder. Single size slider drives both width and height. */
 export const Circle: Story = {
   args: { width: 40, height: 40, borderRadius: 9999 },
   argTypes: {
     width: { control: { type: "range", min: 16, max: 120, step: 2 } },
-    height: { control: { type: "range", min: 16, max: 120, step: 2 } },
+    height: { control: false },
   },
+  render: (args) => (
+    <SkeletonBlock
+      width={args.width}
+      height={typeof args.width === "number" ? args.width : 40}
+      borderRadius={9999}
+    />
+  ),
 };
 
 const styles = StyleSheet.create({

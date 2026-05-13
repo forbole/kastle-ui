@@ -39,7 +39,7 @@ export const Error: Story = {
   args: {
     image: placeholderImage,
     heading: "Couldn't load activity",
-    subtext: "Something went wrong. Check your connection and try again.",
+    subtext: "Check your connection and try again.",
     cta: {
       label: "Retry",
       onPress: () => console.log("retry"),

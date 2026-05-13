@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { DetailKVRow } from "./DetailKVRow";
-import { background, colors, spacing } from "../../../config/theme";
+import { background, colors } from "../../../config/theme";
 
 const meta: Meta<typeof DetailKVRow> = {
   title: "Components/DetailKVRow",
@@ -23,33 +23,33 @@ const meta: Meta<typeof DetailKVRow> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default — neutral label / value */
+/** Neutral label / value — matches Figma "Rate" / "Network fees" rows */
 export const Default: Story = {
   args: {
-    label: "Network Fee",
-    value: "0.001 KAS",
+    label: "Rate",
+    value: "1 KAS ≈ 0.032799 NACHO",
   },
 };
 
-/** Coloured value — green (positive) */
+/** Coloured value — green (positive). Matches Figma "Swap to" row */
 export const ValuePositive: Story = {
   args: {
-    label: "Swap To",
+    label: "Swap to",
     value: "+1,232.4456 NACHO",
     valueColor: colors.success,
   },
 };
 
-/** Coloured value — red (negative) */
+/** Coloured value — red (negative). Matches Figma "Swap from" row */
 export const ValueNegative: Story = {
   args: {
-    label: "Swap From",
+    label: "Swap from",
     value: "-1000 KAS",
     valueColor: colors.danger,
   },
 };
 
-/** Pressable value — external link icon (e.g. TX Hash → explorer) */
+/** Pressable — external link icon. Matches Figma "TX Hash" row (blue, whole row tappable) */
 export const Pressable: Story = {
   args: {
     label: "TX Hash",
@@ -69,6 +69,6 @@ export const LongValue: Story = {
 const styles = StyleSheet.create({
   decorator: {
     backgroundColor: background.bg100,
-    padding: spacing.s4,
+    padding: 20,
   },
 });

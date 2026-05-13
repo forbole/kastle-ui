@@ -15,9 +15,7 @@ const meta: Meta<typeof DualAssetImage> = {
   },
   args: {
     fromImage: placeholderLogo,
-    fromSymbol: "KAS",
     toImage: placeholderLogo,
-    toSymbol: "NACHO",
     chainImage: placeholderLogo,
     fallback: placeholderLogo,
     size: 40,
@@ -53,7 +51,7 @@ export const Small: Story = {
   args: { size: 28 },
 };
 
-/** No from-image — initial letter fallback */
+/** No from-image — plain coloured circle */
 export const NoFromImage: Story = {
   args: {
     fromImage: undefined,
@@ -61,7 +59,7 @@ export const NoFromImage: Story = {
   },
 };
 
-/** No to-image — initial letter fallback */
+/** No to-image — plain coloured circle */
 export const NoToImage: Story = {
   args: {
     toImage: undefined,
@@ -69,7 +67,7 @@ export const NoToImage: Story = {
   },
 };
 
-/** No chain image — coloured circle fallback */
+/** No chain image — plain coloured circle */
 export const NoChainImage: Story = {
   args: {
     chainImage: undefined,
@@ -77,7 +75,7 @@ export const NoChainImage: Story = {
   },
 };
 
-/** No images — all three fall back (initial letters + coloured chain circle) */
+/** No images — all three fall back to plain coloured circles */
 export const NoImages: Story = {
   args: {
     fromImage: undefined,
@@ -95,9 +93,7 @@ export const SizeComparison: Story = {
         <DualAssetImage
           key={size}
           fromImage={placeholderLogo}
-          fromSymbol="KAS"
           toImage={placeholderLogo}
-          toSymbol="NACHO"
           chainImage={placeholderLogo}
           size={size}
         />

@@ -5,18 +5,13 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
-import { AppText } from "../AppText";
-import { background, colors } from "../../config/theme";
+import { background } from "../../config/theme";
 
 export interface DualAssetImageProps {
-  /** From-token image. Falls back to `fallback`, then to initial-letter placeholder. */
+  /** From-token image. Falls back to `fallback`, then to a plain coloured circle. */
   fromImage?: ImageSourcePropType;
-  /** From-token symbol — used for the initial-letter placeholder. */
-  fromSymbol: string;
-  /** To-token image. Falls back to `fallback`, then to initial-letter placeholder. */
+  /** To-token image. Falls back to `fallback`, then to a plain coloured circle. */
   toImage?: ImageSourcePropType;
-  /** To-token symbol — used for the initial-letter placeholder. */
-  toSymbol: string;
   /** Chain badge image. Falls back to `fallback`, then to a plain coloured circle. */
   chainImage?: ImageSourcePropType;
   /** Default image used when any of the above is missing. */
@@ -42,12 +37,9 @@ export interface DualAssetImageProps {
 const TokenCircle: React.FC<{
   image?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
-  symbol: string;
   size: number;
-}> = ({ image, fallback, symbol, size }) => {
+}> = ({ image, fallback, size }) => {
   const resolved = image ?? fallback;
-  const initial = symbol.charAt(0).toUpperCase();
-  const fontSize = Math.round(size * 0.42);
 
   return (
     <View
@@ -80,18 +72,7 @@ const TokenCircle: React.FC<{
             styles.placeholder,
             { width: size, height: size, borderRadius: size / 2 },
           ]}
-        >
-          <AppText
-            weight="600"
-            style={{
-              fontSize,
-              lineHeight: fontSize,
-              color: colors.textPrimary,
-            }}
-          >
-            {initial}
-          </AppText>
-        </View>
+        />
       )}
     </View>
   );
@@ -140,9 +121,7 @@ const ChainBadge: React.FC<{
 
 export const DualAssetImage: React.FC<DualAssetImageProps> = ({
   fromImage,
-  fromSymbol,
   toImage,
-  toSymbol,
   chainImage,
   fallback,
   size = 40,
@@ -167,17 +146,15 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
         <TokenCircle
           image={fromImage}
           fallback={fallback}
-          symbol={fromSymbol}
           size={tokenSize}
         />
       </View>
 
-      {/* To-token + chain badge — overlaps from-token */}
+      {/* To-token — overlaps from-token */}
       <View style={[styles.absolute, { left: clusterLeft + toLeftOffset, top: tokenTop }]}>
         <TokenCircle
           image={toImage}
           fallback={fallback}
-          symbol={toSymbol}
           size={tokenSize}
         />
       </View>

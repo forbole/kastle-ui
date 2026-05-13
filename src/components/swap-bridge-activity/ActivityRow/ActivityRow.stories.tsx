@@ -16,9 +16,7 @@ const meta: Meta<typeof ActivityRow> = {
   args: {
     pair: {
       fromImage: placeholderLogo,
-      fromSymbol: "KAS",
       toImage: placeholderLogo,
-      toSymbol: "NACHO",
       chainImage: placeholderLogo,
       fallback: placeholderLogo,
     },
@@ -39,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 /** Swap on Kaspa — green positive amount */
 export const Swap: Story = {
   args: {
-    title: "Swap KAS →NACHO",
+    title: "Swap KAS → NACHO",
     dateTime: "8 Oct | 02:03",
     amountText: "+1,234 NACHO",
     amountUsd: "≈ $12.34 USD",
@@ -50,7 +48,7 @@ export const Swap: Story = {
 /** Bridge cross-chain — title shows chain names */
 export const Bridge: Story = {
   args: {
-    title: "Bridge Kaspa→Kasplex",
+    title: "Bridge Kaspa → Kasplex",
     dateTime: "8 Oct | 03:45",
     amountText: "+240 KAS",
     amountUsd: "≈ $240.00 USD",
@@ -58,10 +56,10 @@ export const Bridge: Story = {
   },
 };
 
-/** Long amount — single line, truncates with ellipsis */
+/** Long amount — middle ellipsis preserves token symbol */
 export const LongAmount: Story = {
   args: {
-    title: "Swap KAS →NACHO",
+    title: "Swap KAS → NACHO",
     dateTime: "8 Oct | 02:03",
     amountText: "+1,000,000,000.888888 NACHO",
     amountUsd: "≈ $9,486.17 USD",
@@ -69,19 +67,17 @@ export const LongAmount: Story = {
   },
 };
 
-/** Without images — both tokens fall back to initial-letter placeholder */
+/** Without images — both tokens fall back to plain coloured circles */
 export const WithoutImages: Story = {
   args: {
-    title: "Swap KAS →NACHO",
+    title: "Swap KAS → NACHO",
     dateTime: "8 Oct | 02:03",
     amountText: "+1,234 NACHO",
     amountUsd: "≈ $12.34 USD",
     isPositive: true,
     pair: {
       fromImage: undefined,
-      fromSymbol: "KAS",
       toImage: undefined,
-      toSymbol: "NACHO",
       chainImage: undefined,
       fallback: undefined,
     },

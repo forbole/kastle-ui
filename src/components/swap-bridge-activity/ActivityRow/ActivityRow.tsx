@@ -61,7 +61,7 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
           weight="600"
           style={[styles.amount, { color: amountColor }]}
           numberOfLines={1}
-          ellipsizeMode="tail"
+          ellipsizeMode="middle"
         >
           {amountText}
         </AppText>
