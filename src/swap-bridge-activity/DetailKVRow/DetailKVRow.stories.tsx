@@ -5,7 +5,7 @@ import { DetailKVRow } from "./DetailKVRow";
 import { background, colors } from "../../config/theme";
 
 const meta: Meta<typeof DetailKVRow> = {
-  title: "Components/DetailKVRow",
+  title: "Swap-bridge-activity/DetailKVRow",
   component: DetailKVRow,
   parameters: {
     backgrounds: { default: "kastle" },

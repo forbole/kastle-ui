@@ -7,7 +7,7 @@ import { background } from "../../config/theme";
 const placeholderLogo = require("../../../../assets/icon.png");
 
 const meta: Meta<typeof ActivityRow> = {
-  title: "Components/ActivityRow",
+  title: "Swap-bridge-activity/ActivityRow",
   component: ActivityRow,
   parameters: {
     backgrounds: { default: "kastle" },

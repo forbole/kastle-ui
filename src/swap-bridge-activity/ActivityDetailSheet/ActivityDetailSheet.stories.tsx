@@ -6,7 +6,7 @@ import { AppText } from "../../components/AppText";
 import { colors, spacing } from "../../config/theme";
 
 const meta: Meta<typeof ActivityDetailSheet> = {
-  title: "Components/ActivityDetailSheet",
+  title: "Swap-bridge-activity/ActivityDetailSheet",
   component: ActivityDetailSheet,
   parameters: {
     backgrounds: { default: "kastle" },

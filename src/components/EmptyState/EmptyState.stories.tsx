@@ -14,6 +14,9 @@ const meta: Meta<typeof EmptyState> = {
     backgrounds: { default: "kastle" },
     viewport: { defaultViewport: "iphone14" },
   },
+  argTypes: {
+    imageHeight: { control: { type: "range", min: 60, max: 240, step: 4 } },
+  },
   decorators: [
     (Story) => (
       <View style={styles.decorator}>
@@ -46,8 +49,6 @@ export const Error: Story = {
       label: "Retry",
       onPress: () => console.log("retry"),
     },
-
-    imageSize: 190
   },
 };
 
