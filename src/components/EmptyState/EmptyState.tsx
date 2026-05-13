@@ -17,11 +17,13 @@ export interface EmptyStateCta {
 export interface EmptyStateProps {
   /** Hero image for the empty / error state (e.g. magnifying glass, broken-blocks illustration). */
   image: ImageSourcePropType;
-  /**
-   * Image height in pixels (default: 120). Width auto-scales from the image's
-   * intrinsic aspect ratio so the illustration is never squished.
-   */
+  /** Image height in pixels (default: 120). */
   imageHeight?: number;
+  /**
+   * Image width in pixels. If omitted, falls back to `imageHeight` (square).
+   * Pass both `imageWidth` + `imageHeight` to preserve a non-square aspect.
+   */
+  imageWidth?: number;
   heading: string;
   subtext: string;
   /** Primary CTA, e.g. Retry button. */
@@ -31,40 +33,34 @@ export interface EmptyStateProps {
 export const EmptyState: React.FC<EmptyStateProps> = ({
   image,
   imageHeight = 120,
+  imageWidth,
   heading,
   subtext,
   cta,
-}) => {
-  const source = Image.resolveAssetSource(image as any);
-  const aspectRatio = source && source.width && source.height
-    ? source.width / source.height
-    : 1;
-
-  return (
-    <View style={styles.container}>
-      <Image
-        source={image}
-        style={{ height: imageHeight, aspectRatio }}
-        resizeMode="contain"
-      />
-      <AppText weight="600" style={styles.heading}>
-        {heading}
-      </AppText>
-      <AppText style={styles.subtext}>{subtext}</AppText>
-      {cta && (
-        <TouchableOpacity
-          style={styles.cta}
-          onPress={cta.onPress}
-          activeOpacity={0.85}
-        >
-          <AppText weight="600" style={styles.ctaLabel}>
-            {cta.label}
-          </AppText>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-};
+}) => (
+  <View style={styles.container}>
+    <Image
+      source={image}
+      style={{ height: imageHeight, width: imageWidth ?? imageHeight }}
+      resizeMode="contain"
+    />
+    <AppText weight="600" style={styles.heading}>
+      {heading}
+    </AppText>
+    <AppText style={styles.subtext}>{subtext}</AppText>
+    {cta && (
+      <TouchableOpacity
+        style={styles.cta}
+        onPress={cta.onPress}
+        activeOpacity={0.85}
+      >
+        <AppText weight="600" style={styles.ctaLabel}>
+          {cta.label}
+        </AppText>
+      </TouchableOpacity>
+    )}
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

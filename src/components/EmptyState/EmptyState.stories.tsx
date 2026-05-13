@@ -16,6 +16,7 @@ const meta: Meta<typeof EmptyState> = {
   },
   argTypes: {
     imageHeight: { control: { type: "range", min: 60, max: 240, step: 4 } },
+    imageWidth: { control: { type: "range", min: 60, max: 320, step: 4 } },
   },
   decorators: [
     (Story) => (
@@ -33,6 +34,8 @@ type Story = StoryObj<typeof meta>;
 export const Empty: Story = {
   args: {
     image: emptyImage,
+    imageHeight: 160,
+    imageWidth: 192,
     heading: "No activity yet",
     subtext: "Your swaps will appear here once you make one.",
   },
@@ -42,9 +45,10 @@ export const Empty: Story = {
 export const Error: Story = {
   args: {
     image: errorImage,
+    imageHeight: 160,
+    imageWidth: 192,
     heading: "Couldn't load activity",
     subtext: "Check your connection and try again.",
-
     cta: {
       label: "Retry",
       onPress: () => console.log("retry"),
