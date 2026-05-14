@@ -9,11 +9,11 @@ import { DualAssetImage, DualAssetImageProps } from "../../../components/DualAss
 import { borderRadius, borderWidth, colors, spacing, warning } from "../../../config/theme";
 
 export interface ActivityRowProps {
-  /** Caller-formatted title. e.g. "Swap KAS → NACHO" or "Bridge Kaspa → Kasplex" */
+  /** Short row title, e.g. "Swapped" or "Bridged". */
   title: string;
   /** Asset images config — passed straight to DualAssetImage. */
   pair: DualAssetImageProps;
-  /** Caller-formatted date + time. e.g. "8 Oct | 02:03" (regular pipe) */
+  /** Date + time, e.g. "8 Oct | 02:03". */
   dateTime: string;
   /** Numeric portion of the amount, e.g. "+1,000,000.87". Truncates with tail ellipsis if long. */
   amountNumber: string;

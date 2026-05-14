@@ -48,7 +48,7 @@ const providerPrefix = (
   />
 );
 
-/** Swap success — matches Figma 11873-301327 */
+/** Swap success */
 export const SwapSuccess: Story = {
   render: () => (
     <SheetHarness
@@ -80,7 +80,7 @@ export const SwapSuccess: Story = {
   ),
 };
 
-/** Bridge success — matches Figma 11867-172102 */
+/** Bridge success */
 export const BridgeSuccess: Story = {
   render: () => (
     <SheetHarness

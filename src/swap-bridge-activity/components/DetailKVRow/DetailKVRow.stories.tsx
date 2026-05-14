@@ -23,7 +23,7 @@ const meta: Meta<typeof DetailKVRow> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Neutral label / value — matches Figma "Rate" / "Network Fee" rows */
+/** Neutral label / value */
 export const Default: Story = {
   args: {
     label: "Rate",
@@ -31,7 +31,7 @@ export const Default: Story = {
   },
 };
 
-/** Coloured value — green (positive). Matches Figma "Swap To" row */
+/** Coloured value — green (positive) */
 export const ValuePositive: Story = {
   args: {
     label: "Swap To",
@@ -40,7 +40,7 @@ export const ValuePositive: Story = {
   },
 };
 
-/** Coloured value — red (negative). Matches Figma "Swap From" row */
+/** Coloured value — red (negative) */
 export const ValueNegative: Story = {
   args: {
     label: "Swap From",
@@ -49,7 +49,7 @@ export const ValueNegative: Story = {
   },
 };
 
-/** Pressable — external link icon. Matches Figma "TX Hash" row (blue, whole row tappable) */
+/** Pressable — external link icon, whole row tappable */
 export const Pressable: Story = {
   args: {
     label: "TX Hash",

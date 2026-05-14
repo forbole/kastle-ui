@@ -114,7 +114,6 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
     );
   }
 
-  // loaded
   return (
     <View style={styles.root}>
       <ScrollView

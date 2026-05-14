@@ -134,7 +134,6 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
   const overlap = Math.round(tokenSize * overlapRatio);
   const toLeftOffset = tokenSize - overlap;
 
-  // Centre the two-token cluster horizontally inside the bounding box
   const clusterWidth = toLeftOffset + tokenSize;
   const clusterLeft = Math.max(0, Math.round((size - clusterWidth) / 2));
   const tokenTop = Math.round((size - tokenSize) / 2);
