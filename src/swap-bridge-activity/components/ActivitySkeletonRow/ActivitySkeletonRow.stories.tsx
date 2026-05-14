@@ -5,7 +5,7 @@ import { ActivitySkeletonRow } from "./ActivitySkeletonRow";
 import { background } from "../../../config/theme";
 
 const meta: Meta<typeof ActivitySkeletonRow> = {
-  title: "Swap-bridge-activity/ActivitySkeletonRow",
+  title: "Swap-bridge-activity/Components/ActivitySkeletonRow",
   component: ActivitySkeletonRow,
   parameters: {
     backgrounds: { default: "kastle" },

@@ -39,7 +39,7 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
   transfer,
   details,
 }) => (
-  <ActionSheet isOpen={visible} onClose={onClose}>
+  <ActionSheet isOpen={visible} onClose={onClose} heightRatio={0.95}>
     <View style={styles.container}>
       <View style={styles.handlebarWrapper}>
         <View style={styles.handlebar} />

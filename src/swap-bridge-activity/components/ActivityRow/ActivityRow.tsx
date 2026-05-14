@@ -130,6 +130,8 @@ const styles = StyleSheet.create({
   amountRow: {
     flexDirection: "row",
     alignItems: "baseline",
+    justifyContent: "flex-end",
+    width: "100%",
   },
   amountNumber: {
     fontSize: 14,

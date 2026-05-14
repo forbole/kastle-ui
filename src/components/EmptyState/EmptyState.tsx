@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.textPrimary,
     textAlign: "center",
-    marginTop: spacing.s4,
   },
   subtext: {
     fontSize: 14,

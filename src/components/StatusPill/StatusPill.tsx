@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Check, X, Clock } from "lucide-react-native";
+import { CircleCheck, CircleX, Hourglass } from "lucide-react-native";
 import { AppText } from "../AppText";
 import { colors, error, spacing, success, warning } from "../../config/theme";
 
@@ -15,26 +15,26 @@ export interface StatusPillProps {
 const STATUS_CONFIG: Record<
   StatusPillStatus,
   {
-    icon: typeof Check;
+    icon: typeof CircleCheck;
     label: string;
     color: string;
     bg: string;
   }
 > = {
   success: {
-    icon: Check,
+    icon: CircleCheck,
     label: "Success",
     color: colors.success,
     bg: success.background,
   },
   failed: {
-    icon: X,
+    icon: CircleX,
     label: "Failed",
     color: colors.danger,
     bg: error.background,
   },
   pending: {
-    icon: Clock,
+    icon: Hourglass,
     label: "Pending",
     color: warning.w500,
     bg: warning.background,

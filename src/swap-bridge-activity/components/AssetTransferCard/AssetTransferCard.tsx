@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react-native";
 import { AppText } from "../../../components/AppText";
 import { Layer2AssetImage } from "../../../components/Layer2AssetImage";
 import {
+  border,
   borderRadius,
   borderWidth,
   colors,
@@ -96,6 +97,9 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
       </View>
     </View>
 
+    {/* Divider between From/To and the amount rows */}
+    <View style={styles.divider} />
+
     {/* Sent row */}
     <View style={styles.amountRow}>
       <AppText style={styles.amountLabel}>{sentLabel}</AppText>
@@ -126,9 +130,9 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.bw1,
     borderColor: colors.border,
     borderRadius: borderRadius["2xl"],
-    paddingVertical: spacing.s4,
-    paddingHorizontal: spacing.s4,
-    gap: spacing.s4,
+    paddingVertical: spacing.s3_5,
+    paddingHorizontal: spacing.s3_5,
+    gap: spacing.s3_5,
   },
   transferRow: {
     flexDirection: "row",
@@ -154,7 +158,7 @@ const styles = StyleSheet.create({
   directionLabel: {
     fontSize: 12,
     lineHeight: 16,
-    color: colors.textMuted,
+    color: colors.textSecondary,
   },
   symbol: {
     fontSize: 16,
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
   amountLabel: {
     fontSize: 14,
     lineHeight: 20,
-    color: colors.textMuted,
+    color: colors.textSecondary,
   },
   amountRight: {
     alignItems: "flex-end",
@@ -184,5 +188,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.textMuted,
+  },
+  divider: {
+    height: borderWidth.bw1,
+    backgroundColor: border.b400,
+    marginVertical: -spacing.s1,
   },
 });

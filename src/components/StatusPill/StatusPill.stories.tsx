@@ -38,11 +38,6 @@ export const Pending: Story = {
   args: { status: "pending" },
 };
 
-/** Custom label override */
-export const CustomLabel: Story = {
-  args: { status: "success", label: "Completed" },
-};
-
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,

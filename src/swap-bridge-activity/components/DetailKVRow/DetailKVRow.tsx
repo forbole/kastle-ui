@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     lineHeight: 24,
-    color: colors.textMuted,
+    color: colors.textSecondary,
     flexShrink: 0,
   },
   valueWrap: {
