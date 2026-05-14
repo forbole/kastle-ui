@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     gap: spacing.s4,
   },
   label: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 24,
     color: colors.textSecondary,
     flexShrink: 0,
   },
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   value: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 24,
     flexShrink: 1,
     textAlign: "right",
   },
