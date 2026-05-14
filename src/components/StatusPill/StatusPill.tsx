@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { CircleCheck, CircleX, Hourglass } from "lucide-react-native";
+import { CircleCheck, CircleX, ClockFading } from "lucide-react-native";
 import { AppText } from "../AppText";
 import { colors, error, spacing, success, warning } from "../../config/theme";
 
@@ -34,7 +34,7 @@ const STATUS_CONFIG: Record<
     bg: error.background,
   },
   pending: {
-    icon: Hourglass,
+    icon: ClockFading,
     label: "Pending",
     color: warning.w500,
     bg: warning.background,
