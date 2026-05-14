@@ -129,7 +129,7 @@ export const SwapPending: Story = {
         sentLabel: "Paid",
         sentAmount: "1,000 KAS",
         sentUsd: "≈ $9,486.17 USD",
-        receivedAmount: "—",
+        receivedAmount: "-",
         receivedUsd: "Pending",
       }}
       details={[
@@ -161,14 +161,14 @@ export const BridgePending: Story = {
         sentLabel: "Sent",
         sentAmount: "1,000 KAS",
         sentUsd: "≈ $9,486.17 USD",
-        receivedAmount: "—",
+        receivedAmount: "-",
         receivedUsd: "Pending",
       }}
       details={[
         { label: "Fees", value: "0.0002 KAS" },
         { label: "Provider", value: "Kurve Bridge", valuePrefix: providerPrefix },
         { label: "Source TX", value: "View", onPressValue: () => console.log("open source") },
-        { label: "Destination TX", value: "—" },
+        { label: "Destination TX", value: "-" },
       ]}
     />
   ),
