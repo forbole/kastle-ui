@@ -104,7 +104,7 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
     <View style={styles.amountRow}>
       <AppText style={styles.amountLabel}>{sentLabel}</AppText>
       <View style={styles.amountRight}>
-        <AppText weight="500" style={styles.amount}>
+        <AppText weight="400" style={styles.amount}>
           {sentAmount}
         </AppText>
         <AppText style={styles.amountUsd}>{sentUsd}</AppText>
@@ -115,7 +115,7 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
     <View style={styles.amountRow}>
       <AppText style={styles.amountLabel}>{receivedLabel}</AppText>
       <View style={styles.amountRight}>
-        <AppText weight="500" style={styles.amount}>
+        <AppText weight="400" style={styles.amount}>
           {receivedAmount}
         </AppText>
         <AppText style={styles.amountUsd}>{receivedUsd}</AppText>
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   amount: {
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 20,
     color: colors.textPrimary,
   },

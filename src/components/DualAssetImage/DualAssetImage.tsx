@@ -150,22 +150,38 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
         />
       </View>
 
-      {/* To-token — overlaps from-token */}
-      <View style={[styles.absolute, { left: clusterLeft + toLeftOffset, top: tokenTop }]}>
+      {/* To-token + chain badge — badge sits bottom-right of the to-token */}
+      <View
+        style={[
+          styles.absolute,
+          {
+            left: clusterLeft + toLeftOffset,
+            top: tokenTop,
+            width: tokenSize,
+            height: tokenSize,
+          },
+        ]}
+      >
         <TokenCircle
           image={toImage}
           fallback={fallback}
           size={tokenSize}
         />
-      </View>
-
-      {/* Chain badge — bottom-right corner of bounding box */}
-      <View style={[styles.absolute, { right: 0, bottom: 0 }]}>
-        <ChainBadge
-          image={chainImage}
-          fallback={fallback}
-          size={chainSize}
-        />
+        <View
+          style={[
+            styles.absolute,
+            {
+              right: -Math.round(chainSize * 0.2),
+              bottom: -Math.round(chainSize * 0.1),
+            },
+          ]}
+        >
+          <ChainBadge
+            image={chainImage}
+            fallback={fallback}
+            size={chainSize}
+          />
+        </View>
       </View>
     </View>
   );

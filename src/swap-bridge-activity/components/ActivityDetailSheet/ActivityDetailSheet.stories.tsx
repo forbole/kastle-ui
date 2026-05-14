@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { ActivityDetailSheet } from "./ActivityDetailSheet";
 import { AppText } from "../../../components/AppText";
 import { colors, spacing } from "../../../config/theme";
@@ -41,24 +41,11 @@ const SheetHarness = (
   );
 };
 
-const providerLogoStyle = {
-  width: 20,
-  height: 20,
-  borderRadius: 10,
-  backgroundColor: "#000",
-  alignItems: "center" as const,
-  justifyContent: "center" as const,
-};
-const providerLogoInnerStyle = {
-  width: 10,
-  height: 10,
-  borderRadius: 5,
-  backgroundColor: colors.primary,
-};
 const providerPrefix = (
-  <View style={providerLogoStyle}>
-    <View style={providerLogoInnerStyle} />
-  </View>
+  <Image
+    source={placeholderLogo}
+    style={{ width: 20, height: 20, borderRadius: 10 }}
+  />
 );
 
 /** Swap success — matches Figma 11873-301327 */

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import {
-  ActivityIndicator,
   ScrollView,
   StyleSheet,
   View,
 } from "react-native";
-import { Search, AlertTriangle } from "lucide-react-native";
 import { EmptyState } from "../../../components/EmptyState";
 import { colors, spacing } from "../../../config/theme";
 import { ActivityRow, ActivityRowProps } from "../../components/ActivityRow";
@@ -41,7 +39,7 @@ export interface ActivityScreenProps {
   state: ActivityScreenState;
   /** Required when state === "loaded". */
   transactions?: ActivityScreenItem[];
-  /** Show OS-native loader at end of list while fetching next page. */
+  /** Show 2 skeleton rows at end of list while fetching next page. */
   loadingMore?: boolean;
   /** Retry handler for the error state. */
   onRetry?: () => void;
@@ -51,6 +49,9 @@ export interface ActivityScreenProps {
  * Body-only screen for Swap / Bridge activity history.
  * The screen header is rendered by React Navigation in kastle-mobile;
  * the consumer wires `<Stack.Screen options={{ title: "..." }} />` separately.
+ *
+ * Layout is fully responsive — root + list use `flex: 1` so the screen fills
+ * whatever container React Navigation gives it.
  */
 export const ActivityScreen: React.FC<ActivityScreenProps> = ({
   pageType,
@@ -135,9 +136,10 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
           />
         ))}
         {loadingMore && (
-          <View style={styles.loadingMore}>
-            <ActivityIndicator color={colors.primary} />
-          </View>
+          <>
+            <ActivitySkeletonRow />
+            <ActivitySkeletonRow />
+          </>
         )}
       </ScrollView>
 
@@ -159,18 +161,16 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    width: "100%",
     backgroundColor: colors.backgroundScreen,
   },
   list: {
     flex: 1,
+    width: "100%",
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s3,
   },
   listContent: {
     paddingBottom: spacing.s6,
-  },
-  loadingMore: {
-    paddingVertical: spacing.s4,
-    alignItems: "center",
   },
 });

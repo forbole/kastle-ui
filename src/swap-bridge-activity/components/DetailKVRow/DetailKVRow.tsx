@@ -35,7 +35,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
       <View style={styles.valueWrap}>
         {valuePrefix}
         <AppText
-          weight="500"
+          weight="400"
           numberOfLines={2}
           style={[styles.value, { color: resolvedValueColor }]}
         >
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     gap: spacing.s4,
   },
   label: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 14,
+    lineHeight: 20,
     color: colors.textSecondary,
     flexShrink: 0,
   },
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   value: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 14,
+    lineHeight: 20,
     flexShrink: 1,
     textAlign: "right",
   },

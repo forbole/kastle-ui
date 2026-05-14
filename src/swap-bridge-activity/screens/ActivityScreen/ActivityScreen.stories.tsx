@@ -1,29 +1,16 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { View, StyleSheet } from "react-native";
+import { Image, View, StyleSheet } from "react-native";
 import { ActivityScreen, ActivityScreenItem } from "./ActivityScreen";
 import { colors } from "../../../config/theme";
 
 const placeholderLogo = require("../../../../assets/icon.png");
 
-const providerLogoStyle = {
-  width: 20,
-  height: 20,
-  borderRadius: 10,
-  backgroundColor: "#000",
-  alignItems: "center" as const,
-  justifyContent: "center" as const,
-};
-const providerLogoInnerStyle = {
-  width: 10,
-  height: 10,
-  borderRadius: 5,
-  backgroundColor: colors.primary,
-};
 const providerPrefix = (
-  <View style={providerLogoStyle}>
-    <View style={providerLogoInnerStyle} />
-  </View>
+  <Image
+    source={placeholderLogo}
+    style={{ width: 20, height: 20, borderRadius: 10 }}
+  />
 );
 
 const swapTxs: ActivityScreenItem[] = [
@@ -276,8 +263,7 @@ export const BridgeEmpty: Story = {
 const styles = StyleSheet.create({
   frame: {
     flex: 1,
-    width: 390,
-    height: 844,
+    width: "100%",
     backgroundColor: colors.backgroundScreen,
   },
 });

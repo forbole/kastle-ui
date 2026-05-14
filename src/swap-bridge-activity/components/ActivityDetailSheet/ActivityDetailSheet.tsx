@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     borderTopWidth: borderWidth.bw1,
     borderLeftWidth: borderWidth.bw1,
     borderRightWidth: borderWidth.bw1,
-    borderColor: border.b300,
+    borderColor: border.b400,
     paddingTop: spacing.s2,
     ...shadows.soft4,
   },
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   headerSection: {
     paddingHorizontal: PAGE_MARGIN,
     paddingTop: spacing.s2,
-    gap: spacing.s1,
+    gap: spacing.s2,
   },
   title: {
     color: colors.textPrimary,
