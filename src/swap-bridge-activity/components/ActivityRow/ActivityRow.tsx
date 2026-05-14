@@ -61,7 +61,7 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
         <AppText weight="600" style={styles.title} numberOfLines={1}>
           {title}
         </AppText>
-        <AppText weight="400" style={styles.dateTime}>
+        <AppText weight="400" style={styles.dateTime} numberOfLines={1}>
           {dateTime}
         </AppText>
       </View>
