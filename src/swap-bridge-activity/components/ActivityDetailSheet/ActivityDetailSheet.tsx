@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: PAGE_MARGIN,
   },
   detailsSection: {
-    paddingHorizontal: spacing.s3_5,
+    paddingHorizontal: PAGE_MARGIN + spacing.s3_5,
     paddingTop: spacing.s2,
   },
   homeIndicator: {
