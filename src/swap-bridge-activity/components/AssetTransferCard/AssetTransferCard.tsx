@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.bw1,
     borderColor: border.b400,
     borderRadius: borderRadius["2xl"],
-    paddingVertical: spacing.s3_5,
-    paddingHorizontal: spacing.s3_5,
-    gap: spacing.s3_5,
+    paddingVertical: spacing.s4,
+    paddingHorizontal: spacing.s4,
+    gap: spacing.s4,
   },
   transferRow: {
     flexDirection: "row",

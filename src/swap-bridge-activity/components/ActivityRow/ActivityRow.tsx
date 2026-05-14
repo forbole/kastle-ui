@@ -107,9 +107,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: borderRadius["2xl"],
     paddingVertical: spacing.s3,
-    paddingHorizontal: spacing.s2_5,
+    paddingHorizontal: spacing.s3,
     marginBottom: spacing.s2,
-    gap: spacing.s2,
+    gap: spacing.s3,
   },
   tokenPairWrap: {
     // DualAssetImage determines its own width
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   title: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     color: colors.textPrimary,
   },
   dateTime: {
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   amountNumber: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     flexShrink: 1,
   },
   amountSymbol: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 16,
+    lineHeight: 20,
     flexShrink: 0,
     marginLeft: spacing.s1,
   },
