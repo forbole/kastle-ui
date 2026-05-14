@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 const SheetHarness = (
   args: Omit<React.ComponentProps<typeof ActivityDetailSheet>, "visible" | "onClose">
 ) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <View style={styles.harness}>
       <Pressable onPress={() => setOpen(true)} style={styles.openButton}>

@@ -1,11 +1,31 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { view } from './.ondevice/storybook.requires';
+import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  useFonts,
+  Figtree_400Regular,
+  Figtree_500Medium,
+  Figtree_600SemiBold,
+  Figtree_700Bold,
+} from "@expo-google-fonts/figtree";
+import { view } from "./.ondevice/storybook.requires";
 
-const StorybookUIRoot = view.getStorybookUI({
+const StorybookUI = view.getStorybookUI({
   storage: {
     getItem: AsyncStorage.getItem,
     setItem: AsyncStorage.setItem,
   },
 });
+
+const StorybookUIRoot: React.FC = () => {
+  const [fontsLoaded] = useFonts({
+    Figtree_400Regular,
+    Figtree_500Medium,
+    Figtree_600SemiBold,
+    Figtree_700Bold,
+  });
+
+  if (!fontsLoaded) return null;
+  return <StorybookUI />;
+};
 
 export default StorybookUIRoot;
