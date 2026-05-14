@@ -58,6 +58,18 @@ export const Bridge: Story = {
   },
 };
 
+/** Pending — amount renders in amber warning colour */
+export const Pending: Story = {
+  args: {
+    title: "Swapped",
+    dateTime: "8 Oct | 02:03",
+    amountNumber: "+1,234",
+    amountSymbol: "NACHO",
+    amountUsd: "≈ $12.34 USD",
+    isPending: true,
+  },
+};
+
 /** Long amount — number truncates with tail ellipsis, token symbol stays visible */
 export const LongAmount: Story = {
   args: {

@@ -111,13 +111,13 @@ export const BridgeSuccess: Story = {
   ),
 };
 
-/** Failed swap — red status pill */
-export const SwapFailed: Story = {
+/** Swap pending — amber status pill */
+export const SwapPending: Story = {
   render: () => (
     <SheetHarness
       title="Swap KAS → NACHO"
       subtitle="8 Oct, 2025 | 02:03"
-      status="failed"
+      status="pending"
       transfer={{
         fromImage: placeholderLogo,
         fromSymbol: "KAS",
@@ -129,15 +129,46 @@ export const SwapFailed: Story = {
         sentLabel: "Paid",
         sentAmount: "1,000 KAS",
         sentUsd: "≈ $9,486.17 USD",
-        receivedAmount: "0 NACHO",
-        receivedUsd: "≈ $0.00 USD",
+        receivedAmount: "—",
+        receivedUsd: "Pending",
       }}
       details={[
         { label: "Fees", value: "0.0002 KAS" },
-        { label: "Rate", value: "—" },
+        { label: "Rate", value: "1 KAS ≈ 0.032799 NACHO" },
         { label: "Slippage", value: "0.3%" },
         { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
         { label: "Transaction", value: "View", onPressValue: () => console.log("open explorer") },
+      ]}
+    />
+  ),
+};
+
+/** Bridge pending — amber status pill */
+export const BridgePending: Story = {
+  render: () => (
+    <SheetHarness
+      title="Bridge KAS (Kaspa → Kasplex)"
+      subtitle="8 Oct, 2025 | 02:03"
+      status="pending"
+      transfer={{
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "KAS",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Sent",
+        sentAmount: "1,000 KAS",
+        sentUsd: "≈ $9,486.17 USD",
+        receivedAmount: "—",
+        receivedUsd: "Pending",
+      }}
+      details={[
+        { label: "Fees", value: "0.0002 KAS" },
+        { label: "Provider", value: "Kurve Bridge", valuePrefix: providerPrefix },
+        { label: "Source TX", value: "View", onPressValue: () => console.log("open source") },
+        { label: "Destination TX", value: "—" },
       ]}
     />
   ),

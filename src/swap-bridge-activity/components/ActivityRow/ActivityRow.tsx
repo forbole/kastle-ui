@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { AppText } from "../../../components/AppText";
 import { DualAssetImage, DualAssetImageProps } from "../../../components/DualAssetImage";
-import { borderRadius, borderWidth, colors, spacing } from "../../../config/theme";
+import { borderRadius, borderWidth, colors, spacing, warning } from "../../../config/theme";
 
 export interface ActivityRowProps {
   /** Caller-formatted title. e.g. "Swap KAS → NACHO" or "Bridge Kaspa → Kasplex" */
@@ -23,6 +23,8 @@ export interface ActivityRowProps {
   amountUsd: string;
   /** True renders amount in success colour (green). Default false uses textPrimary. */
   isPositive?: boolean;
+  /** True renders amount in warning colour (amber) — overrides isPositive. */
+  isPending?: boolean;
   /** Tap handler — opens detail sheet in caller. */
   onPress?: () => void;
 }
@@ -35,9 +37,14 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
   amountSymbol,
   amountUsd,
   isPositive = false,
+  isPending = false,
   onPress,
 }) => {
-  const amountColor = isPositive ? colors.success : colors.textPrimary;
+  const amountColor = isPending
+    ? warning.w500
+    : isPositive
+      ? colors.success
+      : colors.textPrimary;
 
   return (
     <TouchableOpacity
