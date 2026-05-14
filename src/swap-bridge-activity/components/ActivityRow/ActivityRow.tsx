@@ -53,9 +53,7 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
       activeOpacity={0.7}
       disabled={!onPress}
     >
-      <View style={styles.tokenPairWrap}>
-        <DualAssetImage {...pair} />
-      </View>
+      <DualAssetImage {...pair} />
 
       <View style={styles.middle}>
         <AppText weight="600" style={styles.title} numberOfLines={1}>
@@ -110,9 +108,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s3,
     marginBottom: spacing.s2,
     gap: spacing.s3,
-  },
-  tokenPairWrap: {
-    // DualAssetImage determines its own width
   },
   middle: {
     flexShrink: 0,
