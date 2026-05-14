@@ -90,7 +90,7 @@ const PAGE_MARGIN = 20;
 const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
-    backgroundColor: background.bg100,
+    backgroundColor: background.bg200,
     borderTopLeftRadius: borderRadius["3xl"],
     borderTopRightRadius: borderRadius["3xl"],
     borderTopWidth: borderWidth.bw1,

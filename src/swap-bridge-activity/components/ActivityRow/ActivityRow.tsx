@@ -75,7 +75,6 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
               style={[styles.amountSymbol, { color: amountColor }]}
               numberOfLines={1}
             >
-              {" "}
               {amountSymbol}
             </AppText>
           )}
@@ -101,9 +100,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderRadius: borderRadius["2xl"],
     paddingVertical: spacing.s3,
-    paddingHorizontal: spacing.s3,
+    paddingHorizontal: spacing.s2_5,
     marginBottom: spacing.s2,
-    gap: spacing.s3,
+    gap: spacing.s2,
   },
   tokenPairWrap: {
     // DualAssetImage determines its own width
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
   right: {
     alignItems: "flex-end",
     gap: spacing.s1,
-    maxWidth: "45%",
+    maxWidth: "60%",
   },
   amountRow: {
     flexDirection: "row",
@@ -142,6 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
     flexShrink: 0,
+    marginLeft: spacing.s1,
   },
   amountUsd: {
     fontSize: 12,

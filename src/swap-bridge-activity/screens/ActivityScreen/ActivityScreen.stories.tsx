@@ -16,7 +16,7 @@ const providerPrefix = (
 const swapTxs: ActivityScreenItem[] = [
   {
     id: "s1",
-    title: "Swap KAS → NACHO",
+    title: "Swapped",
     pair: {
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -54,7 +54,7 @@ const swapTxs: ActivityScreenItem[] = [
   },
   {
     id: "s2",
-    title: "Swap KAS → NACHO",
+    title: "Swapped",
     pair: {
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -92,7 +92,7 @@ const swapTxs: ActivityScreenItem[] = [
   },
   {
     id: "s3",
-    title: "Swap KAS → NACHO",
+    title: "Swapped",
     pair: {
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -133,7 +133,7 @@ const swapTxs: ActivityScreenItem[] = [
 const bridgeTxs: ActivityScreenItem[] = [
   {
     id: "b1",
-    title: "Bridge Kaspa → Kasplex",
+    title: "Bridged",
     pair: {
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -170,7 +170,7 @@ const bridgeTxs: ActivityScreenItem[] = [
   },
   {
     id: "b2",
-    title: "Bridge Kasplex → Kaspa",
+    title: "Bridged",
     pair: {
       fromImage: placeholderLogo,
       toImage: placeholderLogo,

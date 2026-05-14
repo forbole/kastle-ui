@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 /** Swap on Kaspa — green positive amount */
 export const Swap: Story = {
   args: {
-    title: "Swap KAS → NACHO",
+    title: "Swapped",
     dateTime: "8 Oct | 02:03",
     amountNumber: "+1,234",
     amountSymbol: "NACHO",
@@ -49,7 +49,7 @@ export const Swap: Story = {
 /** Bridge cross-chain — title shows chain names */
 export const Bridge: Story = {
   args: {
-    title: "Bridge Kaspa → Kasplex",
+    title: "Bridged",
     dateTime: "8 Oct | 03:45",
     amountNumber: "+240",
     amountSymbol: "KAS",
@@ -61,7 +61,7 @@ export const Bridge: Story = {
 /** Long amount — number truncates with tail ellipsis, token symbol stays visible */
 export const LongAmount: Story = {
   args: {
-    title: "Swap KAS → NACHO",
+    title: "Swapped",
     dateTime: "8 Oct | 02:03",
     amountNumber: "+1,000,000,000.888888",
     amountSymbol: "NACHO",
@@ -73,7 +73,7 @@ export const LongAmount: Story = {
 /** Without images — both tokens fall back to plain coloured circles */
 export const WithoutImages: Story = {
   args: {
-    title: "Swap KAS → NACHO",
+    title: "Swapped",
     dateTime: "8 Oct | 02:03",
     amountNumber: "+1,234",
     amountSymbol: "NACHO",
