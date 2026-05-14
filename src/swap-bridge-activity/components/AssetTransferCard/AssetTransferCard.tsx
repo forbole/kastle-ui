@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: borderWidth.bw1,
-    backgroundColor: border.b400,
+    backgroundColor: border.b200,
     marginHorizontal: -spacing.s4,
   },
 });
