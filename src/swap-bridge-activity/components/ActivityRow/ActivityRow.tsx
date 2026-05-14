@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     // DualAssetImage determines its own width
   },
   middle: {
-    flex: 1,
+    flexShrink: 0,
     gap: spacing.s1,
   },
   title: {
@@ -129,9 +129,9 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   right: {
+    flex: 1,
     alignItems: "flex-end",
     gap: spacing.s1,
-    maxWidth: "60%",
   },
   amountRow: {
     flexDirection: "row",
