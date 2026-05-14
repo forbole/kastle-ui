@@ -90,13 +90,13 @@ const PAGE_MARGIN = 20;
 const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
-    backgroundColor: background.bg200,
+    backgroundColor: background.bg100,
     borderTopLeftRadius: borderRadius["3xl"],
     borderTopRightRadius: borderRadius["3xl"],
     borderTopWidth: borderWidth.bw1,
     borderLeftWidth: borderWidth.bw1,
     borderRightWidth: borderWidth.bw1,
-    borderColor: border.b400,
+    borderColor: border.b300,
     paddingTop: spacing.s2,
     ...shadows.soft4,
   },
