@@ -2,6 +2,7 @@ import React, { useState, useCallback, useRef, memo } from "react";
 import {
   Dimensions,
   Keyboard,
+  Platform,
   View,
   StyleSheet,
   Text,
@@ -24,6 +25,7 @@ import {
   textStyles,
   fontFamilies,
 } from "../../../config/theme";
+import { ActionSheet } from "../../ActionSheet";
 import { InlineActionSheet } from "../../InlineActionSheet";
 import { Layer2AssetImage } from "../../Layer2AssetImage";
 
@@ -248,8 +250,10 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
     [isLoading],
   );
 
+  const SheetComponent = Platform.OS === "android" ? InlineActionSheet : ActionSheet;
+
   return (
-    <InlineActionSheet isOpen={isOpen} onClose={onClose} heightRatio={0.92}>
+    <SheetComponent isOpen={isOpen} onClose={onClose} heightRatio={0.92}>
       <View style={styles.container}>
         {/* Drag handle */}
         <View style={styles.handlebarWrapper}>
@@ -326,7 +330,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
         {/* iOS home indicator */}
         <View style={styles.homeIndicator} />
       </View>
-    </InlineActionSheet>
+    </SheetComponent>
   );
 };
 
