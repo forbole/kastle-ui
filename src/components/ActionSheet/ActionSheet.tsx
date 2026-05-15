@@ -7,6 +7,7 @@ import {
   Platform,
   StyleSheet,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -131,6 +132,10 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
         style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }, { translateY: keyboardOffset }] }]}
         pointerEvents="box-none"
       >
+        {/* Top tap zone — tapping the handlebar area closes the sheet */}
+        <TouchableWithoutFeedback onPress={() => animateOut(onClose)}>
+          <View style={styles.topTapZone} />
+        </TouchableWithoutFeedback>
         {children}
       </Animated.View>
     </Modal>
@@ -148,5 +153,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     justifyContent: "flex-end",
+  },
+  topTapZone: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 40,
+    zIndex: 10,
   },
 });
