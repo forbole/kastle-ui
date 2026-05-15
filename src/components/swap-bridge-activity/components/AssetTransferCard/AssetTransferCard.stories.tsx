@@ -4,7 +4,7 @@ import { View, StyleSheet } from "react-native";
 import { AssetTransferCard } from "./AssetTransferCard";
 import { background, spacing } from "../../../../config/theme";
 
-const placeholderLogo = require("../../../../assets/icon.png");
+const placeholderLogo = require("../../../../../assets/icon.png");
 
 const meta: Meta<typeof AssetTransferCard> = {
   title: "Swap-bridge-activity/Components/AssetTransferCard",

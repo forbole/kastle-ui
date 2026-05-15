@@ -2,9 +2,9 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { ActivityRow } from "./ActivityRow";
-import { background } from "../../../config/theme";
+import { background } from "../../../../config/theme";
 
-const placeholderLogo = require("../../../../assets/icon.png");
+const placeholderLogo = require("../../../../../assets/icon.png");
 
 const meta: Meta<typeof ActivityRow> = {
   title: "Swap-bridge-activity/Components/ActivityRow",

@@ -4,7 +4,7 @@ import { Image, View, StyleSheet } from "react-native";
 import { ActivityScreen, ActivityScreenItem } from "./ActivityScreen";
 import { colors } from "../../../../config/theme";
 
-const placeholderLogo = require("../../../../assets/icon.png");
+const placeholderLogo = require("../../../../../assets/icon.png");
 
 const providerPrefix = (
   <Image

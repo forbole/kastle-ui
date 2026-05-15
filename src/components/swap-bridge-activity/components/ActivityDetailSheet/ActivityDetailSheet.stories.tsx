@@ -4,7 +4,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { ActivityDetailSheet } from "./ActivityDetailSheet";
 import { colors, spacing, textStyles } from "../../../../config/theme";
 
-const placeholderLogo = require("../../../../assets/icon.png");
+const placeholderLogo = require("../../../../../assets/icon.png");
 
 const meta: Meta<typeof ActivityDetailSheet> = {
   title: "Swap-bridge-activity/Components/ActivityDetailSheet",

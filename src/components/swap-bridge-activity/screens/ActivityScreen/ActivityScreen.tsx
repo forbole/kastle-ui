@@ -85,7 +85,7 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
     return (
       <View style={styles.root}>
         <EmptyState
-          image={require("../../../../assets/empty-activity.png")}
+          image={require("../../../../../assets/empty-activity.png")}
           imageHeight={160}
           imageWidth={192}
           heading={emptyHeading}
@@ -99,7 +99,7 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
     return (
       <View style={styles.root}>
         <EmptyState
-          image={require("../../../../assets/error-activity.png")}
+          image={require("../../../../../assets/error-activity.png")}
           imageHeight={160}
           imageWidth={192}
           heading="Couldn't load activity"

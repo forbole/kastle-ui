@@ -5,8 +5,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { DualAssetImage, DualAssetImageProps } from "../../../components/DualAssetImage";
-import { borderRadius, borderWidth, colors, spacing, textStyles, warning } from "../../../config/theme";
+import { DualAssetImage, DualAssetImageProps } from "../../../../components/DualAssetImage";
+import { borderRadius, borderWidth, colors, spacing, textStyles, warning } from "../../../../config/theme";
 
 export interface ActivityRowProps {
   /** Short row title, e.g. "Swapped" or "Bridged". */
