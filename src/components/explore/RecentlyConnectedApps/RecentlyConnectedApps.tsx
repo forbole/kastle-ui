@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
   FlatList,
 } from "react-native";
 import { Image } from "expo-image";
-import { colors } from "../../../config/theme";
-import { AppText } from "../../AppText";
+import { colors, textStyles } from "../../../config/theme";
 
 const CARD_WIDTH = 136;
 const CARD_GAP = 8;
@@ -37,11 +37,11 @@ export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <AppText weight="600" style={styles.sectionTitle}>Recently Connected</AppText>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.sectionTitle]}>Recently Connected</Text>
         <TouchableOpacity onPress={() => setIsManaging((prev) => !prev)}>
-          <AppText weight="500" style={styles.manageText}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.manageText]}>
             {isManaging ? "Done" : "Manage"}
-          </AppText>
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -66,20 +66,20 @@ export const RecentlyConnectedApps: React.FC<RecentlyConnectedAppsProps> = ({
                   <Image source={app.appIcon} style={styles.appIcon} />
                 ) : (
                   <View style={styles.appIconPlaceholder}>
-                    <AppText weight="600" style={styles.appIconPlaceholderText}>
+                    <Text allowFontScaling={false} style={[textStyles.bodySemiboldXL, styles.appIconPlaceholderText]}>
                       {app.appName?.charAt(0)?.toUpperCase()}
-                    </AppText>
+                    </Text>
                   </View>
                 )}
               </View>
-              <AppText
-                weight="400"
-                style={styles.appName}
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalSM, styles.appName]}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
                 {app.appName}
-              </AppText>
+              </Text>
             </TouchableOpacity>
 
             {isManaging && (
@@ -112,12 +112,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   sectionTitle: {
-    fontSize: 16,
     color: colors.textSecondary,
     lineHeight: 16,
   },
   manageText: {
-    fontSize: 14,
     color: colors.primary,
     lineHeight: 14,
   },
@@ -185,13 +183,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   appIconPlaceholderText: {
-    fontSize: 20,
     color: colors.textSecondary,
   },
   appName: {
-    fontSize: 14,
     color: colors.textSecondary,
-    lineHeight: 21,
     height: 21,
     textAlign: "center",
   },

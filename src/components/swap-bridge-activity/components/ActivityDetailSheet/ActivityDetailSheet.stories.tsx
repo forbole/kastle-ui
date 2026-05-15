@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { ActivityDetailSheet } from "./ActivityDetailSheet";
-import { AppText } from "../../../components/AppText";
-import { colors, spacing } from "../../../config/theme";
+import { colors, spacing, textStyles } from "../../../../config/theme";
 
 const placeholderLogo = require("../../../../assets/icon.png");
 
@@ -27,9 +26,9 @@ const SheetHarness = (
   return (
     <View style={styles.harness}>
       <Pressable onPress={() => setOpen(true)} style={styles.openButton}>
-        <AppText weight="600" style={styles.openButtonText}>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.openButtonText]}>
           Open detail sheet
-        </AppText>
+        </Text>
       </Pressable>
 
       <ActivityDetailSheet
@@ -190,6 +189,5 @@ const styles = StyleSheet.create({
   },
   openButtonText: {
     color: "#fff",
-    fontSize: 16,
   },
 });

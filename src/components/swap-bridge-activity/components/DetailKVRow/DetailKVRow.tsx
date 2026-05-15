@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ExternalLink } from "lucide-react-native";
-import { AppText } from "../../../components/AppText";
-import { colors, spacing } from "../../../config/theme";
+import { colors, spacing, textStyles } from "../../../../config/theme";
 
 export interface DetailKVRowProps {
   label: string;
@@ -31,16 +30,16 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
 
   const content = (
     <>
-      <AppText style={styles.label}>{label}</AppText>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.label]}>{label}</Text>
       <View style={styles.valueWrap}>
         {valuePrefix}
-        <AppText
-          weight="400"
+        <Text
+          allowFontScaling={false}
           numberOfLines={2}
-          style={[styles.value, { color: resolvedValueColor }]}
+          style={[textStyles.bodyNormalMDRelaxed, styles.value, { color: resolvedValueColor }]}
         >
           {value}
-        </AppText>
+        </Text>
         {onPressValue && (
           <ExternalLink
             size={14}
@@ -77,8 +76,6 @@ const styles = StyleSheet.create({
     gap: spacing.s4,
   },
   label: {
-    fontSize: 16,
-    lineHeight: 24,
     color: colors.textSecondary,
     flexShrink: 0,
   },
@@ -89,8 +86,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   value: {
-    fontSize: 16,
-    lineHeight: 24,
     flexShrink: 1,
     textAlign: "right",
   },

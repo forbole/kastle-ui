@@ -12,10 +12,10 @@ import {
   borderRadius,
   borderWidth,
   spacing,
+  textStyles,
   typography,
 } from "../../../config/theme";
 import { LinkButton } from "../../LinkButton";
-import { AppText } from "../../AppText";
 
 type LucideIconName = keyof typeof LucideIcons;
 
@@ -68,13 +68,13 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
       </View>
       <View style={styles.content}>
         <View style={styles.textGroup}>
-          <AppText weight="700" style={styles.title} numberOfLines={1}>
+          <Text allowFontScaling={false} style={[textStyles.headingXS, styles.title]} numberOfLines={1}>
             {banner.title}
-          </AppText>
+          </Text>
           {banner.description ? (
-            <AppText weight="400" style={styles.description} numberOfLines={2}>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.description]} numberOfLines={2}>
               {banner.description}
-            </AppText>
+            </Text>
           ) : null}
         </View>
         {banner.cta ? (
@@ -145,14 +145,10 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   title: {
-    fontSize: 14,
-    lineHeight: 20,
     color: typography.t900,
     letterSpacing: 0.2,
   },
   description: {
-    fontSize: 12,
     color: typography.t500,
-    lineHeight: 16,
   },
 });

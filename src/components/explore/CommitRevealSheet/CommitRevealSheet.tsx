@@ -15,13 +15,13 @@ import {
   info,
   success,
   error,
+  textStyles,
   typography,
   white,
   borderRadius,
 } from "../../../config/theme";
 import { ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
-import { AppText } from "../../AppText";
 import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
 
 // ---------------------------------------------------------------------------
@@ -81,7 +81,7 @@ function formatScriptData(raw: string): string {
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.networkBadge}>
-    <AppText weight="400" style={styles.networkBadgeText}>{label}</AppText>
+    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.networkBadgeText]}>{label}</Text>
   </View>
 );
 
@@ -93,13 +93,13 @@ const TableRow: React.FC<{
   hasBorderBottom?: boolean;
 }> = ({ label, value, subValue, valueColor, hasBorderBottom = true }) => (
   <View style={[styles.tableRow, hasBorderBottom && styles.tableRowBorder]}>
-    <AppText weight="400" style={styles.tableLabelText}>{label}</AppText>
+    <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableLabelText]}>{label}</Text>
     <View style={styles.tableValue}>
-      <AppText weight="600" style={[styles.tableValueText, valueColor ? { color: valueColor } : undefined]}>
+      <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.tableValueText, valueColor ? { color: valueColor } : undefined]}>
         {value}
-      </AppText>
+      </Text>
       {subValue ? (
-        <AppText weight="400" style={styles.tableSubValueText}>{subValue}</AppText>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tableSubValueText]}>{subValue}</Text>
       ) : null}
     </View>
   </View>
@@ -167,15 +167,15 @@ export const CommitRevealSheet: React.FC<CommitRevealSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <AppText weight="600" style={styles.appIconPlaceholderText}>
+                <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appIconPlaceholderText]}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </AppText>
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <AppText weight="600" style={styles.appTitle}>{appName}</AppText>
-            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitle]}>{appName}</Text>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.appUrl]}>{appUrl}</Text>
           </View>
           {networkBadge ? <NetworkBadge label={networkBadge} /> : null}
         </View>
@@ -226,9 +226,9 @@ export const CommitRevealSheet: React.FC<CommitRevealSheetProps> = ({
                   onPress={() => setScriptExpanded((prev) => !prev)}
                   activeOpacity={0.7}
                 >
-                  <AppText weight="600" style={styles.scriptAccordionLabel}>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.scriptAccordionLabel]}>
                     Script Details
-                  </AppText>
+                  </Text>
                   {scriptExpanded ? (
                     <ChevronUp size={18} color={typography.t600} />
                   ) : (
@@ -328,7 +328,6 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: typography.t900,
-    fontSize: 16,
   },
   appMeta: {
     flex: 1,
@@ -336,12 +335,9 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: typography.t900,
-    fontSize: 18,
   },
   appUrl: {
     color: typography.t500,
-    fontSize: 14,
-    lineHeight: 21,
   },
 
   // Network badge
@@ -355,7 +351,6 @@ const styles = StyleSheet.create({
   },
   networkBadgeText: {
     color: info.i800,
-    fontSize: 12,
   },
 
   // Divider
@@ -396,21 +391,16 @@ const styles = StyleSheet.create({
   tableLabelText: {
     flex: 1,
     color: typography.t900,
-    fontSize: 14,
-    lineHeight: 21,
   },
   tableValue: {
     alignItems: "flex-end",
   },
   tableValueText: {
     color: typography.t900,
-    fontSize: 14,
-    lineHeight: 21,
     textAlign: "right",
   },
   tableSubValueText: {
     color: typography.t600,
-    fontSize: 12,
     textAlign: "right",
   },
 
@@ -427,7 +417,6 @@ const styles = StyleSheet.create({
   scriptAccordionLabel: {
     flex: 1,
     color: typography.t600,
-    fontSize: 14,
   },
   scriptBody: {
     backgroundColor: white["5%"],

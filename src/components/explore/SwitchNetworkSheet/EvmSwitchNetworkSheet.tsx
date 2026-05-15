@@ -2,10 +2,10 @@ import React from "react";
 import {
   View,
   StyleSheet,
+  Text,
   TouchableOpacity,
   ImageSourcePropType,
 } from "react-native";
-import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import {
   background,
@@ -15,6 +15,7 @@ import {
   typography,
   white,
   borderRadius,
+  textStyles,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
 
@@ -72,15 +73,15 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <AppText weight="600" style={styles.appIconPlaceholderText}>
+                <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appIconPlaceholderText]}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </AppText>
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <AppText weight="600" style={styles.appTitle}>Switch Network</AppText>
-            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitle]}>Switch Network</Text>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.appUrl]}>{appUrl}</Text>
           </View>
         </View>
 
@@ -94,16 +95,16 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
               <Image source={targetNetworkIcon} style={styles.networkIcon} />
             ) : (
               <View style={styles.networkIconPlaceholder}>
-                <AppText weight="700" style={styles.networkIconPlaceholderText}>
+                <Text allowFontScaling={false} style={[textStyles.headingSM, styles.networkIconPlaceholderText]}>
                   {targetNetworkName?.charAt(0)?.toUpperCase()}
-                </AppText>
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.networkInfo}>
-            <AppText weight="600" style={styles.networkName}>{targetNetworkName}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.networkName]}>{targetNetworkName}</Text>
             {targetNetworkChainId ? (
-              <AppText weight="400" style={styles.networkChainId}>{targetNetworkChainId}</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.networkChainId]}>{targetNetworkChainId}</Text>
             ) : null}
           </View>
         </View>
@@ -115,14 +116,14 @@ export const EvmSwitchNetworkSheet: React.FC<EvmSwitchNetworkSheetProps> = ({
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <AppText weight="600" style={styles.cancelButtonText}>Cancel</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.cancelButtonText]}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.confirmButton}
             onPress={handleConfirm}
             activeOpacity={0.8}
           >
-            <AppText weight="600" style={styles.confirmButtonText}>Switch</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.confirmButtonText]}>Switch</Text>
           </TouchableOpacity>
         </View>
 
@@ -194,7 +195,6 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: typography.t900,
-    fontSize: 16,
   },
   appMeta: {
     flex: 1,
@@ -202,12 +202,9 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: typography.t900,
-    fontSize: 18,
   },
   appUrl: {
     color: typography.t500,
-    fontSize: 14,
-    lineHeight: 21,
   },
 
   // Divider
@@ -254,7 +251,6 @@ const styles = StyleSheet.create({
   },
   networkIconPlaceholderText: {
     color: info.i800,
-    fontSize: 16,
   },
   networkInfo: {
     flex: 1,
@@ -262,11 +258,9 @@ const styles = StyleSheet.create({
   },
   networkName: {
     color: typography.t900,
-    fontSize: 15,
   },
   networkChainId: {
     color: typography.t500,
-    fontSize: 12,
   },
 
   // Bottom bar
@@ -287,7 +281,6 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: typography.t900,
-    fontSize: 16,
   },
   confirmButton: {
     flex: 1,
@@ -299,7 +292,6 @@ const styles = StyleSheet.create({
   },
   confirmButtonText: {
     color: "#ffffff",
-    fontSize: 16,
   },
 
   // iOS home indicator

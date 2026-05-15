@@ -1,17 +1,18 @@
 import React from "react";
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
 } from "react-native";
-import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import {
   background,
   border,
   info,
   primary,
+  textStyles,
   typography,
   white,
   borderRadius,
@@ -48,7 +49,7 @@ export interface KaspaSwitchNetworkSheetProps {
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.badge}>
-    <AppText weight="400" style={styles.badgeText}>{label}</AppText>
+    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.badgeText]}>{label}</Text>
   </View>
 );
 
@@ -89,15 +90,15 @@ export const KaspaSwitchNetworkSheet: React.FC<KaspaSwitchNetworkSheetProps> =
                 <Image source={appIcon} style={styles.appIcon} />
               ) : (
                 <View style={styles.appIconPlaceholder}>
-                  <AppText weight="600" style={styles.appIconPlaceholderText}>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appIconPlaceholderText]}>
                     {appName?.charAt(0)?.toUpperCase()}
-                  </AppText>
+                  </Text>
                 </View>
               )}
             </View>
             <View style={styles.appMeta}>
-              <AppText weight="600" style={styles.appTitle}>Switch Network</AppText>
-              <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitle]}>Switch Network</Text>
+              <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.appUrl]}>{appUrl}</Text>
             </View>
           </View>
 
@@ -111,14 +112,14 @@ export const KaspaSwitchNetworkSheet: React.FC<KaspaSwitchNetworkSheetProps> =
                 <Image source={targetNetworkIcon} style={styles.networkIcon} />
               ) : (
                 <View style={styles.networkIconPlaceholder}>
-                  <AppText weight="700" style={styles.networkIconPlaceholderText}>
+                  <Text allowFontScaling={false} style={[textStyles.headingXS, styles.networkIconPlaceholderText]}>
                     {targetNetworkName?.charAt(0)?.toUpperCase()}
-                  </AppText>
+                  </Text>
                 </View>
               )}
             </View>
             <View style={styles.networkInfo}>
-              <AppText weight="600" style={styles.networkName}>{targetNetworkName}</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.networkName]}>{targetNetworkName}</Text>
               {targetNetworkBadge ? (
                 <NetworkBadge label={targetNetworkBadge} />
               ) : null}
@@ -132,14 +133,14 @@ export const KaspaSwitchNetworkSheet: React.FC<KaspaSwitchNetworkSheetProps> =
               onPress={onClose}
               activeOpacity={0.7}
             >
-              <AppText weight="600" style={styles.cancelButtonText}>Cancel</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={handleConfirm}
               activeOpacity={0.8}
             >
-              <AppText weight="600" style={styles.confirmButtonText}>Switch</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.confirmButtonText]}>Switch</Text>
             </TouchableOpacity>
           </View>
 
@@ -211,7 +212,6 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: typography.t900,
-    fontSize: 16,
   },
   appMeta: {
     flex: 1,
@@ -219,12 +219,9 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: typography.t900,
-    fontSize: 18,
   },
   appUrl: {
     color: typography.t500,
-    fontSize: 14,
-    lineHeight: 21,
   },
 
   // Divider
@@ -269,7 +266,6 @@ const styles = StyleSheet.create({
   },
   networkIconPlaceholderText: {
     color: typography.t900,
-    fontSize: 16,
   },
   networkInfo: {
     flex: 1,
@@ -280,7 +276,6 @@ const styles = StyleSheet.create({
   },
   networkName: {
     color: typography.t900,
-    fontSize: 15,
   },
 
   // Badge
@@ -294,7 +289,6 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: info.i800,
-    fontSize: 11,
   },
 
   // Bottom bar
@@ -315,7 +309,6 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: typography.t900,
-    fontSize: 16,
   },
   confirmButton: {
     flex: 1,
@@ -327,7 +320,6 @@ const styles = StyleSheet.create({
   },
   confirmButtonText: {
     color: "#ffffff",
-    fontSize: 16,
   },
 
   // iOS home indicator

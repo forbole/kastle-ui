@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
+  Text,
   TouchableOpacity,
   TouchableOpacityProps,
 } from "react-native";
-import { AppText } from "../AppText";
-import { borderRadius, opacity, primary, spacing } from "../../config/theme";
+import { borderRadius, fontFamilies, opacity, primary, spacing } from "../../config/theme";
 
 export interface LinkButtonProps extends TouchableOpacityProps {
   label: string;
@@ -47,16 +47,16 @@ export const LinkButton: React.FC<LinkButtonProps> = ({
       onPressOut={() => setPressed(false)}
       {...props}
     >
-      <AppText
-        weight="500"
+      <Text
+        allowFontScaling={false}
         style={[
           styles.label,
-          { fontSize, lineHeight: fontSize, color },
+          { fontFamily: fontFamilies["500"], fontWeight: "500", fontSize, lineHeight: fontSize, color },
           pressed && { color: pressedColor },
         ]}
       >
         {label}
-      </AppText>
+      </Text>
     </TouchableOpacity>
   );
 };

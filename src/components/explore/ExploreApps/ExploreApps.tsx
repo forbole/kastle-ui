@@ -1,13 +1,13 @@
 import React from "react";
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
 } from "react-native";
-import { AppText } from "../../AppText";
 import { ExternalLink } from "lucide-react-native";
-import { colors } from "../../../config/theme";
+import { colors, textStyles } from "../../../config/theme";
 import {
   ExploreAppCard,
 } from "../ExploreAppCard/ExploreAppCard";
@@ -52,7 +52,7 @@ export const ExploreApps: React.FC<ExploreAppsProps> = ({
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <AppText weight="600" style={styles.sectionTitle}>{title}</AppText>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.sectionTitle]}>{title}</Text>
         </View>
         <View style={styles.appsGrid}>
           {Array.from({ length: skeletonCount }).map((_, i) => (
@@ -76,7 +76,7 @@ export const ExploreApps: React.FC<ExploreAppsProps> = ({
     <View style={styles.container}>
       {/* Section Header */}
       <View style={styles.header}>
-        <AppText weight="600" style={styles.sectionTitle}>{title}</AppText>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.sectionTitle]}>{title}</Text>
       </View>
 
       {/* Apps Grid */}
@@ -103,10 +103,10 @@ export const ExploreApps: React.FC<ExploreAppsProps> = ({
           style={styles.submitLinkContainer}
           onPress={onSubmitAppPress}
         >
-          <AppText style={styles.submitLinkText}>
-            <AppText weight="400" style={styles.submitLinkNormal}>Want your app listed? </AppText>
-            <AppText weight="400" style={styles.submitLinkHighlight}>Submit it now!</AppText>
-          </AppText>
+          <Text allowFontScaling={false} style={styles.submitLinkText}>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.submitLinkNormal]}>Want your app listed? </Text>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.submitLinkHighlight]}>Submit it now!</Text>
+          </Text>
           <ExternalLink
             size={16}
             color={colors.link}
@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   sectionTitle: {
-    fontSize: 16,
     color: colors.textSecondary,
     lineHeight: 16,
   },
@@ -180,8 +179,6 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   submitLinkText: {
-    fontSize: 14,
-    lineHeight: 16,
     flexWrap: "wrap",
   },
   externalLinkIcon: {

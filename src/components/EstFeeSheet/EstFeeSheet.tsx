@@ -3,14 +3,15 @@ import {
   View,
   StyleSheet,
   ScrollView,
+  Text,
 } from "react-native";
-import { AppText } from "../AppText";
 import {
   background,
   border,
   typography,
   white,
   borderRadius,
+  textStyles,
 } from "../../config/theme";
 import { ExternalLink } from "lucide-react-native";
 import { ActionSheet } from "../ActionSheet";
@@ -60,10 +61,10 @@ export const EstFeeSheet: React.FC<EstFeeSheetProps> = ({
         >
           {/* Title section */}
           <View style={styles.titleSection}>
-            <AppText weight="600" style={styles.title}>Est. Fee</AppText>
-            <AppText weight="400" style={styles.subtitle}>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>Est. Fee</Text>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.subtitle]}>
               The estimated total cost for this transfer
-            </AppText>
+            </Text>
             <View style={styles.divider} />
           </View>
 
@@ -73,18 +74,18 @@ export const EstFeeSheet: React.FC<EstFeeSheetProps> = ({
               <View key={index} style={styles.feeRow}>
                 {/* Label + external link icon */}
                 <View style={styles.feeLabel}>
-                  <AppText weight="400" style={styles.feeLabelText}>
+                  <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.feeLabelText]}>
                     {fee.networkName} network fees
-                  </AppText>
+                  </Text>
                   {fee.infoUrl ? (
                     <ExternalLink size={14} color={typography.t600} />
                   ) : null}
                 </View>
                 {/* Amount */}
                 <View style={styles.feeAmount}>
-                  <AppText weight="400" style={styles.feeAmountText}>{fee.fee}</AppText>
+                  <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.feeAmountText]}>{fee.fee}</Text>
                   {fee.feeUsd ? (
-                    <AppText weight="400" style={styles.feeAmountUsd}>{fee.feeUsd}</AppText>
+                    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.feeAmountUsd]}>{fee.feeUsd}</Text>
                   ) : null}
                 </View>
               </View>
@@ -148,11 +149,9 @@ const styles = StyleSheet.create({
   },
   title: {
     color: typography.t900,
-    fontSize: 18,
   },
   subtitle: {
     color: typography.t700, // #C1D5DE
-    fontSize: 16,
   },
   divider: {
     height: 1,
@@ -179,19 +178,16 @@ const styles = StyleSheet.create({
   },
   feeLabelText: {
     color: typography.t700, // #C1D5DE
-    fontSize: 16,
   },
   feeAmount: {
     alignItems: "flex-end",
   },
   feeAmountText: {
     color: typography.t600, // #9EB7C4
-    fontSize: 16,
     textAlign: "right",
   },
   feeAmountUsd: {
     color: typography.t500, // #7B9AAA
-    fontSize: 12,
     textAlign: "right",
   },
 

@@ -1,15 +1,16 @@
 import React from "react";
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { AppText } from "../AppText";
 import {
   background,
   border,
   typography,
   borderRadius,
+  textStyles,
 } from "../../config/theme";
 import { ActionSheet } from "../ActionSheet";
 
@@ -46,13 +47,13 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
         >
           {/* Title + divider */}
           <View style={styles.titleSection}>
-            <AppText weight="600" style={styles.title}>{title}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>{title}</Text>
             <View style={styles.divider} />
           </View>
 
           {/* Description */}
           <View style={styles.descriptionSection}>
-            <AppText weight="400" style={styles.description}>{description}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.description]}>{description}</Text>
           </View>
         </ScrollView>
 
@@ -107,9 +108,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 18,
-    lineHeight: 22,
+    color: typography.t900,
   },
   divider: {
     height: 1,
@@ -123,9 +122,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
   description: {
-    color: typography.t700, // #C1D5DE
-    fontSize: 16,
-    lineHeight: 24,
+    color: typography.t700,
   },
 
   // iOS home indicator

@@ -4,6 +4,7 @@ import {
   Keyboard,
   View,
   StyleSheet,
+  Text,
   TouchableOpacity,
   FlatList,
   TextInput,
@@ -20,9 +21,10 @@ import {
   primary,
   typography,
   white,
+  textStyles,
+  fontFamilies,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { AppText } from "../../AppText";
 import { Layer2AssetImage } from "../../Layer2AssetImage";
 
 // ---------------------------------------------------------------------------
@@ -111,21 +113,21 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
 
       {/* Name + symbol */}
       <View style={styles.tokenMeta}>
-        <AppText weight="600" style={styles.tokenName} numberOfLines={1} ellipsizeMode="tail">
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
           {token.name}
-        </AppText>
+        </Text>
         {token.symbol ? (
-          <AppText weight="400" style={styles.tokenAddress} numberOfLines={1} ellipsizeMode="tail">
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
             {token.symbol}
-          </AppText>
+          </Text>
         ) : null}
       </View>
 
       {/* Amount */}
       {formattedAmount ? (
-        <AppText weight="500" style={styles.tokenBalance} numberOfLines={1} ellipsizeMode="tail">
+        <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
           {formattedAmount}
-        </AppText>
+        </Text>
       ) : null}
     </TouchableOpacity>
   );
@@ -151,12 +153,12 @@ const ChainFilterChip = ({ label, logo, isActive, onPress }: ChainFilterChipProp
     activeOpacity={0.7}
   >
     <Image source={logo} style={styles.chipLogo} resizeMode="cover" />
-    <AppText
-      weight="500"
+    <Text
+      allowFontScaling={false}
       style={[styles.chipLabel, isActive && styles.chipLabelActive]}
     >
       {label}
-    </AppText>
+    </Text>
   </TouchableOpacity>
 );
 
@@ -238,9 +240,9 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
   const ListEmptyComponent = useCallback(
     () => (
       <View style={styles.emptyContainer}>
-        <AppText weight="400" style={styles.emptyText}>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.emptyText]}>
           {isLoading ? "Loading tokens…" : "No tokens available"}
-        </AppText>
+        </Text>
       </View>
     ),
     [isLoading],
@@ -256,9 +258,9 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
         {/* Title */}
         <View style={styles.titleRow}>
-          <AppText weight="600" style={styles.title}>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>
             Select Asset
-          </AppText>
+          </Text>
         </View>
 
         {/* Divider */}
@@ -366,8 +368,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: typography.t900,
-    fontSize: 18,
-    lineHeight: 24,
   },
   divider: {
     height: 1,
@@ -426,6 +426,8 @@ const styles = StyleSheet.create({
   },
   chipLabel: {
     color: typography.t600,
+    fontFamily: fontFamilies["500"],
+    fontWeight: "500",
     fontSize: 13,
   },
   chipLabelActive: {
@@ -454,15 +456,14 @@ const styles = StyleSheet.create({
   },
   tokenName: {
     color: typography.t900,
-    fontSize: 16,
-    lineHeight: 20,
   },
   tokenAddress: {
     color: typography.t500,
-    fontSize: 12,
   },
   tokenBalance: {
     color: typography.t900,
+    fontFamily: fontFamilies["500"],
+    fontWeight: "500",
     fontSize: 14,
     maxWidth: 100,
   },
@@ -472,7 +473,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: typography.t500,
-    fontSize: 14,
   },
   homeIndicator: {
     height: 34,

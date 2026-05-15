@@ -13,13 +13,13 @@ import {
   border,
   primary,
   info,
+  textStyles,
   typography,
   white,
   borderRadius,
 } from "../../../config/theme";
 import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
-import { AppText } from "../../AppText";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
@@ -67,7 +67,7 @@ const InfoIcon: React.FC = () => (
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.networkBadge}>
-    <AppText weight="400" style={styles.networkBadgeText}>{label}</AppText>
+    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.networkBadgeText]}>{label}</Text>
   </View>
 );
 
@@ -87,14 +87,14 @@ const TransactionRow: React.FC<{
   >
     {/* Label column */}
     <View style={styles.tableLabel}>
-      <AppText weight="400" style={styles.tableLabelText}>{row.label}</AppText>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableLabelText]}>{row.label}</Text>
       {row.info && <InfoIcon />}
     </View>
     {/* Value column */}
     <View style={styles.tableValue}>
-      <AppText weight="400" style={styles.tableValueText}>{row.value}</AppText>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableValueText]}>{row.value}</Text>
       {row.subValue ? (
-        <AppText weight="400" style={styles.tableSubValueText}>{row.subValue}</AppText>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tableSubValueText]}>{row.subValue}</Text>
       ) : null}
     </View>
   </TouchableOpacity>
@@ -151,15 +151,15 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <AppText weight="600" style={styles.appIconPlaceholderText}>
+                <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appIconPlaceholderText]}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </AppText>
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <AppText weight="600" style={styles.appTitle}>{appName}</AppText>
-            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitle]}>{appName}</Text>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.appUrl]}>{appUrl}</Text>
           </View>
         </View>
 
@@ -178,10 +178,10 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
             {fromAddress ? (
               <View style={styles.sendFromCard}>
                 <View style={styles.sendFromHeader}>
-                  <AppText weight="600" style={styles.sendFromLabel}>Send from</AppText>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.sendFromLabel]}>Send from</Text>
                   <NetworkBadge label={networkBadge} />
                 </View>
-                <AppText weight="400" style={styles.sendFromAddress}>{fromAddress}</AppText>
+                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.sendFromAddress]}>{fromAddress}</Text>
               </View>
             ) : null}
 
@@ -213,7 +213,7 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
                   onPress={() => setRawExpanded((prev) => !prev)}
                   activeOpacity={0.7}
                 >
-                  <AppText weight="600" style={styles.rawDetailsLabel}>Raw Details</AppText>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.rawDetailsLabel]}>Raw Details</Text>
                   {rawExpanded
                     ? <ChevronUp size={18} color={typography.t600} />
                     : <ChevronDown size={18} color={typography.t600} />
@@ -326,20 +326,16 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: typography.t900,
-    fontSize: 16,
   },
   appMeta: {
     flex: 1,
     gap: 2,
   },
   appTitle: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 18,
+    color: typography.t900,
   },
   appUrl: {
-    color: typography.t500, // #7B9AAA
-    fontSize: 14,
-    lineHeight: 21,
+    color: typography.t500,
   },
 
   // Divider
@@ -375,13 +371,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   sendFromLabel: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 14,
+    color: typography.t900,
   },
   sendFromAddress: {
-    color: typography.t600, // #9EB7C4
-    fontSize: 14,
-    lineHeight: 21,
+    color: typography.t600,
   },
 
   // Network badge
@@ -394,8 +387,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   networkBadgeText: {
-    color: info.i800, // #A2F5FF
-    fontSize: 12,
+    color: info.i800,
   },
 
   // Transaction table card
@@ -432,14 +424,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   tableValueText: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 14,
-    lineHeight: 21,
+    color: typography.t900,
     textAlign: "right",
   },
   tableSubValueText: {
-    color: typography.t600, // #9EB7C4
-    fontSize: 12,
+    color: typography.t600,
     textAlign: "right",
   },
 
@@ -455,8 +444,7 @@ const styles = StyleSheet.create({
   },
   rawDetailsLabel: {
     flex: 1,
-    color: typography.t600, // #9EB7C4
-    fontSize: 14,
+    color: typography.t600,
   },
   rawDetailsBody: {
     backgroundColor: white["5%"],

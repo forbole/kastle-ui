@@ -7,10 +7,9 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
-import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import { ChevronRight, Check } from "lucide-react-native";
-import { colors } from "../../../config/theme";
+import { colors, textStyles } from "../../../config/theme";
 
 export interface ExploreAppDetailsScreenProps {
   appName?: string;
@@ -70,32 +69,32 @@ export const ExploreAppDetailsScreen: React.FC<
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <AppText weight="600" style={styles.appIconPlaceholderText}>
+                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.appIconPlaceholderText]}>
                   {appName?.charAt(0)}
-                </AppText>
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.appTextContainer}>
             <View style={styles.titleRow}>
-              <AppText weight="600" style={styles.appName}>{appName}</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appName]}>{appName}</Text>
               {isVerified && (
                 <View style={styles.verifiedBadge}>
                   <Check size={10} color="#ffffff" strokeWidth={2.5} />
                 </View>
               )}
             </View>
-            <AppText style={styles.appCategory}>{category}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.appCategory]}>{category}</Text>
           </View>
         </View>
 
         {/* Description Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <AppText weight="600" style={styles.sectionTitle}>Description</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.sectionTitle]}>Description</Text>
           </View>
           <View style={styles.descriptionContainer}>
-            <AppText style={styles.descriptionText}>{description}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.descriptionText]}>{description}</Text>
           </View>
         </View>
 
@@ -116,7 +115,7 @@ export const ExploreAppDetailsScreen: React.FC<
         {supportedNetworks && supportedNetworks.length > 0 && (
           <View style={styles.networkSection}>
             <View style={styles.networkRow}>
-              <AppText style={styles.networkLabel}>Supported Network</AppText>
+              <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.networkLabel]}>Supported Network</Text>
               <View style={styles.networkIcons}>
                 {supportedNetworks.map((network, index) =>
                   renderNetworkIcon(network, index),
@@ -130,7 +129,7 @@ export const ExploreAppDetailsScreen: React.FC<
       {/* Bottom Action Bar */}
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.visitButton} onPress={onVisitPress} activeOpacity={0.8}>
-          <AppText weight="500" style={styles.visitButtonText}>Visit</AppText>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalLG, styles.visitButtonText]}>Visit</Text>
           <ChevronRight size={20} color="white" strokeWidth={2} />
         </TouchableOpacity>
       </View>
@@ -175,16 +174,13 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: "white",
-    fontSize: 14,
   },
   appTextContainer: {
     gap: 6,
     flexShrink: 1,
   },
   appName: {
-    fontSize: 16,
     color: colors.textPrimary,
-    lineHeight: 20,
     flexShrink: 1,
   },
   titleRow: {
@@ -202,7 +198,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   appCategory: {
-    fontSize: 12,
     color: colors.textMuted,
     letterSpacing: 0.06,
     lineHeight: 16,
@@ -224,7 +219,6 @@ const styles = StyleSheet.create({
   },
   visitButtonText: {
     color: "white",
-    fontSize: 18,
   },
   section: {
     gap: 8,
@@ -233,7 +227,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   sectionTitle: {
-    fontSize: 16,
     color: colors.textSecondary,
   },
   descriptionContainer: {
@@ -244,9 +237,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   descriptionText: {
-    fontSize: 14,
     color: colors.textSecondary,
-    lineHeight: 21,
   },
   socialSection: {
     backgroundColor: colors.backgroundSurface,
@@ -288,7 +279,6 @@ const styles = StyleSheet.create({
     height: 50,
   },
   networkLabel: {
-    fontSize: 14,
     color: colors.textPrimary,
     lineHeight: 21,
   },

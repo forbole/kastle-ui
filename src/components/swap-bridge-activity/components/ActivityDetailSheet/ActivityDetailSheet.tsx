@@ -1,8 +1,7 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { ActionSheet } from "../../../components/ActionSheet";
-import { AppText } from "../../../components/AppText";
-import { StatusPill, StatusPillStatus } from "../../../components/StatusPill";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActionSheet } from "../../../../components/ActionSheet";
+import { StatusPill, StatusPillStatus } from "../../../../components/StatusPill";
 import {
   background,
   border,
@@ -11,7 +10,8 @@ import {
   colors,
   shadows,
   spacing,
-} from "../../../config/theme";
+  textStyles,
+} from "../../../../config/theme";
 import { AssetTransferCard, AssetTransferCardProps } from "../AssetTransferCard";
 import { DetailKVRow, DetailKVRowProps } from "../DetailKVRow";
 
@@ -51,11 +51,11 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.headerSection}>
-          <AppText weight="600" style={styles.title}>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldXL, styles.title]}>
             {title}
-          </AppText>
+          </Text>
           <View style={styles.subtitleRow}>
-            <AppText style={styles.subtitle}>{subtitle}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.subtitle]}>{subtitle}</Text>
             {status && <StatusPill status={status} />}
           </View>
         </View>
@@ -123,8 +123,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.textPrimary,
-    fontSize: 20,
-    lineHeight: 24,
   },
   subtitleRow: {
     flexDirection: "row",
@@ -134,8 +132,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: colors.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
   },
   divider: {
     height: borderWidth.bw1,

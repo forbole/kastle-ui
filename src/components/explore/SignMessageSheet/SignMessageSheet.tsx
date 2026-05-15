@@ -6,11 +6,11 @@ import {
   ImageSourcePropType,
   ScrollView,
 } from "react-native";
-import { AppText } from "../../AppText";
 import { Image } from "expo-image";
 import {
   background,
   border,
+  textStyles,
   typography,
   white,
   borderRadius,
@@ -79,15 +79,15 @@ export const SignMessageSheet: React.FC<SignMessageSheetProps> = ({
               <Image source={appIcon} style={styles.appIcon} />
             ) : (
               <View style={styles.appIconPlaceholder}>
-                <AppText weight="600" style={styles.appIconPlaceholderText}>
+                <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appIconPlaceholderText]}>
                   {appName?.charAt(0)?.toUpperCase()}
-                </AppText>
+                </Text>
               </View>
             )}
           </View>
           <View style={styles.appMeta}>
-            <AppText weight="600" style={styles.appTitle}>{appName}</AppText>
-            <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitle]}>{appName}</Text>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.appUrl]}>{appUrl}</Text>
           </View>
         </View>
 
@@ -102,7 +102,7 @@ export const SignMessageSheet: React.FC<SignMessageSheetProps> = ({
         >
           <View style={styles.contentSection}>
             {/* Title */}
-            <AppText weight="600" style={styles.sectionTitle}>Message</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.sectionTitle]}>Message</Text>
 
             {/* Message card */}
             <View style={styles.messageCard}>
@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: typography.t900,
-    fontSize: 16,
   },
   appMeta: {
     flex: 1,
@@ -200,12 +199,9 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: typography.t900,
-    fontSize: 18,
   },
   appUrl: {
     color: typography.t500,
-    fontSize: 14,
-    lineHeight: 21,
   },
 
   // Divider
@@ -225,7 +221,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: typography.t600,
-    fontSize: 14,
   },
 
   // Message card

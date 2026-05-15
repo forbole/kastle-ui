@@ -1,6 +1,7 @@
 import React from "react";
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
@@ -12,10 +13,10 @@ import {
   primary,
   info,
   typography,
+  textStyles,
   white,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { AppText } from "../../AppText";
 
 export interface ApiConnectAccount {
   id: string;
@@ -48,13 +49,13 @@ const getAvatarLabel = (name: string): string => {
 
 const AccountAvatar: React.FC<{ name: string }> = ({ name }) => (
   <View style={styles.avatar}>
-    <AppText weight="600" style={styles.avatarText}>{getAvatarLabel(name)}</AppText>
+    <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.avatarText]}>{getAvatarLabel(name)}</Text>
   </View>
 );
 
 const NetworkBadge: React.FC<{ label: string }> = ({ label }) => (
   <View style={styles.networkBadge}>
-    <AppText weight="400" style={styles.networkBadgeText}>{label}</AppText>
+    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.networkBadgeText]}>{label}</Text>
   </View>
 );
 
@@ -67,9 +68,9 @@ const AccountRow: React.FC<{
       <AccountAvatar name={account.name} />
       <View style={styles.accountInfo}>
         <View style={styles.accountNameRow}>
-          <AppText weight="600" style={styles.accountName}>{account.name}</AppText>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.accountName]}>{account.name}</Text>
         </View>
-        <AppText weight="400" style={styles.accountAddress}>{account.address}</AppText>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.accountAddress]}>{account.address}</Text>
       </View>
     </View>
     {/* Right section: edit icon + badge */}
@@ -110,18 +111,18 @@ export const ApiConnectSheet: React.FC<ApiConnectSheetProps> = ({
                 <Image source={appIcon} style={styles.appIcon} />
               ) : (
                 <View style={styles.appIconPlaceholder}>
-                  <AppText weight="600" style={styles.appIconPlaceholderText}>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.appIconPlaceholderText]}>
                     {appName?.charAt(0)?.toUpperCase()}
-                  </AppText>
+                  </Text>
                 </View>
               )}
             </View>
             <View style={styles.appMeta}>
-              <AppText weight="600" style={styles.appTitle}>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitle]}>
                 {"Connect "}
-                <AppText weight="600" style={styles.appTitleHighlight}>{appName}</AppText>
-              </AppText>
-              <AppText weight="400" style={styles.appUrl}>{appUrl}</AppText>
+                <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.appTitleHighlight]}>{appName}</Text>
+              </Text>
+              <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.appUrl]}>{appUrl}</Text>
             </View>
           </View>
 
@@ -142,10 +143,10 @@ export const ApiConnectSheet: React.FC<ApiConnectSheetProps> = ({
         {/* Bottom action bar */}
         <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-          <AppText weight="500" style={styles.cancelButtonText}>Cancel</AppText>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.cancelButtonText]}>Cancel</Text>
         </TouchableOpacity>
           <TouchableOpacity style={styles.connectButton} onPress={onConnect}>
-            <AppText weight="500" style={styles.connectButtonText}>Connect</AppText>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.connectButtonText]}>Connect</Text>
           </TouchableOpacity>
         </View>
 
@@ -215,25 +216,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   appIconPlaceholderText: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 16,
+    color: typography.t900,
   },
   appMeta: {
     flex: 1,
     gap: 4,
   },
   appTitle: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 18,
-    lineHeight: 22,
+    color: typography.t900,
   },
   appTitleHighlight: {
-    color: primary.p600, // #13DCFF
-    fontSize: 18,
+    color: primary.p600,
   },
   appUrl: {
-    color: typography.t500, // #7B9AAA
-    fontSize: 12,
+    color: typography.t500,
   },
   divider: {
     height: 1,
@@ -273,8 +269,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatarText: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 16,
+    color: typography.t900,
   },
   accountInfo: {
     flex: 1,
@@ -286,13 +281,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   accountName: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 16,
-    lineHeight: 17,
+    color: typography.t900,
   },
   accountAddress: {
-    color: typography.t600, // #9EB7C4
-    fontSize: 12,
+    color: typography.t600,
   },
   accountRight: {
     flexDirection: "row",
@@ -311,8 +303,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   networkBadgeText: {
-    color: info.i800, // #A2F5FF
-    fontSize: 12,
+    color: info.i800,
   },
   bottomBar: {
     flexDirection: "row",
@@ -335,8 +326,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   cancelButtonText: {
-    color: typography.t500, // #7B9AAA
-    fontSize: 16,
+    color: typography.t500,
   },
   connectButton: {
     flex: 1,
@@ -348,8 +338,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   connectButtonText: {
-    color: typography.t900, // #FFFFFF
-    fontSize: 16,
+    color: typography.t900,
   },
   homeIndicator: {
     height: 34,

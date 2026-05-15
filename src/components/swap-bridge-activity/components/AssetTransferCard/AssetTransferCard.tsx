@@ -2,18 +2,19 @@ import React from "react";
 import {
   ImageSourcePropType,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import { ArrowRight } from "lucide-react-native";
-import { AppText } from "../../../components/AppText";
-import { Layer2AssetImage } from "../../../components/Layer2AssetImage";
+import { Layer2AssetImage } from "../../../../components/Layer2AssetImage";
 import {
   border,
   borderRadius,
   borderWidth,
   colors,
   spacing,
-} from "../../../config/theme";
+  textStyles,
+} from "../../../../config/theme";
 
 export interface AssetTransferCardProps {
   /** Token image for the "From" side. */
@@ -71,10 +72,10 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
           chainImageSize={14}
         />
         <View style={styles.fromLabels}>
-          <AppText style={styles.directionLabel}>From</AppText>
-          <AppText weight="600" style={styles.symbol}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.directionLabel]}>From</Text>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.symbol]}>
             {fromSymbol}
-          </AppText>
+          </Text>
         </View>
       </View>
 
@@ -82,10 +83,10 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
 
       <View style={styles.toCluster}>
         <View style={styles.toLabels}>
-          <AppText style={styles.directionLabel}>To</AppText>
-          <AppText weight="600" style={styles.symbol}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.directionLabel]}>To</Text>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.symbol]}>
             {toSymbol}
-          </AppText>
+          </Text>
         </View>
         <Layer2AssetImage
           tokenImage={toImage}
@@ -102,23 +103,23 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
 
     {/* Sent row */}
     <View style={styles.amountRow}>
-      <AppText style={styles.amountLabel}>{sentLabel}</AppText>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amountLabel]}>{sentLabel}</Text>
       <View style={styles.amountRight}>
-        <AppText weight="400" style={styles.amount}>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amount]}>
           {sentAmount}
-        </AppText>
-        <AppText style={styles.amountUsd}>{sentUsd}</AppText>
+        </Text>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.amountUsd]}>{sentUsd}</Text>
       </View>
     </View>
 
     {/* Received row */}
     <View style={styles.amountRow}>
-      <AppText style={styles.amountLabel}>{receivedLabel}</AppText>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amountLabel]}>{receivedLabel}</Text>
       <View style={styles.amountRight}>
-        <AppText weight="400" style={styles.amount}>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amount]}>
           {receivedAmount}
-        </AppText>
-        <AppText style={styles.amountUsd}>{receivedUsd}</AppText>
+        </Text>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.amountUsd]}>{receivedUsd}</Text>
       </View>
     </View>
   </View>
@@ -156,13 +157,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   directionLabel: {
-    fontSize: 12,
-    lineHeight: 16,
     color: colors.textSecondary,
   },
   symbol: {
-    fontSize: 16,
-    lineHeight: 20,
     color: colors.textPrimary,
   },
   amountRow: {
@@ -171,8 +168,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   amountLabel: {
-    fontSize: 14,
-    lineHeight: 20,
     color: colors.textSecondary,
   },
   amountRight: {
@@ -180,13 +175,9 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   amount: {
-    fontSize: 14,
-    lineHeight: 20,
     color: colors.textPrimary,
   },
   amountUsd: {
-    fontSize: 12,
-    lineHeight: 16,
     color: colors.textMuted,
   },
   divider: {

@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { Image, View, StyleSheet } from "react-native";
 import { ActivityScreen, ActivityScreenItem } from "./ActivityScreen";
-import { colors } from "../../../config/theme";
+import { colors } from "../../../../config/theme";
 
 const placeholderLogo = require("../../../../assets/icon.png");
 

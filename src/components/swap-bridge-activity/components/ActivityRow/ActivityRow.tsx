@@ -1,12 +1,12 @@
 import React from "react";
 import {
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { AppText } from "../../../components/AppText";
 import { DualAssetImage, DualAssetImageProps } from "../../../components/DualAssetImage";
-import { borderRadius, borderWidth, colors, spacing, warning } from "../../../config/theme";
+import { borderRadius, borderWidth, colors, spacing, textStyles, warning } from "../../../config/theme";
 
 export interface ActivityRowProps {
   /** Short row title, e.g. "Swapped" or "Bridged". */
@@ -56,41 +56,41 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
       <DualAssetImage {...pair} />
 
       <View style={styles.middle}>
-        <AppText weight="600" style={styles.title} numberOfLines={1}>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.title]} numberOfLines={1}>
           {title}
-        </AppText>
-        <AppText weight="400" style={styles.dateTime} numberOfLines={1}>
+        </Text>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.dateTime]} numberOfLines={1}>
           {dateTime}
-        </AppText>
+        </Text>
       </View>
 
       <View style={styles.right}>
         <View style={styles.amountRow}>
-          <AppText
-            weight="600"
-            style={[styles.amountNumber, { color: amountColor }]}
+          <Text
+            allowFontScaling={false}
+            style={[textStyles.bodySemiboldMD, styles.amountNumber, { color: amountColor }]}
             numberOfLines={1}
             ellipsizeMode="tail"
           >
             {amountNumber}
-          </AppText>
+          </Text>
           {amountSymbol && (
-            <AppText
-              weight="600"
-              style={[styles.amountSymbol, { color: amountColor }]}
+            <Text
+              allowFontScaling={false}
+              style={[textStyles.bodySemiboldMD, styles.amountSymbol, { color: amountColor }]}
               numberOfLines={1}
             >
               {amountSymbol}
-            </AppText>
+            </Text>
           )}
         </View>
-        <AppText
-          weight="400"
-          style={styles.amountUsd}
+        <Text
+          allowFontScaling={false}
+          style={[textStyles.bodyNormalXS, styles.amountUsd]}
           numberOfLines={1}
         >
           {amountUsd}
-        </AppText>
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -114,13 +114,9 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   title: {
-    fontSize: 16,
-    lineHeight: 20,
     color: colors.textPrimary,
   },
   dateTime: {
-    fontSize: 12,
-    lineHeight: 16,
     color: colors.textMuted,
   },
   right: {
@@ -135,13 +131,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   amountNumber: {
-    fontSize: 16,
-    lineHeight: 20,
     flexShrink: 1,
   },
   amountSymbol: {
-    fontSize: 16,
-    lineHeight: 20,
     flexShrink: 0,
     marginLeft: spacing.s1,
   },

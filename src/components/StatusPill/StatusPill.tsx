@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { CircleCheck, CircleX, ClockFading } from "lucide-react-native";
-import { AppText } from "../AppText";
-import { colors, error, spacing, success, warning } from "../../config/theme";
+import { colors, error, spacing, success, textStyles, warning } from "../../config/theme";
 
 export type StatusPillStatus = "success" | "failed" | "pending";
 
@@ -48,12 +47,12 @@ export const StatusPill: React.FC<StatusPillProps> = ({ status, label }) => {
   return (
     <View style={[styles.pill, { backgroundColor: config.bg }]}>
       <Icon size={12} color={config.color} strokeWidth={2.5} />
-      <AppText
-        weight="500"
-        style={[styles.label, { color: config.color }]}
+      <Text
+        allowFontScaling={false}
+        style={[textStyles.bodyNormalXS, styles.label, { color: config.color }]}
       >
         {label ?? config.label}
-      </AppText>
+      </Text>
     </View>
   );
 };
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   label: {
-    fontSize: 12,
     lineHeight: 16,
   },
 });

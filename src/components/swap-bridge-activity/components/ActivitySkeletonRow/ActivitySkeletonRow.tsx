@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { SkeletonBlock } from "../../../components/SkeletonBlock";
-import { borderRadius, borderWidth, colors, spacing } from "../../../config/theme";
+import { SkeletonBlock } from "../../../../components/SkeletonBlock";
+import { borderRadius, borderWidth, colors, spacing } from "../../../../config/theme";
 
 const TOKEN_SIZE = 40;
 const OVERLAP = Math.round(TOKEN_SIZE * 0.4);

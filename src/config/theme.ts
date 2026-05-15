@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 /**
  * Kastle UI Design Tokens (Dark mode)
  *
@@ -380,10 +382,10 @@ export const fontSize = {
 
 /** Font weight — matches Figma text style families */
 export const fontWeight = {
-  normal: "400",   // Text-normal
-  medium: "500",   // Text-medium
+  normal: "400", // Text-normal
+  medium: "500", // Text-medium
   semibold: "600", // Text-semibold
-  bold: "700",     // Text-bold / Heading
+  bold: "700", // Text-bold / Heading
 } as const;
 
 /** Letter spacing — headings carry +0.2 tracking per Figma */
@@ -396,6 +398,26 @@ export const letterSpacing = {
 export const fontFamily = {
   default: "Figtree",
 } as const;
+
+/** Platform-aware Figtree font families (web uses CSS variable font; native uses weight-specific files) */
+export const fontFamilies = {
+  "400": Platform.select({
+    web: fontFamily.default,
+    default: "Figtree_400Regular",
+  }) as string,
+  "500": Platform.select({
+    web: fontFamily.default,
+    default: "Figtree_500Medium",
+  }) as string,
+  "600": Platform.select({
+    web: fontFamily.default,
+    default: "Figtree_600SemiBold",
+  }) as string,
+  "700": Platform.select({
+    web: fontFamily.default,
+    default: "Figtree_700Bold",
+  }) as string,
+};
 
 /**
  * Convenience text style presets — matches 📌 Figma named styles.
@@ -410,42 +432,205 @@ export const fontFamily = {
  */
 export const textStyles = {
   // Headings — Bold (700), Auto line height, +0.2 letter spacing
-  headingXS:  { fontFamily: fontFamily.default, fontSize: fontSize.sm,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  headingSM:  { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  headingMD:  { fontFamily: fontFamily.default, fontSize: fontSize.lg,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  headingLG:  { fontFamily: fontFamily.default, fontSize: fontSize.xl,     fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  headingXL:  { fontFamily: fontFamily.default, fontSize: fontSize["2xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  heading2XL: { fontFamily: fontFamily.default, fontSize: fontSize["3xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  heading3XL: { fontFamily: fontFamily.default, fontSize: fontSize["4xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  heading4XL: { fontFamily: fontFamily.default, fontSize: fontSize["5xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
-  heading5XL: { fontFamily: fontFamily.default, fontSize: fontSize["6xl"], fontWeight: fontWeight.bold, letterSpacing: letterSpacing.heading },
+  headingXS: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  headingSM: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  headingMD: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  headingLG: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize.xl,
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  headingXL: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize["2xl"],
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  heading2XL: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize["3xl"],
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  heading3XL: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize["4xl"],
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  heading4XL: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize["5xl"],
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
+  heading5XL: {
+    fontFamily: fontFamilies["700"],
+    fontSize: fontSize["6xl"],
+    fontWeight: fontWeight.bold,
+    letterSpacing: letterSpacing.heading,
+  },
 
   // Body Normal — Regular (400), Auto line height except sm/lg per Figma
-  bodyNormal2XS:        { fontFamily: fontFamily.default, fontSize: fontSize["2xs"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormalXS:         { fontFamily: fontFamily.default, fontSize: fontSize.xs,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormalSM:         { fontFamily: fontFamily.default, fontSize: fontSize.sm,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal, lineHeight: 21 },
-  bodyNormalMD:         { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormalMDRelaxed:  { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal, lineHeight: 24 },
-  bodyNormalLG:         { fontFamily: fontFamily.default, fontSize: fontSize.lg,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal, lineHeight: 27 },
-  bodyNormalXL:         { fontFamily: fontFamily.default, fontSize: fontSize.xl,     fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormal2XL:        { fontFamily: fontFamily.default, fontSize: fontSize["2xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormal3XL:        { fontFamily: fontFamily.default, fontSize: fontSize["3xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormal4XL:        { fontFamily: fontFamily.default, fontSize: fontSize["4xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormal5XL:        { fontFamily: fontFamily.default, fontSize: fontSize["5xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
-  bodyNormal6XL:        { fontFamily: fontFamily.default, fontSize: fontSize["6xl"], fontWeight: fontWeight.normal, letterSpacing: letterSpacing.normal },
+  bodyNormal2XS: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize["2xs"],
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormalXS: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormalSM: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+    lineHeight: 21,
+  },
+  bodyNormalMD: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormalMDRelaxed: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+    lineHeight: 24,
+  },
+  bodyNormalLG: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+    lineHeight: 27,
+  },
+  bodyNormalXL: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize.xl,
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormal2XL: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize["2xl"],
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormal3XL: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize["3xl"],
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormal4XL: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize["4xl"],
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormal5XL: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize["5xl"],
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodyNormal6XL: {
+    fontFamily: fontFamilies["400"],
+    fontSize: fontSize["6xl"],
+    fontWeight: fontWeight.normal,
+    letterSpacing: letterSpacing.normal,
+  },
 
   // Body Semibold — SemiBold (600), Auto line height
-  bodySemibold2XS: { fontFamily: fontFamily.default, fontSize: fontSize["2xs"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemiboldXS:  { fontFamily: fontFamily.default, fontSize: fontSize.xs,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemiboldSM:  { fontFamily: fontFamily.default, fontSize: fontSize.sm,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemiboldMD:  { fontFamily: fontFamily.default, fontSize: fontSize.md,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemiboldLG:  { fontFamily: fontFamily.default, fontSize: fontSize.lg,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemiboldXL:  { fontFamily: fontFamily.default, fontSize: fontSize.xl,     fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemibold2XL: { fontFamily: fontFamily.default, fontSize: fontSize["2xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemibold3XL: { fontFamily: fontFamily.default, fontSize: fontSize["3xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemibold4XL: { fontFamily: fontFamily.default, fontSize: fontSize["4xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemibold5XL: { fontFamily: fontFamily.default, fontSize: fontSize["5xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
-  bodySemibold6XL: { fontFamily: fontFamily.default, fontSize: fontSize["6xl"], fontWeight: fontWeight.semibold, letterSpacing: letterSpacing.normal },
+  bodySemibold2XS: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize["2xs"],
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemiboldXS: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemiboldSM: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemiboldMD: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemiboldLG: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemiboldXL: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize.xl,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemibold2XL: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize["2xl"],
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemibold3XL: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize["3xl"],
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemibold4XL: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize["4xl"],
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemibold5XL: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize["5xl"],
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
+  bodySemibold6XL: {
+    fontFamily: fontFamilies["600"],
+    fontSize: fontSize["6xl"],
+    fontWeight: fontWeight.semibold,
+    letterSpacing: letterSpacing.normal,
+  },
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -462,17 +647,71 @@ export const textStyles = {
  */
 export const shadows = {
   // Soft Shadows (softShadow 1–4) — symmetric blur, no offset
-  soft1: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 2 },
-  soft2: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowRadius: 20, elevation: 5 },
-  soft3: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.1, shadowRadius: 30, elevation: 8 },
-  soft4: { shadowColor: "#262626", shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.2, shadowRadius: 40, elevation: 12 },
+  soft1: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  soft2: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 5,
+  },
+  soft3: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 30,
+    elevation: 8,
+  },
+  soft4: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 40,
+    elevation: 12,
+  },
 
   // Hard Shadows (hardShadow 1–5) — directional, simulate light source
-  hard1: { shadowColor: "#262626", shadowOffset: { width: -2, height: 2  }, shadowOpacity: 0.2, shadowRadius: 8,  elevation: 4 },
-  hard2: { shadowColor: "#262626", shadowOffset: { width:  0, height: 3  }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 5 },
-  hard3: { shadowColor: "#262626", shadowOffset: { width:  2, height: 2  }, shadowOpacity: 0.2, shadowRadius: 8,  elevation: 4 },
-  hard4: { shadowColor: "#262626", shadowOffset: { width:  0, height: -3 }, shadowOpacity: 0.2, shadowRadius: 10, elevation: 5 },
-  hard5: { shadowColor: "#262626", shadowOffset: { width:  0, height: 2  }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 4 },
+  hard1: {
+    shadowColor: "#262626",
+    shadowOffset: { width: -2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  hard2: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  hard3: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  hard4: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  hard5: {
+    shadowColor: "#262626",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 4,
+  },
 } as const;
 
 // ---------------------------------------------------------------------------

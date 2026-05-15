@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { TokenSelectSheet, TokenItem, TokenInfo, ChainFilter } from "./TokenSelectSheet";
-import { background, primary, typography } from "../../../config/theme";
-import { AppText } from "../../AppText";
+import { background, primary, textStyles, typography } from "../../../config/theme";
 
 // ---------------------------------------------------------------------------
 // Sample data
@@ -61,9 +60,9 @@ const SheetDemo = (props: React.ComponentProps<typeof TokenSelectSheet>) => {
   return (
     <View style={storyStyles.container}>
       <TouchableOpacity style={storyStyles.triggerBtn} onPress={() => setIsOpen(true)}>
-        <AppText weight="600" style={storyStyles.triggerText}>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, storyStyles.triggerText]}>
           Open Token Select
-        </AppText>
+        </Text>
       </TouchableOpacity>
       <TokenSelectSheet
         {...props}

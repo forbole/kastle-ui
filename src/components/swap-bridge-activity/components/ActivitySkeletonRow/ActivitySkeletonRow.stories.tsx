@@ -2,7 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { ActivitySkeletonRow } from "./ActivitySkeletonRow";
-import { background } from "../../../config/theme";
+import { background } from "../../../../config/theme";
 
 const meta: Meta<typeof ActivitySkeletonRow> = {
   title: "Swap-bridge-activity/Components/ActivitySkeletonRow",

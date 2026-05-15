@@ -3,11 +3,11 @@ import {
   Image,
   ImageSourcePropType,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { AppText } from "../AppText";
-import { colors, spacing } from "../../config/theme";
+import { colors, spacing, textStyles } from "../../config/theme";
 
 export interface EmptyStateCta {
   label: string;
@@ -44,19 +44,19 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       style={{ height: imageHeight, width: imageWidth ?? imageHeight }}
       resizeMode="contain"
     />
-    <AppText weight="600" style={styles.heading}>
+    <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.heading]}>
       {heading}
-    </AppText>
-    <AppText style={styles.subtext}>{subtext}</AppText>
+    </Text>
+    <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.subtext]}>{subtext}</Text>
     {cta && (
       <TouchableOpacity
         style={styles.cta}
         onPress={cta.onPress}
         activeOpacity={0.85}
       >
-        <AppText weight="600" style={styles.ctaLabel}>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.ctaLabel]}>
           {cta.label}
-        </AppText>
+        </Text>
       </TouchableOpacity>
     )}
   </View>
@@ -71,14 +71,10 @@ const styles = StyleSheet.create({
     gap: spacing.s2,
   },
   heading: {
-    fontSize: 16,
-    lineHeight: 22,
     color: colors.textPrimary,
     textAlign: "center",
   },
   subtext: {
-    fontSize: 14,
-    lineHeight: 20,
     color: colors.textMuted,
     textAlign: "center",
   },
@@ -91,7 +87,6 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
   },
   ctaLabel: {
-    fontSize: 16,
     color: "#FFFFFF",
   },
 });

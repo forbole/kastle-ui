@@ -1,14 +1,14 @@
 import React from "react";
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   ImageSourcePropType,
 } from "react-native";
 import { Image } from "expo-image";
 import { ArrowUpRight, Check } from "lucide-react-native";
-import { colors } from "../../../config/theme";
-import { AppText } from "../../AppText";
+import { colors, textStyles } from "../../../config/theme";
 
 export interface ExploreAppCardProps {
   appName: string;
@@ -40,9 +40,9 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
             <Image source={appIcon} style={styles.appIcon} />
           ) : (
             <View style={styles.appIconPlaceholder}>
-              <AppText weight="600" style={styles.appIconPlaceholderText}>
+              <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.appIconPlaceholderText]}>
                 {appName?.charAt(0)?.toUpperCase()}
-              </AppText>
+              </Text>
             </View>
           )}
         </View>
@@ -50,18 +50,18 @@ export const ExploreAppCard: React.FC<ExploreAppCardProps> = ({
         {/* App Info */}
         <View style={styles.infoContainer}>
           <View style={styles.titleRow}>
-            <AppText weight="600" style={styles.appName} numberOfLines={1}>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldSM, styles.appName]} numberOfLines={1}>
               {appName}
-            </AppText>
+            </Text>
             {isVerified && (
               <View style={styles.verifiedBadge}>
                 <Check size={10} color="#ffffff" strokeWidth={2.5} />
               </View>
             )}
           </View>
-          <AppText weight="400" style={styles.appCategory} numberOfLines={1}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.appCategory]} numberOfLines={1}>
             {appCategory}
-          </AppText>
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
   },
   appIconPlaceholderText: {
     color: colors.textPrimary,
-    fontSize: 14,
   },
   infoContainer: {
     flexShrink: 1,
@@ -121,7 +120,6 @@ const styles = StyleSheet.create({
   },
   appName: {
     color: colors.textPrimary,
-    fontSize: 14,
     flexShrink: 1,
   },
   verifiedBadge: {
@@ -134,7 +132,6 @@ const styles = StyleSheet.create({
   },
   appCategory: {
     color: colors.textMuted,
-    fontSize: 12,
     letterSpacing: 0.06,
     lineHeight: 16,
   },

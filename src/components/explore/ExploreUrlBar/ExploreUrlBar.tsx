@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
   View,
+  Text,
   StyleSheet,
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { AppText } from "../../AppText";
 import { ChevronLeft, MoreVertical, RotateCw } from "lucide-react-native";
 import { ExploreUrlBarMenu } from "./ExploreUrlBarMenu";
-import { colors } from "../../../config/theme";
+import { colors, textStyles } from "../../../config/theme";
 
 export interface ExploreUrlBarProps {
   url?: string;
@@ -45,9 +45,9 @@ export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
 
         {/* Address Bar */}
         <View style={styles.addressBar}>
-          <AppText weight="400" style={styles.urlText} numberOfLines={1} ellipsizeMode="tail">
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.urlText]} numberOfLines={1} ellipsizeMode="tail">
             {url}
-          </AppText>
+          </Text>
           <TouchableOpacity
             style={styles.refreshButton}
             onPress={onRefreshPress}
@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
   },
   urlText: {
     flex: 1,
-    fontSize: 16,
     color: colors.textSecondary,
     textAlign: "center",
     paddingRight: 36,
