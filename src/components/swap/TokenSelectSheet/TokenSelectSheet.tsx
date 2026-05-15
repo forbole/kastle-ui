@@ -2,7 +2,6 @@ import React, { useState, useCallback, useRef, memo } from "react";
 import {
   Dimensions,
   Keyboard,
-  Platform,
   View,
   StyleSheet,
   Text,
@@ -14,8 +13,6 @@ import {
 } from "react-native";
 
 import { Search } from "lucide-react-native";
-
-const SCREEN_HEIGHT = Dimensions.get("window").height;
 import {
   background,
   border,
@@ -26,7 +23,6 @@ import {
   fontFamilies,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { InlineActionSheet } from "../../InlineActionSheet";
 import { Layer2AssetImage } from "../../Layer2AssetImage";
 
 // ---------------------------------------------------------------------------
@@ -250,10 +246,8 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
     [isLoading],
   );
 
-  const SheetComponent = Platform.OS === "android" ? InlineActionSheet : ActionSheet;
-
   return (
-    <SheetComponent isOpen={isOpen} onClose={onClose} heightRatio={0.92}>
+    <ActionSheet isOpen={isOpen} onClose={onClose} heightRatio={0.92}>
       <View style={styles.container}>
         {/* Drag handle */}
         <View style={styles.handlebarWrapper}>
@@ -330,7 +324,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
         {/* iOS home indicator */}
         <View style={styles.homeIndicator} />
       </View>
-    </SheetComponent>
+    </ActionSheet>
   );
 };
 
@@ -340,7 +334,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: SCREEN_HEIGHT * 0.92,
+    height: Dimensions.get("window").height * 0.92,
     backgroundColor: background.bg100,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,

@@ -36,6 +36,8 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
   const keyboardOffset = useRef(new Animated.Value(0)).current;
+  // Combine sheet slide animation + keyboard compensation into one value
+  const combinedTranslateY = useRef(Animated.add(translateY, keyboardOffset)).current;
 
   const animateIn = useCallback(() => {
     Keyboard.dismiss();
@@ -91,14 +93,14 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
     const show = Keyboard.addListener('keyboardDidShow', (e) => {
       Animated.timing(keyboardOffset, {
         toValue: e.endCoordinates.height,
-        duration: 200,
+        duration: 500,
         useNativeDriver: true,
       }).start();
     });
     const hide = Keyboard.addListener('keyboardDidHide', () => {
       Animated.timing(keyboardOffset, {
         toValue: 0,
-        duration: 200,
+        duration: 400,
         useNativeDriver: true,
       }).start();
     });
@@ -129,7 +131,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
       <Animated.View
         renderToHardwareTextureAndroid
         collapsable={false}
-        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }, { translateY: keyboardOffset }] }]}
+        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY: combinedTranslateY }] }]}
         pointerEvents="box-none"
       >
         {/* Top tap zone — tapping the handlebar area closes the sheet */}
