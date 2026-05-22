@@ -1,0 +1,98 @@
+import React, { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { PassphraseInput } from "../../components/PassphraseInput";
+import { WarningCallout } from "../../components/WarningCallout";
+import {
+  background,
+  primary,
+  typography,
+  spacing,
+  borderRadius,
+  textStyles,
+} from "../../config/theme";
+
+export interface ImportPassphraseScreenProps {
+  onContinue: (passphrase: string) => void;
+}
+
+export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
+  onContinue,
+}) => {
+  const [passphrase, setPassphrase] = useState("");
+  const canContinue = passphrase.length > 0;
+
+  return (
+    <View style={styles.screen}>
+      <View style={styles.topContent}>
+        {/* Title — Paul may relocate to ScreenHeader */}
+        <Text
+          allowFontScaling={false}
+          style={[textStyles.headingXL, styles.title]}
+        >
+          Import Passphrase
+        </Text>
+
+        <PassphraseInput value={passphrase} onChangeText={setPassphrase} />
+
+        <WarningCallout
+          severity="warning"
+          title="Wrong passphrase won't show an error"
+        >
+          It will import a different wallet with no balance. Double-check before
+          continuing.
+        </WarningCallout>
+      </View>
+
+      {/* Import Wallet CTA */}
+      <Pressable
+        onPress={() => onContinue(passphrase)}
+        disabled={!canContinue}
+        style={({ pressed }) => [
+          styles.cta,
+          pressed && styles.ctaPressed,
+          !canContinue && styles.ctaDisabled,
+        ]}
+      >
+        <Text
+          allowFontScaling={false}
+          style={[textStyles.bodySemiboldLG, styles.ctaLabel]}
+        >
+          Import Wallet
+        </Text>
+      </Pressable>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: "space-between",
+    backgroundColor: background.bg0,
+    paddingHorizontal: spacing.s5,
+    paddingTop: spacing.s5,
+    paddingBottom: spacing.s4,
+  },
+  topContent: {
+    gap: spacing.s4,
+  },
+  title: {
+    color: typography.t900,
+  },
+  cta: {
+    height: spacing.s12,
+    borderRadius: borderRadius.full,
+    backgroundColor: primary.p500,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ctaPressed: {
+    backgroundColor: primary.p300,
+  },
+  ctaDisabled: {
+    opacity: 0.4,
+  },
+  ctaLabel: {
+    color: typography.t900,
+  },
+});

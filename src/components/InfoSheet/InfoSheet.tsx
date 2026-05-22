@@ -1,15 +1,14 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import {
   background,
   border,
   typography,
   borderRadius,
+  spacing,
+  fontFamilies,
+  fontWeight,
+  fontSize,
   textStyles,
 } from "../../config/theme";
 import { ActionSheet } from "../ActionSheet";
@@ -21,8 +20,12 @@ export interface InfoSheetProps {
   onClose: () => void;
   /** Sheet title */
   title: string;
-  /** Body description text */
-  description: string;
+  /** Body description text. Ignored when `body` is provided. */
+  description?: string;
+  /** Rich body content. Takes precedence over `description` when provided. */
+  body?: React.ReactNode;
+  /** Optional outline CTA button at the bottom. Tapping it calls onClose. */
+  ctaLabel?: string;
 }
 
 export const InfoSheet: React.FC<InfoSheetProps> = ({
@@ -30,6 +33,8 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
   onClose,
   title,
   description,
+  body,
+  ctaLabel,
 }) => {
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose}>
@@ -47,15 +52,44 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
         >
           {/* Title + divider */}
           <View style={styles.titleSection}>
-            <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>{title}</Text>
+            <Text
+              allowFontScaling={false}
+              style={[textStyles.bodySemiboldLG, styles.title]}
+            >
+              {title}
+            </Text>
             <View style={styles.divider} />
           </View>
 
           {/* Description */}
           <View style={styles.descriptionSection}>
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.description]}>{description}</Text>
+            {body ?? (
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalMDRelaxed, styles.description]}
+              >
+                {description}
+              </Text>
+            )}
           </View>
         </ScrollView>
+
+        {/* Optional CTA */}
+        {!!ctaLabel && (
+          <View style={styles.ctaBar}>
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [
+                styles.ctaButton,
+                pressed && styles.ctaButtonPressed,
+              ]}
+            >
+              <Text allowFontScaling={false} style={styles.ctaLabel}>
+                {ctaLabel}
+              </Text>
+            </Pressable>
+          </View>
+        )}
 
         {/* iOS home indicator */}
         <View style={styles.homeIndicator} />
@@ -123,6 +157,30 @@ const styles = StyleSheet.create({
   },
   description: {
     color: typography.t700,
+  },
+
+  // CTA
+  ctaBar: {
+    paddingHorizontal: spacing.s3,
+    paddingTop: spacing.s4,
+  },
+  ctaButton: {
+    height: spacing.s10, // 40
+    borderRadius: borderRadius.full,
+    borderWidth: 1,
+    borderColor: typography.t500, // #7B9AAA
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: spacing.s5,
+  },
+  ctaButtonPressed: {
+    opacity: 0.6,
+  },
+  ctaLabel: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.medium,
+    color: typography.t500,
   },
 
   // iOS home indicator
