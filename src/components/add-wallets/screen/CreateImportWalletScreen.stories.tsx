@@ -5,7 +5,7 @@ import { CreateImportWalletScreen } from "./CreateImportWalletScreen";
 import { background } from "../../../config/theme";
 
 const meta: Meta<typeof CreateImportWalletScreen> = {
-  title: "AddWallets/Screens/Create-Import Wallet Screen",
+  title: "Add-Wallets/Screens/Create-Import Wallet Screen",
   component: CreateImportWalletScreen,
   parameters: {
     layout: "fullscreen",

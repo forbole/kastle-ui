@@ -22,7 +22,7 @@ const SheetDemo = () => {
 };
 
 const meta: Meta<typeof ImportWalletSheet> = {
-  title: "AddWallets/Components/ImportWalletSheet",
+  title: "Add-Wallets/Components/ImportWalletSheet",
   component: ImportWalletSheet,
   parameters: {
     layout: "fullscreen",

@@ -10,6 +10,7 @@ import { AlertCircle } from "lucide-react-native";
 import {
   background,
   border,
+  borderWidth,
   error as errorColors,
   indicator,
   spacing,
@@ -107,15 +108,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s3,
     borderRadius: borderRadius.xl,
     backgroundColor: background.bg50,
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
     borderColor: border.b300,
   },
   boxFocused: {
-    borderWidth: 2,
+    borderWidth: borderWidth.bw2,
     borderColor: indicator.indicatorPrimary,
   },
   boxInvalid: {
-    borderWidth: 2,
+    borderWidth: borderWidth.bw2,
     borderColor: indicator.indicatorError,
   },
   boxDisabled: {
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
   },
   errorRow: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: spacing.s2,
     marginTop: spacing.s2,
   },

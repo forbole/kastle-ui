@@ -5,7 +5,7 @@ import { WalletOptionButton } from "./WalletOptionButton";
 import { background, spacing } from "../../../config/theme";
 
 const meta: Meta<typeof WalletOptionButton> = {
-  title: "AddWallets/Components/WalletOptionButton",
+  title: "Add-Wallets/Components/WalletOptionButton",
   component: WalletOptionButton,
   parameters: {
     backgrounds: { default: "kastle" },

@@ -21,7 +21,7 @@ const SheetDemo = () => {
 };
 
 const meta: Meta<typeof RemoveWalletSheet> = {
-  title: "AddWallets/Components/RemoveWalletSheet",
+  title: "Manage-Wallets/Components/RemoveWalletSheet",
   component: RemoveWalletSheet,
   parameters: {
     layout: "fullscreen",

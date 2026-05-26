@@ -10,30 +10,38 @@ import {
   spacing,
   borderRadius,
   textStyles,
+  fontFamilies,
+  fontSize,
+  fontWeight,
 } from "../../../config/theme";
 
 export interface ImportRecoveryPhraseWithPassphraseScreenProps {
   onContinue: (recoveryPhrase: string) => void;
   /** Paul wires clipboard read; screen stays pure. */
   onPasteAll?: () => void;
+  /** Prefill the field (for stories / restored state). */
+  initialValue?: string;
+  /** External error — takes precedence over the internal private-key detection. */
+  error?: string;
 }
 
 const PRIVATE_KEY_REGEX = /^[0-9a-fA-F]{64}$/;
 
 export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
   ImportRecoveryPhraseWithPassphraseScreenProps
-> = ({ onContinue, onPasteAll }) => {
-  const [value, setValue] = useState("");
+> = ({ onContinue, onPasteAll, initialValue, error: externalError }) => {
+  const [value, setValue] = useState(initialValue ?? "");
   const [masked, setMasked] = useState(false);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
 
-  const error = useMemo(() => {
+  const internalError = useMemo(() => {
     if (PRIVATE_KEY_REGEX.test(value.trim())) {
       return "Private key doesn't support passphrase. Use a recovery phrase.";
     }
     return undefined;
   }, [value]);
 
+  const error = externalError ?? internalError;
   const canContinue = value.trim().length > 0 && !error;
 
   return (
@@ -71,10 +79,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
               ) : (
                 <EyeOff size={18} color={primary.p500} strokeWidth={2} />
               )}
-              <Text
-                allowFontScaling={false}
-                style={[textStyles.bodySemiboldLG, styles.actionText]}
-              >
+              <Text allowFontScaling={false} style={styles.actionText}>
                 {masked ? "Show" : "Hide"}
               </Text>
             </Pressable>
@@ -83,10 +88,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
               hitSlop={8}
               style={styles.actionLink}
             >
-              <Text
-                allowFontScaling={false}
-                style={[textStyles.bodySemiboldLG, styles.actionText]}
-              >
+              <Text allowFontScaling={false} style={styles.actionText}>
                 Paste all
               </Text>
             </Pressable>
@@ -113,10 +115,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
           !canContinue && styles.ctaDisabled,
         ]}
       >
-        <Text
-          allowFontScaling={false}
-          style={[textStyles.bodySemiboldLG, styles.ctaLabel]}
-        >
+        <Text allowFontScaling={false} style={styles.ctaLabel}>
           Import Wallet
         </Text>
       </Pressable>
@@ -173,6 +172,9 @@ const styles = StyleSheet.create({
     height: spacing.s12,
   },
   actionText: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.medium,
     color: primary.p500,
   },
   cta: {
@@ -189,6 +191,9 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   ctaLabel: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.medium,
     color: typography.t900,
   },
 });

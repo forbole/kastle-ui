@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react-native";
 import {
   border,
   borderRadius,
+  borderWidth,
   spacing,
   fontFamilies,
   fontWeight,
@@ -57,11 +58,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.s2,
-    height: 64,
+    height: spacing.s16, // 64
     paddingHorizontal: spacing.s7,
     borderRadius: borderRadius["2xl"],
     backgroundColor: white["5%"],
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
     borderColor: border.b200,
   },
   pressed: {

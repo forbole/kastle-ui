@@ -11,6 +11,7 @@ import { AlertCircle, Eye, ScanLine } from "lucide-react-native";
 import {
   background,
   border,
+  borderWidth,
   error as errorColors,
   indicator,
   spacing,
@@ -66,59 +67,59 @@ export const Textarea: React.FC<TextareaProps> = ({
 
   return (
     <View>
-      <View style={boxStyle}>
-        <TextInput
-          style={styles.input}
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={typography.t600}
-          editable={!disabled}
-          secureTextEntry={secureTextEntry}
-          multiline
-          textAlignVertical="top"
-          autoCapitalize="none"
-          autoCorrect={false}
-          allowFontScaling={false}
-          onFocus={() => {
-            setFocused(true);
-            onFocus?.();
-          }}
-          onBlur={() => {
-            setFocused(false);
-            onBlur?.();
-          }}
-        />
-        {scanIcon && (
-          <View style={styles.scanWrapper}>
-            <ScanLine size={20} color={typography.t600} strokeWidth={2} />
+      {masked ? (
+        <Pressable
+          onPress={onPressMask}
+          style={styles.maskBox}
+          accessibilityRole="button"
+          accessibilityLabel="Reveal recovery phrase"
+        >
+          <Image
+            source={MASK_IMAGE}
+            style={StyleSheet.absoluteFill}
+            resizeMode="cover"
+          />
+          <View style={styles.maskContent}>
+            <Eye size={50} color={typography.t600} strokeWidth={2} />
+            <Text
+              allowFontScaling={false}
+              style={[textStyles.bodyNormalSM, styles.maskHint]}
+            >
+              {maskHint}
+            </Text>
           </View>
-        )}
-
-        {masked && (
-          <Pressable
-            onPress={onPressMask}
-            style={styles.maskOverlay}
-            accessibilityRole="button"
-            accessibilityLabel="Reveal recovery phrase"
-          >
-            <Image
-              source={MASK_IMAGE}
-              style={StyleSheet.absoluteFill}
-              resizeMode="cover"
-            />
-            <View style={styles.maskContent}>
-              <Eye size={50} color={typography.t600} strokeWidth={2} />
-              <Text
-                allowFontScaling={false}
-                style={[textStyles.bodyNormalSM, styles.maskHint]}
-              >
-                {maskHint}
-              </Text>
+        </Pressable>
+      ) : (
+        <View style={boxStyle}>
+          <TextInput
+            style={styles.input}
+            value={value}
+            onChangeText={onChangeText}
+            placeholder={placeholder}
+            placeholderTextColor={typography.t600}
+            editable={!disabled}
+            secureTextEntry={secureTextEntry}
+            multiline
+            textAlignVertical="top"
+            autoCapitalize="none"
+            autoCorrect={false}
+            allowFontScaling={false}
+            onFocus={() => {
+              setFocused(true);
+              onFocus?.();
+            }}
+            onBlur={() => {
+              setFocused(false);
+              onBlur?.();
+            }}
+          />
+          {scanIcon && (
+            <View style={styles.scanWrapper}>
+              <ScanLine size={20} color={typography.t600} strokeWidth={2} />
             </View>
-          </Pressable>
-        )}
-      </View>
+          )}
+        </View>
+      )}
       {invalid && (
         <View style={styles.errorRow}>
           <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
@@ -144,16 +145,16 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.s3,
     borderRadius: borderRadius.xl,
     backgroundColor: background.bg50,
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
     borderColor: border.b300,
     overflow: "hidden",
   },
   boxFocused: {
-    borderWidth: 2,
+    borderWidth: borderWidth.bw2,
     borderColor: indicator.indicatorPrimary,
   },
   boxInvalid: {
-    borderWidth: 2,
+    borderWidth: borderWidth.bw2,
     borderColor: indicator.indicatorError,
   },
   boxDisabled: {
@@ -168,8 +169,11 @@ const styles = StyleSheet.create({
   scanWrapper: {
     paddingTop: spacing.s0_5,
   },
-  maskOverlay: {
-    ...StyleSheet.absoluteFillObject,
+  maskBox: {
+    minHeight: spacing.s32,
+    borderRadius: borderRadius.xl,
+    backgroundColor: background.bg0,
+    overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -187,7 +191,7 @@ const styles = StyleSheet.create({
   },
   errorRow: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: spacing.s2,
     marginTop: spacing.s2,
   },

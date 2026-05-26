@@ -8,6 +8,7 @@ import {
   warning as warningColors,
   spacing,
   borderRadius,
+  borderWidth,
   textStyles,
 } from "../../config/theme";
 
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s4,
     paddingVertical: spacing.s3,
     borderRadius: borderRadius.xl,
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
   },
   iconWrapper: {
     paddingTop: spacing.s0_5,

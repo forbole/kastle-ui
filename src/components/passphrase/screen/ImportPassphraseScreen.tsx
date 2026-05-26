@@ -9,17 +9,26 @@ import {
   spacing,
   borderRadius,
   textStyles,
+  fontFamilies,
+  fontSize,
+  fontWeight,
 } from "../../../config/theme";
 
 export interface ImportPassphraseScreenProps {
   onContinue: (passphrase: string) => void;
+  /** Prefill the passphrase field (for stories / restored state). */
+  initialValue?: string;
+  /** Externally-provided error shown under the passphrase field. */
+  error?: string;
 }
 
 export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
   onContinue,
+  initialValue,
+  error,
 }) => {
-  const [passphrase, setPassphrase] = useState("");
-  const canContinue = passphrase.length > 0;
+  const [passphrase, setPassphrase] = useState(initialValue ?? "");
+  const canContinue = passphrase.length > 0 && !error;
 
   return (
     <View style={styles.screen}>
@@ -35,7 +44,11 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
         </View>
 
         <View style={styles.body}>
-          <PassphraseInput value={passphrase} onChangeText={setPassphrase} />
+          <PassphraseInput
+            value={passphrase}
+            onChangeText={setPassphrase}
+            error={error}
+          />
 
           <WarningCallout
             severity="warning"
@@ -57,10 +70,7 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
           !canContinue && styles.ctaDisabled,
         ]}
       >
-        <Text
-          allowFontScaling={false}
-          style={[textStyles.bodySemiboldLG, styles.ctaLabel]}
-        >
+        <Text allowFontScaling={false} style={styles.ctaLabel}>
           Import Wallet
         </Text>
       </Pressable>
@@ -103,6 +113,9 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   ctaLabel: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.medium,
     color: typography.t900,
   },
 });

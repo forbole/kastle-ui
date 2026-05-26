@@ -6,9 +6,11 @@ import {
   background,
   border,
   borderRadius,
+  borderWidth,
   spacing,
   typography,
   textStyles,
+  shadows,
 } from "../../../config/theme";
 
 export interface ImportWalletSheetProps {
@@ -70,14 +72,11 @@ const styles = StyleSheet.create({
     backgroundColor: background.bg100,
     borderTopLeftRadius: borderRadius["3xl"],
     borderTopRightRadius: borderRadius["3xl"],
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
+    borderTopWidth: borderWidth.bw1,
+    borderLeftWidth: borderWidth.bw1,
+    borderRightWidth: borderWidth.bw1,
     borderColor: border.b300,
-    shadowColor: "#262626",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
+    ...shadows.hard4,
     elevation: 10,
     paddingHorizontal: spacing.s2,
     paddingTop: spacing.s2,
@@ -87,8 +86,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.s1,
   },
   handlebar: {
-    width: 64,
-    height: 4,
+    width: spacing.s16, // 64
+    height: spacing.s1, // 4
     backgroundColor: background.bg400,
     borderRadius: borderRadius.xs,
   },
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
     color: typography.t900,
   },
   divider: {
-    height: 1,
+    height: borderWidth.bw1,
     backgroundColor: border.b400,
     marginTop: spacing.s4,
   },
