@@ -55,7 +55,7 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
         ]}
       >
         <Text allowFontScaling={false} style={styles.ctaLabel}>
-          Import Wallet
+          Continue
         </Text>
       </Pressable>
     </View>

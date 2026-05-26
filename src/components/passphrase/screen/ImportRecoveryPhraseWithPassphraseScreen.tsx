@@ -110,7 +110,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
         ]}
       >
         <Text allowFontScaling={false} style={styles.ctaLabel}>
-          Import Wallet
+          Continue
         </Text>
       </Pressable>
 
