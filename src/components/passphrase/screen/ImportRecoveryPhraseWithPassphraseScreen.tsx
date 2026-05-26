@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.s2,
     paddingVertical: spacing.s3,
-    marginBottom: spacing.s3, // 12px gap before CTA
+    marginBottom: spacing.s6, // 24px gap before CTA
   },
   helpLinkText: {
     fontFamily: fontFamilies["500"],

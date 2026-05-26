@@ -37,10 +37,7 @@ export const WalletOptionButton: React.FC<WalletOptionButtonProps> = ({
         disabled && styles.disabled,
       ]}
     >
-      <Text
-        allowFontScaling={false}
-        style={[styles.label, !!badge && styles.labelCompact]}
-      >
+      <Text allowFontScaling={false} style={styles.label}>
         {label}
       </Text>
       {!!badge && (
@@ -50,7 +47,7 @@ export const WalletOptionButton: React.FC<WalletOptionButtonProps> = ({
           </Text>
         </View>
       )}
-      <ArrowRight size={24} color={typography.t800} strokeWidth={2} />
+      <ArrowRight size={18} color={typography.t800} strokeWidth={2} />
     </Pressable>
   );
 };
@@ -76,12 +73,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: fontFamilies["500"],
-    fontSize: fontSize.lg,
+    fontSize: fontSize.md,
     fontWeight: fontWeight.medium,
     color: typography.t800,
-  },
-  labelCompact: {
-    fontSize: fontSize.md,
   },
   badge: {
     paddingHorizontal: spacing.s2,

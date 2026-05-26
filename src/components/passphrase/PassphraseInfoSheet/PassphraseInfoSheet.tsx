@@ -23,7 +23,7 @@ import {
 } from "../../../config/theme";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-const SHEET_HEIGHT_RATIO = 0.85;
+const SHEET_HEIGHT_RATIO = 0.9;
 
 export interface PassphraseInfoSheetProps {
   isOpen: boolean;
@@ -84,7 +84,7 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
         >
           <Text allowFontScaling={false} style={styles.bodyText}>
             {
-              'A passphrase (sometimes called the "25th word") is an optional security feature that creates a separate wallet from the same recovery phrase.'
+              'A passphrase is an optional extra password added on top of your recovery phrase. With the same recovery phrase, each different passphrase opens a different wallet. Sometimes called the "25th word".'
             }
           </Text>
 
@@ -93,22 +93,36 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
             <Bullet>
               You created your wallet on another app with a passphrase
             </Bullet>
-            <Bullet>You want to import a hidden/decoy wallet</Bullet>
+            <Bullet>
+              You want to import a hidden wallet, a separate wallet only your
+              passphrase can unlock.
+            </Bullet>
           </View>
 
           <View style={styles.section}>
-            <SectionHeading>When NOT to use this:</SectionHeading>
+            <SectionHeading>When not to use this:</SectionHeading>
             <Bullet>Your wallet was created without one</Bullet>
-            <Bullet>You're not sure if you used one</Bullet>
+            <Bullet>
+              Not sure? Go back and use "Recovery phrase or Private Key"
+              instead.
+            </Bullet>
           </View>
 
           <View style={styles.section}>
             <SectionHeading>{"⚠️ Important:"}</SectionHeading>
             <Bullet>Kastle never stores your passphrase</Bullet>
             <Bullet>
-              Wrong passphrase imports a different wallet (no error)
+              If you lose it, your wallet cannot be recovered, not even by
+              Kastle.
             </Bullet>
-            <Bullet>{'Case-sensitive: "Hello" ≠ "hello"'}</Bullet>
+            <Bullet>
+              A wrong passphrase imports a different wallet without showing an
+              error
+            </Bullet>
+            <Bullet>
+              Your passphrase is case-sensitive, so "Hello" and "hello" open
+              different wallets. Make sure you import with correct case.
+            </Bullet>
           </View>
         </ScrollView>
 

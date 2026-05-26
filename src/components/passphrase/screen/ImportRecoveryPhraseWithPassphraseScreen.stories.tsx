@@ -37,17 +37,8 @@ export const RevealedEmpty: Story = {
   },
 };
 
-/** Filled — 12-word recovery phrase (revealed). */
+/** Filled — 24-word recovery phrase (revealed). */
 export const Filled: Story = {
-  args: {
-    initialValue:
-      "witch collapse practice feed shame open despair creek road again ice least",
-    initialMasked: false,
-  },
-};
-
-/** Filled with a long 24-word phrase (revealed). */
-export const FilledLong: Story = {
   args: {
     initialValue:
       "witch collapse practice feed shame open despair creek road again ice least exact valley basket fresh column burst stamp glow ribbon orange thumb cattle",
