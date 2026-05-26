@@ -1,12 +1,12 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { ImportPassphraseScreen } from "./ImportPassphraseScreen";
-import { background } from "../../config/theme";
+import { ImportRecoveryPhraseWithPassphraseScreen } from "./ImportRecoveryPhraseWithPassphraseScreen";
+import { background } from "../../../config/theme";
 
-const meta: Meta<typeof ImportPassphraseScreen> = {
-  title: "Screens/ImportPassphraseScreen",
-  component: ImportPassphraseScreen,
+const meta: Meta<typeof ImportRecoveryPhraseWithPassphraseScreen> = {
+  title: "Passphrase/Screens/ImportRecoveryPhraseWithPassphraseScreen",
+  component: ImportRecoveryPhraseWithPassphraseScreen,
   parameters: {
     layout: "fullscreen",
     viewport: { defaultViewport: "iphone14" },
@@ -19,14 +19,15 @@ const meta: Meta<typeof ImportPassphraseScreen> = {
     ),
   ],
   args: {
-    onContinue: (passphrase: string) => console.log("continue", passphrase),
+    onContinue: (phrase: string) => console.log("continue", phrase),
+    onPasteAll: () => console.log("paste all"),
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Empty — CTA disabled. Type to enable; tap eye to toggle mask. */
+/** Default — empty, CTA disabled. Tap ⓘ to open info sheet, Hide to toggle mask. */
 export const Default: Story = {};
 
 const styles = StyleSheet.create({

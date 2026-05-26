@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import { AlertCircle, ScanLine } from "lucide-react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { AlertCircle, Eye, ScanLine } from "lucide-react-native";
 import {
   background,
   border,
@@ -12,6 +19,8 @@ import {
   textStyles,
 } from "../../config/theme";
 
+const MASK_IMAGE = require("../../../assets/recovery-mask-blur.png");
+
 export interface TextareaProps {
   value: string;
   onChangeText: (text: string) => void;
@@ -21,6 +30,12 @@ export interface TextareaProps {
   secureTextEntry?: boolean;
   /** Visual-only scan icon (top-right). No onPress — Paul wires later. */
   scanIcon?: boolean;
+  /** When true, cover the content with a blurred mask overlay. */
+  masked?: boolean;
+  /** Tapping the mask overlay (reveal). */
+  onPressMask?: () => void;
+  /** Hint shown on the mask overlay. */
+  maskHint?: string;
   onBlur?: () => void;
   onFocus?: () => void;
 }
@@ -33,6 +48,9 @@ export const Textarea: React.FC<TextareaProps> = ({
   disabled = false,
   secureTextEntry = false,
   scanIcon = true,
+  masked = false,
+  onPressMask,
+  maskHint = "Make sure no one is looking your screen",
   onBlur,
   onFocus,
 }) => {
@@ -76,6 +94,30 @@ export const Textarea: React.FC<TextareaProps> = ({
             <ScanLine size={20} color={typography.t600} strokeWidth={2} />
           </View>
         )}
+
+        {masked && (
+          <Pressable
+            onPress={onPressMask}
+            style={styles.maskOverlay}
+            accessibilityRole="button"
+            accessibilityLabel="Reveal recovery phrase"
+          >
+            <Image
+              source={MASK_IMAGE}
+              style={StyleSheet.absoluteFill}
+              resizeMode="cover"
+            />
+            <View style={styles.maskContent}>
+              <Eye size={50} color={typography.t600} strokeWidth={2} />
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalSM, styles.maskHint]}
+              >
+                {maskHint}
+              </Text>
+            </View>
+          </Pressable>
+        )}
       </View>
       {invalid && (
         <View style={styles.errorRow}>
@@ -104,6 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: background.bg50,
     borderWidth: 1,
     borderColor: border.b300,
+    overflow: "hidden",
   },
   boxFocused: {
     borderWidth: 2,
@@ -124,6 +167,23 @@ const styles = StyleSheet.create({
   },
   scanWrapper: {
     paddingTop: spacing.s0_5,
+  },
+  maskOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  maskContent: {
+    position: "relative",
+    zIndex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingHorizontal: spacing.s12,
+  },
+  maskHint: {
+    color: typography.t600,
+    textAlign: "center",
   },
   errorRow: {
     flexDirection: "row",

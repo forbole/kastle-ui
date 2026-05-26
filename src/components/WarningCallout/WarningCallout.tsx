@@ -15,10 +15,12 @@ export type WarningCalloutSeverity = "info" | "success" | "warning" | "error";
 
 export interface WarningCalloutProps {
   severity: WarningCalloutSeverity;
-  title?: string;
+  /** Primary text (bold). */
+  title: string;
+  /** Secondary text (body). */
+  children: React.ReactNode;
   icon?: React.ReactNode;
   showIcon?: boolean;
-  children: React.ReactNode;
 }
 
 const SEVERITY_CONFIG: Record<
@@ -54,9 +56,9 @@ const SEVERITY_CONFIG: Record<
 export const WarningCallout: React.FC<WarningCalloutProps> = ({
   severity,
   title,
+  children,
   icon,
   showIcon = true,
-  children,
 }) => {
   const config = SEVERITY_CONFIG[severity];
   const DefaultIcon = config.icon;
@@ -75,22 +77,17 @@ export const WarningCallout: React.FC<WarningCalloutProps> = ({
           )}
         </View>
       )}
-      <View style={[styles.content, !!title && styles.contentWithTitle]}>
-        {!!title && (
-          <Text
-            allowFontScaling={false}
-            style={[textStyles.bodySemiboldSM, { color: config.text }]}
-          >
-            {title}
-          </Text>
-        )}
+      <View style={styles.content}>
+        <Text
+          allowFontScaling={false}
+          style={[textStyles.bodySemiboldSM, { color: config.text }]}
+        >
+          {title}
+        </Text>
         {typeof children === "string" ? (
           <Text
             allowFontScaling={false}
-            style={[
-              title ? styles.bodyWithTitle : textStyles.bodyNormalSM,
-              { color: config.text },
-            ]}
+            style={[styles.body, { color: config.text }]}
           >
             {children}
           </Text>
@@ -105,7 +102,7 @@ export const WarningCallout: React.FC<WarningCalloutProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: spacing.s2,
     paddingHorizontal: spacing.s4,
     paddingVertical: spacing.s3,
@@ -113,18 +110,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   iconWrapper: {
-    alignSelf: "stretch",
-    justifyContent: "center",
-    paddingVertical: spacing.s0_5,
+    paddingTop: spacing.s0_5,
   },
   content: {
     flex: 1,
-    gap: spacing.s2,
-  },
-  contentWithTitle: {
     gap: spacing.s1,
   },
-  bodyWithTitle: {
+  body: {
     ...textStyles.bodyNormalXS,
     opacity: 0.6,
   },

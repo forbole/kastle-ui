@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Eye, EyeOff, Info } from "lucide-react-native";
-import { Textarea } from "../../components/Textarea";
-import { PassphraseInfoSheet } from "../../components/passphrase/PassphraseInfoSheet";
+import { Textarea } from "../../Textarea";
+import { PassphraseInfoSheet } from "../PassphraseInfoSheet";
 import {
   background,
   primary,
@@ -10,7 +10,7 @@ import {
   spacing,
   borderRadius,
   textStyles,
-} from "../../config/theme";
+} from "../../../config/theme";
 
 export interface ImportRecoveryPhraseWithPassphraseScreenProps {
   onContinue: (recoveryPhrase: string) => void;
@@ -39,59 +39,68 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
   return (
     <View style={styles.screen}>
       <View style={styles.topContent}>
-        {/* Title + info — Paul may relocate to ScreenHeader */}
-        <View style={styles.titleRow}>
-          <Text
-            allowFontScaling={false}
-            style={[textStyles.headingXL, styles.title]}
-          >
-            Recovery phrase with Passphrase
-          </Text>
-          <Pressable
-            onPress={() => setShowInfoSheet(true)}
-            hitSlop={8}
-            style={styles.infoButton}
-          >
-            <Info size={24} color={typography.t900} strokeWidth={2} />
-          </Pressable>
-        </View>
-
-        {/* Hide / Paste all */}
-        <View style={styles.actionRow}>
-          <Pressable
-            onPress={() => setMasked((m) => !m)}
-            hitSlop={8}
-            style={styles.actionLink}
-          >
-            {masked ? (
-              <Eye size={18} color={primary.p500} strokeWidth={2} />
-            ) : (
-              <EyeOff size={18} color={primary.p500} strokeWidth={2} />
-            )}
+        {/* Header — title + info; Paul may relocate to ScreenHeader */}
+        <View style={styles.header}>
+          <View style={styles.titleRow}>
             <Text
               allowFontScaling={false}
-              style={[textStyles.bodySemiboldLG, styles.actionText]}
+              style={[textStyles.headingXL, styles.title]}
             >
-              {masked ? "Show" : "Hide"}
+              Recovery phrase with Passphrase
             </Text>
-          </Pressable>
-          <Pressable onPress={onPasteAll} hitSlop={8} style={styles.actionLink}>
-            <Text
-              allowFontScaling={false}
-              style={[textStyles.bodySemiboldLG, styles.actionText]}
+            <Pressable
+              onPress={() => setShowInfoSheet(true)}
+              hitSlop={8}
+              style={styles.infoButton}
             >
-              Paste all
-            </Text>
-          </Pressable>
+              <Info size={24} color={typography.t900} strokeWidth={2} />
+            </Pressable>
+          </View>
         </View>
 
-        <Textarea
-          value={value}
-          onChangeText={setValue}
-          placeholder="Enter your recovery phrase (12 or 24 words) or private key."
-          error={error}
-          secureTextEntry={masked}
-        />
+        <View style={styles.body}>
+          {/* Hide / Paste all */}
+          <View style={styles.actionRow}>
+            <Pressable
+              onPress={() => setMasked((m) => !m)}
+              hitSlop={8}
+              style={styles.actionLink}
+            >
+              {masked ? (
+                <Eye size={18} color={primary.p500} strokeWidth={2} />
+              ) : (
+                <EyeOff size={18} color={primary.p500} strokeWidth={2} />
+              )}
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodySemiboldLG, styles.actionText]}
+              >
+                {masked ? "Show" : "Hide"}
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={onPasteAll}
+              hitSlop={8}
+              style={styles.actionLink}
+            >
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodySemiboldLG, styles.actionText]}
+              >
+                Paste all
+              </Text>
+            </Pressable>
+          </View>
+
+          <Textarea
+            value={value}
+            onChangeText={setValue}
+            placeholder="Enter your recovery phrase (12 or 24 words) or private key."
+            error={error}
+            masked={masked}
+            onPressMask={() => setMasked(false)}
+          />
+        </View>
       </View>
 
       {/* Import Wallet CTA */}
@@ -123,14 +132,20 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "space-between",
     backgroundColor: background.bg0,
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s5,
+    paddingTop: 0,
     paddingBottom: spacing.s4,
   },
   topContent: {
-    gap: spacing.s4,
+    flex: 1,
+    gap: spacing.s6, // 24 between header and body block
+  },
+  header: {
+    paddingVertical: spacing.s3, // 12
+  },
+  body: {
+    gap: spacing.s4, // 16 inner section gap
   },
   titleRow: {
     flexDirection: "row",

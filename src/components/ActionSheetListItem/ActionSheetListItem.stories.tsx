@@ -1,12 +1,11 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { KeyRound } from "lucide-react-native";
 import { ActionSheetListItem } from "./ActionSheetListItem";
-import { background, spacing, typography } from "../../config/theme";
+import { background, spacing } from "../../config/theme";
 
 const meta: Meta<typeof ActionSheetListItem> = {
-  title: "Components/ActionSheet/ActionSheetListItem",
+  title: "Components/ActionSheetListItem",
   component: ActionSheetListItem,
   parameters: {
     backgrounds: { default: "kastle" },
@@ -36,19 +35,7 @@ export const TitleOnly: Story = {
 export const WithDescription: Story = {
   args: {
     title: "Recovery phrase with Passphrase",
-    description: "Advanced — for wallets created with a BIP39 passphrase",
-    onPress: () => {},
-  },
-};
-
-/** Custom trailing icon */
-export const CustomTrailingIcon: Story = {
-  args: {
-    title: "Connect a Tangem card",
-    description: "Connect a Tangem card with NFC",
-    trailingIcon: (
-      <KeyRound size={20} color={typography.t600} strokeWidth={2} />
-    ),
+    description: "For wallets created with a BIP39 passphrase",
     onPress: () => {},
   },
 };

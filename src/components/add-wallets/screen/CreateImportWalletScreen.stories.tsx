@@ -1,12 +1,12 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { ImportRecoveryPhraseWithPassphraseScreen } from "./ImportRecoveryPhraseWithPassphraseScreen";
-import { background } from "../../config/theme";
+import { CreateImportWalletScreen } from "./CreateImportWalletScreen";
+import { background } from "../../../config/theme";
 
-const meta: Meta<typeof ImportRecoveryPhraseWithPassphraseScreen> = {
-  title: "Screens/ImportRecoveryPhraseWithPassphraseScreen",
-  component: ImportRecoveryPhraseWithPassphraseScreen,
+const meta: Meta<typeof CreateImportWalletScreen> = {
+  title: "AddWallets/Screens/Create-Import Wallet Screen",
+  component: CreateImportWalletScreen,
   parameters: {
     layout: "fullscreen",
     viewport: { defaultViewport: "iphone14" },
@@ -19,15 +19,16 @@ const meta: Meta<typeof ImportRecoveryPhraseWithPassphraseScreen> = {
     ),
   ],
   args: {
-    onContinue: (phrase: string) => console.log("continue", phrase),
-    onPasteAll: () => console.log("paste all"),
+    onCreateWallet: () => console.log("create wallet"),
+    onSelectRecoveryPhrase: () => console.log("recovery phrase"),
+    onSelectPassphrase: () => console.log("passphrase"),
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default — empty, CTA disabled. Tap ⓘ to open info sheet, Hide to toggle mask. */
+/** Tap "Import wallet" to open picker. "Import Hardware wallet" disabled (Soon). */
 export const Default: Story = {};
 
 const styles = StyleSheet.create({

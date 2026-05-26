@@ -68,6 +68,25 @@ export const Error: Story = {
   },
 };
 
+/** Masked — blur overlay, tap to reveal */
+export const Masked: Story = {
+  render: () => {
+    const [value, setValue] = useState(
+      "witch collapse practice feed shame open despair creek road again ice least",
+    );
+    const [masked, setMasked] = useState(true);
+    return (
+      <Textarea
+        value={value}
+        onChangeText={setValue}
+        placeholder="Enter your recovery phrase or private key"
+        masked={masked}
+        onPressMask={() => setMasked(false)}
+      />
+    );
+  },
+};
+
 /** No scan icon */
 export const NoScanIcon: Story = {
   render: () => {

@@ -6,8 +6,6 @@ import { colors, spacing, typography, textStyles } from "../../config/theme";
 export interface ActionSheetListItemProps {
   title: string;
   description?: string;
-  /** Defaults to a chevron-right. Pass null to hide. */
-  trailingIcon?: React.ReactNode;
   onPress: () => void;
   disabled?: boolean;
 }
@@ -15,7 +13,6 @@ export interface ActionSheetListItemProps {
 export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
   title,
   description,
-  trailingIcon,
   onPress,
   disabled = false,
 }) => {
@@ -45,11 +42,7 @@ export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
           </Text>
         )}
       </View>
-      {trailingIcon === undefined ? (
-        <ChevronRight size={24} color={typography.t600} strokeWidth={2} />
-      ) : (
-        trailingIcon
-      )}
+      <ChevronRight size={24} color={typography.t600} strokeWidth={2} />
     </Pressable>
   );
 };

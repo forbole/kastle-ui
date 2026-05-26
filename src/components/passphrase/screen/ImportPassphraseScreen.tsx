@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { PassphraseInput } from "../../components/PassphraseInput";
-import { WarningCallout } from "../../components/WarningCallout";
+import { PassphraseInput } from "../../PassphraseInput";
+import { WarningCallout } from "../../WarningCallout";
 import {
   background,
   primary,
@@ -9,7 +9,7 @@ import {
   spacing,
   borderRadius,
   textStyles,
-} from "../../config/theme";
+} from "../../../config/theme";
 
 export interface ImportPassphraseScreenProps {
   onContinue: (passphrase: string) => void;
@@ -24,23 +24,27 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
   return (
     <View style={styles.screen}>
       <View style={styles.topContent}>
-        {/* Title — Paul may relocate to ScreenHeader */}
-        <Text
-          allowFontScaling={false}
-          style={[textStyles.headingXL, styles.title]}
-        >
-          Import Passphrase
-        </Text>
+        {/* Header — title row; Paul may relocate to ScreenHeader */}
+        <View style={styles.header}>
+          <Text
+            allowFontScaling={false}
+            style={[textStyles.headingXL, styles.title]}
+          >
+            Import Passphrase
+          </Text>
+        </View>
 
-        <PassphraseInput value={passphrase} onChangeText={setPassphrase} />
+        <View style={styles.body}>
+          <PassphraseInput value={passphrase} onChangeText={setPassphrase} />
 
-        <WarningCallout
-          severity="warning"
-          title="Wrong passphrase won't show an error"
-        >
-          It will import a different wallet with no balance. Double-check before
-          continuing.
-        </WarningCallout>
+          <WarningCallout
+            severity="warning"
+            title="Wrong passphrase won't show an error"
+          >
+            It will import a different wallet with no balance. Double-check
+            before continuing.
+          </WarningCallout>
+        </View>
       </View>
 
       {/* Import Wallet CTA */}
@@ -67,17 +71,23 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "space-between",
     backgroundColor: background.bg0,
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s5,
+    paddingTop: 0,
     paddingBottom: spacing.s4,
   },
   topContent: {
-    gap: spacing.s4,
+    flex: 1,
+    gap: spacing.s6, // 24 — gap between header and body block
+  },
+  header: {
+    paddingVertical: spacing.s3, // 12
   },
   title: {
     color: typography.t900,
+  },
+  body: {
+    gap: spacing.s4, // 16 — inner section gap
   },
   cta: {
     height: spacing.s12,

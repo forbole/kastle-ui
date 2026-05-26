@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { View, StyleSheet, Pressable } from "react-native";
-import { Eye, EyeOff } from "lucide-react-native";
+import { View, StyleSheet } from "react-native";
+import { Search } from "lucide-react-native";
 import { Input } from "./Input";
 import { background, spacing, typography } from "../../config/theme";
 
@@ -79,26 +79,16 @@ export const Disabled: Story = {
   ),
 };
 
-/** With eye toggle in rightIcon slot (manual wiring demo) */
-export const WithEyeToggle: Story = {
+/** With leadingIcon slot — demonstrates the icon slot (not eye toggle; see PassphraseInput for that). */
+export const WithIcon: Story = {
   render: () => {
-    const [value, setValue] = useState("super secret");
-    const [masked, setMasked] = useState(true);
+    const [value, setValue] = useState("");
     return (
       <Input
         value={value}
         onChangeText={setValue}
-        placeholder="Placeholder Text"
-        secureTextEntry={masked}
-        rightIcon={
-          <Pressable onPress={() => setMasked((m) => !m)} hitSlop={8}>
-            {masked ? (
-              <EyeOff size={20} color={typography.t600} strokeWidth={2} />
-            ) : (
-              <Eye size={20} color={typography.t600} strokeWidth={2} />
-            )}
-          </Pressable>
-        }
+        placeholder="Search"
+        leftIcon={<Search size={20} color={typography.t600} strokeWidth={2} />}
       />
     );
   },

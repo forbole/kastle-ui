@@ -23,22 +23,23 @@ const meta: Meta<typeof WarningCallout> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Info — short text, no title */
+/** Info */
 export const Info: Story = {
   args: {
     severity: "info",
+    title: "Good to know",
     children:
       "Delivery of this parcel generated 93.2% less carbon dioxide in the last mile.",
   },
 };
 
-/** Warning — with title + body */
+/** Warning */
 export const Warning: Story = {
   args: {
     severity: "warning",
-    title: "Keep your passphrase safe",
+    title: "Wrong passphrase won't show an error",
     children:
-      "If you lose your passphrase, you cannot recover this wallet. There is no reset.",
+      "It will import a different wallet with no balance. Double-check before continuing.",
   },
 };
 
@@ -46,8 +47,9 @@ export const Warning: Story = {
 export const Error: Story = {
   args: {
     severity: "error",
+    title: "Import failed",
     children:
-      "Something went wrong while importing your wallet. Please check your recovery phrase and passphrase, then try again. This message wraps across multiple lines to test layout.",
+      "Something went wrong while importing your wallet. Please check your recovery phrase and passphrase, then try again.",
   },
 };
 

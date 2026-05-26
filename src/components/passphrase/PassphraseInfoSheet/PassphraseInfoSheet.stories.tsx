@@ -40,7 +40,7 @@ const storyStyles = StyleSheet.create({
 });
 
 const meta: Meta<typeof PassphraseInfoSheet> = {
-  title: "Components/Passphrase/PassphraseInfoSheet",
+  title: "Passphrase/Components/PassphraseInfoSheet",
   component: PassphraseInfoSheet,
   parameters: {
     layout: "fullscreen",
