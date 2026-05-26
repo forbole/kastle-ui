@@ -51,7 +51,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   scanIcon = true,
   masked = false,
   onPressMask,
-  maskHint = "Make sure no one is looking your screen",
+  maskHint = "Make sure no one is looking at your screen",
   onBlur,
   onFocus,
 }) => {

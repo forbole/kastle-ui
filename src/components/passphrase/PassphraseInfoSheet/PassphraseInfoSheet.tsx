@@ -23,7 +23,7 @@ import {
 } from "../../../config/theme";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
-const SHEET_HEIGHT_RATIO = 0.7;
+const SHEET_HEIGHT_RATIO = 0.85;
 
 export interface PassphraseInfoSheetProps {
   isOpen: boolean;
@@ -71,7 +71,7 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
             allowFontScaling={false}
             style={[textStyles.bodySemiboldLG, styles.title]}
           >
-            What's a passphrase?
+            What is a passphrase?
           </Text>
           <View style={styles.divider} />
         </View>

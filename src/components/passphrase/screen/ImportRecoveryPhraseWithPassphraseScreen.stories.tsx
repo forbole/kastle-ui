@@ -27,22 +27,31 @@ const meta: Meta<typeof ImportRecoveryPhraseWithPassphraseScreen> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default — empty, CTA disabled. Tap ⓘ to open info sheet, Hide to toggle mask. */
+/** Default — masked by default. Tap the blur to reveal the input. */
 export const Default: Story = {};
 
-/** Filled — 12-word recovery phrase. */
+/** Revealed empty — after tapping the mask; placeholder visible. */
+export const RevealedEmpty: Story = {
+  args: {
+    initialMasked: false,
+  },
+};
+
+/** Filled — 12-word recovery phrase (revealed). */
 export const Filled: Story = {
   args: {
     initialValue:
       "witch collapse practice feed shame open despair creek road again ice least",
+    initialMasked: false,
   },
 };
 
-/** Filled with a long 24-word phrase. */
+/** Filled with a long 24-word phrase (revealed). */
 export const FilledLong: Story = {
   args: {
     initialValue:
       "witch collapse practice feed shame open despair creek road again ice least exact valley basket fresh column burst stamp glow ribbon orange thumb cattle",
+    initialMasked: false,
   },
 };
 
@@ -51,6 +60,7 @@ export const ErrorInvalid: Story = {
   args: {
     initialValue: "not a real recovery phrase at all",
     error: "Oh, invalid",
+    initialMasked: false,
   },
 };
 
@@ -59,6 +69,7 @@ export const ErrorPrivateKey: Story = {
   args: {
     initialValue:
       "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+    initialMasked: false,
   },
 };
 

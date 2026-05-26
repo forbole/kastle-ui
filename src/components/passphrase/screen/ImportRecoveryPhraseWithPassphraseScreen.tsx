@@ -9,7 +9,6 @@ import {
   typography,
   spacing,
   borderRadius,
-  textStyles,
   fontFamilies,
   fontSize,
   fontWeight,
@@ -23,15 +22,23 @@ export interface ImportRecoveryPhraseWithPassphraseScreenProps {
   initialValue?: string;
   /** External error — takes precedence over the internal private-key detection. */
   error?: string;
+  /** Initial mask state. Defaults to true (hidden until the user taps to reveal). */
+  initialMasked?: boolean;
 }
 
 const PRIVATE_KEY_REGEX = /^[0-9a-fA-F]{64}$/;
 
 export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
   ImportRecoveryPhraseWithPassphraseScreenProps
-> = ({ onContinue, onPasteAll, initialValue, error: externalError }) => {
+> = ({
+  onContinue,
+  onPasteAll,
+  initialValue,
+  error: externalError,
+  initialMasked = true,
+}) => {
   const [value, setValue] = useState(initialValue ?? "");
-  const [masked, setMasked] = useState(false);
+  const [masked, setMasked] = useState(initialMasked);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
 
   const internalError = useMemo(() => {
@@ -46,64 +53,51 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
 
   return (
     <View style={styles.screen}>
-      <View style={styles.topContent}>
-        {/* Header — title + info; Paul may relocate to ScreenHeader */}
-        <View style={styles.header}>
-          <View style={styles.titleRow}>
-            <Text
-              allowFontScaling={false}
-              style={[textStyles.headingXL, styles.title]}
-            >
-              Recovery phrase with Passphrase
+      <View style={styles.body}>
+        {/* Hide / Paste all */}
+        <View style={styles.actionRow}>
+          <Pressable
+            onPress={() => setMasked((m) => !m)}
+            hitSlop={8}
+            style={styles.actionLink}
+          >
+            {masked ? (
+              <Eye size={18} color={primary.p500} strokeWidth={2} />
+            ) : (
+              <EyeOff size={18} color={primary.p500} strokeWidth={2} />
+            )}
+            <Text allowFontScaling={false} style={styles.actionText}>
+              {masked ? "Show" : "Hide"}
             </Text>
-            <Pressable
-              onPress={() => setShowInfoSheet(true)}
-              hitSlop={8}
-              style={styles.infoButton}
-            >
-              <Info size={24} color={typography.t900} strokeWidth={2} />
-            </Pressable>
-          </View>
+          </Pressable>
+          <Pressable onPress={onPasteAll} hitSlop={8} style={styles.actionLink}>
+            <Text allowFontScaling={false} style={styles.actionText}>
+              Paste all
+            </Text>
+          </Pressable>
         </View>
 
-        <View style={styles.body}>
-          {/* Hide / Paste all */}
-          <View style={styles.actionRow}>
-            <Pressable
-              onPress={() => setMasked((m) => !m)}
-              hitSlop={8}
-              style={styles.actionLink}
-            >
-              {masked ? (
-                <Eye size={18} color={primary.p500} strokeWidth={2} />
-              ) : (
-                <EyeOff size={18} color={primary.p500} strokeWidth={2} />
-              )}
-              <Text allowFontScaling={false} style={styles.actionText}>
-                {masked ? "Show" : "Hide"}
-              </Text>
-            </Pressable>
-            <Pressable
-              onPress={onPasteAll}
-              hitSlop={8}
-              style={styles.actionLink}
-            >
-              <Text allowFontScaling={false} style={styles.actionText}>
-                Paste all
-              </Text>
-            </Pressable>
-          </View>
-
-          <Textarea
-            value={value}
-            onChangeText={setValue}
-            placeholder="Enter your recovery phrase (12 or 24 words) or private key."
-            error={error}
-            masked={masked}
-            onPressMask={() => setMasked(false)}
-          />
-        </View>
+        <Textarea
+          value={value}
+          onChangeText={setValue}
+          placeholder="Enter your recovery phrase (12 or 24 words) or private key."
+          error={error}
+          masked={masked}
+          onPressMask={() => setMasked(false)}
+        />
       </View>
+
+      {/* What's a passphrase? help link */}
+      <Pressable
+        onPress={() => setShowInfoSheet(true)}
+        hitSlop={8}
+        style={styles.helpLink}
+      >
+        <Info size={16} color={primary.p500} strokeWidth={2} />
+        <Text allowFontScaling={false} style={styles.helpLinkText}>
+          What is a passphrase?
+        </Text>
+      </Pressable>
 
       {/* Import Wallet CTA */}
       <Pressable
@@ -136,29 +130,23 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: spacing.s4,
   },
-  topContent: {
-    flex: 1,
-    gap: spacing.s6, // 24 between header and body block
-  },
-  header: {
-    paddingVertical: spacing.s3, // 12
-  },
   body: {
+    flex: 1,
     gap: spacing.s4, // 16 inner section gap
   },
-  titleRow: {
+  helpLink: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: spacing.s2,
-  },
-  title: {
-    flex: 1,
-    color: typography.t900,
-  },
-  infoButton: {
-    alignItems: "center",
     justifyContent: "center",
+    gap: spacing.s2,
+    paddingVertical: spacing.s3,
+    marginBottom: spacing.s3, // 12px gap before CTA
+  },
+  helpLinkText: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.medium,
+    color: primary.p500,
   },
   actionRow: {
     flexDirection: "row",

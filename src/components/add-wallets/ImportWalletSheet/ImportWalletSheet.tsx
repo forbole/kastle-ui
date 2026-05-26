@@ -49,7 +49,7 @@ export const ImportWalletSheet: React.FC<ImportWalletSheetProps> = ({
         <View style={styles.list}>
           <ActionSheetListItem
             title="Recovery phrase or Private Key"
-            description="Use 12 or 24-word recovery phrases or private keys"
+            description="Use a 12- or 24-word recovery phrase, or a private key."
             onPress={onSelectRecoveryPhrase}
           />
           <ActionSheetListItem
