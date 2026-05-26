@@ -37,7 +37,10 @@ export const WalletOptionButton: React.FC<WalletOptionButtonProps> = ({
         disabled && styles.disabled,
       ]}
     >
-      <Text allowFontScaling={false} style={styles.label}>
+      <Text
+        allowFontScaling={false}
+        style={[styles.label, !!badge && styles.labelCompact]}
+      >
         {label}
       </Text>
       {!!badge && (
@@ -76,6 +79,9 @@ const styles = StyleSheet.create({
     fontSize: fontSize.lg,
     fontWeight: fontWeight.medium,
     color: typography.t800,
+  },
+  labelCompact: {
+    fontSize: fontSize.md,
   },
   badge: {
     paddingHorizontal: spacing.s2,

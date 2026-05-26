@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { PassphraseInput } from "../../PassphraseInput";
-import { WarningCallout } from "../../WarningCallout";
+import { Alert } from "../../Alert";
 import {
   background,
   primary,
@@ -50,13 +50,13 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
             error={error}
           />
 
-          <WarningCallout
+          <Alert
             severity="warning"
             title="Wrong passphrase won't show an error"
           >
             It will import a different wallet with no balance. Double-check
             before continuing.
-          </WarningCallout>
+          </Alert>
         </View>
       </View>
 

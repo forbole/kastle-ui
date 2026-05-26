@@ -1,12 +1,12 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { WarningCallout } from "./WarningCallout";
+import { Alert } from "./Alert";
 import { background, spacing } from "../../config/theme";
 
-const meta: Meta<typeof WarningCallout> = {
-  title: "Components/WarningCallout",
-  component: WarningCallout,
+const meta: Meta<typeof Alert> = {
+  title: "Components/Alert",
+  component: Alert,
   parameters: {
     backgrounds: { default: "kastle" },
     viewport: { defaultViewport: "iphone14" },

@@ -50,7 +50,7 @@ export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: spacing.s2_5,
     padding: spacing.s3,
   },

@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
   divider: {
     height: borderWidth.bw1,
     backgroundColor: border.b400,
-    marginTop: spacing.s4,
   },
   scrollView: {
     flex: 1,

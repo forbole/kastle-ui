@@ -163,11 +163,13 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     alignSelf: "stretch",
+    padding: 0,
+    includeFontPadding: false,
     color: typography.t900,
     ...textStyles.bodyNormalMD,
   },
   scanWrapper: {
-    paddingTop: spacing.s0_5,
+    paddingTop: 0,
   },
   maskBox: {
     minHeight: spacing.s32,
@@ -193,7 +195,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     gap: spacing.s2,
-    marginTop: spacing.s2,
+    marginTop: spacing.s4,
   },
   errorText: {
     color: errorColors.e600,

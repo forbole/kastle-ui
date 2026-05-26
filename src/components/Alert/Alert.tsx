@@ -12,10 +12,10 @@ import {
   textStyles,
 } from "../../config/theme";
 
-export type WarningCalloutSeverity = "info" | "success" | "warning" | "error";
+export type AlertSeverity = "info" | "success" | "warning" | "error";
 
-export interface WarningCalloutProps {
-  severity: WarningCalloutSeverity;
+export interface AlertProps {
+  severity: AlertSeverity;
   /** Primary text (bold). */
   title: string;
   /** Secondary text (body). */
@@ -25,7 +25,7 @@ export interface WarningCalloutProps {
 }
 
 const SEVERITY_CONFIG: Record<
-  WarningCalloutSeverity,
+  AlertSeverity,
   { bg: string; border: string; text: string; icon: typeof Info }
 > = {
   info: {
@@ -54,7 +54,7 @@ const SEVERITY_CONFIG: Record<
   },
 };
 
-export const WarningCallout: React.FC<WarningCalloutProps> = ({
+export const Alert: React.FC<AlertProps> = ({
   severity,
   title,
   children,
@@ -74,7 +74,7 @@ export const WarningCallout: React.FC<WarningCalloutProps> = ({
       {showIcon && (
         <View style={styles.iconWrapper}>
           {icon ?? (
-            <DefaultIcon size={18} color={config.text} strokeWidth={2} />
+            <DefaultIcon size={16} color={config.text} strokeWidth={2} />
           )}
         </View>
       )}

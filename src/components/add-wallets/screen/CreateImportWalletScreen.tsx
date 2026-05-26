@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { WalletOptionButton } from "../WalletOptionButton";
 import { ImportWalletSheet } from "../ImportWalletSheet";
-import { background, spacing } from "../../../config/theme";
+import {
+  background,
+  spacing,
+  typography,
+  textStyles,
+} from "../../../config/theme";
 
 export interface CreateImportWalletScreenProps {
   onCreateWallet: () => void;
@@ -17,6 +22,16 @@ export const CreateImportWalletScreen: React.FC<
 
   return (
     <View style={styles.screen}>
+      {/* Header — title; Paul may relocate to ScreenHeader */}
+      <View style={styles.header}>
+        <Text
+          allowFontScaling={false}
+          style={[textStyles.headingXL, styles.title]}
+        >
+          Create/ Import Wallet
+        </Text>
+      </View>
+
       <View style={styles.buttonStack}>
         <WalletOptionButton label="Create Wallet" onPress={onCreateWallet} />
         <WalletOptionButton
@@ -52,6 +67,13 @@ const styles = StyleSheet.create({
     backgroundColor: background.bg0,
     paddingHorizontal: spacing.s5,
     paddingTop: 0,
+    gap: spacing.s6, // 24 between header and body
+  },
+  header: {
+    paddingVertical: spacing.s3, // 12
+  },
+  title: {
+    color: typography.t900,
   },
   buttonStack: {
     gap: spacing.s4,

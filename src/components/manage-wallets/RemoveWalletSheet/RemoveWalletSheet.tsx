@@ -49,7 +49,7 @@ export const RemoveWalletSheet: React.FC<RemoveWalletSheetProps> = ({
           >
             To access it in the future, you will need to import it again. Make
             sure{" "}
-            <Text style={styles.highlight}>
+            <Text allowFontScaling={false} style={styles.highlight}>
               you have your recovery phrase, passphrase or hardware wallet
             </Text>{" "}
             to restore your wallet.
