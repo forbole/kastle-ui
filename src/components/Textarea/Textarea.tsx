@@ -14,6 +14,7 @@ import {
   borderWidth,
   error as errorColors,
   indicator,
+  primary,
   spacing,
   borderRadius,
   typography,
@@ -115,7 +116,7 @@ export const Textarea: React.FC<TextareaProps> = ({
           />
           {scanIcon && (
             <View style={styles.scanWrapper}>
-              <ScanLine size={20} color={typography.t600} strokeWidth={2} />
+              <ScanLine size={20} color={primary.p500} strokeWidth={2} />
             </View>
           )}
         </View>
