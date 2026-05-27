@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Info } from "lucide-react-native";
 import { PassphraseInput } from "../../PassphraseInput";
 import { Alert } from "../../Alert";
+import { PassphraseInfoSheet } from "../PassphraseInfoSheet";
 import {
   background,
   primary,
@@ -27,6 +29,7 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
   error,
 }) => {
   const [passphrase, setPassphrase] = useState(initialValue ?? "");
+  const [showInfoSheet, setShowInfoSheet] = useState(false);
   const canContinue = passphrase.length > 0 && !error;
 
   return (
@@ -44,7 +47,19 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
         </Alert>
       </View>
 
-      {/* Import Wallet CTA */}
+      {/* What is a passphrase? help link */}
+      <Pressable
+        onPress={() => setShowInfoSheet(true)}
+        hitSlop={8}
+        style={styles.helpLink}
+      >
+        <Info size={16} color={primary.p500} strokeWidth={2} />
+        <Text allowFontScaling={false} style={styles.helpLinkText}>
+          What is a passphrase?
+        </Text>
+      </Pressable>
+
+      {/* Continue CTA */}
       <Pressable
         onPress={() => onContinue(passphrase)}
         disabled={!canContinue}
@@ -58,6 +73,11 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
           Continue
         </Text>
       </Pressable>
+
+      <PassphraseInfoSheet
+        isOpen={showInfoSheet}
+        onClose={() => setShowInfoSheet(false)}
+      />
     </View>
   );
 };
@@ -73,6 +93,20 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     gap: spacing.s4, // 16 — inner section gap
+  },
+  helpLink: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingVertical: spacing.s3,
+    marginBottom: spacing.s6, // 24px gap before CTA
+  },
+  helpLinkText: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.medium,
+    color: primary.p500,
   },
   cta: {
     height: spacing.s12,
