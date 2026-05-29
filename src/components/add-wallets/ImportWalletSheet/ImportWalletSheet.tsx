@@ -54,7 +54,7 @@ export const ImportWalletSheet: React.FC<ImportWalletSheetProps> = ({
           />
           <ActionSheetListItem
             title="Recovery phrase with Passphrase"
-            description="Advanced. Only if you set a passphrase when creating your wallet."
+            description="Use this if you protected your wallet with an extra passphrase during setup."
             onPress={onSelectPassphrase}
           />
         </View>

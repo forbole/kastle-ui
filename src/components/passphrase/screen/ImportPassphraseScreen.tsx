@@ -41,9 +41,11 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
           error={error}
         />
 
-        <Alert severity="warning" title="Wrong passphrase won't show an error">
-          It will import a different wallet with no balance. Double-check before
-          continuing.
+        <Alert
+          severity="warning"
+          title="A wrong passphrase won't show an error"
+        >
+          It will import a different wallet. Double check it before you proceed.
         </Alert>
       </View>
 
