@@ -11,14 +11,14 @@ import { Image } from "expo-image";
 import {
   background,
   border,
-  primary,
   info,
+  warning,
   textStyles,
   typography,
   white,
   borderRadius,
 } from "../../../config/theme";
-import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
+import { Info, ChevronUp, ChevronDown, TriangleAlert } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
@@ -55,6 +55,8 @@ export interface KaspaSignTxSheetProps {
   estFees?: EstFeeRow[];
   /** Called when user confirms signing */
   onConfirm?: () => void;
+  /** Optional warning message shown above the swipe button */
+  warning?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -116,6 +118,7 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
   rawDetails,
   estFees,
   onConfirm,
+  warning: warningMessage,
 }) => {
   const [rawExpanded, setRawExpanded] = useState(false);
   const [activeInfoRow, setActiveInfoRow] = useState<KaspaSignTransactionRow | null>(null);
@@ -231,6 +234,12 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
 
         {/* Bottom action bar */}
         <View style={styles.bottomBar}>
+          {warningMessage ? (
+            <View style={styles.warningBanner}>
+              <TriangleAlert size={14} color={warning.w500} />
+              <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.warningText]}>{warningMessage}</Text>
+            </View>
+          ) : null}
           <SwipeToConfirm ref={swipeRef} onConfirm={handleSign} isLoading={isSigning} />
         </View>
 
@@ -465,6 +474,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingTop: 12,
     backgroundColor: background.bg100,
+    gap: 8,
+  },
+  warningBanner: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 6,
+    backgroundColor: warning.background,
+    borderWidth: 1,
+    borderColor: warning.w200,
+    borderRadius: borderRadius.xl,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  warningText: {
+    flex: 1,
+    color: warning.w800,
   },
   // iOS home indicator
   homeIndicator: {

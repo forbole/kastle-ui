@@ -114,7 +114,6 @@ const meta: Meta<typeof KaspaSignTxSheet> = {
   },
   argTypes: {
     onConfirm: { action: "confirm" },
-    onCancel: { action: "cancel" },
     onClose: { action: "close" },
   },
 };
@@ -144,5 +143,32 @@ export const NoIcon: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
     appIcon: undefined,
+  },
+};
+
+export const WithWarning: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    warning:
+      "This transaction was flagged as potentially suspicious. Proceed only if you trust this dApp.",
+  },
+};
+
+export const MinimalRows: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    rows: [
+      { label: "Amount", value: "50 KAS", subValue: "≈ $0.75 USD" },
+      {
+        label: "Est. Fee",
+        value: "0.00023 KAS",
+        info: {
+          title: "Est. Fee",
+          description: "Estimated network fee for this transaction.",
+        },
+      },
+    ],
+    rawDetails: undefined,
+    fromAddress: undefined,
   },
 };
