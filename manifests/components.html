@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">44 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">41/44 infos</a><span class="filter-pill ok" aria-disabled="true">155 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">44 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">41/44 infos</a><span class="filter-pill ok" aria-disabled="true">157 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.4s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.5s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -4953,9 +4953,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> KaspaSignTxSheet</h2>
       <div class="badges">
-        <label for="c-30-explore-components-kaspasigntxsheet-props" class="badge ok as-toggle">11 prop types</label>
+        <label for="c-30-explore-components-kaspasigntxsheet-props" class="badge ok as-toggle">12 prop types</label>
         <label for="c-30-explore-components-kaspasigntxsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-30-explore-components-kaspasigntxsheet-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-30-explore-components-kaspasigntxsheet-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -4987,7 +4987,7 @@ import { View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">11 prop types</span>
+              <span class="badge ok">12 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/KaspaSignTxSheet/KaspaSignTxSheet.tsx::KaspaSignTxSheet</code></pre>
             <pre><code>Props:</code></pre>
@@ -5035,7 +5035,12 @@ rawDetails?: string
 /**
  * Transaction detail rows
  */
-rows?: KaspaSignTransactionRow[] = []</code></pre>
+rows?: KaspaSignTransactionRow[] = []
+
+/**
+ * Optional warning message shown above the swipe button
+ */
+warning?: string</code></pre>
           </div>
         </div>
     
@@ -5132,6 +5137,59 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     fromAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7&quot;
     rows={defaultRows}
     rawDetails={sampleRawDetails}
+    estFees={[
+      { networkName: &quot;Kaspa&quot;, fee: &quot;0.00023 KAS&quot;, feeUsd: &quot;≈ $0.01 USD&quot; },
+    ]} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">With Warning</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const WithWarning = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Kaspa Finance&quot;
+    appUrl=&quot;app.kaspafinance.io&quot;
+    appIcon={{ uri: iconImage }}
+    networkBadge=&quot;Kaspa&quot;
+    fromAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7&quot;
+    rows={defaultRows}
+    rawDetails={sampleRawDetails}
+    estFees={[
+      { networkName: &quot;Kaspa&quot;, fee: &quot;0.00023 KAS&quot;, feeUsd: &quot;≈ $0.01 USD&quot; },
+    ]}
+    warning=&quot;This transaction was flagged as potentially suspicious. Proceed only if you trust this dApp.&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Minimal Rows</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MinimalRows = () =&gt; &lt;SheetDemo
+    isOpen={false}
+    onClose={() =&gt; {}}
+    appName=&quot;Kaspa Finance&quot;
+    appUrl=&quot;app.kaspafinance.io&quot;
+    appIcon={{ uri: iconImage }}
+    networkBadge=&quot;Kaspa&quot;
+    fromAddress={undefined}
+    rows={[
+      { label: &quot;Amount&quot;, value: &quot;50 KAS&quot;, subValue: &quot;≈ $0.75 USD&quot; },
+      {
+        label: &quot;Est. Fee&quot;,
+        value: &quot;0.00023 KAS&quot;,
+        info: {
+          title: &quot;Est. Fee&quot;,
+          description: &quot;Estimated network fee for this transaction.&quot;,
+        },
+      },
+    ]}
+    rawDetails={undefined}
     estFees={[
       { networkName: &quot;Kaspa&quot;, fee: &quot;0.00023 KAS&quot;, feeUsd: &quot;≈ $0.01 USD&quot; },
     ]} /&gt;;</code></pre>

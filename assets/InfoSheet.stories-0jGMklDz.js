@@ -1,0 +1,11 @@
+import{j as e,V as p,s as m,t as l,p as d,b as h}from"./theme-C-KYfGty.js";import{r as g}from"./iframe-Cj6w58h6.js";import{I as n}from"./InfoSheet-OcAAtsLl.js";import{M as u}from"./index-uZvPIaCR.js";import{T as f}from"./index-DUJszXjv.js";import"./preload-helper-Zf8nSx-t.js";import"./ActionSheet-WoL6wwYr.js";import"./Animated-DVuXJIPq.js";import"./extends-CF3RwP-h.js";import"./index-D40kPQsg.js";import"./index-BlxK_Fq8.js";import"./index-CI9Jn17v.js";import"./NativeEventEmitter-Cps3-231.js";import"./index-BXyBqWSN.js";import"./index-CS44N9Rp.js";import"./index-tVXQZ-Se.js";import"./index-CXxuE8i7.js";const i=t=>{const[c,a]=g.useState(!1);return e.jsxs(p,{style:s.container,children:[e.jsx(u,{style:s.trigger,onPress:()=>a(!0),children:e.jsx(f,{style:s.triggerText,children:"Open Info Sheet"})}),e.jsx(n,{...t,isOpen:c,onClose:()=>a(!1)})]})},s=m.create({container:{flex:1,alignItems:"center",justifyContent:"center",backgroundColor:h.bg0},trigger:{backgroundColor:d.p500,paddingHorizontal:24,paddingVertical:12,borderRadius:9999},triggerText:{color:l.t900,fontSize:16,fontWeight:"600"}}),z={title:"Components/InfoSheet",component:n,parameters:{layout:"fullscreen"},args:{isOpen:!1,onClose:()=>{},title:"Change to your balance",description:`Just like paying with cash, any extra amount from this transaction will be sent back to your wallet.
+
+This happens when your wallet spends more than the exact amount needed.`},argTypes:{onClose:{action:"close"}}},r={render:t=>e.jsx(i,{...t})},o={render:t=>e.jsx(i,{...t}),args:{title:"Est. Fee",description:"The estimated network fee required to process this transaction on the Kaspa blockchain. The actual fee may vary slightly based on network conditions."}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  render: args => <SheetDemo {...args} />
+}`,...r.parameters?.docs?.source}}};o.parameters={...o.parameters,docs:{...o.parameters?.docs,source:{originalSource:`{
+  render: args => <SheetDemo {...args} />,
+  args: {
+    title: "Est. Fee",
+    description: "The estimated network fee required to process this transaction on the Kaspa blockchain. The actual fee may vary slightly based on network conditions."
+  }
+}`,...o.parameters?.docs?.source}}};const K=["Default","EstimatedFee"];export{r as Default,o as EstimatedFee,K as __namedExportsOrder,z as default};
