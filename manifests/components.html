@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">44 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">41/44 infos</a><span class="filter-pill ok" aria-disabled="true">157 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">44 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">41/44 infos</a><span class="filter-pill ok" aria-disabled="true">159 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.5s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.6s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -896,7 +896,7 @@ visible: boolean</code></pre>
                   <span class="ex-name">Imports</span>
                 </div>
                 <pre><code>import { ActivityDetailSheet } from "kastle-ui";
-import { Image, Pressable, Text, View } from "react-native";</code></pre>
+import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
               </div>
           
           
@@ -2364,7 +2364,7 @@ scriptData?: string</code></pre>
       <div class="badges">
         <label for="c-11-add-wallets-screens-create-importwalletscreen-props" class="badge ok as-toggle">3 prop types</label>
         <label for="c-11-add-wallets-screens-create-importwalletscreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-11-add-wallets-screens-create-importwalletscreen-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-11-add-wallets-screens-create-importwalletscreen-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -2400,7 +2400,7 @@ scriptData?: string</code></pre>
             </div>
             <pre><code>Component: src/components/add-wallets/screen/CreateImportWalletScreen.tsx::CreateImportWalletScreen</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>onCreateWallet: () =&gt; void
+            <pre><code>onCreateWallet: () =&gt; void | Promise&lt;void&gt;
 
 onSelectPassphrase: () =&gt; void
 
@@ -2430,6 +2430,18 @@ import { View } from "react-native";</code></pre>
               <div class="hint">Tap &quot;Import wallet&quot; to open picker. &quot;Import Hardware wallet&quot; disabled (Soon).</div>
               <pre><code>const Default = () =&gt; &lt;CreateImportWalletScreen
     onCreateWallet={() =&gt; console.log(&quot;create wallet&quot;)}
+    onSelectRecoveryPhrase={() =&gt; console.log(&quot;recovery phrase&quot;)}
+    onSelectPassphrase={() =&gt; console.log(&quot;passphrase&quot;)} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Creating</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Create Wallet in loading state — spinner shown, button disabled.</div>
+              <pre><code>const Creating = () =&gt; &lt;CreateImportWalletScreen
+    onCreateWallet={() =&gt; new Promise(() =&gt; {})}
     onSelectRecoveryPhrase={() =&gt; console.log(&quot;recovery phrase&quot;)}
     onSelectPassphrase={() =&gt; console.log(&quot;passphrase&quot;)} /&gt;;</code></pre>
             </div>
@@ -6944,9 +6956,9 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> WalletOptionButton</h2>
       <div class="badges">
-        <label for="c-43-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-43-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
         <label for="c-43-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
-        <label for="c-43-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-43-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -6978,7 +6990,7 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">4 prop types</span>
+              <span class="badge ok">5 prop types</span>
             </div>
             <pre><code>Component: src/components/add-wallets/WalletOptionButton/WalletOptionButton.tsx::WalletOptionButton</code></pre>
             <pre><code>Props:</code></pre>
@@ -6988,6 +7000,8 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
 badge?: string
 
 disabled?: boolean = false
+
+isLoading?: boolean = false
 
 label: string
 
@@ -7034,6 +7048,15 @@ import { WalletOptionButton } from "kastle-ui";</code></pre>
               
               
               <pre><code>const HardwareSoon = () =&gt; &lt;WalletOptionButton onPress={() =&gt; {}} label=&quot;Import Hardware wallet&quot; badge=&quot;Soon&quot; disabled /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Loading</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Loading = () =&gt; &lt;WalletOptionButton onPress={() =&gt; {}} label=&quot;Create Wallet&quot; isLoading /&gt;;</code></pre>
             </div>
         </div>
     
