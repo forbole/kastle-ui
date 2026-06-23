@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ArrowRight } from "lucide-react-native";
 import {
   border,
@@ -19,6 +19,7 @@ export interface WalletOptionButtonProps {
   /** Small badge shown after the label (e.g. "Soon"). */
   badge?: string;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 export const WalletOptionButton: React.FC<WalletOptionButtonProps> = ({
@@ -26,16 +27,15 @@ export const WalletOptionButton: React.FC<WalletOptionButtonProps> = ({
   onPress,
   badge,
   disabled = false,
+  isLoading = false,
 }) => {
+  const isDisabled = disabled || isLoading;
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={onPress}
-      disabled={disabled}
-      style={({ pressed }) => [
-        styles.button,
-        pressed && !disabled && styles.pressed,
-        disabled && styles.disabled,
-      ]}
+      disabled={isDisabled}
+      style={[styles.button, isDisabled && styles.disabled]}
+      activeOpacity={isDisabled ? 1 : 0.7}
     >
       <Text allowFontScaling={false} style={styles.label}>
         {label}
@@ -47,8 +47,12 @@ export const WalletOptionButton: React.FC<WalletOptionButtonProps> = ({
           </Text>
         </View>
       )}
-      <ArrowRight size={18} color={typography.t800} strokeWidth={2} />
-    </Pressable>
+      {isLoading ? (
+        <ActivityIndicator size="small" color={typography.t800} />
+      ) : (
+        <ArrowRight size={18} color={typography.t800} strokeWidth={2} />
+      )}
+    </TouchableOpacity>
   );
 };
 

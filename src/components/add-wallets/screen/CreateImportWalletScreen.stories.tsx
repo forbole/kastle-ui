@@ -1,5 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
+import { getByText } from "@testing-library/dom";
 import { View, StyleSheet } from "react-native";
 import { CreateImportWalletScreen } from "./CreateImportWalletScreen";
 import { background } from "../../../config/theme";
@@ -30,6 +31,16 @@ type Story = StoryObj<typeof meta>;
 
 /** Tap "Import wallet" to open picker. "Import Hardware wallet" disabled (Soon). */
 export const Default: Story = {};
+
+/** Create Wallet in loading state — spinner shown, button disabled. */
+export const Creating: Story = {
+  args: {
+    onCreateWallet: () => new Promise(() => {}),
+  },
+  play: async ({ canvasElement }) => {
+    getByText(canvasElement, "Create Wallet").click();
+  },
+};
 
 const styles = StyleSheet.create({
   frame: {

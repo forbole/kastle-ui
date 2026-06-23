@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { Eye, EyeOff, Info } from "lucide-react-native";
 import { Textarea } from "../../Textarea";
 import { PassphraseInfoSheet } from "../PassphraseInfoSheet";
@@ -56,7 +56,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
       <View style={styles.body}>
         {/* Hide / Paste all */}
         <View style={styles.actionRow}>
-          <Pressable
+          <TouchableOpacity
             onPress={() => setMasked((m) => !m)}
             hitSlop={8}
             style={styles.actionLink}
@@ -69,12 +69,12 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
             <Text allowFontScaling={false} style={styles.actionText}>
               {masked ? "Show" : "Hide"}
             </Text>
-          </Pressable>
-          <Pressable onPress={onPasteAll} hitSlop={8} style={styles.actionLink}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPasteAll} hitSlop={8} style={styles.actionLink}>
             <Text allowFontScaling={false} style={styles.actionText}>
               Paste all
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         <Textarea
@@ -88,7 +88,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
       </View>
 
       {/* What's a passphrase? help link */}
-      <Pressable
+      <TouchableOpacity
         onPress={() => setShowInfoSheet(true)}
         hitSlop={8}
         style={styles.helpLink}
@@ -97,22 +97,19 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
         <Text allowFontScaling={false} style={styles.helpLinkText}>
           What is a passphrase?
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       {/* Import Wallet CTA */}
-      <Pressable
+      <TouchableOpacity
         onPress={() => onContinue(value)}
         disabled={!canContinue}
-        style={({ pressed }) => [
-          styles.cta,
-          pressed && styles.ctaPressed,
-          !canContinue && styles.ctaDisabled,
-        ]}
+        style={[styles.cta, !canContinue && styles.ctaDisabled]}
+        activeOpacity={0.7}
       >
         <Text allowFontScaling={false} style={styles.ctaLabel}>
           Continue
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <PassphraseInfoSheet
         isOpen={showInfoSheet}

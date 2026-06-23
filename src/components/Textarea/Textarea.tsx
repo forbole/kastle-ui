@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   Image,
-  Pressable,
+  TouchableOpacity,
   StyleSheet,
   Text,
   TextInput,
@@ -69,7 +69,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   return (
     <View>
       {masked ? (
-        <Pressable
+        <TouchableOpacity
           onPress={onPressMask}
           style={styles.maskBox}
           accessibilityRole="button"
@@ -89,7 +89,7 @@ export const Textarea: React.FC<TextareaProps> = ({
               {maskHint}
             </Text>
           </View>
-        </Pressable>
+        </TouchableOpacity>
       ) : (
         <View style={boxStyle}>
           <TextInput

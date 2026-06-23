@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ActionSheet } from "../../ActionSheet";
 import {
   background,
@@ -58,28 +58,24 @@ export const RemoveWalletSheet: React.FC<RemoveWalletSheetProps> = ({
 
         {/* Actions */}
         <View style={styles.actionBar}>
-          <Pressable
+          <TouchableOpacity
             onPress={onClose}
-            style={({ pressed }) => [
-              styles.cancelButton,
-              pressed && styles.pressed,
-            ]}
+            style={styles.cancelButton}
+            activeOpacity={0.6}
           >
             <Text allowFontScaling={false} style={styles.cancelLabel}>
               Cancel
             </Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={onRemove}
-            style={({ pressed }) => [
-              styles.removeButton,
-              pressed && styles.pressed,
-            ]}
+            style={styles.removeButton}
+            activeOpacity={0.6}
           >
             <Text allowFontScaling={false} style={styles.removeLabel}>
               Remove Wallet
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         {/* iOS home indicator */}

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
 import { ChevronLeft, MoreVertical, RotateCw } from "lucide-react-native";
 import { ExploreUrlBarMenu } from "./ExploreUrlBarMenu";
@@ -31,7 +30,7 @@ export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
     <View style={styles.wrapper}>
       {/* Dismiss overlay when menu is open */}
       {menuVisible && (
-        <Pressable
+        <TouchableOpacity
           style={styles.dismissOverlay}
           onPress={() => setMenuVisible(false)}
         />

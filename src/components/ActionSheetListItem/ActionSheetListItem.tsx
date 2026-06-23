@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 import { colors, spacing, typography, textStyles } from "../../config/theme";
 
@@ -17,14 +17,11 @@ export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
   disabled = false,
 }) => {
   return (
-    <Pressable
+    <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      style={({ pressed }) => [
-        styles.row,
-        pressed && !disabled && styles.rowPressed,
-        disabled && styles.rowDisabled,
-      ]}
+      style={[styles.row, disabled && styles.rowDisabled]}
+      activeOpacity={disabled ? 1 : 0.7}
     >
       <View style={styles.textColumn}>
         <Text
@@ -43,7 +40,7 @@ export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
         )}
       </View>
       <ChevronRight size={24} color={typography.t600} strokeWidth={2} />
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

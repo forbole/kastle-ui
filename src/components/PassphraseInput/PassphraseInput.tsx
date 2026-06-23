@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { Eye, EyeOff } from "lucide-react-native";
 import { Input } from "../Input";
 import { typography } from "../../config/theme";
@@ -32,7 +32,7 @@ export const PassphraseInput: React.FC<PassphraseInputProps> = ({
       autoCapitalize="none"
       autoCorrect={false}
       rightIcon={
-        <Pressable
+        <TouchableOpacity
           onPress={() => setMasked((m) => !m)}
           hitSlop={8}
           style={styles.toggle}
@@ -42,7 +42,7 @@ export const PassphraseInput: React.FC<PassphraseInputProps> = ({
           ) : (
             <Eye size={20} color={typography.t600} strokeWidth={2} />
           )}
-        </Pressable>
+        </TouchableOpacity>
       }
     />
   );

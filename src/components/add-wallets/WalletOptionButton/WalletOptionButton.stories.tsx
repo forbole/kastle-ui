@@ -42,6 +42,13 @@ export const HardwareSoon: Story = {
   },
 };
 
+export const Loading: Story = {
+  args: {
+    label: "Create Wallet",
+    isLoading: true,
+  },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,

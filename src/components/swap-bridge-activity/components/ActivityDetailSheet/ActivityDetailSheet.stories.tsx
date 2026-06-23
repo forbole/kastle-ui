@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ActivityDetailSheet } from "./ActivityDetailSheet";
 import { colors, spacing, textStyles } from "../../../../config/theme";
 
@@ -25,11 +25,11 @@ const SheetHarness = (
   const [open, setOpen] = useState(false);
   return (
     <View style={styles.harness}>
-      <Pressable onPress={() => setOpen(true)} style={styles.openButton}>
+      <TouchableOpacity onPress={() => setOpen(true)} style={styles.openButton}>
         <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.openButtonText]}>
           Open detail sheet
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <ActivityDetailSheet
         {...args}

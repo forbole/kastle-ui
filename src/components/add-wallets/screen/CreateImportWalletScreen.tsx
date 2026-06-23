@@ -5,7 +5,7 @@ import { ImportWalletSheet } from "../ImportWalletSheet";
 import { background, spacing } from "../../../config/theme";
 
 export interface CreateImportWalletScreenProps {
-  onCreateWallet: () => void;
+  onCreateWallet: () => void | Promise<void>;
   onSelectRecoveryPhrase: () => void;
   onSelectPassphrase: () => void;
 }
@@ -14,14 +14,29 @@ export const CreateImportWalletScreen: React.FC<
   CreateImportWalletScreenProps
 > = ({ onCreateWallet, onSelectRecoveryPhrase, onSelectPassphrase }) => {
   const [showImportSheet, setShowImportSheet] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleCreateWallet = async () => {
+    setIsCreating(true);
+    try {
+      await onCreateWallet();
+    } catch {
+      setIsCreating(false);
+    }
+  };
 
   return (
     <View style={styles.screen}>
       <View style={styles.buttonStack}>
-        <WalletOptionButton label="Create Wallet" onPress={onCreateWallet} />
+        <WalletOptionButton
+          label="Create Wallet"
+          onPress={handleCreateWallet}
+          isLoading={isCreating}
+        />
         <WalletOptionButton
           label="Import wallet"
           onPress={() => setShowImportSheet(true)}
+          disabled={isCreating}
         />
         <WalletOptionButton
           label="Import Hardware wallet"

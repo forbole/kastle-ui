@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Dimensions,
-  Pressable,
+  TouchableOpacity,
   ScrollView,
   StyleSheet,
   Text,
@@ -116,17 +116,15 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
 
         {/* Close CTA */}
         <View style={styles.ctaBar}>
-          <Pressable
+          <TouchableOpacity
             onPress={onClose}
-            style={({ pressed }) => [
-              styles.ctaButton,
-              pressed && styles.ctaButtonPressed,
-            ]}
+            style={styles.ctaButton}
+            activeOpacity={0.6}
           >
             <Text allowFontScaling={false} style={styles.ctaLabel}>
               Close
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         {/* iOS home indicator */}

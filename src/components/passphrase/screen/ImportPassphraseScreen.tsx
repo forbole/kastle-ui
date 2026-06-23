@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { Info } from "lucide-react-native";
 import { PassphraseInput } from "../../PassphraseInput";
 import { Alert } from "../../Alert";
@@ -50,7 +50,7 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
       </View>
 
       {/* What is a passphrase? help link */}
-      <Pressable
+      <TouchableOpacity
         onPress={() => setShowInfoSheet(true)}
         hitSlop={8}
         style={styles.helpLink}
@@ -59,22 +59,19 @@ export const ImportPassphraseScreen: React.FC<ImportPassphraseScreenProps> = ({
         <Text allowFontScaling={false} style={styles.helpLinkText}>
           What is a passphrase?
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       {/* Continue CTA */}
-      <Pressable
+      <TouchableOpacity
         onPress={() => onContinue(passphrase)}
         disabled={!canContinue}
-        style={({ pressed }) => [
-          styles.cta,
-          pressed && styles.ctaPressed,
-          !canContinue && styles.ctaDisabled,
-        ]}
+        style={[styles.cta, !canContinue && styles.ctaDisabled]}
+        activeOpacity={0.7}
       >
         <Text allowFontScaling={false} style={styles.ctaLabel}>
           Continue
         </Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <PassphraseInfoSheet
         isOpen={showInfoSheet}
