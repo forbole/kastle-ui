@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">44 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">41/44 infos</a><span class="filter-pill ok" aria-disabled="true">159 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">44 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">41/44 infos</a><span class="filter-pill ok" aria-disabled="true">161 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.6s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.7s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -4321,9 +4321,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ImportRecoveryPhraseWithPassphraseScreen</h2>
       <div class="badges">
-        <label for="c-25-passphrase-screens-importrecoveryphrasewithpassphrasescreen-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-25-passphrase-screens-importrecoveryphrasewithpassphrasescreen-props" class="badge ok as-toggle">8 prop types</label>
         <label for="c-25-passphrase-screens-importrecoveryphrasewithpassphrasescreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-25-passphrase-screens-importrecoveryphrasewithpassphrasescreen-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-25-passphrase-screens-importrecoveryphrasewithpassphrasescreen-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -4355,7 +4355,7 @@ import { View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">5 prop types</span>
+              <span class="badge ok">8 prop types</span>
             </div>
             <pre><code>Component: src/components/passphrase/screen/ImportRecoveryPhraseWithPassphraseScreen.tsx::ImportRecoveryPhraseWithPassphraseScreen</code></pre>
             <pre><code>Props:</code></pre>
@@ -4374,12 +4374,27 @@ initialMasked?: boolean = true
  */
 initialValue?: string
 
+/**
+ * Controlled setter — required when `value` is provided.
+ */
+onChangeText?: (text: string) =&gt; void
+
 onContinue: (recoveryPhrase: string) =&gt; void
 
 /**
- * Paul wires clipboard read; screen stays pure.
+ * Clipboard read handler — when provided, also enables controlled value mode via `value`+`onChangeText`.
  */
-onPasteAll?: () =&gt; void</code></pre>
+onPasteAll?: () =&gt; void
+
+/**
+ * QR scan handler — wired by the caller.
+ */
+onScan?: () =&gt; void
+
+/**
+ * Controlled value — when provided together with `onChangeText`, the parent owns the field value.
+ */
+value?: string</code></pre>
           </div>
         </div>
     
@@ -4458,6 +4473,26 @@ import { View } from "react-native";</code></pre>
     onPasteAll={() =&gt; console.log(&quot;paste all&quot;)}
     initialValue=&quot;abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789&quot;
     initialMasked={false} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Controlled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Controlled — parent owns the value via value+onChangeText.</div>
+              <pre><code>const Controlled = () =&gt; {
+    const [value, setValue] = useState(&quot;correct horse battery staple&quot;);
+
+    return (
+        &lt;ImportRecoveryPhraseWithPassphraseScreen
+            onContinue={(phrase: string) =&gt; console.log(&quot;continue&quot;, phrase)}
+            onPasteAll={() =&gt; console.log(&quot;paste all&quot;)}
+            value={value}
+            onChangeText={setValue}
+            initialMasked={false} /&gt;
+    );
+};</code></pre>
             </div>
         </div>
     
@@ -6498,9 +6533,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Textarea</h2>
       <div class="badges">
-        <label for="c-41-components-textarea-props" class="badge ok as-toggle">12 prop types</label>
+        <label for="c-41-components-textarea-props" class="badge ok as-toggle">13 prop types</label>
         <label for="c-41-components-textarea-info" class="badge info as-toggle">1 info</label>
-        <label for="c-41-components-textarea-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-41-components-textarea-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -6532,7 +6567,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">12 prop types</span>
+              <span class="badge ok">13 prop types</span>
             </div>
             <pre><code>Component: src/components/Textarea/Textarea.tsx::Textarea</code></pre>
             <pre><code>Props:</code></pre>
@@ -6560,6 +6595,8 @@ onFocus?: () =&gt; void
  * Tapping the mask overlay (reveal).
  */
 onPressMask?: () =&gt; void
+
+onPressScan?: () =&gt; void
 
 placeholder?: string
 
@@ -6682,6 +6719,25 @@ import { View } from "react-native";</code></pre>
       onChangeText={setValue}
       placeholder=&quot;Enter your recovery phrase or private key&quot;
       scanIcon={false}
+    /&gt;
+  );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Disabled</div>
+              <pre><code>const Disabled = () =&gt; {
+  const [value, setValue] = useState(&quot;witch collapse practice feed shame&quot;);
+  return (
+    &lt;Textarea
+      value={value}
+      onChangeText={setValue}
+      placeholder=&quot;Enter your recovery phrase or private key&quot;
+      disabled
     /&gt;
   );
 };</code></pre>
