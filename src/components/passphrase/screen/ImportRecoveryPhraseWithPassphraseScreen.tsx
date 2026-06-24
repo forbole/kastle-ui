@@ -16,7 +16,7 @@ import {
 
 export interface ImportRecoveryPhraseWithPassphraseScreenProps {
   onContinue: (recoveryPhrase: string) => void;
-  /** Paul wires clipboard read; screen stays pure. */
+  /** Clipboard read handler — when provided, also enables controlled value mode via `value`+`onChangeText`. */
   onPasteAll?: () => void;
   /** Prefill the field (for stories / restored state). */
   initialValue?: string;
@@ -24,6 +24,12 @@ export interface ImportRecoveryPhraseWithPassphraseScreenProps {
   error?: string;
   /** Initial mask state. Defaults to true (hidden until the user taps to reveal). */
   initialMasked?: boolean;
+  /** Controlled value — when provided together with `onChangeText`, the parent owns the field value. */
+  value?: string;
+  /** Controlled setter — required when `value` is provided. */
+  onChangeText?: (text: string) => void;
+  /** QR scan handler — wired by the caller. */
+  onScan?: () => void;
 }
 
 const PRIVATE_KEY_REGEX = /^[0-9a-fA-F]{64}$/;
@@ -36,8 +42,14 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
   initialValue,
   error: externalError,
   initialMasked = true,
+  value: controlledValue,
+  onChangeText: controlledOnChangeText,
+  onScan,
 }) => {
-  const [value, setValue] = useState(initialValue ?? "");
+  const [internalValue, setInternalValue] = useState(initialValue ?? "");
+  const isControlled = controlledValue !== undefined && controlledOnChangeText !== undefined;
+  const value = isControlled ? controlledValue : internalValue;
+  const setValue = isControlled ? controlledOnChangeText : setInternalValue;
   const [masked, setMasked] = useState(initialMasked);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
 
@@ -84,6 +96,7 @@ export const ImportRecoveryPhraseWithPassphraseScreen: React.FC<
           error={error}
           masked={masked}
           onPressMask={() => setMasked(false)}
+          onPressScan={onScan}
         />
       </View>
 

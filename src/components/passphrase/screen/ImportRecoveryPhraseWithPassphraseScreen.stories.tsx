@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { ImportRecoveryPhraseWithPassphraseScreen } from "./ImportRecoveryPhraseWithPassphraseScreen";
@@ -61,6 +61,21 @@ export const ErrorPrivateKey: Story = {
     initialValue:
       "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
     initialMasked: false,
+  },
+};
+
+/** Controlled — parent owns the value via value+onChangeText. */
+export const Controlled: Story = {
+  render: (args) => {
+    const [value, setValue] = useState("correct horse battery staple");
+    return (
+      <ImportRecoveryPhraseWithPassphraseScreen
+        {...args}
+        value={value}
+        onChangeText={setValue}
+        initialMasked={false}
+      />
+    );
   },
 };
 

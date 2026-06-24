@@ -40,6 +40,7 @@ export interface TextareaProps {
   maskHint?: string;
   onBlur?: () => void;
   onFocus?: () => void;
+  onPressScan?: () => void;
 }
 
 export const Textarea: React.FC<TextareaProps> = ({
@@ -55,6 +56,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   maskHint = "Make sure no one is looking at your screen",
   onBlur,
   onFocus,
+  onPressScan,
 }) => {
   const [focused, setFocused] = useState(false);
   const invalid = !!error;
@@ -115,9 +117,9 @@ export const Textarea: React.FC<TextareaProps> = ({
             }}
           />
           {scanIcon && (
-            <View style={styles.scanWrapper}>
+            <TouchableOpacity onPress={onPressScan} style={styles.scanWrapper}>
               <ScanLine size={20} color={primary.p500} strokeWidth={2} />
-            </View>
+            </TouchableOpacity>
           )}
         </View>
       )}

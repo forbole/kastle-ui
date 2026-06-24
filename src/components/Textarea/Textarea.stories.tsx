@@ -102,6 +102,21 @@ export const NoScanIcon: Story = {
   },
 };
 
+/** Disabled */
+export const Disabled: Story = {
+  render: () => {
+    const [value, setValue] = useState("witch collapse practice feed shame");
+    return (
+      <Textarea
+        value={value}
+        onChangeText={setValue}
+        placeholder="Enter your recovery phrase or private key"
+        disabled
+      />
+    );
+  },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,
