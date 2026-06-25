@@ -127,7 +127,10 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.s2,
     color: typography.t900,
     ...textStyles.bodyNormalLG,
-    textAlign: "center",
+    // Single-line input: drop the LG lineHeight (shifts text high on iOS) so the
+    // box's alignItems:center can vertically centre the text on both platforms.
+    lineHeight: undefined,
+    textAlignVertical: "center",
   },
   errorRow: {
     flexDirection: "row",
