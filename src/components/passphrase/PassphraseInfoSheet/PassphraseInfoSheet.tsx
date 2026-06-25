@@ -1,8 +1,5 @@
 import React from "react";
 import {
-  Dimensions,
-  TouchableOpacity,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -14,16 +11,10 @@ import {
   borderRadius,
   borderWidth,
   spacing,
-  fontFamilies,
-  fontWeight,
-  fontSize,
   typography,
   textStyles,
   shadows,
 } from "../../../config/theme";
-
-const SCREEN_HEIGHT = Dimensions.get("window").height;
-const SHEET_HEIGHT_RATIO = 0.9;
 
 export interface PassphraseInfoSheetProps {
   isOpen: boolean;
@@ -57,7 +48,6 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
     <ActionSheet
       isOpen={isOpen}
       onClose={onClose}
-      heightRatio={SHEET_HEIGHT_RATIO}
     >
       <View style={styles.container}>
         {/* Drag handle */}
@@ -76,15 +66,11 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
           <View style={styles.divider} />
         </View>
 
-        {/* Scrollable rich body */}
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+        {/* Body */}
+        <View style={styles.scrollContent}>
           <Text allowFontScaling={false} style={styles.bodyText}>
             {
-              'What is a passphrase? An optional "25th word" added to your recovery phrase. Each passphrase opens a different wallet.'
+              'An optional "25th word" added to your recovery phrase. Each passphrase opens a different wallet.'
             }
           </Text>
 
@@ -112,19 +98,6 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
             </Bullet>
             <Bullet>{'Case-sensitive: "Hello" ≠ "hello"'}</Bullet>
           </View>
-        </ScrollView>
-
-        {/* Close CTA */}
-        <View style={styles.ctaBar}>
-          <TouchableOpacity
-            onPress={onClose}
-            style={styles.ctaButton}
-            activeOpacity={0.6}
-          >
-            <Text allowFontScaling={false} style={styles.ctaLabel}>
-              Close
-            </Text>
-          </TouchableOpacity>
         </View>
 
         {/* iOS home indicator */}
@@ -136,7 +109,6 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: SCREEN_HEIGHT * SHEET_HEIGHT_RATIO,
     backgroundColor: background.bg100,
     borderTopLeftRadius: borderRadius["3xl"],
     borderTopRightRadius: borderRadius["3xl"],
@@ -171,9 +143,6 @@ const styles = StyleSheet.create({
     height: borderWidth.bw1,
     backgroundColor: border.b400,
   },
-  scrollView: {
-    flex: 1,
-  },
   scrollContent: {
     paddingHorizontal: spacing.s3,
     paddingTop: spacing.s4,
@@ -190,7 +159,6 @@ const styles = StyleSheet.create({
   bodyText: {
     ...textStyles.bodyNormalMDRelaxed,
     color: typography.t600,
-    flex: 1,
   },
   bodyEmphasis: {
     ...textStyles.bodySemiboldMD,
@@ -203,28 +171,6 @@ const styles = StyleSheet.create({
   bulletMark: {
     ...textStyles.bodyNormalMDRelaxed,
     color: typography.t600,
-  },
-  ctaBar: {
-    paddingHorizontal: spacing.s3,
-    paddingTop: spacing.s4,
-  },
-  ctaButton: {
-    height: spacing.s10,
-    borderRadius: borderRadius.full,
-    borderWidth: borderWidth.bw1,
-    borderColor: typography.t500,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: spacing.s5,
-  },
-  ctaButtonPressed: {
-    opacity: 0.6,
-  },
-  ctaLabel: {
-    fontFamily: fontFamilies["500"],
-    fontSize: fontSize.md,
-    fontWeight: fontWeight.medium,
-    color: typography.t500,
   },
   homeIndicator: {
     height: 34,

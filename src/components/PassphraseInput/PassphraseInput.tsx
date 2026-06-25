@@ -38,9 +38,9 @@ export const PassphraseInput: React.FC<PassphraseInputProps> = ({
           style={styles.toggle}
         >
           {masked ? (
-            <EyeOff size={20} color={typography.t600} strokeWidth={2} />
+            <EyeOff size={20} color={typography.t400} strokeWidth={2} />
           ) : (
-            <Eye size={20} color={typography.t600} strokeWidth={2} />
+            <Eye size={20} color={typography.t400} strokeWidth={2} />
           )}
         </TouchableOpacity>
       }

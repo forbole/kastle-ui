@@ -79,7 +79,7 @@ export const Textarea: React.FC<TextareaProps> = ({
         >
           <Image
             source={MASK_IMAGE}
-            style={StyleSheet.absoluteFill}
+            style={[StyleSheet.absoluteFill, styles.maskImage]}
             resizeMode="cover"
           />
           <View style={styles.maskContent}>
@@ -99,7 +99,7 @@ export const Textarea: React.FC<TextareaProps> = ({
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}
-            placeholderTextColor={typography.t600}
+            placeholderTextColor={typography.t400}
             editable={!disabled}
             secureTextEntry={secureTextEntry}
             multiline
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     gap: spacing.s2,
-    minHeight: spacing.s32,
+    minHeight: spacing.s40,
     paddingHorizontal: spacing.s4,
     paddingVertical: spacing.s3,
     borderRadius: borderRadius.xl,
@@ -175,12 +175,15 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   maskBox: {
-    minHeight: spacing.s32,
+    minHeight: spacing.s40,
     borderRadius: borderRadius.xl,
     backgroundColor: background.bg0,
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
+  },
+  maskImage: {
+    borderRadius: borderRadius.xl,
   },
   maskContent: {
     position: "relative",
@@ -188,10 +191,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.s2,
-    paddingHorizontal: spacing.s12,
+    paddingHorizontal: spacing.s4,
   },
   maskHint: {
-    color: typography.t600,
+    color: typography.t400,
     textAlign: "center",
   },
   errorRow: {

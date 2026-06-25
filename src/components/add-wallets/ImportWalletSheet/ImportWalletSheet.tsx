@@ -105,8 +105,10 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingTop: spacing.s4,
+    paddingBottom: spacing.s4,
   },
   homeIndicator: {
     height: 34,
+    marginTop: spacing.s4,
   },
 });
