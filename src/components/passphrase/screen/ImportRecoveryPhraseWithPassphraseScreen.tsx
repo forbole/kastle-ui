@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: background.bg0,
     paddingHorizontal: spacing.s5,
     paddingTop: 0,
-    paddingBottom: spacing.s4,
+    paddingBottom: spacing.s6,
   },
   body: {
     flex: 1,

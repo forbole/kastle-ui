@@ -84,7 +84,7 @@ export const PassphraseInfoSheet: React.FC<PassphraseInfoSheetProps> = ({
         >
           <Text allowFontScaling={false} style={styles.bodyText}>
             {
-              'What is a passphrase? An optional "25th word" added to your recovery phrase. Each passphrase opens a different wallet.'
+              'An optional "25th word" added to your recovery phrase. Each passphrase opens a different wallet.'
             }
           </Text>
 

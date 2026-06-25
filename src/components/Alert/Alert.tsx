@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   body: {
-    ...textStyles.bodyNormalXS,
+    ...textStyles.bodyNormalSM,
     opacity: 0.6,
   },
 });

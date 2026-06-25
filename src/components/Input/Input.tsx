@@ -67,7 +67,7 @@ export const Input: React.FC<InputProps> = ({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={typography.t600}
+          placeholderTextColor={typography.t400}
           editable={!disabled}
           secureTextEntry={secureTextEntry}
           autoCapitalize={autoCapitalize}
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.s2,
     color: typography.t900,
     ...textStyles.bodyNormalLG,
+    textAlign: "center",
   },
   errorRow: {
     flexDirection: "row",
