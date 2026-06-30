@@ -53,6 +53,11 @@ export const Confirmed: Story = {
   args: { status: "pending", label: "Confirmed" },
 };
 
+/** Dot variant — network status badge (e.g. Fee & Speed sheet) */
+export const NetworkDot: Story = {
+  args: { status: "success", label: "Network: Smooth", icon: "dot" },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,
