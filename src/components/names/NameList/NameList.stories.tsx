@@ -61,7 +61,7 @@ const meta: Meta<typeof NameList> = {
   component: NameList,
   decorators: [
     (Story) => (
-      <View style={{ flex: 1, height: 700, backgroundColor: "#051D27" }}>
+      <View style={{ padding: 20, backgroundColor: "#051D27" }}>
         <Story />
       </View>
     ),
@@ -69,7 +69,6 @@ const meta: Meta<typeof NameList> = {
   argTypes: {
     onNamePress: { action: "name pressed" },
     onRegisterPress: { action: "register pressed" },
-    onEndReached: { action: "end reached" },
   },
 };
 

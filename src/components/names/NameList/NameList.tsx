@@ -3,12 +3,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   StyleSheet,
   Image,
   ImageSourcePropType,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from "react-native";
 import { Image as ExpoImage } from "expo-image";
 import Svg, { Defs, LinearGradient, Stop, Rect } from "react-native-svg";
@@ -80,10 +77,6 @@ export interface NameListProps {
   registerLabel?: string;
   onNamePress?: (item: NameListItem) => void;
   onRegisterPress?: () => void;
-  /** Fired once when the user scrolls near the bottom of the list — hand pagination to the caller. */
-  onEndReached?: () => void;
-  /** Fraction of remaining scroll distance that triggers onEndReached. @default 0.4 */
-  onEndReachedThreshold?: number;
 }
 
 export const NameList: React.FC<NameListProps> = ({
@@ -94,81 +87,53 @@ export const NameList: React.FC<NameListProps> = ({
   registerLabel = "Register name",
   onNamePress,
   onRegisterPress,
-  onEndReached,
-  onEndReachedThreshold = 0.4,
 }) => {
-  const endReachedFired = React.useRef(false);
   const [gridWidth, setGridWidth] = React.useState(0);
   const cardWidth = gridWidth
     ? (gridWidth - GRID_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS
     : undefined;
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (!onEndReached) return;
-    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    const distanceFromEnd =
-      contentSize.height - layoutMeasurement.height - contentOffset.y;
-    const triggerDistance = layoutMeasurement.height * onEndReachedThreshold;
-
-    if (distanceFromEnd <= triggerDistance) {
-      if (!endReachedFired.current) {
-        endReachedFired.current = true;
-        onEndReached();
-      }
-    } else {
-      endReachedFired.current = false;
-    }
-  };
-
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}
-      onScroll={handleScroll}
-      scrollEventThrottle={100}
+    <View
+      style={styles.grid}
+      onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}
     >
-      <View
-        style={styles.grid}
-        onLayout={(event) => setGridWidth(event.nativeEvent.layout.width)}
-      >
-        {gridWidth === 0 ? null : isLoading ? (
-          Array.from({ length: skeletonCount }).map((_, index) => (
-            <SkeletonBlock
-              key={index}
+      {gridWidth === 0 ? null : isLoading ? (
+        Array.from({ length: skeletonCount }).map((_, index) => (
+          <SkeletonBlock
+            key={index}
+            width={cardWidth!}
+            height={CARD_HEIGHT}
+            borderRadius={borderRadius.xl}
+          />
+        ))
+      ) : (
+        <>
+          <RegisterCard
+            label={registerLabel}
+            width={cardWidth!}
+            onPress={onRegisterPress}
+          />
+          {names.map((item) => (
+            <NameCard
+              key={item.id}
+              item={item}
               width={cardWidth!}
-              height={CARD_HEIGHT}
-              borderRadius={borderRadius.xl}
+              onPress={onNamePress ? () => onNamePress(item) : undefined}
             />
-          ))
-        ) : (
-          <>
-            <RegisterCard
-              label={registerLabel}
-              width={cardWidth!}
-              onPress={onRegisterPress}
-            />
-            {names.map((item) => (
-              <NameCard
-                key={item.id}
-                item={item}
+          ))}
+          {isLoadingMore &&
+            Array.from({ length: 3 }).map((_, index) => (
+              <SkeletonBlock
+                key={`loading-more-${index}`}
                 width={cardWidth!}
-                onPress={onNamePress ? () => onNamePress(item) : undefined}
+                height={CARD_HEIGHT}
+                borderRadius={borderRadius.xl}
               />
             ))}
-            {isLoadingMore &&
-              Array.from({ length: 3 }).map((_, index) => (
-                <SkeletonBlock
-                  key={`loading-more-${index}`}
-                  width={cardWidth!}
-                  height={CARD_HEIGHT}
-                  borderRadius={borderRadius.xl}
-                />
-              ))}
-          </>
-        )}
-      </View>
-    </ScrollView>
+        </>
+      )}
+    </View>
   );
 };
 
@@ -268,13 +233,6 @@ const NameCard: React.FC<{
 const CARD_HEIGHT = 120;
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flex: 1,
-  },
-  contentContainer: {
-    paddingHorizontal: spacing.s5,
-    paddingBottom: spacing.s10,
-  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
