@@ -576,7 +576,7 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">47 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">42/47 infos</a><span class="filter-pill ok" aria-disabled="true">181 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">48 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">42/48 infos</a><span class="filter-pill ok" aria-disabled="true">189 stories ok</span></div>
   </div>
 </header>
 <main>
@@ -5592,14 +5592,372 @@ import { View } from "react-native";</code></pre>
   no-story-error
   no-doc-error"
   role="listitem"
+  aria-label="NameCreatePage">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> NameCreatePage</h2>
+      <div class="badges">
+        <label for="c-33-names-screens-namecreatepage-props" class="badge ok as-toggle">19 prop types</label>
+        
+        <label for="c-33-names-screens-namecreatepage-stories" class="badge ok as-toggle">8 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/names/NameCreatePage/NameCreatePage.stories.tsx">names-screens-namecreatepage · ./src/components/names/NameCreatePage/NameCreatePage.stories.tsx</div>
+    
+    <div class="hint">Content-only screen — the host route supplies its own native header (e.g. expo-router `Stack.Screen`) and safe-area wrapper.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-33-names-screens-namecreatepage-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-33-names-screens-namecreatepage-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">19 prop types</span>
+            </div>
+            <pre><code>Component: src/components/names/NameCreatePage/NameCreatePage.tsx::NameCreatePage</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>confirmTitle?: string = &quot;Swipe to confirm&quot;
+
+/**
+ * Warning shown above the swipe button, e.g. &quot;This domain costs 4200 KAS&quot;.
+ */
+costMessage?: string
+
+/**
+ * Raw domain value, without the suffix (e.g. &quot;nicole&quot;).
+ */
+domain: string
+
+/**
+ * Formatted domain registration price, e.g. &quot;4200 KAS&quot;. Panel is hidden when omitted.
+ */
+domainPriceAmount?: string
+
+/**
+ * Body text for the &quot;Domain Price&quot; info sheet.
+ */
+domainPriceDescription?: string = &quot;Shorter domains cost more. Pricing is based on the number of characters in your domain name: 1-2 characters are 4200 KAS, 3 characters are 2100 KAS, 4 characters are 525 KAS, and 5+ characters are 35 KAS.&quot;
+
+/**
+ * Formatted USD equivalent, e.g. &quot;≈ $1345 USD&quot;.
+ */
+domainPriceUsd?: string
+
+/**
+ * Validation error shown under the input, e.g. &quot;Domain already registered&quot;.
+ */
+error?: string
+
+/**
+ * Formatted estimated network fee total, e.g. &quot;0.423354 KAS&quot;.
+ */
+estFeeAmount?: string
+
+/**
+ * Formatted USD equivalent.
+ */
+estFeeUsd?: string
+
+/**
+ * Fee breakdown rows shown in the Est. Fee sheet when the row is tapped.
+ */
+feeBreakdown?: EstFeeRow[]
+
+/**
+ * Logo/wordmark rendered on the card, e.g. the Kaspa mark.
+ */
+formatIconSource?: ImageSourcePropType
+
+/**
+ * Label shown next to the format icon, e.g. &quot;Kaspa&quot;.
+ */
+formatLabel?: string = &quot;Kaspa&quot;
+
+/**
+ * Error shown above the swipe button instead of `costMessage`, e.g. &quot;You don&#39;t have enough funds&quot;.
+ */
+insufficientFundsMessage?: string
+
+/**
+ * Shows a green checkmark on the input and card once the domain is confirmed available.
+ */
+isAvailable?: boolean = false
+
+isConfirmDisabled?: boolean = false
+
+isConfirmLoading?: boolean = false
+
+onConfirm: () =&gt; void
+
+onDomainChange: (value: string) =&gt; void
+
+/**
+ * Suffix appended to the domain on the preview card, e.g. &quot;.kas&quot;.
+ */
+suffix?: string = &quot;.kas&quot;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { NameCreatePage } from "kastle-ui";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Empty</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Empty = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled
+            isConfirmLoading={false}
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Typing</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Typing = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled
+            isConfirmLoading={false}
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Available</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Available = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled={false}
+            isConfirmLoading={false}
+            isAvailable
+            domainPriceAmount=&quot;35 KAS&quot;
+            domainPriceUsd=&quot;≈ $11.20 USD&quot;
+            costMessage=&quot;This domain costs 35 KAS&quot;
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Short Domain High Price</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ShortDomainHighPrice = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled={false}
+            isConfirmLoading={false}
+            isAvailable
+            domainPriceAmount=&quot;4200 KAS&quot;
+            domainPriceUsd=&quot;≈ $1345 USD&quot;
+            costMessage=&quot;This domain costs 4200 KAS&quot;
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Domain Taken</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DomainTaken = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled
+            isConfirmLoading={false}
+            error=&quot;KNS Domain registered&quot;
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Invalid Characters</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const InvalidCharacters = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled
+            isConfirmLoading={false}
+            error=&quot;Domain contains invalid characters&quot;
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Insufficient Funds</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const InsufficientFunds = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled
+            isConfirmLoading={false}
+            isAvailable
+            domainPriceAmount=&quot;4200 KAS&quot;
+            domainPriceUsd=&quot;≈ $1345 USD&quot;
+            insufficientFundsMessage=&quot;You don&#39;t have enough funds: 4200.42 KAS required&quot;
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Confirming</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Confirming = () =&gt; {
+    const [domain, setDomain] = useState(args.domain);
+
+    return (
+        &lt;NameCreatePage
+            suffix=&quot;.kas&quot;
+            formatIconSource={FORMAT_ICON_FIXTURE}
+            formatLabel=&quot;Kaspa&quot;
+            estFeeAmount=&quot;0.423354 KAS&quot;
+            estFeeUsd=&quot;≈ $1.35 USD&quot;
+            feeBreakdown={FEE_BREAKDOWN}
+            isConfirmDisabled
+            isConfirmLoading
+            isAvailable
+            domainPriceAmount=&quot;35 KAS&quot;
+            domainPriceUsd=&quot;≈ $11.20 USD&quot;
+            domain={domain}
+            onDomainChange={setDomain} /&gt;
+    );
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
   aria-label="NameDetailPage">
   <div class="head">
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameDetailPage</h2>
       <div class="badges">
-        <label for="c-33-names-screens-namedetailpage-props" class="badge ok as-toggle">11 prop types</label>
+        <label for="c-34-names-screens-namedetailpage-props" class="badge ok as-toggle">11 prop types</label>
         
-        <label for="c-33-names-screens-namedetailpage-stories" class="badge ok as-toggle">10 stories</label>
+        <label for="c-34-names-screens-namedetailpage-stories" class="badge ok as-toggle">10 stories</label>
         
       </div>
     </div>
@@ -5612,9 +5970,9 @@ import { View } from "react-native";</code></pre>
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
   
-  <input id="c-33-names-screens-namedetailpage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-34-names-screens-namedetailpage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-33-names-screens-namedetailpage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-34-names-screens-namedetailpage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -5862,9 +6220,9 @@ transferWarning?: string</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameList</h2>
       <div class="badges">
-        <label for="c-34-names-components-namelist-props" class="badge ok as-toggle">7 prop types</label>
-        <label for="c-34-names-components-namelist-info" class="badge info as-toggle">1 info</label>
-        <label for="c-34-names-components-namelist-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-35-names-components-namelist-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-35-names-components-namelist-info" class="badge info as-toggle">1 info</label>
+        <label for="c-35-names-components-namelist-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -5876,10 +6234,10 @@ transferWarning?: string</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-34-names-components-namelist-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-34-names-components-namelist-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-35-names-components-namelist-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-35-names-components-namelist-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-34-names-components-namelist-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-35-names-components-namelist-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -5993,9 +6351,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> PassphraseInfoSheet</h2>
       <div class="badges">
-        <label for="c-35-passphrase-components-passphraseinfosheet-props" class="badge ok as-toggle">2 prop types</label>
-        <label for="c-35-passphrase-components-passphraseinfosheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-35-passphrase-components-passphraseinfosheet-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-36-passphrase-components-passphraseinfosheet-props" class="badge ok as-toggle">2 prop types</label>
+        <label for="c-36-passphrase-components-passphraseinfosheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-36-passphrase-components-passphraseinfosheet-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -6007,10 +6365,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-35-passphrase-components-passphraseinfosheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-35-passphrase-components-passphraseinfosheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-36-passphrase-components-passphraseinfosheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-36-passphrase-components-passphraseinfosheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-35-passphrase-components-passphraseinfosheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-36-passphrase-components-passphraseinfosheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6075,9 +6433,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> PassphraseInput</h2>
       <div class="badges">
-        <label for="c-36-components-passphraseinput-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-36-components-passphraseinput-info" class="badge info as-toggle">1 info</label>
-        <label for="c-36-components-passphraseinput-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-37-components-passphraseinput-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-37-components-passphraseinput-info" class="badge info as-toggle">1 info</label>
+        <label for="c-37-components-passphraseinput-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -6089,10 +6447,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-36-components-passphraseinput-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-36-components-passphraseinput-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-37-components-passphraseinput-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-37-components-passphraseinput-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-36-components-passphraseinput-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-37-components-passphraseinput-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6196,9 +6554,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RecentlyConnectedApps</h2>
       <div class="badges">
-        <label for="c-37-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-37-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-37-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-38-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-38-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
+        <label for="c-38-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -6210,10 +6568,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-37-explore-components-recentlyconnectedapps-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-37-explore-components-recentlyconnectedapps-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-38-explore-components-recentlyconnectedapps-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-38-explore-components-recentlyconnectedapps-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-37-explore-components-recentlyconnectedapps-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-38-explore-components-recentlyconnectedapps-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6382,9 +6740,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RemoveWalletSheet</h2>
       <div class="badges">
-        <label for="c-38-manage-wallets-components-removewalletsheet-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-38-manage-wallets-components-removewalletsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-38-manage-wallets-components-removewalletsheet-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-39-manage-wallets-components-removewalletsheet-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-39-manage-wallets-components-removewalletsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-39-manage-wallets-components-removewalletsheet-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -6396,10 +6754,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-38-manage-wallets-components-removewalletsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-38-manage-wallets-components-removewalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-39-manage-wallets-components-removewalletsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-39-manage-wallets-components-removewalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-38-manage-wallets-components-removewalletsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-39-manage-wallets-components-removewalletsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6466,9 +6824,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SignMessageSheet</h2>
       <div class="badges">
-        <label for="c-39-explore-components-signmessagesheet-props" class="badge ok as-toggle">7 prop types</label>
-        <label for="c-39-explore-components-signmessagesheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-39-explore-components-signmessagesheet-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-40-explore-components-signmessagesheet-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-40-explore-components-signmessagesheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-40-explore-components-signmessagesheet-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -6480,10 +6838,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-39-explore-components-signmessagesheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-39-explore-components-signmessagesheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-40-explore-components-signmessagesheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-40-explore-components-signmessagesheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-39-explore-components-signmessagesheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-40-explore-components-signmessagesheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6606,9 +6964,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SkeletonBlock</h2>
       <div class="badges">
-        <label for="c-40-components-skeletonblock-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-40-components-skeletonblock-info" class="badge info as-toggle">1 info</label>
-        <label for="c-40-components-skeletonblock-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-41-components-skeletonblock-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-41-components-skeletonblock-info" class="badge info as-toggle">1 info</label>
+        <label for="c-41-components-skeletonblock-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -6620,10 +6978,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-40-components-skeletonblock-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-40-components-skeletonblock-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-41-components-skeletonblock-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-41-components-skeletonblock-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-40-components-skeletonblock-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-41-components-skeletonblock-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6713,9 +7071,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> StatusPill</h2>
       <div class="badges">
-        <label for="c-41-components-statuspill-props" class="badge ok as-toggle">2 prop types</label>
-        <label for="c-41-components-statuspill-info" class="badge info as-toggle">1 info</label>
-        <label for="c-41-components-statuspill-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-42-components-statuspill-props" class="badge ok as-toggle">2 prop types</label>
+        <label for="c-42-components-statuspill-info" class="badge info as-toggle">1 info</label>
+        <label for="c-42-components-statuspill-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -6727,10 +7085,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-41-components-statuspill-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-41-components-statuspill-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-42-components-statuspill-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-42-components-statuspill-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-41-components-statuspill-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-42-components-statuspill-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6816,9 +7174,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SwipeToConfirm</h2>
       <div class="badges">
-        <label for="c-42-components-swipetoconfirm-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-42-components-swipetoconfirm-info" class="badge info as-toggle">1 info</label>
-        <label for="c-42-components-swipetoconfirm-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-43-components-swipetoconfirm-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-43-components-swipetoconfirm-info" class="badge info as-toggle">1 info</label>
+        <label for="c-43-components-swipetoconfirm-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -6830,10 +7188,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-42-components-swipetoconfirm-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-42-components-swipetoconfirm-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-43-components-swipetoconfirm-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-43-components-swipetoconfirm-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-42-components-swipetoconfirm-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-43-components-swipetoconfirm-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6929,9 +7287,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Textarea</h2>
       <div class="badges">
-        <label for="c-43-components-textarea-props" class="badge ok as-toggle">13 prop types</label>
-        <label for="c-43-components-textarea-info" class="badge info as-toggle">1 info</label>
-        <label for="c-43-components-textarea-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-44-components-textarea-props" class="badge ok as-toggle">13 prop types</label>
+        <label for="c-44-components-textarea-info" class="badge info as-toggle">1 info</label>
+        <label for="c-44-components-textarea-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -6943,10 +7301,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-43-components-textarea-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-43-components-textarea-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-44-components-textarea-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-44-components-textarea-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-43-components-textarea-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-44-components-textarea-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7154,9 +7512,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> TokenSelectSheet</h2>
       <div class="badges">
-        <label for="c-44-swap-tokenselectsheet-props" class="badge ok as-toggle">10 prop types</label>
-        <label for="c-44-swap-tokenselectsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-44-swap-tokenselectsheet-stories" class="badge ok as-toggle">8 stories</label>
+        <label for="c-45-swap-tokenselectsheet-props" class="badge ok as-toggle">10 prop types</label>
+        <label for="c-45-swap-tokenselectsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-45-swap-tokenselectsheet-stories" class="badge ok as-toggle">8 stories</label>
         
       </div>
     </div>
@@ -7168,10 +7526,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-44-swap-tokenselectsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-44-swap-tokenselectsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-45-swap-tokenselectsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-45-swap-tokenselectsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-44-swap-tokenselectsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-45-swap-tokenselectsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7408,9 +7766,9 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> TransferConfirmPage</h2>
       <div class="badges">
-        <label for="c-45-names-screens-transferconfirmpage-props" class="badge ok as-toggle">16 prop types</label>
+        <label for="c-46-names-screens-transferconfirmpage-props" class="badge ok as-toggle">16 prop types</label>
         
-        <label for="c-45-names-screens-transferconfirmpage-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-46-names-screens-transferconfirmpage-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -7423,9 +7781,9 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
   
-  <input id="c-45-names-screens-transferconfirmpage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-46-names-screens-transferconfirmpage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-45-names-screens-transferconfirmpage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-46-names-screens-transferconfirmpage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7660,9 +8018,9 @@ senderNetworkLabel?: string = &quot;Kaspa&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> WalletOptionButton</h2>
       <div class="badges">
-        <label for="c-46-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-46-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
-        <label for="c-46-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-47-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-47-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
+        <label for="c-47-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -7674,10 +8032,10 @@ senderNetworkLabel?: string = &quot;Kaspa&quot;</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-46-add-wallets-components-walletoptionbutton-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-46-add-wallets-components-walletoptionbutton-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-47-add-wallets-components-walletoptionbutton-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-47-add-wallets-components-walletoptionbutton-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-46-add-wallets-components-walletoptionbutton-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-47-add-wallets-components-walletoptionbutton-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
