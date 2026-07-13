@@ -91,7 +91,9 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
 }) => {
   const formatConfig = FORMAT_CONFIG[format];
   const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
-  const visibleDetails = details.filter((row) => row.value !== undefined && row.value !== "");
+  const visibleDetails = details.filter(
+    (row) => row.value !== undefined && row.value !== "",
+  );
   const canTransfer = isTransferable && !transferWarning;
 
   return (
@@ -112,7 +114,13 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
           ) : (
             <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
               <Defs>
-                <LinearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <LinearGradient
+                  id="cardGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
                   <Stop offset="0%" stopColor={CARD_GRADIENT[0]} />
                   <Stop offset="100%" stopColor={CARD_GRADIENT[1]} />
                 </LinearGradient>
@@ -184,7 +192,10 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
                 onPress={() => setDescriptionExpanded((expanded) => !expanded)}
                 activeOpacity={0.7}
               >
-                <Text allowFontScaling={false} style={styles.descriptionSeeMore}>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.descriptionSeeMore}
+                >
                   {descriptionExpanded ? "See less" : "See more"}
                 </Text>
               </TouchableOpacity>
@@ -318,7 +329,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: spacing.s5,
     right: spacing.s5,
-    bottom: spacing.s5,
+    bottom: spacing.s7,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s2,
@@ -328,8 +339,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   cardLogoText: {
-    ...textStyles.bodySemiboldMD,
-    fontFamily: fontFamilies["600"],
+    ...textStyles.bodySemiboldXL,
     color: colors.white,
   },
   shareButton: {
