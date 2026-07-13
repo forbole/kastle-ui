@@ -121,8 +121,8 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
             </Svg>
           )}
 
-          {/* Name + format wordmark overlay */}
-          <View style={styles.cardOverlay}>
+          {/* Domain name — vertically centered on the card */}
+          <View style={styles.cardNameWrap}>
             <Text
               allowFontScaling={false}
               style={styles.cardName}
@@ -130,12 +130,14 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
             >
               {name}
             </Text>
-            <View style={styles.cardLogoRow}>
-              <Image source={formatIconSource} style={styles.cardLogoIcon} />
-              <Text allowFontScaling={false} style={styles.cardLogoText}>
-                {formatConfig.label}
-              </Text>
-            </View>
+          </View>
+
+          {/* Format wordmark — pinned to the bottom edge */}
+          <View style={styles.cardLogoRow}>
+            <Image source={formatIconSource} style={styles.cardLogoIcon} />
+            <Text allowFontScaling={false} style={styles.cardLogoText}>
+              {formatConfig.label}
+            </Text>
           </View>
 
           {/* Share button overlay */}
@@ -299,12 +301,13 @@ const styles = StyleSheet.create({
   nameImage: {
     ...StyleSheet.absoluteFillObject,
   },
-  cardOverlay: {
+  cardNameWrap: {
     position: "absolute",
     left: spacing.s5,
     right: spacing.s5,
-    bottom: spacing.s5,
-    gap: spacing.s3,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
   },
   cardName: {
     ...textStyles.heading3XL,
@@ -312,6 +315,10 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   cardLogoRow: {
+    position: "absolute",
+    left: spacing.s5,
+    right: spacing.s5,
+    bottom: spacing.s5,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s2,
