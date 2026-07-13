@@ -68,6 +68,18 @@ export const KnsLongName: Story = {
   },
 };
 
+export const KnsDisabledWithWarning: Story = {
+  args: {
+    transferWarning: "This domain is currently being transferred.",
+  },
+};
+
+export const KnsListed: Story = {
+  args: {
+    transferWarning: "This asset is currently listed and cannot be transferred.",
+  },
+};
+
 // ── iGRA ───────────────────────────────────────────────────────────────
 
 export const IgraTransferable: Story = {
@@ -98,5 +110,16 @@ export const IgraWithDescription: Story = {
     details: IGRA_DETAILS,
     description: "A digital identity on the iGRA network. This name resolves to your wallet address.",
     isTransferable: true,
+  },
+};
+
+export const IgraDisabledWithWarning: Story = {
+  args: {
+    format: "igra",
+    name: "alice.igra",
+    isVerified: false,
+    details: IGRA_DETAILS,
+    isTransferable: true,
+    transferWarning: "This domain is currently being transferred.",
   },
 };

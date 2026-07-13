@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Image as ExpoImage } from "expo-image";
 import Svg, { Defs, LinearGradient, Stop, Rect } from "react-native-svg";
-import { Share2, BadgeCheck } from "lucide-react-native";
+import { Share2, BadgeCheck, Info } from "lucide-react-native";
 import {
   colors,
   textStyles,
@@ -66,6 +66,8 @@ export interface NameDetailPageProps {
   details?: NameDetailRow[];
   /** Whether the Transfer action is available for this name. */
   isTransferable: boolean;
+  /** Reason the Transfer action is blocked, e.g. "This asset is currently listed and cannot be transferred." or an error message. Setting this disables the button and shows the reason underneath, regardless of `isTransferable`. */
+  transferWarning?: string;
   onTransferPress?: () => void;
   onSharePress?: () => void;
 }
@@ -83,12 +85,14 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
   description,
   details = [],
   isTransferable,
+  transferWarning,
   onTransferPress,
   onSharePress,
 }) => {
   const formatConfig = FORMAT_CONFIG[format];
   const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
   const visibleDetails = details.filter((row) => row.value !== undefined && row.value !== "");
+  const canTransfer = isTransferable && !transferWarning;
 
   return (
     <View style={styles.container}>
@@ -231,22 +235,31 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
         <TouchableOpacity
           style={[
             styles.transferButton,
-            !isTransferable && styles.transferButtonOutline,
+            !canTransfer && styles.transferButtonOutline,
+            !!transferWarning && styles.transferButtonWarning,
           ]}
           onPress={onTransferPress}
-          disabled={!isTransferable}
+          disabled={!canTransfer}
           activeOpacity={0.8}
         >
           <Text
             allowFontScaling={false}
             style={[
               styles.transferButtonText,
-              !isTransferable && styles.transferButtonTextOutline,
+              !canTransfer && styles.transferButtonTextOutline,
             ]}
           >
             Transfer
           </Text>
         </TouchableOpacity>
+        {transferWarning ? (
+          <View style={styles.transferWarningRow}>
+            <Info size={16} color={typography.t600} strokeWidth={2} />
+            <Text allowFontScaling={false} style={styles.transferWarningText}>
+              {transferWarning}
+            </Text>
+          </View>
+        ) : null}
         <View style={styles.homeIndicator} />
       </View>
     </View>
@@ -425,6 +438,22 @@ const styles = StyleSheet.create({
   },
   transferButtonTextOutline: {
     color: typography.t500,
+  },
+  transferButtonWarning: {
+    opacity: 0.4,
+  },
+  transferWarningRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s1,
+    marginTop: spacing.s3,
+  },
+  transferWarningText: {
+    ...textStyles.bodyNormalXS,
+    fontFamily: fontFamilies["400"],
+    color: typography.t600,
+    textAlign: "center",
   },
   homeIndicator: {
     height: 34,
