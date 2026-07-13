@@ -582,7 +582,7 @@
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.6s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.2s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -5862,7 +5862,7 @@ transferWarning?: string</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameList</h2>
       <div class="badges">
-        <label for="c-34-names-components-namelist-props" class="badge ok as-toggle">9 prop types</label>
+        <label for="c-34-names-components-namelist-props" class="badge ok as-toggle">7 prop types</label>
         <label for="c-34-names-components-namelist-info" class="badge info as-toggle">1 info</label>
         <label for="c-34-names-components-namelist-stories" class="badge ok as-toggle">4 stories</label>
         
@@ -5896,7 +5896,7 @@ transferWarning?: string</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">9 prop types</span>
+              <span class="badge ok">7 prop types</span>
             </div>
             <pre><code>Component: src/components/names/NameList/NameList.tsx::NameList</code></pre>
             <pre><code>Props:</code></pre>
@@ -5911,16 +5911,6 @@ isLoading?: boolean = false
 isLoadingMore?: boolean = false
 
 names?: NameListItem[] = []
-
-/**
- * Fired once when the user scrolls near the bottom of the list — hand pagination to the caller.
- */
-onEndReached?: () =&gt; void
-
-/**
- * Fraction of remaining scroll distance that triggers onEndReached. @default 0.4
- */
-onEndReachedThreshold?: number = 0.4
 
 onNamePress?: (item: NameListItem) =&gt; void
 
