@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">46 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">42/46 infos</a><span class="filter-pill ok" aria-disabled="true">175 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">47 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">42/47 infos</a><span class="filter-pill ok" aria-disabled="true">181 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.6s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.3s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -7399,6 +7399,258 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
 <article
   class="card 
   no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="TransferConfirmPage">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> TransferConfirmPage</h2>
+      <div class="badges">
+        <label for="c-45-names-screens-transferconfirmpage-props" class="badge ok as-toggle">16 prop types</label>
+        
+        <label for="c-45-names-screens-transferconfirmpage-stories" class="badge ok as-toggle">6 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/names/TransferConfirmPage/TransferConfirmPage.stories.tsx">names-screens-transferconfirmpage · ./src/components/names/TransferConfirmPage/TransferConfirmPage.stories.tsx</div>
+    
+    <div class="hint">Content-only screen — the host route supplies its own native header (e.g. expo-router `Stack.Screen`) and safe-area wrapper.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-45-names-screens-transferconfirmpage-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-45-names-screens-transferconfirmpage-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">16 prop types</span>
+            </div>
+            <pre><code>Component: src/components/names/TransferConfirmPage/TransferConfirmPage.tsx::TransferConfirmPage</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Swipe button label.
+ */
+confirmTitle?: string = &quot;Swipe to confirm&quot;
+
+/**
+ * Card artwork. Falls back to a flat gradient when omitted.
+ */
+domainImageUri?: string
+
+/**
+ * Full domain name being transferred, e.g. &quot;nicole.kas&quot;.
+ */
+domainName: string
+
+/**
+ * Formatted estimated fee total, e.g. &quot;0.423354 KAS&quot;.
+ */
+estFeeAmount: string
+
+/**
+ * Formatted USD equivalent, e.g. &quot;≈ $1.345 USD&quot;.
+ */
+estFeeUsd?: string
+
+/**
+ * Fee breakdown rows shown in the Est. Fee sheet when the row is tapped.
+ */
+feeBreakdown?: EstFeeRow[]
+
+/**
+ * Logo/wordmark rendered at the bottom of the card, e.g. the Kaspa mark.
+ */
+formatIconSource?: ImageSourcePropType
+
+/**
+ * Label shown next to the format icon, e.g. &quot;Kaspa&quot;.
+ */
+formatLabel?: string = &quot;Kaspa&quot;
+
+/**
+ * Disables the swipe-to-confirm button, e.g. while fees are still loading.
+ */
+isConfirmDisabled?: boolean = false
+
+/**
+ * Shows a loading spinner on the swipe-to-confirm button.
+ */
+isConfirmLoading?: boolean = false
+
+/**
+ * Shows a verified checkmark badge on the card.
+ */
+isVerified?: boolean = false
+
+onConfirm: () =&gt; void
+
+/**
+ * Recipient&#39;s wallet address.
+ */
+recipientAddress: string
+
+/**
+ * Network badge shown on the &quot;To&quot; row, e.g. &quot;Kaspa&quot;.
+ */
+recipientNetworkLabel?: string = &quot;Kaspa&quot;
+
+/**
+ * Sender&#39;s wallet address.
+ */
+senderAddress: string
+
+/**
+ * Network badge shown on the &quot;From&quot; row, e.g. &quot;Kaspa&quot;.
+ */
+senderNetworkLabel?: string = &quot;Kaspa&quot;</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { TransferConfirmPage } from "kastle-ui";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;TransferConfirmPage
+    domainName=&quot;nicole.kas&quot;
+    formatIconSource={FORMAT_ICON_FIXTURE}
+    isVerified
+    senderAddress={ADDRESS}
+    recipientAddress={ADDRESS}
+    estFeeAmount=&quot;0.423354 KAS&quot;
+    estFeeUsd=&quot;≈ $1.345 USD&quot;
+    feeBreakdown={FEE_BREAKDOWN}
+    isConfirmDisabled={false}
+    isConfirmLoading={false} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">No Fee Breakdown</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const NoFeeBreakdown = () =&gt; &lt;TransferConfirmPage
+    domainName=&quot;nicole.kas&quot;
+    formatIconSource={FORMAT_ICON_FIXTURE}
+    isVerified
+    senderAddress={ADDRESS}
+    recipientAddress={ADDRESS}
+    estFeeAmount=&quot;0.423354 KAS&quot;
+    estFeeUsd=&quot;≈ $1.345 USD&quot;
+    feeBreakdown={undefined}
+    isConfirmDisabled={false}
+    isConfirmLoading={false} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Fee Loading</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const FeeLoading = () =&gt; &lt;TransferConfirmPage
+    domainName=&quot;nicole.kas&quot;
+    formatIconSource={FORMAT_ICON_FIXTURE}
+    isVerified
+    senderAddress={ADDRESS}
+    recipientAddress={ADDRESS}
+    estFeeAmount=&quot;—&quot;
+    estFeeUsd={undefined}
+    feeBreakdown={undefined}
+    isConfirmDisabled
+    isConfirmLoading={false} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Confirming</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Confirming = () =&gt; &lt;TransferConfirmPage
+    domainName=&quot;nicole.kas&quot;
+    formatIconSource={FORMAT_ICON_FIXTURE}
+    isVerified
+    senderAddress={ADDRESS}
+    recipientAddress={ADDRESS}
+    estFeeAmount=&quot;0.423354 KAS&quot;
+    estFeeUsd=&quot;≈ $1.345 USD&quot;
+    feeBreakdown={FEE_BREAKDOWN}
+    isConfirmDisabled={false}
+    isConfirmLoading /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Addresses</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LongAddresses = () =&gt; &lt;TransferConfirmPage
+    domainName=&quot;nicole.kas&quot;
+    formatIconSource={FORMAT_ICON_FIXTURE}
+    isVerified
+    senderAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7extra1234567890&quot;
+    recipientAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7extra1234567890&quot;
+    estFeeAmount=&quot;0.423354 KAS&quot;
+    estFeeUsd=&quot;≈ $1.345 USD&quot;
+    feeBreakdown={FEE_BREAKDOWN}
+    isConfirmDisabled={false}
+    isConfirmLoading={false} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Domain Name</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LongDomainName = () =&gt; &lt;TransferConfirmPage
+    domainName=&quot;super-long-kaspa-name-service-domain.kas&quot;
+    formatIconSource={FORMAT_ICON_FIXTURE}
+    isVerified
+    senderAddress={ADDRESS}
+    recipientAddress={ADDRESS}
+    estFeeAmount=&quot;0.423354 KAS&quot;
+    estFeeUsd=&quot;≈ $1.345 USD&quot;
+    feeBreakdown={FEE_BREAKDOWN}
+    isConfirmDisabled={false}
+    isConfirmLoading={false} /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
   has-info 
   no-story-error
   no-doc-error"
@@ -7408,9 +7660,9 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> WalletOptionButton</h2>
       <div class="badges">
-        <label for="c-45-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-45-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
-        <label for="c-45-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-46-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-46-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
+        <label for="c-46-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -7422,10 +7674,10 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-45-add-wallets-components-walletoptionbutton-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-45-add-wallets-components-walletoptionbutton-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-46-add-wallets-components-walletoptionbutton-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-46-add-wallets-components-walletoptionbutton-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-45-add-wallets-components-walletoptionbutton-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-46-add-wallets-components-walletoptionbutton-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
