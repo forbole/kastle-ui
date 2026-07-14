@@ -116,7 +116,12 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
   const [isFeeSheetOpen, setIsFeeSheetOpen] = useState(false);
 
   const hasDomain = domain.length > 0;
-  const showDetails = hasDomain && !error && !!domainPriceAmount && !!estFeeAmount;
+  const showDetails =
+    hasDomain &&
+    !error &&
+    !insufficientFundsMessage &&
+    !!domainPriceAmount &&
+    !!estFeeAmount;
 
   return (
     <KeyboardAvoidingView
