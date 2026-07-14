@@ -86,7 +86,9 @@ export const Input: React.FC<InputProps> = ({
       </View>
       {invalid && (
         <View style={styles.errorRow}>
-          <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
+          <View style={styles.errorIcon}>
+            <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
+          </View>
           <Text
             allowFontScaling={false}
             style={[textStyles.bodyNormalSM, styles.errorText]}
@@ -137,6 +139,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.s2,
     marginTop: spacing.s2,
+  },
+  errorIcon: {
+    // Nudges the icon down so it sits on the first text line, not the
+    // vertical center of the whole (possibly multi-line) message.
+    marginTop: 2,
   },
   errorText: {
     color: errorColors.e600,

@@ -435,9 +435,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.s2,
   },
   messageIcon: {
-    // Nudges the icon down so it sits on the first text line, not the
-    // vertical center of the whole (possibly multi-line) message.
-    marginTop: 2,
+    // Matches bodyNormalSM's lineHeight so the icon centers on the first
+    // text line, not the vertical center of the whole (possibly multi-line)
+    // message.
+    height: 21,
+    justifyContent: "center",
   },
   messageSpacer: {
     height: spacing.s2,
