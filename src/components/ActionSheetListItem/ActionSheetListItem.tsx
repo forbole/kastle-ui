@@ -39,7 +39,7 @@ export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
           </Text>
         )}
       </View>
-      <ChevronRight size={24} color={typography.t600} strokeWidth={2} />
+      <ChevronRight size={24} color={typography.t900} strokeWidth={2} />
     </TouchableOpacity>
   );
 };
@@ -47,7 +47,7 @@ export const ActionSheetListItem: React.FC<ActionSheetListItemProps> = ({
 const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     gap: spacing.s2_5,
     padding: spacing.s3,
   },
