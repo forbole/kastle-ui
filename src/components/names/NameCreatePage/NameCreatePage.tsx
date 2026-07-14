@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Image,
   ImageSourcePropType,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Svg, { Defs, LinearGradient, Stop, Rect } from "react-native-svg";
 import { BadgeCheck, CircleCheck, Info, CircleAlert } from "lucide-react-native";
@@ -107,7 +109,10 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
   const showDetails = hasDomain && !error && !!domainPriceAmount && !!estFeeAmount;
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
@@ -285,7 +290,7 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
           fees={feeBreakdown}
         />
       )}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
