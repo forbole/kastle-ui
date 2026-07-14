@@ -29,13 +29,17 @@ import {
 import { Input } from "../../Input";
 import { SwipeToConfirm } from "../../SwipeToConfirm";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
-import { InfoSheet } from "../../InfoSheet";
+import { DomainPriceSheet, DomainPriceRow } from "../../DomainPriceSheet";
 
 /** Default card art — matches the gradient used on the name detail card. */
 const CARD_GRADIENT: [string, string] = ["#2FDCF5", "#0A6FA8"];
 
-const DEFAULT_PRICE_DESCRIPTION =
-  "Shorter domains cost more. Pricing is based on the number of characters in your domain name: 1-2 characters are 4200 KAS, 3 characters are 2100 KAS, 4 characters are 525 KAS, and 5+ characters are 35 KAS.";
+const DEFAULT_PRICE_ROWS: DomainPriceRow[] = [
+  { label: "1-2 characters", price: "4200 KAS" },
+  { label: "3 characters", price: "2100 KAS" },
+  { label: "4 characters", price: "525 KAS" },
+  { label: "5+ characters", price: "35 KAS" },
+];
 
 export interface NameCreatePageProps {
   /** Raw domain value, without the suffix (e.g. "nicole"). */
@@ -56,8 +60,12 @@ export interface NameCreatePageProps {
   domainPriceAmount?: string;
   /** Formatted USD equivalent, e.g. "≈ $1345 USD". */
   domainPriceUsd?: string;
-  /** Body text for the "Domain Price" info sheet. */
-  domainPriceDescription?: string;
+  /** Price tiers shown in the "Domain Price" sheet when the row is tapped. */
+  domainPriceRows?: DomainPriceRow[];
+  /** Attribution label shown at the bottom of the "Domain Price" sheet, e.g. "INS Domain". */
+  domainPriceSourceLabel?: string;
+  /** Called when the "Domain Price" sheet's attribution row is pressed. */
+  onDomainPriceSourcePress?: () => void;
 
   /** Formatted estimated network fee total, e.g. "0.423354 KAS". */
   estFeeAmount?: string;
@@ -91,7 +99,9 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
   error,
   domainPriceAmount,
   domainPriceUsd,
-  domainPriceDescription = DEFAULT_PRICE_DESCRIPTION,
+  domainPriceRows = DEFAULT_PRICE_ROWS,
+  domainPriceSourceLabel,
+  onDomainPriceSourcePress,
   estFeeAmount,
   estFeeUsd,
   feeBreakdown,
@@ -276,11 +286,12 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
         <View style={styles.homeIndicator} />
       </View>
 
-      <InfoSheet
+      <DomainPriceSheet
         isOpen={isPriceSheetOpen}
         onClose={() => setIsPriceSheetOpen(false)}
-        title="Domain Price"
-        description={domainPriceDescription}
+        rows={domainPriceRows}
+        sourceLabel={domainPriceSourceLabel}
+        onSourcePress={onDomainPriceSourcePress}
       />
 
       {!!feeBreakdown?.length && (
