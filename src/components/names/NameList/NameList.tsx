@@ -277,8 +277,8 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   cardLogo: {
-    width: 10,
-    height: 10,
+    width: 44,
+    height: 14,
     alignSelf: "flex-start",
   },
   verifiedBadge: {

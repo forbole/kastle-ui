@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   cardLogo: {
-    width: 16,
+    width: 50,
     height: 16,
     alignSelf: "flex-start",
   },
