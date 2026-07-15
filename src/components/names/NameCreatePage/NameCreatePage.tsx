@@ -18,7 +18,6 @@ import {
   spacing,
   borderRadius,
   fontFamilies,
-  primary,
   typography,
   background,
   border,
@@ -30,6 +29,7 @@ import { Input } from "../../Input";
 import { SwipeToConfirm } from "../../SwipeToConfirm";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { DomainPriceSheet, DomainPriceRow } from "../../DomainPriceSheet";
+import { FORMAT_CONFIG, type NameFormat } from "../types";
 
 /** Default card art — matches the gradient used on the name detail card. */
 const CARD_GRADIENT: [string, string] = ["#2FDCF5", "#0A6FA8"];
@@ -45,6 +45,8 @@ export interface NameCreatePageProps {
   /** Raw domain value, without the suffix (e.g. "nicole"). */
   domain: string;
   onDomainChange: (value: string) => void;
+  /** Which naming service this domain belongs to — sets the verified badge's accent color to match NameDetailPage/NameList. */
+  format?: NameFormat;
   /** Suffix appended to the domain on the preview card, e.g. ".kas". */
   suffix?: string;
   /** Logo/wordmark rendered on the card, e.g. the Kaspa mark. */
@@ -92,6 +94,7 @@ export interface NameCreatePageProps {
 export const NameCreatePage: React.FC<NameCreatePageProps> = ({
   domain,
   onDomainChange,
+  format = "kns",
   suffix = ".kas",
   formatIconSource,
   formatLabel = "Kaspa",
@@ -124,10 +127,7 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
     !!estFeeAmount;
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <View style={styles.container}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
@@ -173,7 +173,7 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
               <View style={styles.verifiedBadge}>
                 <BadgeCheck
                   size={20}
-                  color={primary.p500}
+                  color={FORMAT_CONFIG[format].color}
                   fill={colors.white}
                   strokeWidth={2}
                 />
@@ -259,37 +259,41 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
       </ScrollView>
 
       {/* Bottom Action Bar */}
-      <View style={styles.bottomBar}>
-        {insufficientFundsMessage ? (
-          <View style={styles.messageRow}>
-            <View style={styles.messageIcon}>
-              <CircleAlert size={18} color={errorColors.e600} strokeWidth={2} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <View style={styles.bottomBar}>
+          {insufficientFundsMessage ? (
+            <View style={styles.messageRow}>
+              <View style={styles.messageIcon}>
+                <CircleAlert size={18} color={errorColors.e600} strokeWidth={2} />
+              </View>
+              <Text allowFontScaling={false} style={styles.errorMessageText}>
+                {insufficientFundsMessage}
+              </Text>
             </View>
-            <Text allowFontScaling={false} style={styles.errorMessageText}>
-              {insufficientFundsMessage}
-            </Text>
-          </View>
-        ) : costMessage ? (
-          <View style={styles.messageRow}>
-            <View style={styles.messageIcon}>
-              <Info size={18} color={warning.w500} strokeWidth={2} />
+          ) : costMessage ? (
+            <View style={styles.messageRow}>
+              <View style={styles.messageIcon}>
+                <Info size={18} color={warning.w500} strokeWidth={2} />
+              </View>
+              <Text allowFontScaling={false} style={styles.warningMessageText}>
+                {costMessage}
+              </Text>
             </View>
-            <Text allowFontScaling={false} style={styles.warningMessageText}>
-              {costMessage}
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.messageSpacer} />
-        )}
+          ) : (
+            <View style={styles.messageSpacer} />
+          )}
 
-        <SwipeToConfirm
-          title={confirmTitle}
-          onConfirm={onConfirm}
-          isDisabled={isConfirmDisabled}
-          isLoading={isConfirmLoading}
-        />
-        <View style={styles.homeIndicator} />
-      </View>
+          <SwipeToConfirm
+            title={confirmTitle}
+            onConfirm={onConfirm}
+            isDisabled={isConfirmDisabled}
+            isLoading={isConfirmLoading}
+          />
+          <View style={styles.homeIndicator} />
+        </View>
+      </KeyboardAvoidingView>
 
       <DomainPriceSheet
         isOpen={isPriceSheetOpen}
@@ -306,7 +310,7 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
           fees={feeBreakdown}
         />
       )}
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 

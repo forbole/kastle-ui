@@ -22,12 +22,7 @@ import {
   background,
 } from "../../../config/theme";
 import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
-import type { NameFormat } from "../types";
-
-const FORMAT_LABEL: Record<NameFormat, string> = {
-  kns: "Kaspa",
-  igra: "iGRA",
-};
+import { FORMAT_CONFIG, type NameFormat } from "../types";
 
 const GRID_COLUMNS = 3;
 const GRID_GAP = spacing.s2;
@@ -203,7 +198,12 @@ const NameCard: React.FC<{
 
       {item.isVerified && (
         <View style={styles.verifiedBadge}>
-          <BadgeCheck size={16} color={colors.white} strokeWidth={2} />
+          <BadgeCheck
+            size={16}
+            color={FORMAT_CONFIG[item.format].color}
+            fill={colors.white}
+            strokeWidth={2}
+          />
         </View>
       )}
 
@@ -223,7 +223,7 @@ const NameCard: React.FC<{
       <View style={styles.cardLogoRow}>
         <Image source={item.formatIconSource} style={styles.cardLogoIcon} />
         <Text allowFontScaling={false} style={styles.cardLogoText}>
-          {FORMAT_LABEL[item.format]}
+          {FORMAT_CONFIG[item.format].label}
         </Text>
       </View>
     </TouchableOpacity>

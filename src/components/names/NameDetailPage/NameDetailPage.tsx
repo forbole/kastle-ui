@@ -17,28 +17,11 @@ import {
   spacing,
   borderRadius,
   fontFamilies,
-  primary,
-  tertiary,
   typography,
   background,
   border,
 } from "../../../config/theme";
-import type { NameFormat, NameFormatConfig } from "../types";
-
-const FORMAT_CONFIG: Record<NameFormat, NameFormatConfig> = {
-  kns: {
-    label: "Kaspa",
-    suffix: ".kas",
-    color: primary.p500,
-    background: primary.p0,
-  },
-  igra: {
-    label: "iGRA",
-    suffix: ".igra",
-    color: tertiary.t500,
-    background: tertiary.t0,
-  },
-};
+import { FORMAT_CONFIG, type NameFormat } from "../types";
 
 /** Default card art — every card renders on this gradient unless `imageUri` overrides it. */
 const CARD_GRADIENT: [string, string] = ["#2FDCF5", "#0A6FA8"];
@@ -434,7 +417,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundScreen,
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s3,
-    paddingBottom: spacing.s4,
   },
   transferButton: {
     backgroundColor: colors.primary,
