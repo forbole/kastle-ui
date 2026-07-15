@@ -1,11 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet/EstFeeSheet";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import { SwipeToConfirm } from "../../SwipeToConfirm/SwipeToConfirm";
 import {
+  background,
   colors,
   spacing,
   borderRadius,
@@ -48,7 +49,7 @@ export const CreateVaultConfirmStep: React.FC<
 > = ({
   recoveryAddress,
   onPressCopyRecovery,
-  recoveryLabel = "Pays out to",
+  recoveryLabel = "External recovery address",
   rows,
   fees = [],
   confirmTitle = "Swipe to confirm",
@@ -67,16 +68,13 @@ export const CreateVaultConfirmStep: React.FC<
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Pays out to */}
-        <View style={styles.section}>
-          <Text allowFontScaling={false} style={styles.sectionLabel}>
-            {recoveryLabel}
-          </Text>
-          <VaultAddressCard
-            address={recoveryAddress}
-            onPressCopy={onPressCopyRecovery}
-          />
-        </View>
+        {/* Recovery address — labeled card with chain badge */}
+        <VaultAddressCard
+          label={recoveryLabel}
+          chainBadge="Kaspa"
+          address={recoveryAddress}
+          onPressCopy={onPressCopyRecovery}
+        />
 
         {/* Summary */}
         <View style={styles.card}>
@@ -130,15 +128,8 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.s4,
     gap: spacing.s4,
   },
-  section: {
-    gap: spacing.s2,
-  },
-  sectionLabel: {
-    ...textStyles.bodySemiboldSM,
-    color: colors.textSecondary,
-  },
   card: {
-    backgroundColor: colors.backgroundSurface,
+    backgroundColor: background.bg50,
     borderColor: colors.border,
     borderWidth: borderWidth.bw1,
     borderRadius: borderRadius["2xl"],
