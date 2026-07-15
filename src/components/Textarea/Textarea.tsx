@@ -29,6 +29,12 @@ export interface TextareaProps {
   placeholder?: string;
   error?: string;
   disabled?: boolean;
+  /** Non-editable (read-only) display without the dimmed `disabled` look. */
+  editable?: boolean;
+  /** Custom trailing icon (top-right). Overrides the default scan icon. */
+  rightIcon?: React.ReactNode;
+  /** Override the box min height (default 160 — the recovery-phrase textarea). */
+  minHeight?: number;
   secureTextEntry?: boolean;
   /** Visual-only scan icon (top-right). No onPress — Paul wires later. */
   scanIcon?: boolean;
@@ -49,6 +55,9 @@ export const Textarea: React.FC<TextareaProps> = ({
   placeholder,
   error,
   disabled = false,
+  editable = true,
+  rightIcon,
+  minHeight,
   secureTextEntry = false,
   scanIcon = true,
   masked = false,
@@ -66,6 +75,7 @@ export const Textarea: React.FC<TextareaProps> = ({
     focused && !invalid && styles.boxFocused,
     invalid && styles.boxInvalid,
     disabled && styles.boxDisabled,
+    minHeight != null && { minHeight },
   ];
 
   return (
@@ -100,9 +110,10 @@ export const Textarea: React.FC<TextareaProps> = ({
             onChangeText={onChangeText}
             placeholder={placeholder}
             placeholderTextColor={typography.t400}
-            editable={!disabled}
+            editable={editable && !disabled}
             secureTextEntry={secureTextEntry}
             multiline
+            scrollEnabled={editable}
             textAlignVertical="top"
             autoCapitalize="none"
             autoCorrect={false}
@@ -116,11 +127,13 @@ export const Textarea: React.FC<TextareaProps> = ({
               onBlur?.();
             }}
           />
-          {scanIcon && (
+          {rightIcon ? (
+            <View style={styles.scanWrapper}>{rightIcon}</View>
+          ) : scanIcon ? (
             <TouchableOpacity onPress={onPressScan} style={styles.scanWrapper}>
               <ScanLine size={20} color={primary.p500} strokeWidth={2} />
             </TouchableOpacity>
-          )}
+          ) : null}
         </View>
       )}
       {invalid && (
