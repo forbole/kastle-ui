@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ExternalLink } from "lucide-react-native";
+import { ExternalLink, Info } from "lucide-react-native";
 import { colors, spacing, textStyles } from "../../../../config/theme";
 
 export interface DetailKVRowProps {
@@ -16,6 +16,8 @@ export interface DetailKVRowProps {
   valuePrefix?: React.ReactNode;
   /** If set: the whole row becomes pressable and appends an external-link icon. */
   onPressValue?: () => void;
+  /** If set: an info (ⓘ) button after the label (e.g. opens a tooltip sheet). */
+  onPressInfo?: () => void;
 }
 
 export const DetailKVRow: React.FC<DetailKVRowProps> = ({
@@ -24,13 +26,21 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   valueColor,
   valuePrefix,
   onPressValue,
+  onPressInfo,
 }) => {
   const defaultValueColor = onPressValue ? colors.primary : colors.textPrimary;
   const resolvedValueColor = valueColor ?? defaultValueColor;
 
   const content = (
     <>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.label]}>{label}</Text>
+      <View style={styles.labelWrap}>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.label]}>{label}</Text>
+        {onPressInfo ? (
+          <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
+            <Info size={14} color={colors.textMuted} strokeWidth={2} />
+          </TouchableOpacity>
+        ) : null}
+      </View>
       <View style={styles.valueWrap}>
         {valuePrefix}
         <Text
@@ -74,6 +84,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingVertical: spacing.s3,
     gap: spacing.s4,
+  },
+  labelWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s1,
+    flexShrink: 0,
   },
   label: {
     color: colors.textSecondary,
