@@ -22,7 +22,7 @@ import {
   background,
 } from "../../../config/theme";
 import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
-import { FORMAT_CONFIG, LOGO_ASPECT_RATIO, type NameFormat } from "../types";
+import { FORMAT_CONFIG, type NameFormat } from "../types";
 
 const GRID_COLUMNS = 3;
 const GRID_GAP = spacing.s2;
@@ -277,8 +277,8 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   cardLogo: {
+    width: 44,
     height: 14,
-    aspectRatio: LOGO_ASPECT_RATIO,
     alignSelf: "flex-start",
   },
   verifiedBadge: {

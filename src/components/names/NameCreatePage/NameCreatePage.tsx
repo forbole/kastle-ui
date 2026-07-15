@@ -29,7 +29,6 @@ import { Input } from "../../Input";
 import { SwipeToConfirm } from "../../SwipeToConfirm";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { DomainPriceSheet, DomainPriceRow } from "../../DomainPriceSheet";
-import { LOGO_ASPECT_RATIO } from "../types";
 
 /** Default card art — matches the gradient used on the name detail card. */
 const CARD_GRADIENT: [string, string] = ["#2FDCF5", "#0A6FA8"];
@@ -365,8 +364,8 @@ const styles = StyleSheet.create({
     gap: spacing.s1,
   },
   cardLogo: {
+    width: 50,
     height: 16,
-    aspectRatio: LOGO_ASPECT_RATIO,
     alignSelf: "flex-start",
   },
   verifiedBadge: {

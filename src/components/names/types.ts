@@ -29,6 +29,3 @@ export const FORMAT_CONFIG: Record<NameFormat, NameFormatConfig> = {
     background: tertiary.t0,
   },
 };
-
-/** Native aspect ratio of the `*-long-logo.png` wordmark assets (~157×50) — pair with a fixed `height` and this `aspectRatio` so Image only needs its height constrained; width is derived automatically. */
-export const LOGO_ASPECT_RATIO = 157 / 50;
