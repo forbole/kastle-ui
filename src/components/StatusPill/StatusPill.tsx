@@ -9,6 +9,8 @@ export interface StatusPillProps {
   status: StatusPillStatus;
   /** Override the default label ("Success" / "Failed" / "Pending"). */
   label?: string;
+  /** Left indicator: lucide icon (default) or a small filled dot. */
+  indicator?: "icon" | "dot";
 }
 
 const STATUS_CONFIG: Record<
@@ -40,13 +42,17 @@ const STATUS_CONFIG: Record<
   },
 };
 
-export const StatusPill: React.FC<StatusPillProps> = ({ status, label }) => {
+export const StatusPill: React.FC<StatusPillProps> = ({ status, label, indicator = "icon" }) => {
   const config = STATUS_CONFIG[status];
   const Icon = config.icon;
 
   return (
     <View style={[styles.pill, { backgroundColor: config.bg }]}>
-      <Icon size={12} color={config.color} strokeWidth={2.5} />
+      {indicator === "dot" ? (
+        <View style={[styles.dot, { backgroundColor: config.color }]} />
+      ) : (
+        <Icon size={12} color={config.color} strokeWidth={2.5} />
+      )}
       <Text
         allowFontScaling={false}
         style={[textStyles.bodyNormalXS, styles.label, { color: config.color }]}
@@ -69,5 +75,10 @@ const styles = StyleSheet.create({
   },
   label: {
     lineHeight: 16,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 9999,
   },
 });
