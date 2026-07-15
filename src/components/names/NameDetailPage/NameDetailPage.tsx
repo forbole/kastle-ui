@@ -149,7 +149,7 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
             <View style={styles.verifiedBadge}>
               <BadgeCheck
                 size={28}
-                color={formatConfig.color}
+                color={colors.primary}
                 fill={colors.white}
                 strokeWidth={2}
               />

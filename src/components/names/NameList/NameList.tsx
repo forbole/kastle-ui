@@ -200,7 +200,7 @@ const NameCard: React.FC<{
         <View style={styles.verifiedBadge}>
           <BadgeCheck
             size={16}
-            color={FORMAT_CONFIG[item.format].color}
+            color={colors.primary}
             fill={colors.white}
             strokeWidth={2}
           />

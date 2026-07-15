@@ -29,7 +29,6 @@ import { Input } from "../../Input";
 import { SwipeToConfirm } from "../../SwipeToConfirm";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { DomainPriceSheet, DomainPriceRow } from "../../DomainPriceSheet";
-import { FORMAT_CONFIG, type NameFormat } from "../types";
 
 /** Default card art — matches the gradient used on the name detail card. */
 const CARD_GRADIENT: [string, string] = ["#2FDCF5", "#0A6FA8"];
@@ -45,8 +44,6 @@ export interface NameCreatePageProps {
   /** Raw domain value, without the suffix (e.g. "nicole"). */
   domain: string;
   onDomainChange: (value: string) => void;
-  /** Which naming service this domain belongs to — sets the verified badge's accent color to match NameDetailPage/NameList. */
-  format?: NameFormat;
   /** Suffix appended to the domain on the preview card, e.g. ".kas". */
   suffix?: string;
   /** Logo/wordmark rendered on the card, e.g. the Kaspa mark. */
@@ -94,7 +91,6 @@ export interface NameCreatePageProps {
 export const NameCreatePage: React.FC<NameCreatePageProps> = ({
   domain,
   onDomainChange,
-  format = "kns",
   suffix = ".kas",
   formatIconSource,
   formatLabel = "Kaspa",
@@ -175,7 +171,7 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
               <View style={styles.verifiedBadge}>
                 <BadgeCheck
                   size={20}
-                  color={FORMAT_CONFIG[format].color}
+                  color={colors.primary}
                   fill={colors.white}
                   strokeWidth={2}
                 />
