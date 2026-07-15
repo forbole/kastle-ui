@@ -1,0 +1,153 @@
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { Eye, EyeOff } from "lucide-react-native";
+import { VaultCard, VaultCardProps } from "../VaultCard/VaultCard";
+import { EmptyState, EmptyStateProps } from "../../EmptyState/EmptyState";
+import { colors, spacing, textStyles } from "../../../config/theme";
+
+export interface VaultListScreenProps {
+  /** Vault cards to render in the 2-column grid. */
+  vaults: VaultCardProps[];
+  /** Balance summary label. */
+  totalLabel?: string;
+  /** Balance summary amount, e.g. "$12,152,000.375". */
+  totalAmount?: string;
+  /** Initial hidden state for the balance (toggled internally by the eye). */
+  defaultBalanceHidden?: boolean;
+  /** Fired after the eye toggles (parent may persist the preference). */
+  onToggleBalance?: () => void;
+  /** Show the scanning state instead of the grid. */
+  scanning?: boolean;
+  scanningText?: string;
+  /** Rendered when there are no vaults and we are not scanning. */
+  emptyState?: EmptyStateProps;
+}
+
+/**
+ * Body-only vaults list: balance summary + a 2-column grid of VaultCards,
+ * with scanning + empty states. Header bar and bottom nav live in
+ * kastle-mobile (去頭去尾). Pure UI — the only local state is the balance
+ * hide/reveal toggle (a UI affordance, not data).
+ */
+export const VaultListScreen: React.FC<VaultListScreenProps> = ({
+  vaults,
+  totalLabel = "Total Assets (USD)",
+  totalAmount,
+  defaultBalanceHidden = false,
+  onToggleBalance,
+  scanning = false,
+  scanningText = "Scanning for vaults…",
+  emptyState,
+}) => {
+  const [hidden, setHidden] = React.useState(defaultBalanceHidden);
+
+  const toggleBalance = () => {
+    setHidden((h) => !h);
+    onToggleBalance?.();
+  };
+
+  // Chunk into rows of two for the grid.
+  const rows: VaultCardProps[][] = [];
+  for (let i = 0; i < vaults.length; i += 2) {
+    rows.push(vaults.slice(i, i + 2));
+  }
+
+  return (
+    <View style={styles.body}>
+      {/* Balance summary */}
+      <View style={styles.balance}>
+        <View style={styles.balanceRow}>
+          <Text allowFontScaling={false} style={styles.balanceLabel}>
+            {totalLabel}
+          </Text>
+          <TouchableOpacity onPress={toggleBalance} hitSlop={8}>
+            {hidden ? (
+              <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+            ) : (
+              <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+            )}
+          </TouchableOpacity>
+        </View>
+        <Text allowFontScaling={false} style={styles.balanceAmount}>
+          {hidden ? "••••••••" : totalAmount}
+        </Text>
+      </View>
+
+      {/* Grid / scanning / empty */}
+      {scanning ? (
+        <View style={styles.stateBox}>
+          <ActivityIndicator color={colors.primary} />
+          <Text allowFontScaling={false} style={styles.scanningText}>
+            {scanningText}
+          </Text>
+        </View>
+      ) : vaults.length === 0 && emptyState ? (
+        <EmptyState {...emptyState} />
+      ) : (
+        <View style={styles.grid}>
+          {rows.map((row, ri) => (
+            <View key={ri} style={styles.gridRow}>
+              {row.map((vault, ci) => (
+                <View key={ci} style={styles.gridCell}>
+                  <VaultCard {...vault} />
+                </View>
+              ))}
+              {row.length === 1 ? <View style={styles.gridCell} /> : null}
+            </View>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    paddingHorizontal: spacing.s5,
+    gap: spacing.s4,
+  },
+  balance: {
+    paddingVertical: spacing.s2,
+    gap: spacing.s1,
+  },
+  balanceRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
+  },
+  balanceLabel: {
+    ...textStyles.bodyNormalSM,
+    color: colors.textSecondary,
+  },
+  balanceAmount: {
+    ...textStyles.headingLG,
+    color: colors.textPrimary,
+  },
+  grid: {
+    gap: spacing.s2,
+  },
+  gridRow: {
+    flexDirection: "row",
+    gap: spacing.s2,
+  },
+  gridCell: {
+    flex: 1,
+  },
+  stateBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingVertical: spacing.s10,
+  },
+  scanningText: {
+    ...textStyles.bodyNormalSM,
+    color: colors.textMuted,
+  },
+});
