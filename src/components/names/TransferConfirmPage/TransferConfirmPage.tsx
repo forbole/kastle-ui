@@ -134,14 +134,16 @@ export const TransferConfirmPage: React.FC<TransferConfirmPageProps> = ({
                 {domainName}
               </Text>
             </View>
-            <View style={styles.cardLogoRow}>
-              {formatIconSource && (
-                <Image source={formatIconSource} style={styles.cardLogoIcon} />
-              )}
-              <Text allowFontScaling={false} style={styles.cardLogoText}>
-                {formatLabel}
-              </Text>
-            </View>
+            {formatIconSource && (
+              <View style={styles.cardLogoRow}>
+                <Image
+                  source={formatIconSource}
+                  style={styles.cardLogo}
+                  resizeMode="contain"
+                  accessibilityLabel={formatLabel}
+                />
+              </View>
+            )}
             {isVerified && (
               <View style={styles.verifiedBadge}>
                 <BadgeCheck
@@ -307,13 +309,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s1,
   },
-  cardLogoIcon: {
+  cardLogo: {
     width: 16,
     height: 16,
-  },
-  cardLogoText: {
-    ...textStyles.bodyNormalXS,
-    color: colors.white,
+    alignSelf: "flex-start",
   },
   verifiedBadge: {
     position: "absolute",

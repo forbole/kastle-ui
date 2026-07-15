@@ -125,10 +125,12 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
 
           {/* Format wordmark — pinned to the bottom edge */}
           <View style={styles.cardLogoRow}>
-            <Image source={formatIconSource} style={styles.cardLogoIcon} />
-            <Text allowFontScaling={false} style={styles.cardLogoText}>
-              {formatConfig.label}
-            </Text>
+            <Image
+              source={formatIconSource}
+              style={styles.cardLogo}
+              resizeMode="contain"
+              accessibilityLabel={formatConfig.label}
+            />
           </View>
 
           {/* Share button overlay */}
@@ -256,7 +258,6 @@ export const NameDetailPage: React.FC<NameDetailPageProps> = ({
             </Text>
           </View>
         ) : null}
-        <View style={styles.homeIndicator} />
       </View>
     </View>
   );
@@ -317,13 +318,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s2,
   },
-  cardLogoIcon: {
+  cardLogo: {
     width: 24,
     height: 24,
-  },
-  cardLogoText: {
-    ...textStyles.bodySemiboldXL,
-    color: colors.white,
+    alignSelf: "flex-start",
   },
   shareButton: {
     position: "absolute",
@@ -453,8 +451,5 @@ const styles = StyleSheet.create({
     fontFamily: fontFamilies["400"],
     color: typography.t600,
     textAlign: "center",
-  },
-  homeIndicator: {
-    height: 34,
   },
 });

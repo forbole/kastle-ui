@@ -161,14 +161,16 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
                 {hasDomain ? `${domain}${suffix}` : suffix}
               </Text>
             </View>
-            <View style={styles.cardLogoRow}>
-              {formatIconSource && (
-                <Image source={formatIconSource} style={styles.cardLogoIcon} />
-              )}
-              <Text allowFontScaling={false} style={styles.cardLogoText}>
-                {formatLabel}
-              </Text>
-            </View>
+            {formatIconSource && (
+              <View style={styles.cardLogoRow}>
+                <Image
+                  source={formatIconSource}
+                  style={styles.cardLogo}
+                  resizeMode="contain"
+                  accessibilityLabel={formatLabel}
+                />
+              </View>
+            )}
             {isAvailable && (
               <View style={styles.verifiedBadge}>
                 <BadgeCheck
@@ -291,7 +293,6 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
             isDisabled={isConfirmDisabled}
             isLoading={isConfirmLoading}
           />
-          <View style={styles.homeIndicator} />
         </View>
       </KeyboardAvoidingView>
 
@@ -366,13 +367,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s1,
   },
-  cardLogoIcon: {
+  cardLogo: {
     width: 16,
     height: 16,
-  },
-  cardLogoText: {
-    ...textStyles.bodyNormalXS,
-    color: colors.white,
+    alignSelf: "flex-start",
   },
   verifiedBadge: {
     position: "absolute",
@@ -464,8 +462,5 @@ const styles = StyleSheet.create({
     color: warning.w500,
     flexShrink: 1,
     textAlign: "left",
-  },
-  homeIndicator: {
-    height: 34,
   },
 });

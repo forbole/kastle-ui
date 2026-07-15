@@ -221,10 +221,12 @@ const NameCard: React.FC<{
       </View>
 
       <View style={styles.cardLogoRow}>
-        <Image source={item.formatIconSource} style={styles.cardLogoIcon} />
-        <Text allowFontScaling={false} style={styles.cardLogoText}>
-          {FORMAT_CONFIG[item.format].label}
-        </Text>
+        <Image
+          source={item.formatIconSource}
+          style={styles.cardLogo}
+          resizeMode="contain"
+          accessibilityLabel={FORMAT_CONFIG[item.format].label}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -274,17 +276,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s1,
   },
-  cardLogoIcon: {
+  cardLogo: {
     width: 10,
     height: 10,
-    resizeMode: "contain",
-  },
-  cardLogoText: {
-    ...textStyles.bodySemibold2XS,
-    color: colors.white,
-    textShadowColor: "rgba(0, 19, 58, 0.4)",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 4,
+    alignSelf: "flex-start",
   },
   verifiedBadge: {
     position: "absolute",
