@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Delete } from "lucide-react-native";
+import { Delete, Info, AlertCircle } from "lucide-react-native";
 import {
   colors,
   spacing,
@@ -23,6 +23,15 @@ export interface KeypadProps {
   maxLabel?: string;
   onPressMax?: () => void;
   maxDisabled?: boolean;
+  /**
+   * Info link shown above the keys (e.g. "How a Vault works?"). When an error
+   * is set it is replaced by the error — the row keeps a fixed height either
+   * way so the layout never jumps.
+   */
+  infoLabel?: string;
+  onPressInfo?: () => void;
+  /** Validation error (red). Takes priority over infoLabel in the same row. */
+  error?: string;
 }
 
 const KEYS: string[][] = [
@@ -47,6 +56,9 @@ export const Keypad: React.FC<KeypadProps> = ({
   maxLabel = "Max",
   onPressMax,
   maxDisabled = false,
+  infoLabel,
+  onPressInfo,
+  error,
 }) => {
   const atMaxFraction = (amount: string) => {
     const [, fraction] = amount.split(".");
@@ -79,6 +91,36 @@ export const Keypad: React.FC<KeypadProps> = ({
 
   return (
     <View style={styles.container}>
+      {/* Info link / error — fixed height so toggling never shifts the keys */}
+      {infoLabel || error ? (
+        <View style={styles.messageRow}>
+          {error ? (
+            <>
+              <AlertCircle
+                size={16}
+                color={colors.danger}
+                strokeWidth={2}
+              />
+              <Text allowFontScaling={false} style={styles.messageError}>
+                {error}
+              </Text>
+            </>
+          ) : (
+            <TouchableOpacity
+              style={styles.messageInfo}
+              onPress={onPressInfo}
+              disabled={!onPressInfo}
+              hitSlop={8}
+            >
+              <Info size={16} color={colors.textSecondary} strokeWidth={2} />
+              <Text allowFontScaling={false} style={styles.messageInfoText}>
+                {infoLabel}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ) : null}
+
       {/* Balance + Max */}
       <View style={styles.header}>
         <View style={styles.balanceRow}>
@@ -137,6 +179,29 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
     paddingTop: spacing.s6,
     backgroundColor: colors.backgroundScreen,
+  },
+  messageRow: {
+    minHeight: spacing.s5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingHorizontal: spacing.s5,
+  },
+  messageInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
+  },
+  messageInfoText: {
+    ...textStyles.bodyNormalSM,
+    color: colors.textSecondary,
+  },
+  messageError: {
+    ...textStyles.bodyNormalSM,
+    color: colors.danger,
+    flexShrink: 1,
+    textAlign: "center",
   },
   header: {
     flexDirection: "row",

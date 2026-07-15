@@ -35,6 +35,8 @@ export interface TextareaProps {
   rightIcon?: React.ReactNode;
   /** Override the box min height (default 160 — the recovery-phrase textarea). */
   minHeight?: number;
+  /** Always reserve the error line's height so showing/hiding it never shifts layout. */
+  reserveErrorSpace?: boolean;
   secureTextEntry?: boolean;
   /** Visual-only scan icon (top-right). No onPress — Paul wires later. */
   scanIcon?: boolean;
@@ -58,6 +60,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   editable = true,
   rightIcon,
   minHeight,
+  reserveErrorSpace = false,
   secureTextEntry = false,
   scanIcon = true,
   masked = false,
@@ -136,17 +139,23 @@ export const Textarea: React.FC<TextareaProps> = ({
           ) : null}
         </View>
       )}
-      {invalid && (
-        <View style={styles.errorRow}>
-          <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
-          <Text
-            allowFontScaling={false}
-            style={[textStyles.bodyNormalSM, styles.errorText]}
-          >
-            {error}
-          </Text>
+      {invalid || reserveErrorSpace ? (
+        <View
+          style={[styles.errorRow, reserveErrorSpace && styles.errorRowReserved]}
+        >
+          {invalid ? (
+            <>
+              <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalSM, styles.errorText]}
+              >
+                {error}
+              </Text>
+            </>
+          ) : null}
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -215,6 +224,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.s2,
     marginTop: spacing.s4,
+  },
+  errorRowReserved: {
+    minHeight: spacing.s5,
   },
   errorText: {
     color: errorColors.e600,
