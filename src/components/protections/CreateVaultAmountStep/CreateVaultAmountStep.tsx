@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Info, AlertCircle } from "lucide-react-native";
 import { Keypad } from "../../Keypad/Keypad";
+import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import {
   colors,
   spacing,
@@ -36,10 +36,12 @@ export interface CreateVaultAmountStepProps {
   onPressMax?: () => void;
   maxDisabled?: boolean;
   maximumFractionDigits?: number;
-  /** Hint under the amount (shown when no error). */
-  message?: string;
-  /** Error under the amount (takes priority over message). */
+  /** Validation error — shown (red) on the keypad's message row. */
   error?: string;
+  /** Persistent info link on the keypad, e.g. "How a Vault works?". */
+  infoLabel?: string;
+  /** Content for the info sheet opened by the info link. */
+  infoSheet?: { title: string; description: string };
   continueLabel?: string;
   onPressContinue?: () => void;
   continueDisabled?: boolean;
@@ -47,9 +49,9 @@ export interface CreateVaultAmountStepProps {
 
 /**
  * Create-vault Step 1 — amount. Body-only: amount display + custom Keypad +
- * Continue. Header/nav live in kastle-mobile (去頭去尾). Pure — controlled amount.
- * Uses option 1 (custom keypad) per Nicole, rebuilt from the kastle-mobile
- * swap/bridge keypad.
+ * Continue. The info link / validation error live INSIDE the keypad (fixed
+ * height, so the layout never jumps). Header/nav live in kastle-mobile
+ * (去頭去尾). Pure — controlled amount; the info sheet is local UI state.
  */
 export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
   amount,
@@ -60,8 +62,9 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
   onPressMax,
   maxDisabled,
   maximumFractionDigits,
-  message,
   error,
+  infoLabel = "How a Vault works?",
+  infoSheet,
   continueLabel = "Continue",
   onPressContinue,
   continueDisabled = false,
@@ -69,6 +72,7 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
   const amountFontStyle =
     AMOUNT_TIERS.find((t) => amount.length <= t.maxLen)?.style ??
     textStyles.headingMD; // 18px floor — matches kastle-mobile minimumFontScale 0.5
+  const [infoOpen, setInfoOpen] = React.useState(false);
 
   return (
     <View style={styles.body}>
@@ -97,24 +101,7 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         ) : null}
       </View>
 
-      {/* Info / error — sits just above the keypad (per Figma) */}
-      {error ? (
-        <View style={styles.messageBar}>
-          <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
-          <Text allowFontScaling={false} style={styles.errorText}>
-            {error}
-          </Text>
-        </View>
-      ) : message ? (
-        <View style={styles.messageBar}>
-          <Info size={16} color={colors.textSecondary} strokeWidth={2} />
-          <Text allowFontScaling={false} style={styles.messageText}>
-            {message}
-          </Text>
-        </View>
-      ) : null}
-
-      {/* Keypad */}
+      {/* Keypad (hosts the info link / error) */}
       <Keypad
         value={amount}
         onChange={onChangeAmount}
@@ -122,6 +109,9 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         onPressMax={onPressMax}
         maxDisabled={maxDisabled}
         maximumFractionDigits={maximumFractionDigits}
+        infoLabel={infoLabel}
+        onPressInfo={infoSheet ? () => setInfoOpen(true) : undefined}
+        error={error}
       />
 
       {/* Continue */}
@@ -137,6 +127,13 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
           </Text>
         </TouchableOpacity>
       </View>
+
+      <InfoSheet
+        isOpen={infoOpen}
+        onClose={() => setInfoOpen(false)}
+        title={infoSheet?.title ?? ""}
+        description={infoSheet?.description ?? ""}
+      />
     </View>
   );
 };
@@ -176,26 +173,6 @@ const styles = StyleSheet.create({
   fiat: {
     ...textStyles.bodyNormalMD,
     color: colors.textMuted,
-  },
-  messageBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.s2,
-    paddingHorizontal: spacing.s5,
-    paddingBottom: spacing.s3,
-  },
-  messageText: {
-    ...textStyles.bodyNormalSM,
-    color: colors.textSecondary,
-    flexShrink: 1,
-    textAlign: "center",
-  },
-  errorText: {
-    ...textStyles.bodyNormalSM,
-    color: colors.danger,
-    flexShrink: 1,
-    textAlign: "center",
   },
   actionBar: {
     paddingHorizontal: spacing.s5,
