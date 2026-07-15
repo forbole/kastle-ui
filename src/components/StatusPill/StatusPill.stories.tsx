@@ -58,6 +58,16 @@ export const NetworkDot: Story = {
   args: { status: "success", label: "Network: Smooth", icon: "dot" },
 };
 
+/** Vault — Locked (green dot indicator) */
+export const LockedDot: Story = {
+  args: { status: "success", label: "Locked", icon: "dot" },
+};
+
+/** Vault — Withdrawing (amber dot indicator) */
+export const WithdrawingDot: Story = {
+  args: { status: "pending", label: "Withdrawing", icon: "dot" },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,
