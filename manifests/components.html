@@ -5713,7 +5713,7 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameCreatePage</h2>
       <div class="badges">
-        <label for="c-34-names-screens-namecreatepage-props" class="badge ok as-toggle">21 prop types</label>
+        <label for="c-34-names-screens-namecreatepage-props" class="badge ok as-toggle">22 prop types</label>
         
         <label for="c-34-names-screens-namecreatepage-stories" class="badge ok as-toggle">8 stories</label>
         
@@ -5740,7 +5740,7 @@ import { View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">21 prop types</span>
+              <span class="badge ok">22 prop types</span>
             </div>
             <pre><code>Component: src/components/names/NameCreatePage/NameCreatePage.tsx::NameCreatePage</code></pre>
             <pre><code>Props:</code></pre>
@@ -5800,6 +5800,11 @@ estFeeUsd?: string
  * Fee breakdown rows shown in the Est. Fee sheet when the row is tapped.
  */
 feeBreakdown?: EstFeeRow[]
+
+/**
+ * Which naming service this domain belongs to — sets the verified badge&#39;s accent color to match NameDetailPage/NameList.
+ */
+format?: &quot;kns&quot; | &quot;igra&quot; = &quot;kns&quot;
 
 /**
  * Logo/wordmark rendered on the card, e.g. the Kaspa mark.
