@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
 
   // List
   list: {
-    paddingBottom: spacing.s4,
+    paddingTop: spacing.s4,
+    paddingBottom: spacing.s6,
   },
 
   // iOS home indicator
