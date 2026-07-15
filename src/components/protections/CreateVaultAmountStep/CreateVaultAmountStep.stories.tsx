@@ -5,10 +5,9 @@ import { CreateVaultAmountStep } from "./CreateVaultAmountStep";
 import { background } from "../../../config/theme";
 
 const Demo: React.FC<{
-  message?: string;
   error?: string;
   fiatValue?: string;
-}> = ({ message, error, fiatValue }) => {
+}> = ({ error, fiatValue }) => {
   const [amount, setAmount] = React.useState("0");
   return (
     <CreateVaultAmountStep
@@ -17,8 +16,12 @@ const Demo: React.FC<{
       balance="1,500,000.45646 KAS"
       onPressMax={() => setAmount("1500000.45646")}
       fiatValue={fiatValue}
-      message={message}
       error={error}
+      infoSheet={{
+        title: "How a Vault works?",
+        description:
+          "A vault locks your KAS so it can't be moved right away. If your phone is stolen, the thief still can't take it — after the protection window, funds move to your recovery address.",
+      }}
       onPressContinue={() => {}}
       continueDisabled={amount === "0" || amount === ""}
     />
@@ -48,11 +51,9 @@ const meta: Meta<typeof CreateVaultAmountStep> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Enter the amount to lock — Continue enables once above zero. */
+/** Enter the amount to lock. Info link lives on the keypad; Continue enables above zero. */
 export const Default: Story = {
-  render: () => (
-    <Demo message="This whole amount will be locked in the vault." />
-  ),
+  render: () => <Demo />,
 };
 
 /** With a fiat conversion line. */

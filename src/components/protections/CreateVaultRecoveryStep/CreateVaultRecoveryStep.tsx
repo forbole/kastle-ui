@@ -88,6 +88,7 @@ export const CreateVaultRecoveryStep: React.FC<
           error={error}
           onPressScan={onPressScan}
           minHeight={spacing.s20}
+          reserveErrorSpace
         />
 
         {alerts.map((alert, i) => (
