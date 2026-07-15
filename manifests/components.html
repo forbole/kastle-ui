@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">50 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">44/50 infos</a><span class="filter-pill ok" aria-disabled="true">193 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">57 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">44/57 infos</a><span class="filter-pill ok" aria-disabled="true">215 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>2.1s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.9s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -1495,6 +1495,243 @@ import { View } from "react-native";</code></pre>
 <article
   class="card 
   no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="AddCustomNodeSheet">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> AddCustomNodeSheet</h2>
+      <div class="badges">
+        <label for="c-6-custom-rpc-components-addcustomnodesheet-props" class="badge ok as-toggle">7 prop types</label>
+        
+        <label for="c-6-custom-rpc-components-addcustomnodesheet-stories" class="badge ok as-toggle">4 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/custom-rpc/AddCustomNodeSheet/AddCustomNodeSheet.stories.tsx">custom-rpc-components-addcustomnodesheet · ./src/components/custom-rpc/AddCustomNodeSheet/AddCustomNodeSheet.stories.tsx</div>
+    
+    <div class="hint">Bottom sheet to add a custom RPC node — Node Name + RPC URL, with a trust note.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-6-custom-rpc-components-addcustomnodesheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-6-custom-rpc-components-addcustomnodesheet-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">7 prop types</span>
+            </div>
+            <pre><code>Component: src/components/custom-rpc/AddCustomNodeSheet/AddCustomNodeSheet.tsx::AddCustomNodeSheet</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Seed the inputs (e.g. to preview the filled / validating / error states).
+ */
+defaultName?: string = &quot;&quot;
+
+defaultUrl?: string = &quot;&quot;
+
+/**
+ * Error message shown under the RPC URL field.
+ */
+error?: string
+
+isOpen: boolean
+
+/**
+ * Show a spinner on Add while the node is being tested.
+ */
+isValidating?: boolean = false
+
+/**
+ * Called with the entered name + url when Add is pressed.
+ */
+onAdd: (name: string, url: string) =&gt; void
+
+onClose: () =&gt; void</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { AddCustomNodeSheet } from "kastle-ui";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;AddCustomNodeSheet isOpen /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Filled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Filled = () =&gt; &lt;AddCustomNodeSheet isOpen /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Validating</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Validating = () =&gt; &lt;AddCustomNodeSheet isOpen isValidating /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Error</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Error = () =&gt; &lt;AddCustomNodeSheet
+    isOpen
+    defaultName=&quot;Home node&quot;
+    defaultUrl=&quot;wss://bad-node&quot;
+    error=&quot;Can&#39;t reach this address.&quot; /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="AdvancedSettingsGroup">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> AdvancedSettingsGroup</h2>
+      <div class="badges">
+        <label for="c-7-settings-components-advancedsettingsgroup-props" class="badge ok as-toggle">5 prop types</label>
+        
+        <label for="c-7-settings-components-advancedsettingsgroup-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/settings/AdvancedSettingsGroup/AdvancedSettingsGroup.stories.tsx">settings-components-advancedsettingsgroup · ./src/components/settings/AdvancedSettingsGroup/AdvancedSettingsGroup.stories.tsx</div>
+    
+    <div class="hint">Advanced Settings group — section label + card holding the Network and Custom RPC rows. Matches the production kastle-mobile Settings group so it drops into the existing Settings page cleanly.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-7-settings-components-advancedsettingsgroup-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-7-settings-components-advancedsettingsgroup-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">5 prop types</span>
+            </div>
+            <pre><code>Component: src/components/settings/AdvancedSettingsGroup/AdvancedSettingsGroup.tsx::AdvancedSettingsGroup</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Custom RPC value — &quot;Default&quot; or the active node name.
+ */
+customRpcValue: string
+
+/**
+ * Network value colour. Defaults to mainnet teal.
+ */
+networkColor?: string = &quot;#14B8A6&quot;
+
+/**
+ * Current network value, e.g. &quot;Mainnet&quot;.
+ */
+networkValue: string
+
+onCustomRpcPress: () =&gt; void
+
+onNetworkPress: () =&gt; void</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { AdvancedSettingsGroup } from "kastle-ui";
+import { View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;AdvancedSettingsGroup networkValue=&quot;Mainnet&quot; customRpcValue=&quot;Default&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Custom Selected</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CustomSelected = () =&gt; &lt;AdvancedSettingsGroup networkValue=&quot;Mainnet&quot; customRpcValue=&quot;Home node&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Custom Name</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LongCustomName = () =&gt; &lt;AdvancedSettingsGroup
+    networkValue=&quot;Mainnet&quot;
+    customRpcValue=&quot;A very long node&#39;s name that truncates&quot; /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
   has-info 
   no-story-error
   no-doc-error"
@@ -1504,9 +1741,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Alert</h2>
       <div class="badges">
-        <label for="c-6-components-alert-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-6-components-alert-info" class="badge info as-toggle">1 info</label>
-        <label for="c-6-components-alert-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-8-components-alert-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-8-components-alert-info" class="badge info as-toggle">1 info</label>
+        <label for="c-8-components-alert-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -1518,10 +1755,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-6-components-alert-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-6-components-alert-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-8-components-alert-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-8-components-alert-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-6-components-alert-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-8-components-alert-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1625,9 +1862,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ApiConnectSheet</h2>
       <div class="badges">
-        <label for="c-7-explore-components-apiconnectsheet-props" class="badge ok as-toggle">8 prop types</label>
-        <label for="c-7-explore-components-apiconnectsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-7-explore-components-apiconnectsheet-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-9-explore-components-apiconnectsheet-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-9-explore-components-apiconnectsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-9-explore-components-apiconnectsheet-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -1639,10 +1876,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-7-explore-components-apiconnectsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-7-explore-components-apiconnectsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-9-explore-components-apiconnectsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-9-explore-components-apiconnectsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-7-explore-components-apiconnectsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-9-explore-components-apiconnectsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1774,9 +2011,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> AssetTransferCard</h2>
       <div class="badges">
-        <label for="c-8-swap-bridge-activity-components-assettransfercard-props" class="badge ok as-toggle">13 prop types</label>
-        <label for="c-8-swap-bridge-activity-components-assettransfercard-info" class="badge info as-toggle">1 info</label>
-        <label for="c-8-swap-bridge-activity-components-assettransfercard-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-10-swap-bridge-activity-components-assettransfercard-props" class="badge ok as-toggle">13 prop types</label>
+        <label for="c-10-swap-bridge-activity-components-assettransfercard-info" class="badge info as-toggle">1 info</label>
+        <label for="c-10-swap-bridge-activity-components-assettransfercard-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -1788,10 +2025,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-8-swap-bridge-activity-components-assettransfercard-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-8-swap-bridge-activity-components-assettransfercard-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-10-swap-bridge-activity-components-assettransfercard-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-10-swap-bridge-activity-components-assettransfercard-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-8-swap-bridge-activity-components-assettransfercard-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-10-swap-bridge-activity-components-assettransfercard-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -1938,9 +2175,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Banner</h2>
       <div class="badges">
-        <label for="c-9-explore-components-banner-props" class="badge ok as-toggle">2 prop types</label>
-        <label for="c-9-explore-components-banner-info" class="badge info as-toggle">1 info</label>
-        <label for="c-9-explore-components-banner-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-11-explore-components-banner-props" class="badge ok as-toggle">2 prop types</label>
+        <label for="c-11-explore-components-banner-info" class="badge info as-toggle">1 info</label>
+        <label for="c-11-explore-components-banner-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -1952,10 +2189,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-9-explore-components-banner-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-9-explore-components-banner-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-11-explore-components-banner-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-11-explore-components-banner-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-9-explore-components-banner-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-11-explore-components-banner-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2080,6 +2317,107 @@ import { View } from "react-native";</code></pre>
 <article
   class="card 
   no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="ButtonGroup">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> ButtonGroup</h2>
+      <div class="badges">
+        <label for="c-12-components-buttongroup-props" class="badge ok as-toggle">6 prop types</label>
+        
+        <label for="c-12-components-buttongroup-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/ButtonGroup/ButtonGroup.stories.tsx">components-buttongroup · ./src/components/ButtonGroup/ButtonGroup.stories.tsx</div>
+    
+    <div class="hint">Shared two-button footer (Cancel / primary action) — matches the Figma &quot;Bottom Action bar&quot; Outline Button + Action Button pair used across sheets.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-12-components-buttongroup-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-12-components-buttongroup-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">6 prop types</span>
+            </div>
+            <pre><code>Component: src/components/ButtonGroup/ButtonGroup.tsx::ButtonGroup</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>onPrimaryPress: () =&gt; void
+
+onSecondaryPress: () =&gt; void
+
+primaryDisabled?: boolean = false
+
+primaryLabel: string
+
+primaryLoading?: boolean = false
+
+secondaryLabel: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { ButtonGroup } from "kastle-ui";
+import { View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;ButtonGroup primaryLabel=&quot;Add&quot; secondaryLabel=&quot;Cancel&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Primary Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const PrimaryDisabled = () =&gt; &lt;ButtonGroup primaryLabel=&quot;Add&quot; secondaryLabel=&quot;Cancel&quot; primaryDisabled /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Primary Loading</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const PrimaryLoading = () =&gt; &lt;ButtonGroup primaryLabel=&quot;Add&quot; secondaryLabel=&quot;Cancel&quot; primaryLoading /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
   has-info 
   no-story-error
   no-doc-error"
@@ -2089,9 +2427,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> CommitRevealSheet</h2>
       <div class="badges">
-        <label for="c-10-explore-components-commitrevealsheet-props" class="badge ok as-toggle">13 prop types</label>
-        <label for="c-10-explore-components-commitrevealsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-10-explore-components-commitrevealsheet-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-13-explore-components-commitrevealsheet-props" class="badge ok as-toggle">13 prop types</label>
+        <label for="c-13-explore-components-commitrevealsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-13-explore-components-commitrevealsheet-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -2103,10 +2441,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-10-explore-components-commitrevealsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-10-explore-components-commitrevealsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-13-explore-components-commitrevealsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-13-explore-components-commitrevealsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-10-explore-components-commitrevealsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-13-explore-components-commitrevealsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2362,9 +2700,9 @@ scriptData?: string</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> CreateImportWalletScreen</h2>
       <div class="badges">
-        <label for="c-11-add-wallets-screens-create-importwalletscreen-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-11-add-wallets-screens-create-importwalletscreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-11-add-wallets-screens-create-importwalletscreen-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-14-add-wallets-screens-create-importwalletscreen-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-14-add-wallets-screens-create-importwalletscreen-info" class="badge info as-toggle">1 info</label>
+        <label for="c-14-add-wallets-screens-create-importwalletscreen-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -2376,10 +2714,10 @@ scriptData?: string</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-11-add-wallets-screens-create-importwalletscreen-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-11-add-wallets-screens-create-importwalletscreen-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-14-add-wallets-screens-create-importwalletscreen-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-14-add-wallets-screens-create-importwalletscreen-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-11-add-wallets-screens-create-importwalletscreen-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-14-add-wallets-screens-create-importwalletscreen-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2452,6 +2790,117 @@ import { View } from "react-native";</code></pre>
 <article
   class="card 
   no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="CustomRpcScreen">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> CustomRpcScreen</h2>
+      <div class="badges">
+        <label for="c-15-custom-rpc-screens-customrpcscreen-props" class="badge ok as-toggle">14 prop types</label>
+        
+        <label for="c-15-custom-rpc-screens-customrpcscreen-stories" class="badge ok as-toggle">2 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/custom-rpc/CustomRpcScreen/CustomRpcScreen.stories.tsx">custom-rpc-screens-customrpcscreen · ./src/components/custom-rpc/CustomRpcScreen/CustomRpcScreen.stories.tsx</div>
+    
+    <div class="hint">Custom RPC screen body (no header — the top nav + edit pencil live in the app shell / kastle-mobile). Subtitle + network tab + node list + add flow.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-15-custom-rpc-screens-customrpcscreen-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-15-custom-rpc-screens-customrpcscreen-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">14 prop types</span>
+            </div>
+            <pre><code>Component: src/components/custom-rpc/CustomRpcScreen/CustomRpcScreen.tsx::CustomRpcScreen</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>addError?: string
+
+isAddOpen: boolean
+
+/**
+ * Edit mode — rows show a remove control; the bottom button becomes &quot;Done&quot;.
+ */
+isEditing?: boolean = false
+
+isValidatingAdd?: boolean
+
+network: string
+
+nodes: RpcNode[]
+
+onAdd: (name: string, url: string) =&gt; void
+
+onCloseAdd: () =&gt; void
+
+onDoneEditing?: () =&gt; void
+
+onNetworkChange: (network: string) =&gt; void
+
+onOpenAdd: () =&gt; void
+
+onRemove?: (id: string) =&gt; void
+
+onSelect: (id: string) =&gt; void
+
+selectedId: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { CustomRpcScreen } from "kastle-ui";
+import { View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;Demo /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Edit Mode</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const EditMode = () =&gt; &lt;Demo editing /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
   has-info 
   no-story-error
   no-doc-error"
@@ -2461,9 +2910,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> DetailKVRow</h2>
       <div class="badges">
-        <label for="c-12-swap-bridge-activity-components-detailkvrow-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-12-swap-bridge-activity-components-detailkvrow-info" class="badge info as-toggle">1 info</label>
-        <label for="c-12-swap-bridge-activity-components-detailkvrow-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-16-swap-bridge-activity-components-detailkvrow-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-16-swap-bridge-activity-components-detailkvrow-info" class="badge info as-toggle">1 info</label>
+        <label for="c-16-swap-bridge-activity-components-detailkvrow-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -2475,10 +2924,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-12-swap-bridge-activity-components-detailkvrow-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-12-swap-bridge-activity-components-detailkvrow-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-16-swap-bridge-activity-components-detailkvrow-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-16-swap-bridge-activity-components-detailkvrow-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-12-swap-bridge-activity-components-detailkvrow-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-16-swap-bridge-activity-components-detailkvrow-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2599,9 +3048,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> DomainPriceSheet</h2>
       <div class="badges">
-        <label for="c-13-components-domainpricesheet-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-13-components-domainpricesheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-13-components-domainpricesheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-17-components-domainpricesheet-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-17-components-domainpricesheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-17-components-domainpricesheet-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -2613,10 +3062,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-13-components-domainpricesheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-13-components-domainpricesheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-17-components-domainpricesheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-17-components-domainpricesheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-13-components-domainpricesheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-17-components-domainpricesheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2715,9 +3164,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> DualAssetImage</h2>
       <div class="badges">
-        <label for="c-14-components-dualassetimage-props" class="badge ok as-toggle">8 prop types</label>
-        <label for="c-14-components-dualassetimage-info" class="badge info as-toggle">1 info</label>
-        <label for="c-14-components-dualassetimage-stories" class="badge ok as-toggle">8 stories</label>
+        <label for="c-18-components-dualassetimage-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-18-components-dualassetimage-info" class="badge info as-toggle">1 info</label>
+        <label for="c-18-components-dualassetimage-stories" class="badge ok as-toggle">8 stories</label>
         
       </div>
     </div>
@@ -2729,10 +3178,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-14-components-dualassetimage-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-14-components-dualassetimage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-18-components-dualassetimage-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-18-components-dualassetimage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-14-components-dualassetimage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-18-components-dualassetimage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -2945,9 +3394,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> EmptyState</h2>
       <div class="badges">
-        <label for="c-15-components-emptystate-props" class="badge ok as-toggle">6 prop types</label>
-        <label for="c-15-components-emptystate-info" class="badge info as-toggle">1 info</label>
-        <label for="c-15-components-emptystate-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-19-components-emptystate-props" class="badge ok as-toggle">6 prop types</label>
+        <label for="c-19-components-emptystate-info" class="badge info as-toggle">1 info</label>
+        <label for="c-19-components-emptystate-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -2959,10 +3408,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-15-components-emptystate-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-15-components-emptystate-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-19-components-emptystate-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-19-components-emptystate-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-15-components-emptystate-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-19-components-emptystate-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3071,9 +3520,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> EstFeeSheet</h2>
       <div class="badges">
-        <label for="c-16-components-estfeesheet-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-16-components-estfeesheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-16-components-estfeesheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-20-components-estfeesheet-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-20-components-estfeesheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-20-components-estfeesheet-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -3085,10 +3534,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-16-components-estfeesheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-16-components-estfeesheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-20-components-estfeesheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-20-components-estfeesheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-16-components-estfeesheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-20-components-estfeesheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3182,9 +3631,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> EvmSignTxSheet</h2>
       <div class="badges">
-        <label for="c-17-explore-components-evmsigntxsheet-props" class="badge ok as-toggle">12 prop types</label>
-        <label for="c-17-explore-components-evmsigntxsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-17-explore-components-evmsigntxsheet-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-21-explore-components-evmsigntxsheet-props" class="badge ok as-toggle">12 prop types</label>
+        <label for="c-21-explore-components-evmsigntxsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-21-explore-components-evmsigntxsheet-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -3196,10 +3645,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-17-explore-components-evmsigntxsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-17-explore-components-evmsigntxsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-21-explore-components-evmsigntxsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-21-explore-components-evmsigntxsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-17-explore-components-evmsigntxsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-21-explore-components-evmsigntxsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3395,9 +3844,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> EvmSwitchNetworkSheet</h2>
       <div class="badges">
-        <label for="c-18-explore-components-evmswitchnetworksheet-props" class="badge ok as-toggle">9 prop types</label>
-        <label for="c-18-explore-components-evmswitchnetworksheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-18-explore-components-evmswitchnetworksheet-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-22-explore-components-evmswitchnetworksheet-props" class="badge ok as-toggle">9 prop types</label>
+        <label for="c-22-explore-components-evmswitchnetworksheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-22-explore-components-evmswitchnetworksheet-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -3409,10 +3858,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-18-explore-components-evmswitchnetworksheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-18-explore-components-evmswitchnetworksheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-22-explore-components-evmswitchnetworksheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-22-explore-components-evmswitchnetworksheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-18-explore-components-evmswitchnetworksheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-22-explore-components-evmswitchnetworksheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3543,9 +3992,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreAppCard</h2>
       <div class="badges">
-        <label for="c-19-explore-components-exploreappcard-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-19-explore-components-exploreappcard-info" class="badge info as-toggle">1 info</label>
-        <label for="c-19-explore-components-exploreappcard-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-23-explore-components-exploreappcard-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-23-explore-components-exploreappcard-info" class="badge info as-toggle">1 info</label>
+        <label for="c-23-explore-components-exploreappcard-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -3557,10 +4006,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-19-explore-components-exploreappcard-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-19-explore-components-exploreappcard-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-23-explore-components-exploreappcard-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-23-explore-components-exploreappcard-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-19-explore-components-exploreappcard-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-23-explore-components-exploreappcard-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3699,9 +4148,9 @@ onPress: () =&gt; void</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreAppDetailsScreen</h2>
       <div class="badges">
-        <label for="c-20-explore-screens-exploreappdetailsscreen-props" class="badge ok as-toggle">9 prop types</label>
-        <label for="c-20-explore-screens-exploreappdetailsscreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-20-explore-screens-exploreappdetailsscreen-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-24-explore-screens-exploreappdetailsscreen-props" class="badge ok as-toggle">9 prop types</label>
+        <label for="c-24-explore-screens-exploreappdetailsscreen-info" class="badge info as-toggle">1 info</label>
+        <label for="c-24-explore-screens-exploreappdetailsscreen-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -3713,10 +4162,10 @@ onPress: () =&gt; void</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-20-explore-screens-exploreappdetailsscreen-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-20-explore-screens-exploreappdetailsscreen-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-24-explore-screens-exploreappdetailsscreen-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-24-explore-screens-exploreappdetailsscreen-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-20-explore-screens-exploreappdetailsscreen-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-24-explore-screens-exploreappdetailsscreen-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -3899,9 +4348,9 @@ supportedNetworks?: Array&lt;{
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreApps</h2>
       <div class="badges">
-        <label for="c-21-explore-components-exploreapps-props" class="badge ok as-toggle">7 prop types</label>
-        <label for="c-21-explore-components-exploreapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-21-explore-components-exploreapps-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-25-explore-components-exploreapps-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-25-explore-components-exploreapps-info" class="badge info as-toggle">1 info</label>
+        <label for="c-25-explore-components-exploreapps-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -3913,10 +4362,10 @@ supportedNetworks?: Array&lt;{
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-21-explore-components-exploreapps-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-21-explore-components-exploreapps-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-25-explore-components-exploreapps-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-25-explore-components-exploreapps-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-21-explore-components-exploreapps-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-25-explore-components-exploreapps-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4052,9 +4501,9 @@ title?: string = &quot;Verified Apps&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreUrlBar</h2>
       <div class="badges">
-        <label for="c-22-explore-components-exploreurlbar-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-22-explore-components-exploreurlbar-info" class="badge info as-toggle">1 info</label>
-        <label for="c-22-explore-components-exploreurlbar-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-26-explore-components-exploreurlbar-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-26-explore-components-exploreurlbar-info" class="badge info as-toggle">1 info</label>
+        <label for="c-26-explore-components-exploreurlbar-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -4066,10 +4515,10 @@ title?: string = &quot;Verified Apps&quot;</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-22-explore-components-exploreurlbar-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-22-explore-components-exploreurlbar-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-26-explore-components-exploreurlbar-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-26-explore-components-exploreurlbar-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-22-explore-components-exploreurlbar-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-26-explore-components-exploreurlbar-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4148,9 +4597,9 @@ url?: string = &quot;&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreUrlBarMenu</h2>
       <div class="badges">
-        <label for="c-23-explore-components-exploreurlbarmenu-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-23-explore-components-exploreurlbarmenu-info" class="badge info as-toggle">1 info</label>
-        <label for="c-23-explore-components-exploreurlbarmenu-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-27-explore-components-exploreurlbarmenu-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-27-explore-components-exploreurlbarmenu-info" class="badge info as-toggle">1 info</label>
+        <label for="c-27-explore-components-exploreurlbarmenu-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -4162,10 +4611,10 @@ url?: string = &quot;&quot;</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-23-explore-components-exploreurlbarmenu-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-23-explore-components-exploreurlbarmenu-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-27-explore-components-exploreurlbarmenu-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-27-explore-components-exploreurlbarmenu-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-23-explore-components-exploreurlbarmenu-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-27-explore-components-exploreurlbarmenu-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4238,9 +4687,9 @@ visible: boolean</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ImportHardwareWalletSheet</h2>
       <div class="badges">
-        <label for="c-24-add-wallets-components-importhardwarewalletsheet-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-24-add-wallets-components-importhardwarewalletsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-24-add-wallets-components-importhardwarewalletsheet-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-28-add-wallets-components-importhardwarewalletsheet-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-28-add-wallets-components-importhardwarewalletsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-28-add-wallets-components-importhardwarewalletsheet-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -4252,10 +4701,10 @@ visible: boolean</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-24-add-wallets-components-importhardwarewalletsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-24-add-wallets-components-importhardwarewalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-28-add-wallets-components-importhardwarewalletsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-28-add-wallets-components-importhardwarewalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-24-add-wallets-components-importhardwarewalletsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-28-add-wallets-components-importhardwarewalletsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4324,9 +4773,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ImportPassphraseScreen</h2>
       <div class="badges">
-        <label for="c-25-passphrase-screens-importpassphrasescreen-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-25-passphrase-screens-importpassphrasescreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-25-passphrase-screens-importpassphrasescreen-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-29-passphrase-screens-importpassphrasescreen-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-29-passphrase-screens-importpassphrasescreen-info" class="badge info as-toggle">1 info</label>
+        <label for="c-29-passphrase-screens-importpassphrasescreen-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -4338,10 +4787,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-25-passphrase-screens-importpassphrasescreen-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-25-passphrase-screens-importpassphrasescreen-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-29-passphrase-screens-importpassphrasescreen-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-29-passphrase-screens-importpassphrasescreen-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-25-passphrase-screens-importpassphrasescreen-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-29-passphrase-screens-importpassphrasescreen-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4437,9 +4886,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ImportRecoveryPhraseWithPassphraseScreen</h2>
       <div class="badges">
-        <label for="c-26-passphrase-screens-importrecoveryphrasewithpassphrasescreen-props" class="badge ok as-toggle">8 prop types</label>
-        <label for="c-26-passphrase-screens-importrecoveryphrasewithpassphrasescreen-info" class="badge info as-toggle">1 info</label>
-        <label for="c-26-passphrase-screens-importrecoveryphrasewithpassphrasescreen-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-30-passphrase-screens-importrecoveryphrasewithpassphrasescreen-props" class="badge ok as-toggle">8 prop types</label>
+        <label for="c-30-passphrase-screens-importrecoveryphrasewithpassphrasescreen-info" class="badge info as-toggle">1 info</label>
+        <label for="c-30-passphrase-screens-importrecoveryphrasewithpassphrasescreen-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -4451,10 +4900,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-26-passphrase-screens-importrecoveryphrasewithpassphrasescreen-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-26-passphrase-screens-importrecoveryphrasewithpassphrasescreen-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-30-passphrase-screens-importrecoveryphrasewithpassphrasescreen-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-30-passphrase-screens-importrecoveryphrasewithpassphrasescreen-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-26-passphrase-screens-importrecoveryphrasewithpassphrasescreen-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-30-passphrase-screens-importrecoveryphrasewithpassphrasescreen-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4626,9 +5075,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ImportWalletSheet</h2>
       <div class="badges">
-        <label for="c-27-add-wallets-components-importwalletsheet-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-27-add-wallets-components-importwalletsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-27-add-wallets-components-importwalletsheet-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-31-add-wallets-components-importwalletsheet-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-31-add-wallets-components-importwalletsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-31-add-wallets-components-importwalletsheet-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -4640,10 +5089,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-27-add-wallets-components-importwalletsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-27-add-wallets-components-importwalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-31-add-wallets-components-importwalletsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-31-add-wallets-components-importwalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-27-add-wallets-components-importwalletsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-31-add-wallets-components-importwalletsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4712,9 +5161,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> InfoSheet</h2>
       <div class="badges">
-        <label for="c-28-components-infosheet-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-28-components-infosheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-28-components-infosheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-32-components-infosheet-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-32-components-infosheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-32-components-infosheet-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -4726,10 +5175,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-28-components-infosheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-28-components-infosheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-32-components-infosheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-32-components-infosheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-28-components-infosheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-32-components-infosheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4827,9 +5276,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> InlineActionSheet</h2>
       <div class="badges">
-        <label for="c-29-components-inlineactionsheet-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-33-components-inlineactionsheet-props" class="badge ok as-toggle">5 prop types</label>
         
-        <label for="c-29-components-inlineactionsheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-33-components-inlineactionsheet-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -4842,9 +5291,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
   
-  <input id="c-29-components-inlineactionsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-33-components-inlineactionsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-29-components-inlineactionsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-33-components-inlineactionsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -4932,9 +5381,9 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";</code></
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Input</h2>
       <div class="badges">
-        <label for="c-30-components-input-props" class="badge ok as-toggle">12 prop types</label>
-        <label for="c-30-components-input-info" class="badge info as-toggle">1 info</label>
-        <label for="c-30-components-input-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-34-components-input-props" class="badge ok as-toggle">12 prop types</label>
+        <label for="c-34-components-input-info" class="badge info as-toggle">1 info</label>
+        <label for="c-34-components-input-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -4946,10 +5395,10 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";</code></
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-30-components-input-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-30-components-input-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-34-components-input-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-34-components-input-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-30-components-input-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-34-components-input-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -5116,9 +5565,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> KaspaSignTxSheet</h2>
       <div class="badges">
-        <label for="c-31-explore-components-kaspasigntxsheet-props" class="badge ok as-toggle">12 prop types</label>
-        <label for="c-31-explore-components-kaspasigntxsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-31-explore-components-kaspasigntxsheet-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-35-explore-components-kaspasigntxsheet-props" class="badge ok as-toggle">12 prop types</label>
+        <label for="c-35-explore-components-kaspasigntxsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-35-explore-components-kaspasigntxsheet-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -5130,10 +5579,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-31-explore-components-kaspasigntxsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-31-explore-components-kaspasigntxsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-35-explore-components-kaspasigntxsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-35-explore-components-kaspasigntxsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-31-explore-components-kaspasigntxsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-35-explore-components-kaspasigntxsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -5373,9 +5822,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> KaspaSwitchNetworkSheet</h2>
       <div class="badges">
-        <label for="c-32-explore-components-kaspaswitchnetworksheet-props" class="badge ok as-toggle">9 prop types</label>
-        <label for="c-32-explore-components-kaspaswitchnetworksheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-32-explore-components-kaspaswitchnetworksheet-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-36-explore-components-kaspaswitchnetworksheet-props" class="badge ok as-toggle">9 prop types</label>
+        <label for="c-36-explore-components-kaspaswitchnetworksheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-36-explore-components-kaspaswitchnetworksheet-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -5387,10 +5836,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-32-explore-components-kaspaswitchnetworksheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-32-explore-components-kaspaswitchnetworksheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-36-explore-components-kaspaswitchnetworksheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-36-explore-components-kaspaswitchnetworksheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-32-explore-components-kaspaswitchnetworksheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-36-explore-components-kaspaswitchnetworksheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -5527,9 +5976,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Layer2AssetImage</h2>
       <div class="badges">
-        <label for="c-33-components-layer2assetimage-props" class="badge ok as-toggle">6 prop types</label>
-        <label for="c-33-components-layer2assetimage-info" class="badge info as-toggle">1 info</label>
-        <label for="c-33-components-layer2assetimage-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-37-components-layer2assetimage-props" class="badge ok as-toggle">6 prop types</label>
+        <label for="c-37-components-layer2assetimage-info" class="badge info as-toggle">1 info</label>
+        <label for="c-37-components-layer2assetimage-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -5541,10 +5990,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-33-components-layer2assetimage-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-33-components-layer2assetimage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-37-components-layer2assetimage-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-37-components-layer2assetimage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-33-components-layer2assetimage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-37-components-layer2assetimage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -5713,9 +6162,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameCreatePage</h2>
       <div class="badges">
-        <label for="c-34-names-screens-namecreatepage-props" class="badge ok as-toggle">21 prop types</label>
+        <label for="c-38-names-screens-namecreatepage-props" class="badge ok as-toggle">21 prop types</label>
         
-        <label for="c-34-names-screens-namecreatepage-stories" class="badge ok as-toggle">8 stories</label>
+        <label for="c-38-names-screens-namecreatepage-stories" class="badge ok as-toggle">8 stories</label>
         
       </div>
     </div>
@@ -5728,9 +6177,9 @@ import { View } from "react-native";</code></pre>
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
   
-  <input id="c-34-names-screens-namecreatepage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-38-names-screens-namecreatepage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-34-names-screens-namecreatepage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-38-names-screens-namecreatepage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6086,9 +6535,9 @@ suffix?: string = &quot;.kas&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameDetailPage</h2>
       <div class="badges">
-        <label for="c-35-names-screens-namedetailpage-props" class="badge ok as-toggle">11 prop types</label>
+        <label for="c-39-names-screens-namedetailpage-props" class="badge ok as-toggle">11 prop types</label>
         
-        <label for="c-35-names-screens-namedetailpage-stories" class="badge ok as-toggle">10 stories</label>
+        <label for="c-39-names-screens-namedetailpage-stories" class="badge ok as-toggle">10 stories</label>
         
       </div>
     </div>
@@ -6101,9 +6550,9 @@ suffix?: string = &quot;.kas&quot;</code></pre>
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
   
-  <input id="c-35-names-screens-namedetailpage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-39-names-screens-namedetailpage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-35-names-screens-namedetailpage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-39-names-screens-namedetailpage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6351,9 +6800,9 @@ transferWarning?: string</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> NameList</h2>
       <div class="badges">
-        <label for="c-36-names-components-namelist-props" class="badge ok as-toggle">7 prop types</label>
-        <label for="c-36-names-components-namelist-info" class="badge info as-toggle">1 info</label>
-        <label for="c-36-names-components-namelist-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-40-names-components-namelist-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-40-names-components-namelist-info" class="badge info as-toggle">1 info</label>
+        <label for="c-40-names-components-namelist-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -6365,10 +6814,10 @@ transferWarning?: string</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-36-names-components-namelist-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-36-names-components-namelist-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-40-names-components-namelist-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-40-names-components-namelist-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-36-names-components-namelist-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-40-names-components-namelist-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6473,6 +6922,148 @@ import { View } from "react-native";</code></pre>
 <article
   class="card 
   no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="NodeListItem">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> NodeListItem</h2>
+      <div class="badges">
+        <label for="c-41-custom-rpc-components-nodelistitem-props" class="badge ok as-toggle">7 prop types</label>
+        
+        <label for="c-41-custom-rpc-components-nodelistitem-stories" class="badge ok as-toggle">5 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/custom-rpc/NodeListItem/NodeListItem.stories.tsx">custom-rpc-components-nodelistitem · ./src/components/custom-rpc/NodeListItem/NodeListItem.stories.tsx</div>
+    
+    <div class="hint">A node row in the Custom RPC list: icon · name (+ Default tag) · url · select / remove.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-41-custom-rpc-components-nodelistitem-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-41-custom-rpc-components-nodelistitem-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">7 prop types</span>
+            </div>
+            <pre><code>Component: src/components/custom-rpc/NodeListItem/NodeListItem.tsx::NodeListItem</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Edit mode — shows a remove control (custom nodes only).
+ */
+editing?: boolean = false
+
+/**
+ * Built-in / default node — cannot be removed.
+ */
+isDefault?: boolean = false
+
+name: string
+
+onPress?: () =&gt; void
+
+onRemove?: () =&gt; void
+
+/**
+ * Currently active node.
+ */
+selected?: boolean = false
+
+url: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { NodeListItem } from "kastle-ui";
+import { View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default Selected</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DefaultSelected = () =&gt; &lt;NodeListItem
+    name=&quot;Kastle node&quot;
+    url=&quot;kastle-mainnet-borsh.rhyzome.co&quot;
+    isDefault
+    selected
+    onPress={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Unselected</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Unselected = () =&gt; &lt;NodeListItem name=&quot;Community node&quot; url=&quot;community-node.com&quot; onPress={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Editing</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Editing = () =&gt; &lt;NodeListItem name=&quot;Home node&quot; url=&quot;home.com&quot; editing onRemove={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Editing Default Locked</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const EditingDefaultLocked = () =&gt; &lt;NodeListItem
+    name=&quot;Kastle node&quot;
+    url=&quot;kastle-mainnet-borsh.rhyzome.co&quot;
+    isDefault
+    editing /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Name</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LongName = () =&gt; &lt;NodeListItem
+    name=&quot;A very long node&#39;s name that truncates&quot;
+    url=&quot;a-very-long-subdomain-name.example-node-host.com&quot;
+    onPress={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
   has-info 
   no-story-error
   no-doc-error"
@@ -6482,9 +7073,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> PassphraseInfoSheet</h2>
       <div class="badges">
-        <label for="c-37-passphrase-components-passphraseinfosheet-props" class="badge ok as-toggle">2 prop types</label>
-        <label for="c-37-passphrase-components-passphraseinfosheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-37-passphrase-components-passphraseinfosheet-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-42-passphrase-components-passphraseinfosheet-props" class="badge ok as-toggle">2 prop types</label>
+        <label for="c-42-passphrase-components-passphraseinfosheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-42-passphrase-components-passphraseinfosheet-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -6496,10 +7087,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-37-passphrase-components-passphraseinfosheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-37-passphrase-components-passphraseinfosheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-42-passphrase-components-passphraseinfosheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-42-passphrase-components-passphraseinfosheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-37-passphrase-components-passphraseinfosheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-42-passphrase-components-passphraseinfosheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6564,9 +7155,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> PassphraseInput</h2>
       <div class="badges">
-        <label for="c-38-components-passphraseinput-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-38-components-passphraseinput-info" class="badge info as-toggle">1 info</label>
-        <label for="c-38-components-passphraseinput-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-43-components-passphraseinput-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-43-components-passphraseinput-info" class="badge info as-toggle">1 info</label>
+        <label for="c-43-components-passphraseinput-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -6578,10 +7169,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-38-components-passphraseinput-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-38-components-passphraseinput-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-43-components-passphraseinput-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-43-components-passphraseinput-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-38-components-passphraseinput-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-43-components-passphraseinput-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6685,9 +7276,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RecentlyConnectedApps</h2>
       <div class="badges">
-        <label for="c-39-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-39-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
-        <label for="c-39-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-44-explore-components-recentlyconnectedapps-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-44-explore-components-recentlyconnectedapps-info" class="badge info as-toggle">1 info</label>
+        <label for="c-44-explore-components-recentlyconnectedapps-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -6699,10 +7290,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-39-explore-components-recentlyconnectedapps-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-39-explore-components-recentlyconnectedapps-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-44-explore-components-recentlyconnectedapps-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-44-explore-components-recentlyconnectedapps-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-39-explore-components-recentlyconnectedapps-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-44-explore-components-recentlyconnectedapps-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6871,9 +7462,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RegisterNameActionSheet</h2>
       <div class="badges">
-        <label for="c-40-names-sheets-registernameactionsheet-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-40-names-sheets-registernameactionsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-40-names-sheets-registernameactionsheet-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-45-names-sheets-registernameactionsheet-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-45-names-sheets-registernameactionsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-45-names-sheets-registernameactionsheet-stories" class="badge ok as-toggle">2 stories</label>
         
       </div>
     </div>
@@ -6885,10 +7476,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-40-names-sheets-registernameactionsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-40-names-sheets-registernameactionsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-45-names-sheets-registernameactionsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-45-names-sheets-registernameactionsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-40-names-sheets-registernameactionsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-45-names-sheets-registernameactionsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -6992,9 +7583,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> RemoveWalletSheet</h2>
       <div class="badges">
-        <label for="c-41-manage-wallets-components-removewalletsheet-props" class="badge ok as-toggle">3 prop types</label>
-        <label for="c-41-manage-wallets-components-removewalletsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-41-manage-wallets-components-removewalletsheet-stories" class="badge ok as-toggle">1 story</label>
+        <label for="c-46-manage-wallets-components-removewalletsheet-props" class="badge ok as-toggle">3 prop types</label>
+        <label for="c-46-manage-wallets-components-removewalletsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-46-manage-wallets-components-removewalletsheet-stories" class="badge ok as-toggle">1 story</label>
         
       </div>
     </div>
@@ -7006,10 +7597,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-41-manage-wallets-components-removewalletsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-41-manage-wallets-components-removewalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-46-manage-wallets-components-removewalletsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-46-manage-wallets-components-removewalletsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-41-manage-wallets-components-removewalletsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-46-manage-wallets-components-removewalletsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7067,6 +7658,218 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 <article
   class="card 
   no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Segmented">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Segmented</h2>
+      <div class="badges">
+        <label for="c-47-components-segmented-props" class="badge ok as-toggle">3 prop types</label>
+        
+        <label for="c-47-components-segmented-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/Segmented/Segmented.stories.tsx">components-segmented · ./src/components/Segmented/Segmented.stories.tsx</div>
+    
+    <div class="hint">Generic pill segmented control (e.g. Mainnet / Testnet). Matches Figma&#39;s &quot;segmented control&quot; component.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-47-components-segmented-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-47-components-segmented-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">3 prop types</span>
+            </div>
+            <pre><code>Component: src/components/Segmented/Segmented.tsx::Segmented</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>onChange: (value: string) =&gt; void
+
+options: SegmentedOption[]
+
+value: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Segmented } from "kastle-ui";
+import { View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Network Tabs</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const NetworkTabs = () =&gt; &lt;NetworkExample /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  no-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="SettingRow">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> SettingRow</h2>
+      <div class="badges">
+        <label for="c-48-components-settingrow-props" class="badge ok as-toggle">7 prop types</label>
+        
+        <label for="c-48-components-settingrow-stories" class="badge ok as-toggle">4 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/SettingRow/SettingRow.stories.tsx">components-settingrow · ./src/components/SettingRow/SettingRow.stories.tsx</div>
+    
+    <div class="hint">Generic Settings menu row — label + value + chevron. Matches the production kastle-mobile Settings rows so it blends in on merge.</div>
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  
+  <input id="c-48-components-settingrow-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-48-components-settingrow-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">7 prop types</span>
+            </div>
+            <pre><code>Component: src/components/SettingRow/SettingRow.tsx::SettingRow</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>disabled?: boolean = false
+
+/**
+ * Setting name shown on the left.
+ */
+label: string
+
+onPress?: () =&gt; void
+
+/**
+ * Show the trailing chevron. Default true.
+ */
+showChevron?: boolean = true
+
+/**
+ * Hairline top divider — use when stacking rows inside a card.
+ */
+showTopDivider?: boolean = false
+
+/**
+ * Current value shown on the right (e.g. &quot;Mainnet&quot;, &quot;Default&quot;, a node name).
+ */
+value?: string
+
+/**
+ * Override the value colour (e.g. network teal). Defaults to secondary text.
+ */
+valueColor?: string</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { SettingRow } from "kastle-ui";
+import { View } from "react-native";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Default = () =&gt; &lt;SettingRow label=&quot;Custom RPC&quot; value=&quot;Default&quot; onPress={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Chevron Only</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ChevronOnly = () =&gt; &lt;SettingRow label=&quot;Change PIN&quot; onPress={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Value</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const LongValue = () =&gt; &lt;SettingRow
+    label=&quot;Custom RPC&quot;
+    value=&quot;A very long node&#39;s name that truncates&quot;
+    onPress={() =&gt; {}} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Stacked</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Stacked = () =&gt; (
+  &lt;&gt;
+    &lt;SettingRow label=&quot;Network&quot; value=&quot;Mainnet&quot; onPress={() =&gt; {}} /&gt;
+    &lt;SettingRow label=&quot;Custom RPC&quot; value=&quot;Default&quot; showTopDivider onPress={() =&gt; {}} /&gt;
+  &lt;/&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
   has-info 
   no-story-error
   no-doc-error"
@@ -7076,9 +7879,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SignMessageSheet</h2>
       <div class="badges">
-        <label for="c-42-explore-components-signmessagesheet-props" class="badge ok as-toggle">7 prop types</label>
-        <label for="c-42-explore-components-signmessagesheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-42-explore-components-signmessagesheet-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-49-explore-components-signmessagesheet-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-49-explore-components-signmessagesheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-49-explore-components-signmessagesheet-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -7090,10 +7893,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-42-explore-components-signmessagesheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-42-explore-components-signmessagesheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-49-explore-components-signmessagesheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-49-explore-components-signmessagesheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-42-explore-components-signmessagesheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-49-explore-components-signmessagesheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7216,9 +8019,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SkeletonBlock</h2>
       <div class="badges">
-        <label for="c-43-components-skeletonblock-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-43-components-skeletonblock-info" class="badge info as-toggle">1 info</label>
-        <label for="c-43-components-skeletonblock-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-50-components-skeletonblock-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-50-components-skeletonblock-info" class="badge info as-toggle">1 info</label>
+        <label for="c-50-components-skeletonblock-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -7230,10 +8033,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-43-components-skeletonblock-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-43-components-skeletonblock-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-50-components-skeletonblock-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-50-components-skeletonblock-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-43-components-skeletonblock-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-50-components-skeletonblock-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7323,9 +8126,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> StatusPill</h2>
       <div class="badges">
-        <label for="c-44-components-statuspill-props" class="badge ok as-toggle">2 prop types</label>
-        <label for="c-44-components-statuspill-info" class="badge info as-toggle">1 info</label>
-        <label for="c-44-components-statuspill-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-51-components-statuspill-props" class="badge ok as-toggle">2 prop types</label>
+        <label for="c-51-components-statuspill-info" class="badge info as-toggle">1 info</label>
+        <label for="c-51-components-statuspill-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -7337,10 +8140,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-44-components-statuspill-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-44-components-statuspill-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-51-components-statuspill-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-51-components-statuspill-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-44-components-statuspill-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-51-components-statuspill-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7426,9 +8229,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> SwipeToConfirm</h2>
       <div class="badges">
-        <label for="c-45-components-swipetoconfirm-props" class="badge ok as-toggle">4 prop types</label>
-        <label for="c-45-components-swipetoconfirm-info" class="badge info as-toggle">1 info</label>
-        <label for="c-45-components-swipetoconfirm-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-52-components-swipetoconfirm-props" class="badge ok as-toggle">4 prop types</label>
+        <label for="c-52-components-swipetoconfirm-info" class="badge info as-toggle">1 info</label>
+        <label for="c-52-components-swipetoconfirm-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -7440,10 +8243,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-45-components-swipetoconfirm-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-45-components-swipetoconfirm-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-52-components-swipetoconfirm-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-52-components-swipetoconfirm-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-45-components-swipetoconfirm-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-52-components-swipetoconfirm-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7539,9 +8342,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> Textarea</h2>
       <div class="badges">
-        <label for="c-46-components-textarea-props" class="badge ok as-toggle">13 prop types</label>
-        <label for="c-46-components-textarea-info" class="badge info as-toggle">1 info</label>
-        <label for="c-46-components-textarea-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-53-components-textarea-props" class="badge ok as-toggle">13 prop types</label>
+        <label for="c-53-components-textarea-info" class="badge info as-toggle">1 info</label>
+        <label for="c-53-components-textarea-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -7553,10 +8356,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-46-components-textarea-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-46-components-textarea-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-53-components-textarea-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-53-components-textarea-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-46-components-textarea-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-53-components-textarea-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -7764,9 +8567,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> TokenSelectSheet</h2>
       <div class="badges">
-        <label for="c-47-swap-tokenselectsheet-props" class="badge ok as-toggle">10 prop types</label>
-        <label for="c-47-swap-tokenselectsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-47-swap-tokenselectsheet-stories" class="badge ok as-toggle">8 stories</label>
+        <label for="c-54-swap-tokenselectsheet-props" class="badge ok as-toggle">10 prop types</label>
+        <label for="c-54-swap-tokenselectsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-54-swap-tokenselectsheet-stories" class="badge ok as-toggle">8 stories</label>
         
       </div>
     </div>
@@ -7778,10 +8581,10 @@ import { View } from "react-native";</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-47-swap-tokenselectsheet-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-47-swap-tokenselectsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-54-swap-tokenselectsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-54-swap-tokenselectsheet-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-47-swap-tokenselectsheet-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-54-swap-tokenselectsheet-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -8018,9 +8821,9 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> TransferConfirmPage</h2>
       <div class="badges">
-        <label for="c-48-names-screens-transferconfirmpage-props" class="badge ok as-toggle">16 prop types</label>
+        <label for="c-55-names-screens-transferconfirmpage-props" class="badge ok as-toggle">16 prop types</label>
         
-        <label for="c-48-names-screens-transferconfirmpage-stories" class="badge ok as-toggle">6 stories</label>
+        <label for="c-55-names-screens-transferconfirmpage-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -8033,9 +8836,9 @@ import { TokenItem, TokenSelectSheet } from "kastle-ui";</code></pre>
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
   
-  <input id="c-48-names-screens-transferconfirmpage-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-55-names-screens-transferconfirmpage-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-48-names-screens-transferconfirmpage-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-55-names-screens-transferconfirmpage-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
@@ -8270,9 +9073,9 @@ senderNetworkLabel?: string = &quot;Kaspa&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> WalletOptionButton</h2>
       <div class="badges">
-        <label for="c-49-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
-        <label for="c-49-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
-        <label for="c-49-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-56-add-wallets-components-walletoptionbutton-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-56-add-wallets-components-walletoptionbutton-info" class="badge info as-toggle">1 info</label>
+        <label for="c-56-add-wallets-components-walletoptionbutton-stories" class="badge ok as-toggle">4 stories</label>
         
       </div>
     </div>
@@ -8284,10 +9087,10 @@ senderNetworkLabel?: string = &quot;Kaspa&quot;</code></pre>
 
   <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
   
-  <input id="c-49-add-wallets-components-walletoptionbutton-info" class="tg tg-info" type="checkbox" hidden />
-  <input id="c-49-add-wallets-components-walletoptionbutton-stories" class="tg tg-stories" type="checkbox" hidden />
+  <input id="c-56-add-wallets-components-walletoptionbutton-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-56-add-wallets-components-walletoptionbutton-stories" class="tg tg-stories" type="checkbox" hidden />
   
-  <input id="c-49-add-wallets-components-walletoptionbutton-props" class="tg tg-props" type="checkbox" hidden />
+  <input id="c-56-add-wallets-components-walletoptionbutton-props" class="tg tg-props" type="checkbox" hidden />
 
   <div class="panels">
     
