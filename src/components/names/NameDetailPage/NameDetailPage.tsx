@@ -415,6 +415,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundScreen,
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s3,
+    paddingBottom: spacing.s4,
   },
   transferButton: {
     backgroundColor: colors.primary,
