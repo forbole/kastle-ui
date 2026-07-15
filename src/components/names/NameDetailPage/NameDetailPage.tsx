@@ -21,7 +21,7 @@ import {
   background,
   border,
 } from "../../../config/theme";
-import { FORMAT_CONFIG, type NameFormat } from "../types";
+import { FORMAT_CONFIG, LOGO_ASPECT_RATIO, type NameFormat } from "../types";
 
 /** Default card art — every card renders on this gradient unless `imageUri` overrides it. */
 const CARD_GRADIENT: [string, string] = ["#2FDCF5", "#0A6FA8"];
@@ -319,8 +319,8 @@ const styles = StyleSheet.create({
     gap: spacing.s2,
   },
   cardLogo: {
-    width: 76,
     height: 24,
+    aspectRatio: LOGO_ASPECT_RATIO,
     alignSelf: "flex-start",
   },
   shareButton: {
