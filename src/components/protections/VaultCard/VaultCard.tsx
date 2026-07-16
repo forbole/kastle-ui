@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s3,
     justifyContent: "space-between",
     gap: spacing.s3,
-    minHeight: 210,
+    // Fixed so every card in the grid is the same height (Figma card = 222)
+    height: 222,
   },
   content: {
     gap: spacing.s3,

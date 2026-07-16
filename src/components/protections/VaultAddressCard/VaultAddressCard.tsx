@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Copy } from "lucide-react-native";
+import { Copy, Info } from "lucide-react-native";
 import { Textarea } from "../../Textarea/Textarea";
 import {
   borderWidth,
@@ -25,6 +25,8 @@ export interface VaultAddressCardProps {
   label?: string;
   /** Chain badge in the header, e.g. "Kaspa" (labeled variant only). */
   chainBadge?: string;
+  /** Info affordance in the labeled header (opens an explainer). */
+  onPressInfo?: () => void;
 }
 
 const noop = () => {};
@@ -34,31 +36,33 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
   onPressCopy,
   label,
   chainBadge,
+  onPressInfo,
 }) => {
   // Labeled variant — Figma confirm address box (node 13391:539812).
   if (label) {
     return (
       <View style={styles.card}>
         <View style={styles.header}>
-          <Text
-            allowFontScaling={false}
-            style={styles.label}
-            numberOfLines={1}
-          >
-            {label}
-          </Text>
-          <View style={styles.headerRight}>
-            <TouchableOpacity onPress={onPressCopy} hitSlop={8}>
-              <Copy size={16} color={colors.textPrimary} strokeWidth={1.5} />
+          {/* Label + info icon sit together on the left (per Figma) */}
+          <View style={styles.labelRow}>
+            <Text
+              allowFontScaling={false}
+              style={styles.label}
+              numberOfLines={1}
+            >
+              {label}
+            </Text>
+            <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
+              <Info size={16} color={colors.textPrimary} strokeWidth={2} />
             </TouchableOpacity>
-            {chainBadge ? (
-              <View style={styles.badge}>
-                <Text allowFontScaling={false} style={styles.badgeText}>
-                  {chainBadge}
-                </Text>
-              </View>
-            ) : null}
           </View>
+          {chainBadge ? (
+            <View style={styles.badge}>
+              <Text allowFontScaling={false} style={styles.badgeText}>
+                {chainBadge}
+              </Text>
+            </View>
+          ) : null}
         </View>
         <Text allowFontScaling={false} style={styles.address}>
           {address}
@@ -104,10 +108,11 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     flexShrink: 1,
   },
-  headerRight: {
+  labelRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s2,
+    flexShrink: 1,
   },
   badge: {
     backgroundColor: info.background,

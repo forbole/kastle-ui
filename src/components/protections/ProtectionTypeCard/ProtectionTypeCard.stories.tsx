@@ -1,9 +1,8 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { Vault, Wallet, ScrollText } from "lucide-react-native";
 import { ProtectionTypeCard } from "./ProtectionTypeCard";
-import { background, colors, spacing } from "../../../config/theme";
+import { background, spacing } from "../../../config/theme";
 
 const meta: Meta<typeof ProtectionTypeCard> = {
   title: "Protections/Components/ProtectionTypeCard",
@@ -25,24 +24,22 @@ const meta: Meta<typeof ProtectionTypeCard> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Vault — active, with a CTA. */
+/** Vault — active, with the "Set up" CTA. */
 export const Active: Story = {
   args: {
-    icon: <Vault size={24} color={colors.primary} strokeWidth={2} />,
     title: "Vault",
     description:
-      "Lock your KAS so it can't be moved right away — even if your phone is stolen.",
+      "Undo theft. Withdrawals wait out a delay you set, so you have time to clawback and send funds to your recovery address if something looks wrong.",
     status: "active",
-    ctaLabel: "Create vault",
+    ctaLabel: "Set up",
   },
 };
 
 /** Allowance — coming soon. */
 export const SoonAllowance: Story = {
   args: {
-    icon: <Wallet size={24} color={colors.textMuted} strokeWidth={2} />,
     title: "Allowance",
-    description: "Set spending limits for the apps you connect to.",
+    description: "Daily spend limits on your everyday balance.",
     status: "soon",
   },
 };
@@ -50,9 +47,8 @@ export const SoonAllowance: Story = {
 /** Legacy — coming soon. */
 export const SoonLegacy: Story = {
   args: {
-    icon: <ScrollText size={24} color={colors.textMuted} strokeWidth={2} />,
     title: "Legacy",
-    description: "Pass your assets on to someone you trust.",
+    description: "Pass your KAS on if you ever go inactive.",
     status: "soon",
   },
 };

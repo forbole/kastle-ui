@@ -1,18 +1,16 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
-import {
-  CreateVaultWindowStep,
-  WindowPreset,
-} from "./CreateVaultWindowStep";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
+import { CreateVaultWindowStep, WindowPreset } from "./CreateVaultWindowStep";
 import { background } from "../../../config/theme";
 
+// Copy pulled from Figma (Step 2 / Protection window) — labels only, no subtitles.
 const PRESETS: WindowPreset[] = [
-  { id: "1d", label: "1 day", subtitle: "Fastest access" },
-  { id: "3d", label: "3 days", subtitle: "Recommended" },
+  { id: "1d", label: "1 day" },
+  { id: "3d", label: "3 days", badge: "Recommended" },
   { id: "7d", label: "7 days" },
   { id: "30d", label: "30 days" },
-  { id: "90d", label: "90 days", subtitle: "Maximum protection" },
+  { id: "90d", label: "90 days" },
 ];
 
 const Demo: React.FC = () => {
@@ -22,11 +20,8 @@ const Demo: React.FC = () => {
       presets={PRESETS}
       selectedId={selectedId}
       onSelect={setSelectedId}
-      title="Protection window"
-      subtitle="How long your funds stay locked before they can move."
       alert={{
-        title: "You can't change this later",
-        body: "The protection window is set when you create the vault and can't be changed. To use a different window, close this vault and create a new one.",
+        body: "You can't change this after creation. If you need a different delay later, you can create a new vault.",
       }}
       onPressContinue={() => {}}
     />
@@ -56,7 +51,7 @@ const meta: Meta<typeof CreateVaultWindowStep> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Five fixed presets, "3 days" selected. Tap to change. */
+/** Five fixed presets, "3 days" recommended + selected. Tap to change — no jump. */
 export const Default: Story = {
   render: () => <Demo />,
 };

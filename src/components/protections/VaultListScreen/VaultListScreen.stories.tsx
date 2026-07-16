@@ -5,12 +5,13 @@ import { VaultListScreen } from "./VaultListScreen";
 import { VaultCardProps } from "../VaultCard/VaultCard";
 import { background, spacing } from "../../../config/theme";
 
+// Newest first — Vault 1 (oldest) sits at the bottom.
 const SAMPLE: VaultCardProps[] = [
   {
-    status: "locked",
-    name: "Vault 1",
-    amount: "1,000,000.999999 KAS",
-    caption: "3 days window",
+    status: "complete",
+    name: "Vault 4",
+    amount: "500 KAS",
+    caption: "Withdrawn",
     onPress: () => {},
   },
   {
@@ -29,10 +30,10 @@ const SAMPLE: VaultCardProps[] = [
     onPress: () => {},
   },
   {
-    status: "complete",
-    name: "Vault 4",
-    amount: "500 KAS",
-    caption: "Withdrawn",
+    status: "locked",
+    name: "Vault 1",
+    amount: "1,000,000.999999 KAS",
+    caption: "3 days window",
     onPress: () => {},
   },
 ];
