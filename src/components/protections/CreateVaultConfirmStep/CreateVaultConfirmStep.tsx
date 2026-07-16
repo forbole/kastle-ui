@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ImageSourcePropType,
+} from "react-native";
+import { Image } from "expo-image";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet/EstFeeSheet";
@@ -15,6 +21,8 @@ import {
   typography,
 } from "../../../config/theme";
 
+const SIGN_IMAGE = require("../../../../assets/sign.png");
+
 export interface ConfirmRow {
   label: string;
   value: string;
@@ -27,6 +35,8 @@ export interface ConfirmRow {
 }
 
 export interface CreateVaultConfirmStepProps {
+  /** Hero artwork. Defaults to the shared signing illustration. */
+  illustration?: ImageSourcePropType | string;
   /** Recovery address the vault pays out to (read-only). */
   recoveryAddress: string;
   onPressCopyRecovery?: () => void;
@@ -52,6 +62,7 @@ export interface CreateVaultConfirmStepProps {
 export const CreateVaultConfirmStep: React.FC<
   CreateVaultConfirmStepProps
 > = ({
+  illustration,
   recoveryAddress,
   onPressCopyRecovery,
   recoveryLabel = "External recovery address",
@@ -74,6 +85,15 @@ export const CreateVaultConfirmStep: React.FC<
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        {/* Illustration — signing artwork, as on every confirm/sign step */}
+        <View style={styles.illustration}>
+          <Image
+            source={illustration ?? SIGN_IMAGE}
+            style={styles.illustrationImage}
+            contentFit="contain"
+          />
+        </View>
+
         {/* Recovery address — labeled card with chain badge */}
         <VaultAddressCard
           label={recoveryLabel}
@@ -141,6 +161,13 @@ const styles = StyleSheet.create({
     paddingTop: spacing.s4,
     paddingBottom: spacing.s4,
     gap: spacing.s4,
+  },
+  illustration: {
+    alignItems: "center",
+  },
+  illustrationImage: {
+    width: 237,
+    height: 160,
   },
   card: {
     backgroundColor: background.bg50,

@@ -6,7 +6,6 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { Image } from "expo-image";
-import { Vault } from "lucide-react-native";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
@@ -18,6 +17,8 @@ import {
   borderRadius,
   borderWidth,
 } from "../../../config/theme";
+
+const SIGN_IMAGE = require("../../../../assets/sign.png");
 
 export interface WithdrawConfirmRow {
   label: string;
@@ -72,17 +73,13 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Illustration */}
+        {/* Illustration — signing artwork, as on every confirm/sign step */}
         <View style={styles.illustration}>
-          {illustration ? (
-            <Image
-              source={illustration}
-              style={styles.illustrationImage}
-              contentFit="contain"
-            />
-          ) : (
-            <Vault size={64} color={colors.textSecondary} strokeWidth={1.5} />
-          )}
+          <Image
+            source={illustration ?? SIGN_IMAGE}
+            style={styles.illustrationImage}
+            contentFit="contain"
+          />
         </View>
 
         {/* Recovery address */}
