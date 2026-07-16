@@ -14,9 +14,12 @@ export interface VaultIntroScreenProps {
   /** Primary CTA. */
   ctaLabel?: string;
   onPressCta?: () => void;
-  /** Secondary button below the CTA. */
+  /** Outline button below the CTA (Figma: "Close"). */
   secondaryLabel?: string;
   onPressSecondary?: () => void;
+  /** ⓘ link above the buttons (Figma: "How a Vault works?"). */
+  infoLabel?: string;
+  onPressInfo?: () => void;
 }
 
 /**
@@ -32,6 +35,8 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
   onPressCta,
   secondaryLabel,
   onPressSecondary,
+  infoLabel,
+  onPressInfo,
 }) => {
   return (
     <View style={styles.body}>
@@ -52,6 +57,11 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
       </View>
 
       <BottomActionBar
+        message={
+          infoLabel
+            ? { text: infoLabel, variant: "info", onPress: onPressInfo }
+            : undefined
+        }
         buttons={[
           ...(ctaLabel ? [{ label: ctaLabel, onPress: onPressCta }] : []),
           ...(secondaryLabel
