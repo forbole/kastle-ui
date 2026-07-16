@@ -8,7 +8,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { Image } from "expo-image";
-import { AlertTriangle, Info, Vault } from "lucide-react-native";
+import { Info } from "lucide-react-native";
 import { CountdownRing } from "../CountdownRing/CountdownRing";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { VaultStatus } from "../VaultCard/VaultCard";
@@ -18,6 +18,7 @@ import {
   StatusPillStatus,
 } from "../../StatusPill/StatusPill";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
+import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
 import {
   background,
   borderWidth,
@@ -30,6 +31,8 @@ import {
   textStyles,
   warning,
 } from "../../../config/theme";
+
+const VAULT_IMAGE = require("../../../../assets/vault.png");
 
 export interface VaultDetailRow {
   label: string;
@@ -131,19 +134,16 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        {/* Hero — illustration + countdown ring */}
+        {/* Hero — the vault sits at the top only while locked; withdrawing
+            replaces it with the countdown ring (Figma 13409:25553). */}
         <View style={styles.hero}>
-          <View style={styles.illustration}>
-            {illustration ? (
-              <Image
-                source={illustration}
-                style={styles.illustrationImage}
-                contentFit="contain"
-              />
-            ) : (
-              <Vault size={64} color={colors.textSecondary} strokeWidth={1.5} />
-            )}
-          </View>
+          {!showRing ? (
+            <Image
+              source={illustration ?? VAULT_IMAGE}
+              style={styles.illustrationImage}
+              contentFit="contain"
+            />
+          ) : null}
           {showRing ? (
             <CountdownRing
               time={countdownTime!}
@@ -173,7 +173,6 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
               <Text allowFontScaling={false} style={styles.backupTitle}>
                 {backupTitle}
               </Text>
-              <AlertTriangle size={16} color={warning.w500} strokeWidth={2} />
             </View>
             {onPressBackupDone ? (
               <TouchableOpacity onPress={onPressBackupDone} hitSlop={8}>
@@ -235,33 +234,10 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
       </ScrollView>
 
       {/* Primary action — the danger line sits inside the bar, above the button */}
-      <View style={styles.actionBar}>
-        {dangerNote ? (
-          <Text allowFontScaling={false} style={styles.dangerNote}>
-            {dangerNote}
-          </Text>
-        ) : null}
-        <TouchableOpacity
-          style={[
-            styles.action,
-            variant === "warning" ? styles.actionWarning : styles.actionOutline,
-          ]}
-          onPress={handleAction}
-          activeOpacity={0.85}
-        >
-          <Text
-            allowFontScaling={false}
-            style={[
-              styles.actionLabel,
-              variant === "warning"
-                ? styles.actionLabelWarning
-                : styles.actionLabelOutline,
-            ]}
-          >
-            {actionLabel}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <BottomActionBar
+        message={dangerNote ? { text: dangerNote, variant: "error" } : undefined}
+        buttons={[{ label: actionLabel, variant, onPress: handleAction }]}
+      />
 
       <InfoSheet
         isOpen={!!tooltip}
@@ -301,21 +277,15 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
   },
+  // Figma body (Frame 254215): pad [0,20,…,20], gap 16
   scroll: {
     paddingHorizontal: spacing.s5,
     paddingBottom: spacing.s6,
-    gap: spacing.s5,
+    gap: spacing.s4,
   },
   hero: {
     alignItems: "center",
     gap: spacing.s4,
-    paddingTop: spacing.s4,
-  },
-  illustration: {
-    width: 135,
-    height: 140,
-    alignItems: "center",
-    justifyContent: "center",
   },
   illustrationImage: {
     width: 135,
@@ -341,10 +311,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s4,
     gap: spacing.s2,
   },
+  // Figma "Header" is 32 high — the Done button, not the title, sets it
   backupHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    height: spacing.s8,
   },
   backupTitleRow: {
     flexDirection: "row",
@@ -367,9 +339,11 @@ const styles = StyleSheet.create({
   details: {
     gap: spacing.s2,
   },
+  // Figma "Header" 353×43: pad [12,0,12,0]
   detailsTitle: {
     ...textStyles.bodySemiboldMD,
     color: colors.textSecondary,
+    paddingVertical: spacing.s3,
   },
   // Figma wraps the rows in a table card (r16, bg50)
   detailsCard: {
@@ -378,41 +352,5 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.bw1,
     borderRadius: borderRadius["2xl"],
     paddingHorizontal: spacing.s4,
-  },
-  // Figma "Bottom Action bar": pad [12,20,0,20], inner gap 12, pad-bottom 16
-  actionBar: {
-    paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s3,
-    paddingBottom: spacing.s4,
-    gap: spacing.s3,
-  },
-  dangerNote: {
-    ...textStyles.bodyNormalXS,
-    color: colors.danger,
-  },
-  action: {
-    borderRadius: borderRadius.full,
-    height: spacing.s12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  actionOutline: {
-    borderWidth: borderWidth.bw1,
-    borderColor: colors.textMuted,
-  },
-  actionWarning: {
-    backgroundColor: warning.w500,
-  },
-  actionLabel: {
-    // Figma: 18 Medium
-    fontFamily: fontFamilies["500"],
-    fontSize: fontSize.lg,
-    fontWeight: fontWeight.medium,
-  },
-  actionLabelOutline: {
-    color: colors.textMuted,
-  },
-  actionLabelWarning: {
-    color: colors.white,
   },
 });
