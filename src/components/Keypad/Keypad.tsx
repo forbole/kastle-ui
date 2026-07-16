@@ -6,6 +6,9 @@ import {
   spacing,
   borderRadius,
   borderWidth,
+  fontFamilies,
+  fontSize,
+  fontWeight,
   textStyles,
 } from "../../config/theme";
 
@@ -104,38 +107,41 @@ export const Keypad: React.FC<KeypadProps> = ({
       </View>
 
       {/* Keys */}
-      {KEYS.map((row, ri) => (
-        <View key={ri} style={styles.row}>
-          {row.map((key) => (
-            <TouchableOpacity
-              key={key}
-              style={styles.key}
-              onPress={() => onKeyPress(key)}
-              onLongPress={key === "del" ? () => onKeyPress("clear") : undefined}
-              activeOpacity={0.6}
-            >
-              {key === "del" ? (
-                <Delete size={20} color={colors.textPrimary} strokeWidth={2} />
-              ) : (
-                <Text allowFontScaling={false} style={styles.keyLabel}>
-                  {key}
-                </Text>
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
-      ))}
+      <View style={styles.keys}>
+        {KEYS.map((row, ri) => (
+          <View key={ri} style={styles.row}>
+            {row.map((key) => (
+              <TouchableOpacity
+                key={key}
+                style={styles.key}
+                onPress={() => onKeyPress(key)}
+                onLongPress={
+                  key === "del" ? () => onKeyPress("clear") : undefined
+                }
+                activeOpacity={0.6}
+              >
+                {key === "del" ? (
+                  <Delete size={18} color={colors.textPrimary} strokeWidth={2} />
+                ) : (
+                  <Text allowFontScaling={false} style={styles.keyLabel}>
+                    {key}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // Figma "keypad" 12831:678052 — bg0 with a hairline top edge, no inner gap:
+  // the balance row's own padding provides the space above the keys.
   container: {
-    alignItems: "center",
-    gap: spacing.s4,
     borderTopWidth: borderWidth.bw1,
     borderTopColor: colors.border,
-    paddingTop: spacing.s6,
     backgroundColor: colors.backgroundScreen,
   },
   header: {
@@ -143,6 +149,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     alignSelf: "stretch",
+    paddingVertical: spacing.s3,
     paddingHorizontal: spacing.s5,
   },
   balanceRow: {
@@ -161,7 +168,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   maxBtn: {
-    height: spacing.s8,
+    height: spacing.s9,
     paddingHorizontal: spacing.s4,
     borderRadius: borderRadius.full,
     backgroundColor: colors.backgroundSurface,
@@ -174,8 +181,18 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   maxLabel: {
-    ...textStyles.bodySemiboldSM,
+    // Figma: 14 Medium
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.medium,
     color: colors.textPrimary,
+  },
+  // Figma insets the key grid tighter than the balance row (pad [0,12,0,10]),
+  // which lands the keys on their 118-wide columns.
+  keys: {
+    paddingLeft: spacing.s2_5,
+    paddingRight: spacing.s3,
+    gap: spacing.s1,
   },
   row: {
     flexDirection: "row",
@@ -185,7 +202,7 @@ const styles = StyleSheet.create({
   },
   key: {
     flex: 1,
-    height: spacing.s12,
+    height: spacing.s10,
     borderRadius: borderRadius.full,
     alignItems: "center",
     justifyContent: "center",

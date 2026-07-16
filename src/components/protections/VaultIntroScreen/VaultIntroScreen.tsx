@@ -1,29 +1,20 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ImageSourcePropType,
-} from "react-native";
+import { View, Text, StyleSheet, ImageSourcePropType } from "react-native";
 import { Image } from "expo-image";
-import { Vault } from "lucide-react-native";
-import {
-  colors,
-  spacing,
-  borderRadius,
-  textStyles,
-} from "../../../config/theme";
+import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
+import { colors, spacing, textStyles } from "../../../config/theme";
+
+const VAULT_INTRO_IMAGE = require("../../../../assets/vault-intro.png");
 
 export interface VaultIntroScreenProps {
-  /** Hero illustration (PNG). Falls back to a placeholder glyph. */
+  /** Hero illustration (PNG). Defaults to the Figma vault artwork. */
   illustration?: ImageSourcePropType | string;
   title: string;
   body: string;
   /** Primary CTA. */
   ctaLabel?: string;
   onPressCta?: () => void;
-  /** Secondary text button (opens the explainer). */
+  /** Secondary button below the CTA. */
   secondaryLabel?: string;
   onPressSecondary?: () => void;
 }
@@ -45,17 +36,11 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
   return (
     <View style={styles.body}>
       <View style={styles.content}>
-        <View style={styles.illustration}>
-          {illustration ? (
-            <Image
-              source={illustration}
-              style={styles.illustrationImage}
-              contentFit="contain"
-            />
-          ) : (
-            <Vault size={96} color={colors.textSecondary} strokeWidth={1.5} />
-          )}
-        </View>
+        <Image
+          source={illustration ?? VAULT_INTRO_IMAGE}
+          style={styles.illustrationImage}
+          contentFit="contain"
+        />
         <View style={styles.textGroup}>
           <Text allowFontScaling={false} style={styles.title}>
             {title}
@@ -66,30 +51,20 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
         </View>
       </View>
 
-      <View style={styles.actions}>
-        {ctaLabel ? (
-          <TouchableOpacity
-            style={styles.cta}
-            onPress={onPressCta}
-            activeOpacity={0.85}
-          >
-            <Text allowFontScaling={false} style={styles.ctaLabel}>
-              {ctaLabel}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-        {secondaryLabel ? (
-          <TouchableOpacity
-            style={styles.secondary}
-            onPress={onPressSecondary}
-            activeOpacity={0.7}
-          >
-            <Text allowFontScaling={false} style={styles.secondaryLabel}>
-              {secondaryLabel}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
+      <BottomActionBar
+        buttons={[
+          ...(ctaLabel ? [{ label: ctaLabel, onPress: onPressCta }] : []),
+          ...(secondaryLabel
+            ? [
+                {
+                  label: secondaryLabel,
+                  variant: "outline" as const,
+                  onPress: onPressSecondary,
+                },
+              ]
+            : []),
+        ]}
+      />
     </View>
   );
 };
@@ -98,21 +73,18 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     justifyContent: "space-between",
-    paddingHorizontal: spacing.s5,
   },
   content: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     gap: spacing.s8,
+    paddingHorizontal: spacing.s5,
   },
-  illustration: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  // Figma "vault" illustration is 256×186
   illustrationImage: {
-    width: 200,
-    height: 200,
+    width: 256,
+    height: 186,
   },
   textGroup: {
     gap: spacing.s3,
@@ -126,29 +98,5 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalMDRelaxed,
     color: colors.textSecondary,
     textAlign: "center",
-  },
-  actions: {
-    gap: spacing.s2,
-    paddingBottom: spacing.s5,
-  },
-  cta: {
-    backgroundColor: colors.primary,
-    borderRadius: borderRadius.full,
-    paddingVertical: spacing.s4,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ctaLabel: {
-    ...textStyles.bodySemiboldMD,
-    color: colors.white,
-  },
-  secondary: {
-    paddingVertical: spacing.s3,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  secondaryLabel: {
-    ...textStyles.bodySemiboldMD,
-    color: colors.link,
   },
 });

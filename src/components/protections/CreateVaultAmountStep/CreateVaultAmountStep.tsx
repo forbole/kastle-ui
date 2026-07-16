@@ -1,20 +1,31 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Image } from "expo-image";
+import { ArrowUpDown } from "lucide-react-native";
 import { Keypad } from "../../Keypad/Keypad";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
+import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
 import {
   colors,
   spacing,
   borderRadius,
+  borderWidth,
+  fontFamilies,
+  fontSize,
+  fontWeight,
   textStyles,
 } from "../../../config/theme";
 
+const KASPA_LOGO = require("../../../../assets/kaspa-logo.png");
+const US_FLAG = require("../../../../assets/us-flag.png");
+
 /**
- * Amount sizing mirrors kastle-mobile AmountDisplay: base 36px, shrinking to a
- * 18px floor (its adjustsFontSizeToFit + minimumFontScale=0.5) to keep the
- * number on one line. adjustsFontSizeToFit is a no-op in RN-web Storybook, so
- * these length tiers reproduce the same 36→18 range for the web preview; on
- * native the adjustsFontSizeToFit below fine-tunes within the tier.
+ * Amount sizing mirrors kastle-mobile AmountDisplay: base 36px (Figma
+ * 12757:300288), shrinking to a 18px floor (its adjustsFontSizeToFit +
+ * minimumFontScale=0.5) to keep the number on one line. adjustsFontSizeToFit is
+ * a no-op in RN-web Storybook, so these length tiers reproduce the same 36→18
+ * range for the web preview; on native the adjustsFontSizeToFit below
+ * fine-tunes within the tier.
  * ⚠️ Thresholds are approximate — confirm against Figma.
  */
 const AMOUNT_TIERS = [
@@ -31,14 +42,17 @@ export interface CreateVaultAmountStepProps {
   tokenSymbol?: string;
   /** Fiat conversion under the amount — always shown on this step. */
   fiatValue?: string;
+  fiatSymbol?: string;
+  /** Swap the entry currency (KAS ⇄ USD). */
+  onPressSwapCurrency?: () => void;
   /** Keypad balance row. */
   balance?: string;
   onPressMax?: () => void;
   maxDisabled?: boolean;
   maximumFractionDigits?: number;
-  /** Validation error — replaces the info link above the keypad (red). */
+  /** Validation error — replaces the info link in the action bar (red). */
   error?: string;
-  /** Info link above the keypad (blue). */
+  /** Info link in the action bar (blue). */
   infoLabel?: string;
   /** Content for the info sheet opened by the info link. */
   infoSheet?: { title: string; description: string };
@@ -48,9 +62,9 @@ export interface CreateVaultAmountStepProps {
 }
 
 /**
- * Create-vault Step 1 — amount. Body-only: amount display + info/error line +
- * custom Keypad + Continue. The info link / error sit ABOVE the keypad and the
- * row keeps a fixed height, so toggling the error never shifts the layout.
+ * Create-vault Step 1 — amount. Body-only: amount display + custom Keypad +
+ * BottomActionBar. Per Figma the info link and the validation error share the
+ * action bar's message slot (above Continue), NOT the space above the keypad.
  * Header/nav live in kastle-mobile (去頭去尾). Pure — controlled amount.
  */
 export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
@@ -58,6 +72,8 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
   onChangeAmount,
   tokenSymbol = "KAS",
   fiatValue,
+  fiatSymbol = "USD",
+  onPressSwapCurrency,
   balance,
   onPressMax,
   maxDisabled,
@@ -90,34 +106,50 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
               {amount}
             </Text>
           </View>
-          <Text allowFontScaling={false} style={styles.unit}>
-            {tokenSymbol}
-          </Text>
-        </View>
-        {fiatValue ? (
-          <Text allowFontScaling={false} style={styles.fiat}>
-            {fiatValue}
-          </Text>
-        ) : null}
-      </View>
-
-      {/* Info link / error — ABOVE the keypad, fixed height (no layout jump) */}
-      <View style={styles.messageRow}>
-        {error ? (
-          <Text allowFontScaling={false} style={styles.messageError}>
-            {error}
-          </Text>
-        ) : infoLabel ? (
-          <TouchableOpacity
-            onPress={() => setInfoOpen(true)}
-            disabled={!infoSheet}
-            hitSlop={8}
-          >
-            <Text allowFontScaling={false} style={styles.messageInfo}>
-              {infoLabel}
+          {/* Currency selector — Kaspa logo + symbol */}
+          <View style={styles.currency}>
+            <Image
+              source={KASPA_LOGO}
+              style={styles.currencyLogo}
+              contentFit="contain"
+            />
+            <Text allowFontScaling={false} style={styles.currencySymbol}>
+              {tokenSymbol}
             </Text>
-          </TouchableOpacity>
-        ) : null}
+          </View>
+        </View>
+
+        {/* Fiat + currency chip + swap */}
+        <View style={styles.fiatRow}>
+          {fiatValue ? (
+            <Text allowFontScaling={false} style={styles.fiat}>
+              {fiatValue}
+            </Text>
+          ) : null}
+          <View style={styles.fiatChip}>
+            <Image
+              source={US_FLAG}
+              style={styles.flag}
+              contentFit="cover"
+            />
+            <Text allowFontScaling={false} style={styles.fiatChipLabel}>
+              {fiatSymbol}
+            </Text>
+          </View>
+          {onPressSwapCurrency ? (
+            <TouchableOpacity
+              style={styles.swap}
+              onPress={onPressSwapCurrency}
+              activeOpacity={0.7}
+            >
+              <ArrowUpDown
+                size={16}
+                color={colors.textPrimary}
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
+          ) : null}
+        </View>
       </View>
 
       {/* Keypad */}
@@ -130,19 +162,27 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         maximumFractionDigits={maximumFractionDigits}
       />
 
-      {/* Continue */}
-      <View style={styles.actionBar}>
-        <TouchableOpacity
-          style={[styles.continue, continueDisabled && styles.continueDisabled]}
-          onPress={onPressContinue}
-          disabled={continueDisabled}
-          activeOpacity={0.85}
-        >
-          <Text allowFontScaling={false} style={styles.continueLabel}>
-            {continueLabel}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* Message slot + Continue */}
+      <BottomActionBar
+        message={
+          error
+            ? { text: error, variant: "error" }
+            : infoLabel
+              ? {
+                  text: infoLabel,
+                  variant: "info",
+                  onPress: infoSheet ? () => setInfoOpen(true) : undefined,
+                }
+              : undefined
+        }
+        buttons={[
+          {
+            label: continueLabel,
+            onPress: onPressContinue,
+            disabled: continueDisabled,
+          },
+        ]}
+      />
 
       <InfoSheet
         isOpen={infoOpen}
@@ -168,61 +208,72 @@ const styles = StyleSheet.create({
   },
   amountRow: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
     justifyContent: "center",
     gap: spacing.s2,
     maxWidth: "100%",
   },
   amountWrap: {
     flexShrink: 1,
-    maxWidth: "80%",
+    maxWidth: "70%",
   },
   amountColor: {
     color: colors.textPrimary,
   },
-  unit: {
-    ...textStyles.headingLG,
-    color: colors.textSecondary,
+  currency: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
     flexShrink: 0,
-    paddingBottom: spacing.s1,
+  },
+  currencyLogo: {
+    width: spacing.s10,
+    height: spacing.s10,
+    borderRadius: borderRadius.full,
+  },
+  currencySymbol: {
+    // Figma: 20 SemiBold, secondary
+    ...textStyles.bodySemiboldXL,
+    color: colors.textSecondary,
+  },
+  fiatRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
   },
   fiat: {
     ...textStyles.bodyNormalMD,
-    color: colors.textMuted,
+    color: colors.textSecondary,
   },
-  messageRow: {
-    minHeight: spacing.s8,
+  // Figma: r24 chip, pad [6,8], gap 6
+  fiatChip: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: spacing.s5,
-    paddingBottom: spacing.s3,
+    gap: spacing.s1_5,
+    paddingVertical: spacing.s1_5,
+    paddingHorizontal: spacing.s2,
+    borderRadius: borderRadius["3xl"],
+    backgroundColor: colors.backgroundSurface,
   },
-  messageInfo: {
-    ...textStyles.bodyNormalSM,
-    color: colors.link,
-  },
-  messageError: {
-    ...textStyles.bodyNormalSM,
-    color: colors.danger,
-    textAlign: "center",
-  },
-  actionBar: {
-    paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s8,
-    paddingBottom: spacing.s5,
-  },
-  continue: {
-    backgroundColor: colors.primary,
+  flag: {
+    width: spacing.s4,
+    height: spacing.s4,
     borderRadius: borderRadius.full,
-    paddingVertical: spacing.s4,
+  },
+  fiatChipLabel: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.medium,
+    color: colors.textSecondary,
+  },
+  swap: {
+    width: spacing.s8,
+    height: spacing.s8,
+    borderRadius: borderRadius.full,
+    borderWidth: borderWidth.bw1,
+    borderColor: colors.border,
+    backgroundColor: colors.backgroundSurface,
     alignItems: "center",
     justifyContent: "center",
-  },
-  continueDisabled: {
-    opacity: 0.4,
-  },
-  continueLabel: {
-    ...textStyles.bodySemiboldMD,
-    color: colors.white,
   },
 });
