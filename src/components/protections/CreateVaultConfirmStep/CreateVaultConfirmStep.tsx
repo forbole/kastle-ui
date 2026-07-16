@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
-import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
+import { DetailTable } from "../DetailTable/DetailTable";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet/EstFeeSheet";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import { SwipeToConfirm } from "../../SwipeToConfirm/SwipeToConfirm";
@@ -106,30 +106,19 @@ export const CreateVaultConfirmStep: React.FC<
         />
 
         {/* Summary */}
-        <View style={styles.card}>
-          {rows.map((row, i) => (
-            <DetailKVRow
-              key={i}
-              label={row.label}
-              // Text/Title Color — Nicole's semantic set is t900/t600/t400;
-              // the node's raw typography800 binding bypasses it.
-              labelColor={typography.t900}
-              value={row.value}
-              emphasis={row.emphasis}
-              // Figma draws a hairline under every row; the filled total has none
-              divider={!row.emphasis && i < rows.length - 1}
-              // The fee sheet opens from the row's ⓘ, like every other
-              // explainer — onPressValue would turn the value into a blue link.
-              onPressInfo={
-                row.opensFeeSheet
-                  ? () => setFeeOpen(true)
-                  : row.tooltip
-                    ? () => setTooltip(row.tooltip!)
-                    : undefined
-              }
-            />
-          ))}
-        </View>
+        <DetailTable
+          rows={rows.map((row) => ({
+            label: row.label,
+            value: row.value,
+            emphasis: row.emphasis,
+            // The fee sheet opens from the row's ⓘ, like every other explainer.
+            onPressInfo: row.opensFeeSheet
+              ? () => setFeeOpen(true)
+              : row.tooltip
+                ? () => setTooltip(row.tooltip!)
+                : undefined,
+          }))}
+        />
       </ScrollView>
 
       <View style={styles.actionBar}>
