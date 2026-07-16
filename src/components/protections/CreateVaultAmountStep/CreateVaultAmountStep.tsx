@@ -119,7 +119,7 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
           </View>
         </View>
 
-        {/* Fiat + currency chip + swap */}
+        {/* Fiat + currency chip */}
         <View style={styles.fiatRow}>
           {fiatValue ? (
             <Text allowFontScaling={false} style={styles.fiat}>
@@ -136,20 +136,18 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
               {fiatSymbol}
             </Text>
           </View>
-          {onPressSwapCurrency ? (
-            <TouchableOpacity
-              style={styles.swap}
-              onPress={onPressSwapCurrency}
-              activeOpacity={0.7}
-            >
-              <ArrowUpDown
-                size={16}
-                color={colors.textPrimary}
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
-          ) : null}
         </View>
+
+        {/* Swap gets its own row, pinned right (Figma Amount Info, align MAX) */}
+        {onPressSwapCurrency ? (
+          <TouchableOpacity
+            style={styles.swap}
+            onPress={onPressSwapCurrency}
+            activeOpacity={0.7}
+          >
+            <ArrowUpDown size={16} color={colors.textPrimary} strokeWidth={2} />
+          </TouchableOpacity>
+        ) : null}
       </View>
 
       {/* Info link — above the keypad. It can't share the action bar with the
@@ -204,9 +202,10 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
   },
+  // Figma "Amount Info": 353 wide, vertical, cross-axis MAX (right)
   display: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "flex-end",
     justifyContent: "center",
     gap: spacing.s2,
     paddingHorizontal: spacing.s5,
@@ -218,6 +217,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.s2,
     maxWidth: "100%",
+    alignSelf: "center",
   },
   amountWrap: {
     flexShrink: 1,
@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s2,
+    alignSelf: "center",
   },
   fiat: {
     ...textStyles.bodyNormalMD,
