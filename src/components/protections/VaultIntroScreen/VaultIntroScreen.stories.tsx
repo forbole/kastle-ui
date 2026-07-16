@@ -33,8 +33,10 @@ export const Default: Story = {
   args: {
     title: " Your KAS just got a Vault",
     body: "A Vault locks your KAS behind a delay only you control. If your phone is ever stolen, that delay gives you time to step in and move your funds to safety. Enforced on Kaspa itself, never by Kastle.",
+    // Figma 12711:223618: ⓘ link, then Set up now (primary), then Close (outline)
+    infoLabel: "How a Vault works?",
     ctaLabel: "Set up now",
-    secondaryLabel: "How a Vault works?",
+    secondaryLabel: "Close",
   },
 };
 
