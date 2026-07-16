@@ -50,6 +50,9 @@ export interface BottomActionBarProps {
  * [12, 20, 16, 20], gap 12, buttons 48 high. Body-only: the iOS home
  * indicator below it is device chrome and lives in kastle-mobile.
  */
+/** One line of `bodyNormalSM`; anything taller has wrapped. */
+const SINGLE_LINE_HEIGHT = 21;
+
 export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   message,
   buttons,
@@ -59,11 +62,18 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   const messageColor =
     message?.variant === "error" ? colors.danger : colors.link;
 
+  // A short message centres under the button; once it wraps it reads as a
+  // paragraph, so it goes left-aligned with the icon pinned to the first line.
+  const [wrapped, setWrapped] = React.useState(false);
+
   const messageRow = message ? (
-    <View style={styles.message}>
+    <View style={[styles.message, wrapped ? styles.messageWrapped : styles.messageSingle]}>
       <Info size={16} color={messageColor} strokeWidth={2} />
       <Text
         allowFontScaling={false}
+        onLayout={(e) =>
+          setWrapped(e.nativeEvent.layout.height > SINGLE_LINE_HEIGHT * 1.5)
+        }
         style={[styles.messageText, { color: messageColor }]}
       >
         {message.text}
@@ -127,8 +137,15 @@ const styles = StyleSheet.create({
   },
   message: {
     flexDirection: "row",
-    alignItems: "center",
     gap: spacing.s2,
+  },
+  messageSingle: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  messageWrapped: {
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   messageText: {
     ...textStyles.bodyNormalSM,
