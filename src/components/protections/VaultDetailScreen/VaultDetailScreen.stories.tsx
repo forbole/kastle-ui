@@ -1,13 +1,26 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { VaultDetailScreen, VaultDetailRow } from "./VaultDetailScreen";
 import { background } from "../../../config/theme";
 
-// Copy + values pulled from Figma (Vault Details + its tooltips).
-const ROWS: VaultDetailRow[] = [
-  { label: "Vault Status", value: "Locked" },
-  { label: "Vault amount", value: "~ 20,000 KAS" },
+const VAULT_ADDRESS =
+  "kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9trv4k2";
+
+const BACKUP_NOTE =
+  "This is your vault address on Kaspa — where protected KAS lives. Save it to find your vault anytime, even without Kastle. Your funds go to [recovery address] when you clawback or withdraw.";
+
+const WITHDRAW_NOTE =
+  "Nothing has moved yet. When the countdown ends, funds go to your recovery address automatically. Withdraw now moves them right away.";
+
+const DANGER_NOTE =
+  "Wasn't you? Withdraw now,  funds can only go to your recovery address.";
+
+// Copy + values pulled from Figma (Vault details /Default 12802:617586 and the
+// clawback withdraw variants 13393:44068).
+const BASE_ROWS: VaultDetailRow[] = [
+  { label: "Vault Status", pill: { label: "Locked", status: "success" } },
+  { label: "Vault amount", value: "~ 20,000 KAS", subValue: "$200.232 USD" },
   {
     label: "Protection window",
     value: "3 days",
@@ -48,6 +61,25 @@ const ROWS: VaultDetailRow[] = [
   { label: "Created", value: "23/5/2025, 5:14:12" },
 ];
 
+/** Withdrawing swaps the status pill to pending; the rest of the table is identical. */
+const withdrawingRows = (): VaultDetailRow[] =>
+  BASE_ROWS.map((r) =>
+    r.label === "Vault Status"
+      ? { ...r, pill: { label: "Withdrawing", status: "pending" as const } }
+      : r
+  );
+
+/** Shared args for every withdrawing/clawback countdown variant. */
+const withdrawingArgs = (countdownTime: string) => ({
+  status: "withdrawing" as const,
+  countdownTime,
+  countdownLabel: "Funds leave in",
+  note: WITHDRAW_NOTE,
+  dangerNote: DANGER_NOTE,
+  rows: withdrawingRows(),
+  actionLabel: "Withdraw now",
+});
+
 const meta: Meta<typeof VaultDetailScreen> = {
   title: "Protections/Screens/VaultDetailScreen",
   component: VaultDetailScreen,
@@ -57,6 +89,8 @@ const meta: Meta<typeof VaultDetailScreen> = {
     layout: "fullscreen",
   },
   args: {
+    vaultAddress: VAULT_ADDRESS,
+    rows: BASE_ROWS,
     onPressCopyAddress: () => {},
     onPressAction: () => {},
     onPressBackupDone: () => {},
@@ -76,19 +110,38 @@ const meta: Meta<typeof VaultDetailScreen> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Withdrawing — countdown ring, backup card, details, "Withdraw now". */
-export const Withdrawing: Story = {
+/**
+ * Default — Locked (Figma 12802:617586). No countdown ring and no withdraw
+ * notes; the backup card + details show and the action is an outline button.
+ */
+export const Locked: Story = {
   args: {
-    status: "withdrawing",
-    countdownTime: "30d:11h:44m",
-    note: "Nothing has moved yet. When the countdown ends, funds go to your recovery address automatically. Withdraw now moves them right away.",
-    vaultAddress:
-      "kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9",
-    backupNote:
-      "This is your vault address on Kaspa — where protected KAS lives. Save it to find your vault anytime, even without Kastle. Your funds go to your recovery address when you withdraw.",
-    rows: ROWS,
-    actionLabel: "Withdraw now",
+    status: "locked",
+    backupNote: BACKUP_NOTE,
+    rows: BASE_ROWS,
+    actionLabel: "Withdraw",
   },
+};
+
+/**
+ * Clawback — more than one day left (Figma 13409:25553). Countdown counts down
+ * in DD:HH:MM; no backup card; orange "Withdraw now".
+ */
+export const WithdrawingMoreThanOneDay: Story = {
+  args: withdrawingArgs("2d:23h:59m"),
+};
+
+/**
+ * Clawback — under one day left (Figma 13393:34423). Countdown switches to
+ * HH:MM:SS so the last day reads as urgent.
+ */
+export const WithdrawingOneDayLeft: Story = {
+  args: withdrawingArgs("23h:11m:44s"),
+};
+
+/** Clawback — longest window (Figma 13393:86085), 90-day protection. */
+export const Withdrawing90Days: Story = {
+  args: withdrawingArgs("89d:23h:59m"),
 };
 
 const styles = StyleSheet.create({
