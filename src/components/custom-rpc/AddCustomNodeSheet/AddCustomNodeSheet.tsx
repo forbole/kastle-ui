@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Keyboard, Platform } from "react-native";
 import { Info } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
-import { InlineActionSheet } from "../../InlineActionSheet";
 import { Input } from "../../Input";
 import { ButtonGroup } from "../../ButtonGroup";
 import {
@@ -14,13 +13,6 @@ import {
   background,
   border,
 } from "../../../config/theme";
-
-// iOS: RN's Modal opens a separate native surface that KeyboardAvoidingView
-// can't measure correctly, so the sheet never rises above the keyboard —
-// use InlineActionSheet (no Modal, renders in the normal view tree) instead.
-// Android: ActionSheet (Modal-based) already works correctly via the
-// platform's own adjustResize, so leave it as-is there.
-const Sheet = Platform.OS === "ios" ? InlineActionSheet : ActionSheet;
 
 export interface AddCustomNodeSheetProps {
   isOpen: boolean;
@@ -50,64 +42,83 @@ export const AddCustomNodeSheet: React.FC<AddCustomNodeSheetProps> = ({
   const [url, setUrl] = useState(defaultUrl);
   const canAdd = name.trim().length > 0 && url.trim().length > 0 && !isValidating;
 
+  // KeyboardAvoidingView measures its own on-screen frame to compute the
+  // keyboard overlap, but ActionSheet renders inside a Modal, which opens a
+  // separate native surface on iOS — that measurement comes out wrong and
+  // the sheet never rises above the keyboard. Track the keyboard height
+  // manually via Keyboard events instead and pad the sheet directly; this
+  // doesn't depend on any cross-window measurement so it works inside the
+  // Modal. Android already lifts correctly on its own (Modal's hardcoded
+  // adjustResize), so only apply the padding on iOS.
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  useEffect(() => {
+    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+    const showSub = Keyboard.addListener(showEvent, (e) =>
+      setKeyboardHeight(e.endCoordinates.height),
+    );
+    const hideSub = Keyboard.addListener(hideEvent, () => setKeyboardHeight(0));
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
   return (
-    <Sheet isOpen={isOpen} onClose={onClose}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.keyboardAvoidingView}
+    <ActionSheet isOpen={isOpen} onClose={onClose}>
+      <View
+        style={[
+          styles.container,
+          Platform.OS === "ios" && { paddingBottom: keyboardHeight },
+        ]}
       >
-        <View style={styles.container}>
-          <View style={styles.handleWrap}>
-            <View style={styles.handle} />
-          </View>
-
-          <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>
-            Add custom node
-          </Text>
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.caption]}>
-            Connect Kastle to your own Kaspa node.
-          </Text>
-          <View style={styles.divider} />
-
-          <View style={styles.field}>
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
-              Node Name
-            </Text>
-            <Input value={name} onChangeText={setName} placeholder="Home node" />
-          </View>
-
-          <View style={styles.field}>
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
-              RPC URL
-            </Text>
-            <Input value={url} onChangeText={setUrl} placeholder="ws:// or wss://" error={error} autoCapitalize="none" />
-          </View>
-
-          <ButtonGroup
-            secondaryLabel="Cancel"
-            primaryLabel="Add"
-            onSecondaryPress={onClose}
-            onPrimaryPress={() => canAdd && onAdd(name.trim(), url.trim())}
-            primaryDisabled={!canAdd}
-            primaryLoading={isValidating}
-          />
-
-          <View style={styles.trust}>
-            <Info size={14} color={colors.textSecondary} strokeWidth={2} />
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.trustText]}>
-              Only add a node you trust.
-            </Text>
-          </View>
+        <View style={styles.handleWrap}>
+          <View style={styles.handle} />
         </View>
-      </KeyboardAvoidingView>
-    </Sheet>
+
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>
+          Add custom node
+        </Text>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.caption]}>
+          Connect Kastle to your own Kaspa node.
+        </Text>
+        <View style={styles.divider} />
+
+        <View style={styles.field}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
+            Node Name
+          </Text>
+          <Input value={name} onChangeText={setName} placeholder="Home node" />
+        </View>
+
+        <View style={styles.field}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
+            RPC URL
+          </Text>
+          <Input value={url} onChangeText={setUrl} placeholder="ws:// or wss://" error={error} autoCapitalize="none" />
+        </View>
+
+        <ButtonGroup
+          secondaryLabel="Cancel"
+          primaryLabel="Add"
+          onSecondaryPress={onClose}
+          onPrimaryPress={() => canAdd && onAdd(name.trim(), url.trim())}
+          primaryDisabled={!canAdd}
+          primaryLoading={isValidating}
+        />
+
+        <View style={styles.trust}>
+          <Info size={14} color={colors.textSecondary} strokeWidth={2} />
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.trustText]}>
+            Only add a node you trust.
+          </Text>
+        </View>
+      </View>
+    </ActionSheet>
   );
 };
 
 const styles = StyleSheet.create({
-  keyboardAvoidingView: {
-    flex: 1,
-  },
   container: {
     backgroundColor: background.bg100,
     borderTopLeftRadius: borderRadius["3xl"],
