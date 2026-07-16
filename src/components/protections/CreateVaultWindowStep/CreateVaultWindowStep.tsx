@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Check, Clock } from "lucide-react-native";
+import { Check } from "lucide-react-native";
 import { Alert, AlertSeverity } from "../../Alert/Alert";
 import {
   border,
@@ -93,32 +93,24 @@ export const CreateVaultWindowStep: React.FC<CreateVaultWindowStepProps> = ({
                 onPress={() => onSelect(preset.id)}
                 activeOpacity={0.8}
               >
-                <View style={styles.iconWrap}>
-                  <Clock
-                    size={20}
-                    color={colors.textSecondary}
-                    strokeWidth={2}
-                  />
-                </View>
                 <View style={styles.rowText}>
-                  <View style={styles.labelRow}>
-                    <Text allowFontScaling={false} style={styles.rowLabel}>
-                      {preset.label}
-                    </Text>
-                    {preset.badge ? (
-                      <View style={styles.badge}>
-                        <Text allowFontScaling={false} style={styles.badgeText}>
-                          {preset.badge}
-                        </Text>
-                      </View>
-                    ) : null}
-                  </View>
+                  <Text allowFontScaling={false} style={styles.rowLabel}>
+                    {preset.label}
+                  </Text>
                   {preset.subtitle ? (
                     <Text allowFontScaling={false} style={styles.rowSubtitle}>
                       {preset.subtitle}
                     </Text>
                   ) : null}
                 </View>
+                {/* Badge sits on the right, beside the checkbox (per Figma) */}
+                {preset.badge ? (
+                  <View style={styles.badge}>
+                    <Text allowFontScaling={false} style={styles.badgeText}>
+                      {preset.badge}
+                    </Text>
+                  </View>
+                ) : null}
                 <View style={[styles.check, selected && styles.checkSelected]}>
                   {selected ? (
                     <Check size={12} color={colors.white} strokeWidth={3} />
@@ -194,23 +186,9 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.s3,
     paddingHorizontal: spacing.s4,
   },
-  iconWrap: {
-    width: spacing.s10,
-    height: spacing.s10,
-    borderRadius: borderRadius.full,
-    backgroundColor: colors.backgroundSurfaceStrong,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   rowText: {
     flex: 1,
     gap: spacing.s0_5,
-  },
-  labelRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.s2,
-    flexShrink: 1,
   },
   rowLabel: {
     ...textStyles.bodySemiboldMD,
