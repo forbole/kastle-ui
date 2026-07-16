@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ChevronRight, Coins, Loader, Lock } from "lucide-react-native";
+import { ChevronRight, Coins, LoaderCircle, Lock } from "lucide-react-native";
 import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
 import {
+  borderRadius,
   colors,
+  opacity,
   spacing,
   borderWidth,
   textStyles,
@@ -74,7 +76,8 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
       {state === "scanning" ? (
         <View style={styles.row}>
           <View style={styles.iconBox}>
-            <Loader size={16} color={colors.textPrimary} strokeWidth={2} />
+            {/* icon + label share textDimmed */}
+            <LoaderCircle size={16} color={colors.textDimmed} strokeWidth={2} />
           </View>
           <View style={styles.scanningCol}>
             <Text
@@ -116,7 +119,13 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
                 {lockedValue}
               </Text>
             )}
-            <ChevronRight size={16} color={colors.textPrimary} strokeWidth={2} />
+            <ChevronRight
+              size={16}
+              color={colors.textPrimary}
+              strokeWidth={2}
+              // dimmed while the balance is still resolving
+              opacity={loading ? opacity.o40 : opacity.o100}
+            />
           </View>
         </TouchableOpacity>
       )}
@@ -125,9 +134,12 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
 };
 
 const styles = StyleSheet.create({
+  // Figma rounds the stack as one card (r16) and lets the shared border read as
+  // a divider — the rows themselves stay square inside it.
   stack: {
-    // -1 so the two rows share a border, per Figma
     gap: -1,
+    borderRadius: borderRadius["2xl"],
+    overflow: "hidden",
   },
   row: {
     flexDirection: "row",
@@ -148,28 +160,31 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   labelCol: {
-    width: 114,
+    flexShrink: 0,
   },
   label: {
     ...textStyles.bodySemiboldSM,
     color: colors.textPrimary,
   },
+  // Value + chevron are flush right; the label keeps the left edge.
   valueCol: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-end",
     gap: spacing.s1_5,
   },
   value: {
     ...textStyles.bodyNormalSM,
     color: colors.textPrimary,
     flexShrink: 1,
+    textAlign: "right",
   },
   scanningCol: {
     flex: 1,
   },
   scanningLabel: {
     ...textStyles.bodyNormalSM,
-    color: colors.textSecondary,
+    color: colors.textDimmed,
   },
 });
