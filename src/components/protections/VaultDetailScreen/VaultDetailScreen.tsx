@@ -12,7 +12,7 @@ import { Info } from "lucide-react-native";
 import { CountdownRing } from "../CountdownRing/CountdownRing";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { VaultStatus } from "../VaultCard/VaultCard";
-import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
+import { DetailTable } from "../DetailTable/DetailTable";
 import {
   StatusPill,
   StatusPillStatus,
@@ -219,43 +219,30 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
             <Text allowFontScaling={false} style={styles.detailsTitle}>
               {detailsTitle}
             </Text>
-            <View style={styles.detailsCard}>
-              {rows.map((row, i) => (
-                <DetailKVRow
-                  key={i}
-                  // Figma's table draws a hairline under every row but the last
-                  divider={i < rows.length - 1}
-                  labelIcon={
-                    row.tokenLogo ? (
-                      <Image
-                        source={KASPA_LOGO}
-                        style={styles.tokenLogo}
-                        contentFit="contain"
-                      />
-                    ) : undefined
-                  }
-                  label={row.label}
-                  // Vault details uses white labels (Figma), not the muted
-                  // default the activity rows ship with.
-                  labelColor={colors.textPrimary}
-                  value={row.value}
-                  subValue={row.subValue}
-                  valueNode={
-                    row.pill ? (
-                      <StatusPill
-                        status={row.pill.status}
-                        label={row.pill.label}
-                        indicator="dot"
-                      />
-                    ) : undefined
-                  }
-                  onPressValue={row.onPressValue}
-                  onPressInfo={
-                    row.tooltip ? () => setTooltip(row.tooltip!) : undefined
-                  }
-                />
-              ))}
-            </View>
+            <DetailTable
+              rows={rows.map((row) => ({
+                label: row.label,
+                value: row.value,
+                subValue: row.subValue,
+                labelIcon: row.tokenLogo ? (
+                  <Image
+                    source={KASPA_LOGO}
+                    style={styles.tokenLogo}
+                    contentFit="contain"
+                  />
+                ) : undefined,
+                valueNode: row.pill ? (
+                  <StatusPill
+                    status={row.pill.status}
+                    label={row.pill.label}
+                    indicator="dot"
+                  />
+                ) : undefined,
+                onPressInfo: row.tooltip
+                  ? () => setTooltip(row.tooltip!)
+                  : undefined,
+              }))}
+            />
           </View>
         ) : null}
       </ScrollView>
@@ -383,13 +370,5 @@ const styles = StyleSheet.create({
   tokenLogo: {
     width: spacing.s5,
     height: spacing.s5,
-  },
-  // Figma wraps the rows in a table card (r16, bg50)
-  detailsCard: {
-    backgroundColor: background.bg50,
-    borderColor: colors.border,
-    borderWidth: borderWidth.bw1,
-    borderRadius: borderRadius["2xl"],
-    paddingHorizontal: spacing.s4,
   },
 });
