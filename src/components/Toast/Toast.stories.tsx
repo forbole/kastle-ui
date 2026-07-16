@@ -58,11 +58,41 @@ export const ErrorRetry: Story = {
   },
 };
 
+// Clawback ("Withdraw early") result states — Figma 12802:633805. Each one
+// renders over the screen behind it: loading + fail sit on the vault detail
+// screen, success lands on the vaults list.
+
+/** Clawback in flight (Figma 12802:628610). */
+export const ClawbackLoading: Story = {
+  args: { variant: "loading", heading: "Sending to your recovery address…" },
+};
+
+/** Clawback failed (Figma 12802:628795). */
+export const ClawbackError: Story = {
+  args: {
+    variant: "error",
+    heading: "Couldn't withdraw",
+    actionLabel: "Close",
+  },
+};
+
+/** Clawback done (Figma 13400:546209) — shown on the vaults list. */
+export const ClawbackSuccess: Story = {
+  args: {
+    variant: "success",
+    heading: "Withdrawal complete",
+    actionLabel: "View TX",
+  },
+};
+
 const styles = StyleSheet.create({
+  // Story scaffolding only — mirrors Figma's toast wrapper padding
+  // ([120, 20, 0, 20]) so the pill previews where it actually lands. The
+  // overlay itself is mounted app-side.
   decorator: {
     flex: 1,
     backgroundColor: background.bg0,
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s20,
+    paddingTop: 120,
   },
 });
