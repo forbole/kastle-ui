@@ -1,32 +1,28 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
-import { Vault, Wallet, ScrollText } from "lucide-react-native";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { ProtectionsHubScreen } from "./ProtectionsHubScreen";
 import { ProtectionTypeCardProps } from "../ProtectionTypeCard/ProtectionTypeCard";
-import { background, colors } from "../../../config/theme";
+import { background } from "../../../config/theme";
 
 const CARDS: ProtectionTypeCardProps[] = [
   {
-    icon: <Vault size={24} color={colors.primary} strokeWidth={2} />,
     title: "Vault",
     description:
-      "Lock your KAS so it can't be moved right away — even if your phone is stolen.",
+      "Undo theft. Withdrawals wait out a delay you set, so you have time to clawback and send funds to your recovery address if something looks wrong.",
     status: "active",
-    ctaLabel: "Create vault",
+    ctaLabel: "Set up",
     onPress: () => {},
     onPressCta: () => {},
   },
   {
-    icon: <Wallet size={24} color={colors.textMuted} strokeWidth={2} />,
     title: "Allowance",
-    description: "Set spending limits for the apps you connect to.",
+    description: "Daily spend limits on your everyday balance.",
     status: "soon",
   },
   {
-    icon: <ScrollText size={24} color={colors.textMuted} strokeWidth={2} />,
     title: "Legacy",
-    description: "Pass your assets on to someone you trust.",
+    description: "Pass your KAS on if you ever go inactive.",
     status: "soon",
   },
 ];

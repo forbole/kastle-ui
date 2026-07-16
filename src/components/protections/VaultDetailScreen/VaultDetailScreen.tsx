@@ -119,7 +119,8 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
           </View>
         ) : null}
 
-        {/* Backup your vault address (amber card) */}
+        {/* Backup your vault address — not shown while withdrawing (per Figma) */}
+        {status !== "withdrawing" ? (
         <View style={styles.backupCard}>
           <View style={styles.backupHeader}>
             <View style={styles.backupTitleRow}>
@@ -149,6 +150,7 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
             </View>
           ) : null}
         </View>
+        ) : null}
 
         {/* Details */}
         {rows.length > 0 ? (

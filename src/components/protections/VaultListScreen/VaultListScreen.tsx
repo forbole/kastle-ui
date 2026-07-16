@@ -1,18 +1,22 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Eye, EyeOff } from "lucide-react-native";
 import { VaultCard, VaultCardProps } from "../VaultCard/VaultCard";
 import { EmptyState, EmptyStateProps } from "../../EmptyState/EmptyState";
-import { colors, spacing, textStyles } from "../../../config/theme";
+import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
+import {
+  borderRadius,
+  colors,
+  spacing,
+  textStyles,
+} from "../../../config/theme";
+
+/** Card height — kept in sync with VaultCard so skeletons match the real grid. */
+const CARD_HEIGHT = 222;
+const SKELETON_COUNT = 4;
 
 export interface VaultListScreenProps {
-  /** Vault cards to render in the 2-column grid. */
+  /** Vault cards to render in the 2-column grid (newest first). */
   vaults: VaultCardProps[];
   /** Balance summary label. */
   totalLabel?: string;
@@ -22,18 +26,24 @@ export interface VaultListScreenProps {
   defaultBalanceHidden?: boolean;
   /** Fired after the eye toggles (parent may persist the preference). */
   onToggleBalance?: () => void;
-  /** Show the scanning state instead of the grid. */
+  /** Show skeleton cards instead of the grid while scanning for vaults. */
   scanning?: boolean;
-  scanningText?: string;
   /** Rendered when there are no vaults and we are not scanning. */
   emptyState?: EmptyStateProps;
 }
 
+/** Chunk a list into rows of two for the grid. */
+const toRows = <T,>(items: T[]): T[][] => {
+  const rows: T[][] = [];
+  for (let i = 0; i < items.length; i += 2) rows.push(items.slice(i, i + 2));
+  return rows;
+};
+
 /**
- * Body-only vaults list: balance summary + a 2-column grid of VaultCards,
- * with scanning + empty states. Header bar and bottom nav live in
+ * Body-only vaults list: balance summary + a 2-column grid of VaultCards, with
+ * skeleton (scanning) + empty states. Header bar and bottom nav live in
  * kastle-mobile (去頭去尾). Pure UI — the only local state is the balance
- * hide/reveal toggle (a UI affordance, not data).
+ * hide/reveal toggle.
  */
 export const VaultListScreen: React.FC<VaultListScreenProps> = ({
   vaults,
@@ -42,7 +52,6 @@ export const VaultListScreen: React.FC<VaultListScreenProps> = ({
   defaultBalanceHidden = false,
   onToggleBalance,
   scanning = false,
-  scanningText = "Scanning for vaults…",
   emptyState,
 }) => {
   const [hidden, setHidden] = React.useState(defaultBalanceHidden);
@@ -52,11 +61,8 @@ export const VaultListScreen: React.FC<VaultListScreenProps> = ({
     onToggleBalance?.();
   };
 
-  // Chunk into rows of two for the grid.
-  const rows: VaultCardProps[][] = [];
-  for (let i = 0; i < vaults.length; i += 2) {
-    rows.push(vaults.slice(i, i + 2));
-  }
+  const rows = toRows(vaults);
+  const skeletonRows = toRows(Array.from({ length: SKELETON_COUNT }, (_, i) => i));
 
   return (
     <View style={styles.body}>
@@ -75,17 +81,26 @@ export const VaultListScreen: React.FC<VaultListScreenProps> = ({
           </TouchableOpacity>
         </View>
         <Text allowFontScaling={false} style={styles.balanceAmount}>
-          {hidden ? "••••••••" : totalAmount}
+          {hidden ? "****" : totalAmount}
         </Text>
       </View>
 
-      {/* Grid / scanning / empty */}
+      {/* Skeleton / empty / grid */}
       {scanning ? (
-        <View style={styles.stateBox}>
-          <ActivityIndicator color={colors.primary} />
-          <Text allowFontScaling={false} style={styles.scanningText}>
-            {scanningText}
-          </Text>
+        <View style={styles.grid}>
+          {skeletonRows.map((row, ri) => (
+            <View key={ri} style={styles.gridRow}>
+              {row.map((i) => (
+                <View key={i} style={styles.gridCell}>
+                  <SkeletonBlock
+                    width="100%"
+                    height={CARD_HEIGHT}
+                    borderRadius={borderRadius["2xl"]}
+                  />
+                </View>
+              ))}
+            </View>
+          ))}
         </View>
       ) : vaults.length === 0 && emptyState ? (
         <EmptyState {...emptyState} />
@@ -139,15 +154,5 @@ const styles = StyleSheet.create({
   },
   gridCell: {
     flex: 1,
-  },
-  stateBox: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.s2,
-    paddingVertical: spacing.s10,
-  },
-  scanningText: {
-    ...textStyles.bodyNormalSM,
-    color: colors.textMuted,
   },
 });

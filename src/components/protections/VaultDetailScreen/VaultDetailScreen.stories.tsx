@@ -4,36 +4,48 @@ import { View, StyleSheet, useWindowDimensions } from "react-native";
 import { VaultDetailScreen, VaultDetailRow } from "./VaultDetailScreen";
 import { background } from "../../../config/theme";
 
+// Copy + values pulled from Figma (Vault Details + its tooltips).
 const ROWS: VaultDetailRow[] = [
-  { label: "Vault amount", value: "1,000,000.999999 KAS" },
+  { label: "Vault Status", value: "Locked" },
+  { label: "Vault amount", value: "~ 20,000 KAS" },
   {
     label: "Protection window",
     value: "3 days",
     tooltip: {
       title: "Protection window",
       description:
-        "How long your funds stay locked before they can move. Set when you create the vault and can't be changed.",
+        "Every withdrawal waits this long — giving you time to spot theft and withdraw immediately. You set it at creation and it can't be changed.",
+    },
+  },
+  {
+    label: "Recovery marker",
+    value: "0.5 KAS",
+    tooltip: {
+      title: "Recovery marker",
+      description:
+        "A tiny marker output Kastle creates on-chain at vault creation so you can recover your vault from your seed alone. Cost: ~0.5 KAS (dust floor). It gets refunded when you close the vault.",
+    },
+  },
+  {
+    label: "Vault address",
+    value: "kaspa:pq8z…v4k2",
+    tooltip: {
+      title: "Vault address",
+      description:
+        "The on-chain address that holds this vault's funds. Don't send deposits to it. Only the vault's rules can move what's inside.",
     },
   },
   {
     label: "Recovery address",
-    value: "kaspa:qz0…gk7cu9",
+    value: "kaspa:pfdf…v45s",
     onPressValue: () => {},
     tooltip: {
-      title: "Recovery address",
+      title: "External recovery address",
       description:
-        "Where your funds go when you withdraw — now in an emergency, or after the delay. Set at creation and can't be changed.",
+        "Where your vault sends funds in any scenario — emergency clawback or normal withdrawal.",
     },
   },
-  {
-    label: "Refundable deposit",
-    value: "0.5 KAS",
-    tooltip: {
-      title: "Refundable deposit",
-      description:
-        "A small deposit that returns to your wallet when the vault closes. It never enters the vault.",
-    },
-  },
+  { label: "Created", value: "23/5/2025, 5:14:12" },
 ];
 
 const meta: Meta<typeof VaultDetailScreen> = {

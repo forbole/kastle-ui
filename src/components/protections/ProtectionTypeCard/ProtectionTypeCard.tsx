@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ChevronRight } from "lucide-react-native";
 import {
+  background,
   colors,
   spacing,
   borderRadius,
@@ -12,8 +12,6 @@ import {
 export type ProtectionStatus = "active" | "soon";
 
 export interface ProtectionTypeCardProps {
-  /** Left glyph (pass a lucide icon node). */
-  icon: React.ReactNode;
   title: string;
   description: string;
   /** "active" → chevron + CTA button; "soon" → muted, "Soon" badge, no CTA. */
@@ -34,7 +32,6 @@ export interface ProtectionTypeCardProps {
  * (soon). Pure UI. Copy is placeholder in Figma — real copy comes via props.
  */
 export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
-  icon,
   title,
   description,
   status = "active",
@@ -48,26 +45,21 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
 
   return (
     <Container
-      style={[styles.card, !isActive && styles.cardSoon]}
+      style={styles.card}
       onPress={isActive ? onPress : undefined}
       activeOpacity={0.85}
     >
       <View style={styles.header}>
-        <View style={styles.titleRow}>
-          {icon}
-          <Text allowFontScaling={false} style={styles.title} numberOfLines={1}>
-            {title}
-          </Text>
-        </View>
-        {isActive ? (
-          <ChevronRight size={20} color={colors.textMuted} strokeWidth={2} />
-        ) : (
+        <Text allowFontScaling={false} style={styles.title} numberOfLines={1}>
+          {title}
+        </Text>
+        {!isActive ? (
           <View style={styles.soonBadge}>
             <Text allowFontScaling={false} style={styles.soonLabel}>
               {soonLabel}
             </Text>
           </View>
-        )}
+        ) : null}
       </View>
 
       <Text allowFontScaling={false} style={styles.description}>
@@ -98,20 +90,11 @@ const styles = StyleSheet.create({
     padding: spacing.s4,
     gap: spacing.s3,
   },
-  cardSoon: {
-    opacity: 0.6,
-  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.s2,
-  },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.s2,
-    flexShrink: 1,
   },
   title: {
     ...textStyles.bodySemiboldMD,
@@ -123,13 +106,13 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   soonBadge: {
-    backgroundColor: colors.backgroundSurfaceStrong,
+    backgroundColor: background.bg100,
     borderRadius: borderRadius.full,
     paddingHorizontal: spacing.s2,
-    paddingVertical: spacing.s0_5,
+    paddingVertical: spacing.s1,
   },
   soonLabel: {
-    ...textStyles.bodySemiboldXS,
+    ...textStyles.bodyNormalXS,
     color: colors.textMuted,
   },
   cta: {
