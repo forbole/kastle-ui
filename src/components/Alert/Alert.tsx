@@ -121,6 +121,5 @@ const styles = StyleSheet.create({
   },
   body: {
     ...textStyles.bodyNormalSM,
-    opacity: 0.6,
   },
 });
