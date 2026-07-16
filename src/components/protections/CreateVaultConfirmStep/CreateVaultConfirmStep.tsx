@@ -12,6 +12,7 @@ import {
   borderRadius,
   borderWidth,
   textStyles,
+  typography,
 } from "../../../config/theme";
 
 export interface ConfirmRow {
@@ -88,6 +89,7 @@ export const CreateVaultConfirmStep: React.FC<
             <DetailKVRow
               key={i}
               label={row.label}
+              labelColor={typography.t800}
               value={row.value}
               // The fee sheet opens from the row's ⓘ, like every other
               // explainer — onPressValue would turn the value into a blue link.

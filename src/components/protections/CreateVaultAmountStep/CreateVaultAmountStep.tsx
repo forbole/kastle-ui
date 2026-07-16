@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
-import { ArrowUpDown } from "lucide-react-native";
+import { ArrowUpDown, Info } from "lucide-react-native";
 import { Keypad } from "../../Keypad/Keypad";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
@@ -152,6 +152,22 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         </View>
       </View>
 
+      {/* Info link — above the keypad. It can't share the action bar with the
+          CTA, so only the validation error uses the bar's message slot. */}
+      {infoLabel ? (
+        <TouchableOpacity
+          style={styles.infoRow}
+          onPress={() => setInfoOpen(true)}
+          disabled={!infoSheet}
+          activeOpacity={0.7}
+        >
+          <Info size={16} color={colors.link} strokeWidth={2} />
+          <Text allowFontScaling={false} style={styles.infoLabel}>
+            {infoLabel}
+          </Text>
+        </TouchableOpacity>
+      ) : null}
+
       {/* Keypad */}
       <Keypad
         value={amount}
@@ -162,19 +178,9 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         maximumFractionDigits={maximumFractionDigits}
       />
 
-      {/* Message slot + Continue */}
+      {/* Error + Continue */}
       <BottomActionBar
-        message={
-          error
-            ? { text: error, variant: "error" }
-            : infoLabel
-              ? {
-                  text: infoLabel,
-                  variant: "info",
-                  onPress: infoSheet ? () => setInfoOpen(true) : undefined,
-                }
-              : undefined
-        }
+        message={error ? { text: error, variant: "error" } : undefined}
         buttons={[
           {
             label: continueLabel,
@@ -265,6 +271,19 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     fontWeight: fontWeight.medium,
     color: colors.textSecondary,
+  },
+  // Figma "Info message": row, gap 8, pad [16,0,16,0]
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingVertical: spacing.s4,
+    paddingHorizontal: spacing.s5,
+  },
+  infoLabel: {
+    ...textStyles.bodyNormalSM,
+    color: colors.link,
   },
   swap: {
     width: spacing.s8,
