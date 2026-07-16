@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ImageSourcePropType,
+} from "react-native";
+import { Image } from "expo-image";
 import {
   colors,
   spacing,
@@ -13,6 +20,8 @@ export interface ProtectionsBannerProps {
   body: string;
   ctaLabel?: string;
   onPressCta?: () => void;
+  /** Artwork bleeding off the banner's right edge. */
+  illustration?: ImageSourcePropType | string;
   /** Whole banner tap. */
   onPress?: () => void;
 }
@@ -29,6 +38,7 @@ export const ProtectionsBanner: React.FC<ProtectionsBannerProps> = ({
   body,
   ctaLabel,
   onPressCta,
+  illustration,
   onPress,
 }) => {
   return (
@@ -37,23 +47,35 @@ export const ProtectionsBanner: React.FC<ProtectionsBannerProps> = ({
       onPress={onPress}
       activeOpacity={0.85}
     >
-      <Text allowFontScaling={false} style={styles.title}>
-        {title}
-      </Text>
-      <Text allowFontScaling={false} style={styles.body}>
-        {body}
-      </Text>
-      {ctaLabel ? (
-        <TouchableOpacity
-          style={styles.cta}
-          onPress={onPressCta}
-          activeOpacity={0.85}
-        >
-          <Text allowFontScaling={false} style={styles.ctaLabel}>
-            {ctaLabel}
-          </Text>
-        </TouchableOpacity>
+      {/* Artwork sits behind the copy and bleeds off the right edge */}
+      {illustration ? (
+        <Image
+          source={illustration}
+          style={styles.illustration}
+          contentFit="cover"
+          contentPosition="right"
+        />
       ) : null}
+
+      <View style={styles.content}>
+        <Text allowFontScaling={false} style={styles.title}>
+          {title}
+        </Text>
+        <Text allowFontScaling={false} style={styles.body}>
+          {body}
+        </Text>
+        {ctaLabel ? (
+          <TouchableOpacity
+            style={styles.cta}
+            onPress={onPressCta}
+            activeOpacity={0.85}
+          >
+            <Text allowFontScaling={false} style={styles.ctaLabel}>
+              {ctaLabel}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -64,8 +86,16 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderWidth: borderWidth.bw1,
     borderRadius: borderRadius["2xl"],
+    overflow: "hidden",
+  },
+  illustration: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  content: {
     padding: spacing.s4,
     gap: spacing.s2,
+    // keep the copy clear of the artwork on the right
+    paddingRight: spacing.s24,
   },
   title: {
     ...textStyles.bodySemiboldMD,
