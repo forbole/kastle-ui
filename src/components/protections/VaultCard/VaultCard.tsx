@@ -7,7 +7,7 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { Image } from "expo-image";
-import { Timer, Vault } from "lucide-react-native";
+import { Timer } from "lucide-react-native";
 import { StatusPill, StatusPillStatus } from "../../StatusPill/StatusPill";
 import {
   colors,
@@ -19,6 +19,8 @@ import {
   fontSize,
   fontWeight,
 } from "../../../config/theme";
+
+const VAULT_IMAGE = require("../../../../assets/vault.png");
 
 export type VaultStatus = "locked" | "withdrawing" | "complete";
 
@@ -67,11 +69,11 @@ export const VaultCard: React.FC<VaultCardProps> = ({
         {/* Top row — illustration (left) + status pill (right) */}
         <View style={styles.topRow}>
           <View style={styles.illustration}>
-            {illustration ? (
-              <Image source={illustration} style={styles.illustrationImage} contentFit="cover" />
-            ) : (
-              <Vault size={22} color={colors.textSecondary} strokeWidth={2} />
-            )}
+            <Image
+              source={illustration ?? VAULT_IMAGE}
+              style={styles.illustrationImage}
+              contentFit="contain"
+            />
           </View>
           <StatusPill status={pill.status} label={pill.label} indicator="dot" />
         </View>

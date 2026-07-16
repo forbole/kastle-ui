@@ -5,6 +5,8 @@ import { VaultListScreen } from "./VaultListScreen";
 import { VaultCardProps } from "../VaultCard/VaultCard";
 import { background, spacing } from "../../../config/theme";
 
+const VAULT_IMAGE = require("../../../../assets/vault.png");
+
 // Newest first — Vault 1 (oldest) sits at the bottom.
 const SAMPLE: VaultCardProps[] = [
   {
@@ -12,6 +14,7 @@ const SAMPLE: VaultCardProps[] = [
     name: "Vault 4",
     amount: "500 KAS",
     caption: "Withdrawn",
+    illustration: VAULT_IMAGE,
     onPress: () => {},
   },
   {
@@ -20,6 +23,7 @@ const SAMPLE: VaultCardProps[] = [
     amount: "1,200 KAS",
     caption: "withdrawing",
     countdown: "20h:02m:02s",
+    illustration: VAULT_IMAGE,
     onPress: () => {},
   },
   {
@@ -27,6 +31,7 @@ const SAMPLE: VaultCardProps[] = [
     name: "Vault 2",
     amount: "2,000 KAS",
     caption: "3 days window",
+    illustration: VAULT_IMAGE,
     onPress: () => {},
   },
   {
@@ -34,6 +39,7 @@ const SAMPLE: VaultCardProps[] = [
     name: "Vault 1",
     amount: "1,000,000.999999 KAS",
     caption: "3 days window",
+    illustration: VAULT_IMAGE,
     onPress: () => {},
   },
 ];
