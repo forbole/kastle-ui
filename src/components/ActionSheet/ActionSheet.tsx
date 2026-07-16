@@ -3,7 +3,9 @@ import {
   Animated,
   Dimensions,
   Keyboard,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -108,7 +110,17 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
         <TouchableWithoutFeedback onPress={() => animateOut(onClose)}>
           <View style={styles.topTapZone} />
         </TouchableWithoutFeedback>
-        {children}
+        {/* iOS only: the Modal doesn't auto-resize on keyboard show (unlike
+            Android's hardcoded adjustResize), so nothing moves the sheet on
+            its own here — pad it ourselves. `behavior={undefined}` on
+            Android is a no-op, so this doesn't disturb Android's native
+            resize behavior. */}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.keyboardAvoidingView}
+        >
+          {children}
+        </KeyboardAvoidingView>
       </Animated.View>
     </Modal>
   );
@@ -133,5 +145,8 @@ const styles = StyleSheet.create({
     right: 0,
     height: 40,
     zIndex: 10,
+  },
+  keyboardAvoidingView: {
+    flexShrink: 1,
   },
 });
