@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -11,6 +12,12 @@ import { colors, textStyles } from "../../../config/theme";
 
 export interface ExploreUrlBarProps {
   url?: string;
+  /** Lets the address bar be typed into, e.g. only when no dApp is connected. Default: false (read-only, matches prior behavior). */
+  editable?: boolean;
+  /** Fires as the user types. Only relevant when `editable`. */
+  onUrlChange?: (url: string) => void;
+  /** Fires when the user submits the typed URL (e.g. pressing return). Only relevant when `editable`. */
+  onUrlSubmit?: (url: string) => void;
   onBackPress?: () => void;
   onRefreshPress?: () => void;
   onSharePress?: () => void;
@@ -19,6 +26,9 @@ export interface ExploreUrlBarProps {
 
 export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
   url = "",
+  editable = false,
+  onUrlChange,
+  onUrlSubmit,
   onBackPress,
   onRefreshPress,
   onSharePress,
@@ -44,9 +54,26 @@ export const ExploreUrlBar: React.FC<ExploreUrlBarProps> = ({
 
         {/* Address Bar */}
         <View style={styles.addressBar}>
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.urlText]} numberOfLines={1} ellipsizeMode="tail">
-            {url}
-          </Text>
+          {editable ? (
+            <TextInput
+              value={url}
+              onChangeText={onUrlChange}
+              onSubmitEditing={(e) => onUrlSubmit?.(e.nativeEvent.text)}
+              allowFontScaling={false}
+              style={[textStyles.bodyNormalMD, styles.urlText, styles.urlInput]}
+              placeholder="Enter a URL"
+              placeholderTextColor={colors.textSecondary}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="url"
+              returnKeyType="go"
+              selectTextOnFocus
+            />
+          ) : (
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.urlText]} numberOfLines={1} ellipsizeMode="tail">
+              {url}
+            </Text>
+          )}
           <TouchableOpacity
             style={styles.refreshButton}
             onPress={onRefreshPress}
@@ -124,6 +151,10 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: "center",
     paddingRight: 36,
+  },
+  urlInput: {
+    textAlign: "left",
+    padding: 0,
   },
   refreshButton: {
     position: "absolute",
