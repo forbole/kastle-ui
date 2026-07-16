@@ -25,12 +25,12 @@ type Story = StoryObj<typeof meta>;
 
 /** Long range — days : hours : minutes. */
 export const Default: Story = {
-  args: { time: "30d:11h:44m", label: "Funds leave when this ends" },
+  args: { time: "30d:11h:44m", label: "Funds leave in" },
 };
 
 /** Near the end — hours : minutes : seconds, with units. */
 export const NearEnd: Story = {
-  args: { time: "20h:02m:02s", label: "Funds leave when this ends" },
+  args: { time: "20h:02m:02s", label: "Funds leave in" },
 };
 
 /** Timer only, no caption. */
@@ -66,7 +66,7 @@ const Live: React.FC<{ from: number; label?: string }> = ({ from, label }) => {
 
 /** Live ticking — counts down every second from 20h:02m:02s. */
 export const LiveTicking: Story = {
-  render: () => <Live from={72122} label="Funds leave when this ends" />,
+  render: () => <Live from={72122} label="Funds leave in" />,
 };
 
 const styles = StyleSheet.create({

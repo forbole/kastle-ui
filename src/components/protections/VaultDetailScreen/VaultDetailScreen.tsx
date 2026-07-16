@@ -13,13 +13,19 @@ import { CountdownRing } from "../CountdownRing/CountdownRing";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { VaultStatus } from "../VaultCard/VaultCard";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
+import {
+  StatusPill,
+  StatusPillStatus,
+} from "../../StatusPill/StatusPill";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import {
   background,
-  border,
   borderWidth,
   borderRadius,
   colors,
+  fontFamilies,
+  fontSize,
+  fontWeight,
   spacing,
   textStyles,
   warning,
@@ -27,7 +33,11 @@ import {
 
 export interface VaultDetailRow {
   label: string;
-  value: string;
+  value?: string;
+  /** Secondary line under the value, e.g. "$200.232 USD". */
+  subValue?: string;
+  /** Renders a StatusPill instead of value text (Vault Status row). */
+  pill?: { label: string; status: StatusPillStatus };
   onPressValue?: () => void;
   /** Optional ⓘ tooltip opened from the row label. */
   tooltip?: { title: string; description: string };
@@ -37,11 +47,13 @@ export interface VaultDetailScreenProps {
   status: VaultStatus;
   /** Vault illustration (PNG). Falls back to a placeholder glyph. */
   illustration?: ImageSourcePropType | string;
-  /** Countdown string, e.g. "30d:11h:44m" — shown while withdrawing. */
+  /** Countdown string, e.g. "2d:23h:59m" — shown while withdrawing. */
   countdownTime?: string;
   countdownLabel?: string;
   /** Info line under the countdown. */
   note?: string;
+  /** Red warning above the action button (withdrawing state). */
+  dangerNote?: string;
   /** Vault / recovery address for the backup card. */
   vaultAddress: string;
   onPressCopyAddress?: () => void;
@@ -53,6 +65,11 @@ export interface VaultDetailScreenProps {
   rows?: VaultDetailRow[];
   /** Primary action, e.g. "Withdraw now". */
   actionLabel?: string;
+  /**
+   * Button style. Defaults from `status`: locked → `outline` (muted),
+   * withdrawing → `warning` (orange fill), per Figma.
+   */
+  actionVariant?: "outline" | "warning";
   onPressAction?: () => void;
 }
 
@@ -68,8 +85,9 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
   status,
   illustration,
   countdownTime,
-  countdownLabel = "Funds leave when this ends",
+  countdownLabel = "Funds leave in",
   note,
+  dangerNote,
   vaultAddress,
   onPressCopyAddress,
   backupTitle = "Backup your vault address",
@@ -78,9 +96,12 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
   detailsTitle = "Details",
   rows = [],
   actionLabel = "Withdraw now",
+  actionVariant,
   onPressAction,
 }) => {
   const showRing = status === "withdrawing" && !!countdownTime;
+  const variant =
+    actionVariant ?? (status === "withdrawing" ? "warning" : "outline");
   const [tooltip, setTooltip] = React.useState<
     { title: string; description: string } | null
   >(null);
@@ -158,12 +179,25 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
             <Text allowFontScaling={false} style={styles.detailsTitle}>
               {detailsTitle}
             </Text>
-            <View>
+            <View style={styles.detailsCard}>
               {rows.map((row, i) => (
                 <DetailKVRow
                   key={i}
                   label={row.label}
+                  // Vault details uses white labels (Figma), not the muted
+                  // default the activity rows ship with.
+                  labelColor={colors.textPrimary}
                   value={row.value}
+                  subValue={row.subValue}
+                  valueNode={
+                    row.pill ? (
+                      <StatusPill
+                        status={row.pill.status}
+                        label={row.pill.label}
+                        indicator="dot"
+                      />
+                    ) : undefined
+                  }
                   onPressValue={row.onPressValue}
                   onPressInfo={
                     row.tooltip ? () => setTooltip(row.tooltip!) : undefined
@@ -175,14 +209,30 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
         ) : null}
       </ScrollView>
 
-      {/* Primary action */}
+      {/* Primary action — the danger line sits inside the bar, above the button */}
       <View style={styles.actionBar}>
+        {dangerNote ? (
+          <Text allowFontScaling={false} style={styles.dangerNote}>
+            {dangerNote}
+          </Text>
+        ) : null}
         <TouchableOpacity
-          style={styles.action}
+          style={[
+            styles.action,
+            variant === "warning" ? styles.actionWarning : styles.actionOutline,
+          ]}
           onPress={onPressAction}
           activeOpacity={0.85}
         >
-          <Text allowFontScaling={false} style={styles.actionLabel}>
+          <Text
+            allowFontScaling={false}
+            style={[
+              styles.actionLabel,
+              variant === "warning"
+                ? styles.actionLabelWarning
+                : styles.actionLabelOutline,
+            ]}
+          >
             {actionLabel}
           </Text>
         </TouchableOpacity>
@@ -259,30 +309,61 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   backupDone: {
-    ...textStyles.bodySemiboldSM,
+    // Figma: 12 Medium (not the 14 semibold the other section links use)
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.medium,
     color: colors.primary,
   },
   details: {
-    gap: spacing.s1,
+    gap: spacing.s2,
   },
   detailsTitle: {
-    ...textStyles.bodySemiboldSM,
-    color: colors.textPrimary,
+    ...textStyles.bodySemiboldMD,
+    color: colors.textSecondary,
   },
+  // Figma wraps the rows in a table card (r16, bg50)
+  detailsCard: {
+    backgroundColor: background.bg50,
+    borderColor: colors.border,
+    borderWidth: borderWidth.bw1,
+    borderRadius: borderRadius["2xl"],
+    paddingHorizontal: spacing.s4,
+  },
+  // Figma "Bottom Action bar": pad [12,20,0,20], inner gap 12, pad-bottom 16
   actionBar: {
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s3,
-    paddingBottom: spacing.s5,
+    paddingBottom: spacing.s4,
+    gap: spacing.s3,
+  },
+  dangerNote: {
+    ...textStyles.bodyNormalXS,
+    color: colors.danger,
   },
   action: {
-    backgroundColor: colors.primary,
     borderRadius: borderRadius.full,
-    paddingVertical: spacing.s4,
+    height: spacing.s12,
     alignItems: "center",
     justifyContent: "center",
   },
+  actionOutline: {
+    borderWidth: borderWidth.bw1,
+    borderColor: colors.textMuted,
+  },
+  actionWarning: {
+    backgroundColor: warning.w500,
+  },
   actionLabel: {
-    ...textStyles.bodySemiboldMD,
+    // Figma: 18 Medium
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.lg,
+    fontWeight: fontWeight.medium,
+  },
+  actionLabelOutline: {
+    color: colors.textMuted,
+  },
+  actionLabelWarning: {
     color: colors.white,
   },
 });

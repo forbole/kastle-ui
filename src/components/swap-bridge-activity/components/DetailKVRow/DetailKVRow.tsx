@@ -5,15 +5,22 @@ import { colors, spacing, textStyles } from "../../../../config/theme";
 
 export interface DetailKVRowProps {
   label: string;
-  value: string;
+  /** Omit when rendering a `valueNode` instead. */
+  value?: string;
   /**
    * Override value text colour. Default behaviour:
    *   - `onPressValue` set → `colors.primary` (blue link)
    *   - otherwise → `colors.textPrimary`
    */
   valueColor?: string;
+  /** Override label colour (defaults to `colors.textSecondary`). */
+  labelColor?: string;
   /** Optional node rendered immediately to the left of the value (e.g. provider logo). */
   valuePrefix?: React.ReactNode;
+  /** Replaces the value text entirely (e.g. a StatusPill). */
+  valueNode?: React.ReactNode;
+  /** Secondary line under the value, e.g. a fiat conversion. */
+  subValue?: string;
   /** If set: the whole row becomes pressable and appends an external-link icon. */
   onPressValue?: () => void;
   /** If set: an info (ⓘ) button after the label (e.g. opens a tooltip sheet). */
@@ -24,41 +31,69 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   label,
   value,
   valueColor,
+  labelColor,
   valuePrefix,
+  valueNode,
+  subValue,
   onPressValue,
   onPressInfo,
 }) => {
   const defaultValueColor = onPressValue ? colors.primary : colors.textPrimary;
   const resolvedValueColor = valueColor ?? defaultValueColor;
 
+  const valueBlock = (
+    <View style={styles.valueWrap}>
+      {valuePrefix}
+      {valueNode ??
+        (value !== undefined ? (
+          <Text
+            allowFontScaling={false}
+            numberOfLines={2}
+            style={[textStyles.bodyNormalMDRelaxed, styles.value, { color: resolvedValueColor }]}
+          >
+            {value}
+          </Text>
+        ) : null)}
+      {onPressValue && (
+        <ExternalLink
+          size={14}
+          color={resolvedValueColor}
+          strokeWidth={2}
+          style={styles.linkIcon}
+        />
+      )}
+    </View>
+  );
+
   const content = (
     <>
       <View style={styles.labelWrap}>
-        <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.label]}>{label}</Text>
+        <Text
+          allowFontScaling={false}
+          style={[
+            textStyles.bodyNormalMDRelaxed,
+            styles.label,
+            labelColor ? { color: labelColor } : null,
+          ]}
+        >
+          {label}
+        </Text>
         {onPressInfo ? (
           <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
             <Info size={14} color={colors.textMuted} strokeWidth={2} />
           </TouchableOpacity>
         ) : null}
       </View>
-      <View style={styles.valueWrap}>
-        {valuePrefix}
-        <Text
-          allowFontScaling={false}
-          numberOfLines={2}
-          style={[textStyles.bodyNormalMDRelaxed, styles.value, { color: resolvedValueColor }]}
-        >
-          {value}
-        </Text>
-        {onPressValue && (
-          <ExternalLink
-            size={14}
-            color={resolvedValueColor}
-            strokeWidth={2}
-            style={styles.linkIcon}
-          />
-        )}
-      </View>
+      {subValue ? (
+        <View style={styles.valueCol}>
+          {valueBlock}
+          <Text allowFontScaling={false} style={styles.subValue}>
+            {subValue}
+          </Text>
+        </View>
+      ) : (
+        valueBlock
+      )}
     </>
   );
 
@@ -100,6 +135,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s1,
     flexShrink: 1,
+  },
+  // Only used when `subValue` is set — keeps existing rows' layout untouched.
+  valueCol: {
+    alignItems: "flex-end",
+    gap: spacing.s0_5,
+    flexShrink: 1,
+  },
+  subValue: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "right",
   },
   value: {
     flexShrink: 1,
