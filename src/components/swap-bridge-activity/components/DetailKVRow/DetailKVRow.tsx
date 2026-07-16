@@ -40,6 +40,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
 }) => {
   const defaultValueColor = onPressValue ? colors.primary : colors.textPrimary;
   const resolvedValueColor = valueColor ?? defaultValueColor;
+  const resolvedLabelColor = labelColor ?? colors.textSecondary;
 
   const valueBlock = (
     <View style={styles.valueWrap}>
@@ -73,15 +74,14 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
           style={[
             textStyles.bodyNormalMDRelaxed,
             styles.label,
-            labelColor ? { color: labelColor } : null,
+            { color: resolvedLabelColor },
           ]}
         >
           {label}
         </Text>
+        {/* Icon colour always follows its adjacent label */}
         {onPressInfo ? (
-          <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
-            <Info size={14} color={colors.textMuted} strokeWidth={2} />
-          </TouchableOpacity>
+          <Info size={14} color={resolvedLabelColor} strokeWidth={2} />
         ) : null}
       </View>
       {subValue ? (
@@ -97,11 +97,13 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
     </>
   );
 
-  if (onPressValue) {
+  // The whole row is the tap target — an ⓘ-sized hit area is too small to aim at.
+  const onPressRow = onPressValue ?? onPressInfo;
+  if (onPressRow) {
     return (
       <TouchableOpacity
         style={styles.row}
-        onPress={onPressValue}
+        onPress={onPressRow}
         activeOpacity={0.7}
       >
         {content}

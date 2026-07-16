@@ -60,7 +60,6 @@ const BASE_ROWS: VaultDetailRow[] = [
   {
     label: "Recovery address",
     value: "kaspa:pfdf…v45s",
-    onPressValue: () => {},
     tooltip: {
       title: "External recovery address",
       description:
