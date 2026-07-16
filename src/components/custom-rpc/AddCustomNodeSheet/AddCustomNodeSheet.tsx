@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Info } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { Input } from "../../Input";
@@ -44,54 +44,62 @@ export const AddCustomNodeSheet: React.FC<AddCustomNodeSheetProps> = ({
 
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose}>
-      <View style={styles.container}>
-        <View style={styles.handleWrap}>
-          <View style={styles.handle} />
-        </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.keyboardAvoidingView}
+      >
+        <View style={styles.container}>
+          <View style={styles.handleWrap}>
+            <View style={styles.handle} />
+          </View>
 
-        <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>
-          Add custom node
-        </Text>
-        <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.caption]}>
-          Connect Kastle to your own Kaspa node.
-        </Text>
-        <View style={styles.divider} />
-
-        <View style={styles.field}>
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
-            Node Name
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>
+            Add custom node
           </Text>
-          <Input value={name} onChangeText={setName} placeholder="Home node" />
-        </View>
-
-        <View style={styles.field}>
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
-            RPC URL
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.caption]}>
+            Connect Kastle to your own Kaspa node.
           </Text>
-          <Input value={url} onChangeText={setUrl} placeholder="ws:// or wss://" error={error} autoCapitalize="none" />
-        </View>
+          <View style={styles.divider} />
 
-        <ButtonGroup
-          secondaryLabel="Cancel"
-          primaryLabel="Add"
-          onSecondaryPress={onClose}
-          onPrimaryPress={() => canAdd && onAdd(name.trim(), url.trim())}
-          primaryDisabled={!canAdd}
-          primaryLoading={isValidating}
-        />
+          <View style={styles.field}>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
+              Node Name
+            </Text>
+            <Input value={name} onChangeText={setName} placeholder="Home node" />
+          </View>
 
-        <View style={styles.trust}>
-          <Info size={14} color={colors.textSecondary} strokeWidth={2} />
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.trustText]}>
-            Only add a node you trust.
-          </Text>
+          <View style={styles.field}>
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.label]}>
+              RPC URL
+            </Text>
+            <Input value={url} onChangeText={setUrl} placeholder="ws:// or wss://" error={error} autoCapitalize="none" />
+          </View>
+
+          <ButtonGroup
+            secondaryLabel="Cancel"
+            primaryLabel="Add"
+            onSecondaryPress={onClose}
+            onPrimaryPress={() => canAdd && onAdd(name.trim(), url.trim())}
+            primaryDisabled={!canAdd}
+            primaryLoading={isValidating}
+          />
+
+          <View style={styles.trust}>
+            <Info size={14} color={colors.textSecondary} strokeWidth={2} />
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.trustText]}>
+              Only add a node you trust.
+            </Text>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </ActionSheet>
   );
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     backgroundColor: background.bg100,
     borderTopLeftRadius: borderRadius["3xl"],
