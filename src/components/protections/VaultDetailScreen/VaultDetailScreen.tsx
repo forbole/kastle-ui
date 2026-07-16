@@ -50,10 +50,20 @@ export interface VaultDetailScreenProps {
   /** Countdown string, e.g. "2d:23h:59m" — shown while withdrawing. */
   countdownTime?: string;
   countdownLabel?: string;
+  /** ⓘ tooltip on the countdown label. */
+  countdownTooltip?: { title: string; description: string };
   /** Info line under the countdown. */
   note?: string;
   /** Red warning above the action button (withdrawing state). */
   dangerNote?: string;
+  /** Confirm sheet raised by the action button (e.g. "Withdraw now?"). */
+  confirm?: {
+    title: string;
+    description: string;
+    cancelLabel: string;
+    confirmLabel: string;
+    onConfirm?: () => void;
+  };
   /** Vault / recovery address for the backup card. */
   vaultAddress: string;
   onPressCopyAddress?: () => void;
@@ -86,8 +96,10 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
   illustration,
   countdownTime,
   countdownLabel = "Funds leave in",
+  countdownTooltip,
   note,
   dangerNote,
+  confirm,
   vaultAddress,
   onPressCopyAddress,
   backupTitle = "Backup your vault address",
@@ -105,6 +117,13 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
   const [tooltip, setTooltip] = React.useState<
     { title: string; description: string } | null
   >(null);
+  const [confirming, setConfirming] = React.useState(false);
+
+  // The action raises the confirm sheet when one is supplied.
+  const handleAction = () => {
+    if (confirm) setConfirming(true);
+    else onPressAction?.();
+  };
 
   return (
     <View style={styles.body}>
@@ -126,7 +145,13 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
             )}
           </View>
           {showRing ? (
-            <CountdownRing time={countdownTime!} label={countdownLabel} />
+            <CountdownRing
+              time={countdownTime!}
+              label={countdownLabel}
+              onPressInfo={
+                countdownTooltip ? () => setTooltip(countdownTooltip) : undefined
+              }
+            />
           ) : null}
         </View>
 
@@ -221,7 +246,7 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
             styles.action,
             variant === "warning" ? styles.actionWarning : styles.actionOutline,
           ]}
-          onPress={onPressAction}
+          onPress={handleAction}
           activeOpacity={0.85}
         >
           <Text
@@ -244,6 +269,30 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
         title={tooltip?.title ?? ""}
         description={tooltip?.description ?? ""}
       />
+
+      {confirm ? (
+        <InfoSheet
+          isOpen={confirming}
+          onClose={() => setConfirming(false)}
+          title={confirm.title}
+          description={confirm.description}
+          actions={[
+            {
+              label: confirm.cancelLabel,
+              variant: "outline",
+              onPress: () => setConfirming(false),
+            },
+            {
+              label: confirm.confirmLabel,
+              variant: "warning",
+              onPress: () => {
+                setConfirming(false);
+                confirm.onConfirm?.();
+              },
+            },
+          ]}
+        />
+      ) : null}
     </View>
   );
 };
