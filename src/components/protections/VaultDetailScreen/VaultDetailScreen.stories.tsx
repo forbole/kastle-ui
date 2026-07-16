@@ -20,7 +20,16 @@ const DANGER_NOTE =
 // clawback withdraw variants 13393:44068).
 const BASE_ROWS: VaultDetailRow[] = [
   { label: "Vault Status", pill: { label: "Locked", status: "success" } },
-  { label: "Vault amount", value: "~ 20,000 KAS", subValue: "$200.232 USD" },
+  {
+    label: "Vault amount",
+    value: "~ 20,000 KAS",
+    subValue: "$200.232 USD",
+    tooltip: {
+      title: "Vault amount",
+      description:
+        "The KAS going into your vault. Not a fee, still yours. It comes back through the external recovery address when you withdraw.",
+    },
+  },
   {
     label: "Protection window",
     value: "3 days",
@@ -74,10 +83,25 @@ const withdrawingArgs = (countdownTime: string) => ({
   status: "withdrawing" as const,
   countdownTime,
   countdownLabel: "Funds leave in",
+  countdownTooltip: {
+    title: "Funds leave in",
+    description:
+      "Your protection window counting down. When it ends, funds move to your external recovery address automatically. Withdraw anytime before it ends.",
+  },
   note: WITHDRAW_NOTE,
   dangerNote: DANGER_NOTE,
   rows: withdrawingRows(),
   actionLabel: "Withdraw now",
+  // Tapping "Withdraw now" raises the clawback confirm sheet
+  // (Figma I12802:628368;13540:55551).
+  confirm: {
+    title: "Withdraw now?",
+    description:
+      "Funds will go to your recovery address right away. Only you can access it.",
+    cancelLabel: "Back",
+    confirmLabel: "Withdraw now",
+    onConfirm: () => {},
+  },
 });
 
 const meta: Meta<typeof VaultDetailScreen> = {

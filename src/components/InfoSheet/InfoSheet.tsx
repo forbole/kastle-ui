@@ -4,15 +4,30 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import {
   background,
   border,
+  borderWidth,
+  colors,
+  fontFamilies,
+  fontSize,
+  fontWeight,
+  spacing,
   typography,
   borderRadius,
   textStyles,
+  warning,
 } from "../../config/theme";
 import { ActionSheet } from "../ActionSheet";
+
+export interface InfoSheetAction {
+  label: string;
+  onPress?: () => void;
+  /** `outline` — muted ghost (e.g. "Back"); `warning` — orange fill. */
+  variant?: "outline" | "warning";
+}
 
 export interface InfoSheetProps {
   /** Controls sheet visibility */
@@ -23,6 +38,11 @@ export interface InfoSheetProps {
   title: string;
   /** Body description text */
   description: string;
+  /**
+   * Optional button row (Figma shows/hides it on the same Actionsheet).
+   * Omit for a plain tooltip; pass two for a confirm dialog.
+   */
+  actions?: InfoSheetAction[];
 }
 
 export const InfoSheet: React.FC<InfoSheetProps> = ({
@@ -30,6 +50,7 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
   onClose,
   title,
   description,
+  actions,
 }) => {
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose}>
@@ -55,6 +76,37 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
           <View style={styles.descriptionSection}>
             <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.description]}>{description}</Text>
           </View>
+
+          {/* Optional confirm/cancel row — equal-width buttons, gap 12 */}
+          {actions?.length ? (
+            <View style={styles.actions}>
+              {actions.map((action, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={[
+                    styles.action,
+                    action.variant === "warning"
+                      ? styles.actionWarning
+                      : styles.actionOutline,
+                  ]}
+                  onPress={action.onPress}
+                  activeOpacity={0.85}
+                >
+                  <Text
+                    allowFontScaling={false}
+                    style={[
+                      styles.actionLabel,
+                      action.variant === "warning"
+                        ? styles.actionLabelWarning
+                        : styles.actionLabelOutline,
+                    ]}
+                  >
+                    {action.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : null}
         </ScrollView>
 
         {/* iOS home indicator */}
@@ -123,6 +175,39 @@ const styles = StyleSheet.create({
   },
   description: {
     color: typography.t700,
+  },
+
+  // Buttons (Figma: 40 high, r9999, 16 Medium, row gap 12)
+  actions: {
+    flexDirection: "row",
+    gap: spacing.s3,
+    paddingHorizontal: 12,
+    paddingTop: spacing.s6,
+  },
+  action: {
+    flex: 1,
+    height: spacing.s10,
+    borderRadius: borderRadius.full,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  actionOutline: {
+    borderWidth: borderWidth.bw1,
+    borderColor: colors.textMuted,
+  },
+  actionWarning: {
+    backgroundColor: warning.w500,
+  },
+  actionLabel: {
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.md,
+    fontWeight: fontWeight.medium,
+  },
+  actionLabelOutline: {
+    color: colors.textMuted,
+  },
+  actionLabelWarning: {
+    color: colors.white,
   },
 
   // iOS home indicator

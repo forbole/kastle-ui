@@ -9,7 +9,15 @@ import { background } from "../../../config/theme";
 
 // Copy + values pulled from Figma (Withdrawal / confirm, node 12802:619523).
 const ROWS: WithdrawConfirmRow[] = [
-  { label: "Arrives in", value: "~ 3 days" },
+  {
+    label: "Arrives in",
+    value: "~ 3 days",
+    tooltip: {
+      title: "Arrives in",
+      description:
+        "The wait before your funds reach the external recovery address. It's the protection window you set. You can cancel any time before it ends.",
+    },
+  },
   { label: "Amount", value: "1,250.00 KAS" },
   { label: "Est. Fee", value: "0 KAS" },
 ];
