@@ -6,6 +6,7 @@ import { EmptyState, EmptyStateProps } from "../../EmptyState/EmptyState";
 import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
 import {
   borderRadius,
+  borderWidth,
   colors,
   spacing,
   textStyles,
@@ -128,9 +129,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s5,
     gap: spacing.s4,
   },
+  // Figma "Balance Container": pad [8,20,8,20], edge-to-edge, with a
+  // Border/border50 hairline separating it from the grid.
   balance: {
     paddingVertical: spacing.s2,
+    paddingHorizontal: spacing.s5,
+    marginHorizontal: -spacing.s5,
     gap: spacing.s1,
+    borderBottomWidth: borderWidth.bw1,
+    borderBottomColor: colors.borderSecondary,
   },
   balanceRow: {
     flexDirection: "row",
