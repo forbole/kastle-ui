@@ -146,6 +146,17 @@ export const Locked: Story = {
   },
 };
 
+/** Locked, after the user taps Done — the backup card is gone. */
+export const LockedBackedUp: Story = {
+  args: {
+    status: "locked",
+    backupNote: BACKUP_NOTE,
+    backupDone: true,
+    rows: BASE_ROWS,
+    actionLabel: "Withdraw",
+  },
+};
+
 /**
  * Clawback — more than one day left (Figma 13409:25553). Countdown counts down
  * in DD:HH:MM; no backup card; orange "Withdraw now".
