@@ -14,6 +14,7 @@ const Demo: React.FC<{ error?: string }> = ({ error }) => {
       onPressMax={() => setAmount("1500000.45646")}
       // Fiat is always part of this step — not a separate variant.
       fiatValue="≈ $0.00"
+      onPressSwapCurrency={() => {}}
       error={error}
       infoLabel="How a Vault works?"
       // Copy pulled from Figma (tooltips / How a Vault works?, node 12824:656344)
