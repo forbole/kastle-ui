@@ -1,22 +1,21 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import {
   CreateVaultRecoveryStep,
   RecoveryAlert,
 } from "./CreateVaultRecoveryStep";
 import { background } from "../../../config/theme";
 
+// Copy pulled from Figma (Step 3 / external recovery address) — description-only alerts.
 const ALERTS: RecoveryAlert[] = [
   {
     severity: "info",
-    title: "Set once, can't be changed",
-    body: "This is where your KAS goes when the vault opens. It's locked in at creation and can't be edited later.",
+    body: "This address is locked in at creation. You'll use it for emergency clawback (instant) or normal withdrawal (after delay expires).",
   },
   {
     severity: "warning",
-    title: "Use an address you control",
-    body: "Choose an address you'll always have access to — a hardware wallet is a good choice.",
+    body: "Use an address you control outside this phone — cold wallet, hardware wallet, separate account. Once you set it, you can't change it.",
   },
 ];
 
@@ -26,8 +25,6 @@ const Demo: React.FC<{ error?: string }> = ({ error }) => {
     <CreateVaultRecoveryStep
       address={address}
       onChangeAddress={setAddress}
-      title="External recovery address"
-      subtitle="Where your funds go when the vault opens."
       alerts={ALERTS}
       error={error}
       onPressScan={() => {}}
@@ -65,7 +62,7 @@ export const Default: Story = {
   render: () => <Demo />,
 };
 
-/** Invalid address error. */
+/** Invalid address — error space is reserved, so nothing shifts. */
 export const Error: Story = {
   render: () => <Demo error="Invalid Kaspa address" />,
 };

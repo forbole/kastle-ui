@@ -29,16 +29,16 @@ export interface CreateVaultAmountStepProps {
   amount: string;
   onChangeAmount: (value: string) => void;
   tokenSymbol?: string;
-  /** Optional fiat conversion under the amount. */
+  /** Fiat conversion under the amount — always shown on this step. */
   fiatValue?: string;
   /** Keypad balance row. */
   balance?: string;
   onPressMax?: () => void;
   maxDisabled?: boolean;
   maximumFractionDigits?: number;
-  /** Validation error — shown (red) on the keypad's message row. */
+  /** Validation error — replaces the info link above the keypad (red). */
   error?: string;
-  /** Persistent info link on the keypad, e.g. "How a Vault works?". */
+  /** Info link above the keypad (blue). */
   infoLabel?: string;
   /** Content for the info sheet opened by the info link. */
   infoSheet?: { title: string; description: string };
@@ -48,10 +48,10 @@ export interface CreateVaultAmountStepProps {
 }
 
 /**
- * Create-vault Step 1 — amount. Body-only: amount display + custom Keypad +
- * Continue. The info link / validation error live INSIDE the keypad (fixed
- * height, so the layout never jumps). Header/nav live in kastle-mobile
- * (去頭去尾). Pure — controlled amount; the info sheet is local UI state.
+ * Create-vault Step 1 — amount. Body-only: amount display + info/error line +
+ * custom Keypad + Continue. The info link / error sit ABOVE the keypad and the
+ * row keeps a fixed height, so toggling the error never shifts the layout.
+ * Header/nav live in kastle-mobile (去頭去尾). Pure — controlled amount.
  */
 export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
   amount,
@@ -63,7 +63,7 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
   maxDisabled,
   maximumFractionDigits,
   error,
-  infoLabel = "How a Vault works?",
+  infoLabel,
   infoSheet,
   continueLabel = "Continue",
   onPressContinue,
@@ -101,7 +101,26 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         ) : null}
       </View>
 
-      {/* Keypad (hosts the info link / error) */}
+      {/* Info link / error — ABOVE the keypad, fixed height (no layout jump) */}
+      <View style={styles.messageRow}>
+        {error ? (
+          <Text allowFontScaling={false} style={styles.messageError}>
+            {error}
+          </Text>
+        ) : infoLabel ? (
+          <TouchableOpacity
+            onPress={() => setInfoOpen(true)}
+            disabled={!infoSheet}
+            hitSlop={8}
+          >
+            <Text allowFontScaling={false} style={styles.messageInfo}>
+              {infoLabel}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
+
+      {/* Keypad */}
       <Keypad
         value={amount}
         onChange={onChangeAmount}
@@ -109,9 +128,6 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         onPressMax={onPressMax}
         maxDisabled={maxDisabled}
         maximumFractionDigits={maximumFractionDigits}
-        infoLabel={infoLabel}
-        onPressInfo={infoSheet ? () => setInfoOpen(true) : undefined}
-        error={error}
       />
 
       {/* Continue */}
@@ -174,9 +190,25 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalMD,
     color: colors.textMuted,
   },
+  messageRow: {
+    minHeight: spacing.s8,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: spacing.s5,
+    paddingBottom: spacing.s3,
+  },
+  messageInfo: {
+    ...textStyles.bodyNormalSM,
+    color: colors.link,
+  },
+  messageError: {
+    ...textStyles.bodyNormalSM,
+    color: colors.danger,
+    textAlign: "center",
+  },
   actionBar: {
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s3,
+    paddingTop: spacing.s8,
     paddingBottom: spacing.s5,
   },
   continue: {

@@ -17,7 +17,8 @@ import {
 
 export interface RecoveryAlert {
   severity?: AlertSeverity;
-  title: string;
+  /** Omit for a description-only alert (Figma has no titles here). */
+  title?: string;
   body: string;
 }
 
@@ -51,7 +52,7 @@ export const CreateVaultRecoveryStep: React.FC<
   onChangeAddress,
   title,
   subtitle,
-  placeholder = "Paste or scan a Kaspa address",
+  placeholder = "Enter external address or KNS domain",
   error,
   onPressScan,
   alerts = [],

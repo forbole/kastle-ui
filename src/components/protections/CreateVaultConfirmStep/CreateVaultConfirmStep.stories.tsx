@@ -8,30 +8,43 @@ import {
 import { EstFeeRow } from "../../EstFeeSheet/EstFeeSheet";
 import { background } from "../../../config/theme";
 
+// Copy + values pulled from Figma (Vault Creation / confirm + tooltips).
 const ROWS: ConfirmRow[] = [
   {
     label: "Vault amount",
-    value: "1,000,000.999999 KAS",
+    value: "20,000 KAS",
     tooltip: {
       title: "Vault amount",
-      description: "The KAS locked in this vault.",
-    },
-  },
-  { label: "Est. Fee", value: "0.00023 KAS", opensFeeSheet: true },
-  {
-    label: "Refundable deposit",
-    value: "0.5 KAS",
-    tooltip: {
-      title: "Refundable deposit",
       description:
-        "A small deposit that returns to your wallet when the vault closes. It never enters the vault.",
+        "The KAS going into your vault. Not a fee, still yours. It comes back through the external recovery address when you withdraw.",
     },
   },
-  { label: "Total from wallet", value: "1,000,001.500 KAS" },
+  {
+    label: "Protection window",
+    value: "3 days",
+    tooltip: {
+      title: "Protection window",
+      description:
+        "Every withdrawal waits this long — giving you time to spot theft and withdraw immediately. You set it at creation and it can't be changed.",
+    },
+  },
+  {
+    label: "Recovery marker",
+    value: "~ 0.5 KAS",
+    tooltip: {
+      title: "Recovery marker",
+      description:
+        "A tiny marker output Kastle creates on-chain at vault creation so you can recover your vault from your seed alone. Cost: ~0.5 KAS (dust floor). It gets refunded when you close the vault.",
+    },
+  },
+  { label: "Est. Fee", value: "~ 1.0001 KAS", opensFeeSheet: true },
+  { label: "Total from wallet", value: "20,001.5001 KAS" },
 ];
 
+// ⚠️ Figma's breakdown is "Creation fees" ($11 KAS) + "Network fees"; the shared
+// EstFeeSheet only renders "<network> network fees" rows — flagged for Nicole.
 const FEES: EstFeeRow[] = [
-  { networkName: "Kaspa", fee: "0.00023 KAS", feeUsd: "≈ $0.00 USD" },
+  { networkName: "Kaspa", fee: "~ 1.0001 KAS", feeUsd: "≈ $0.23 USD" },
 ];
 
 const meta: Meta<typeof CreateVaultConfirmStep> = {

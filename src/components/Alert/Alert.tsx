@@ -16,8 +16,8 @@ export type AlertSeverity = "info" | "success" | "warning" | "error";
 
 export interface AlertProps {
   severity: AlertSeverity;
-  /** Primary text (bold). */
-  title: string;
+  /** Primary text (bold). Omit for a description-only alert. */
+  title?: string;
   /** Secondary text (body). */
   children: React.ReactNode;
   icon?: React.ReactNode;
@@ -79,12 +79,14 @@ export const Alert: React.FC<AlertProps> = ({
         </View>
       )}
       <View style={styles.content}>
-        <Text
-          allowFontScaling={false}
-          style={[textStyles.bodySemiboldSM, { color: config.text }]}
-        >
-          {title}
-        </Text>
+        {title ? (
+          <Text
+            allowFontScaling={false}
+            style={[textStyles.bodySemiboldSM, { color: config.text }]}
+          >
+            {title}
+          </Text>
+        ) : null}
         {typeof children === "string" ? (
           <Text
             allowFontScaling={false}
