@@ -33,6 +33,10 @@ export interface DetailKVRowProps {
    * to the card's edges. Assumes the parent card pads by `spacing.s4`.
    */
   emphasis?: boolean;
+  /** Node after the label (e.g. a token logo). Replaces the ⓘ when both are set. */
+  labelIcon?: React.ReactNode;
+  /** Hairline under the row — table-style lists (vault details) use it. */
+  divider?: boolean;
   /** If set: the whole row becomes pressable and appends an external-link icon. */
   onPressValue?: () => void;
   /** If set: an info (ⓘ) button after the label (e.g. opens a tooltip sheet). */
@@ -48,6 +52,8 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   valueNode,
   subValue,
   emphasis,
+  labelIcon,
+  divider,
   onPressValue,
   onPressInfo,
 }) => {
@@ -99,9 +105,10 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
           {label}
         </Text>
         {/* Icon colour always follows its adjacent label */}
-        {onPressInfo ? (
-          <Info size={14} color={resolvedLabelColor} strokeWidth={2} />
-        ) : null}
+        {labelIcon ??
+          (onPressInfo ? (
+            <Info size={14} color={resolvedLabelColor} strokeWidth={2} />
+          ) : null)}
       </View>
       {subValue ? (
         <View style={styles.valueCol}>
@@ -118,7 +125,11 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
 
   // The whole row is the tap target — an ⓘ-sized hit area is too small to aim at.
   const onPressRow = onPressValue ?? onPressInfo;
-  const rowStyle = [styles.row, emphasis && styles.rowEmphasis];
+  const rowStyle = [
+    styles.row,
+    divider && styles.rowDivider,
+    emphasis && styles.rowEmphasis,
+  ];
   if (onPressRow) {
     return (
       <TouchableOpacity style={rowStyle} onPress={onPressRow} activeOpacity={0.7}>
@@ -137,6 +148,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingVertical: spacing.s3,
     gap: spacing.s4,
+  },
+  // Figma's table rows are 50 high with a hairline underneath (Border/border200,
+  // bottom edge only) — it bleeds to the card's edges like the emphasis fill.
+  rowDivider: {
+    paddingVertical: spacing.s3_5,
+    marginHorizontal: -spacing.s4,
+    paddingHorizontal: spacing.s4,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
   // Figma's total row is filled and edge-to-edge, so it cancels the card's
   // s4 padding and re-applies its own.

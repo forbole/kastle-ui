@@ -20,15 +20,12 @@ const DANGER_NOTE =
 // clawback withdraw variants 13393:44068).
 const BASE_ROWS: VaultDetailRow[] = [
   { label: "Vault Status", pill: { label: "Locked", status: "success" } },
+  // Figma shows the Kaspa logo here and hides the ⓘ — per Nicole, keep the logo.
   {
     label: "Vault amount",
     value: "~ 20,000 KAS",
     subValue: "$200.232 USD",
-    tooltip: {
-      title: "Vault amount",
-      description:
-        "The KAS going into your vault. Not a fee, still yours. It comes back through the external recovery address when you withdraw.",
-    },
+    tokenLogo: true,
   },
   {
     label: "Protection window",
