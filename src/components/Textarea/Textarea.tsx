@@ -108,7 +108,7 @@ export const Textarea: React.FC<TextareaProps> = ({
       ) : (
         <View style={boxStyle}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, !editable && styles.inputReadOnly]}
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}
@@ -192,6 +192,11 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
     color: typography.t900,
     ...textStyles.bodyNormalMD,
+  },
+  // Read-only value is muted (Figma Typography/typography600) — what you typed
+  // stays t900; what the app is showing you does not.
+  inputReadOnly: {
+    color: typography.t600,
   },
   scanWrapper: {
     paddingTop: 0,
