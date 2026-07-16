@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Copy, Info } from "lucide-react-native";
 import { Textarea } from "../../Textarea/Textarea";
 import {
+  background,
   borderWidth,
   borderRadius,
   colors,
@@ -95,8 +96,10 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
 };
 
 const styles = StyleSheet.create({
+  // bg50 per Nicole — Figma fills this card with white 5%, which composites a
+  // shade off the bg50 summary card sitting right below it.
   card: {
-    backgroundColor: colors.backgroundSurface,
+    backgroundColor: background.bg50,
     borderColor: colors.border,
     borderWidth: borderWidth.bw1,
     borderRadius: borderRadius["2xl"],
