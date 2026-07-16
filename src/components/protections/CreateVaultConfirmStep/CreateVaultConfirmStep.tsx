@@ -28,6 +28,8 @@ export interface CreateVaultConfirmStepProps {
   recoveryAddress: string;
   onPressCopyRecovery?: () => void;
   recoveryLabel?: string;
+  /** Explainer opened from the recovery card's ⓘ. */
+  recoveryTooltip?: { title: string; description: string };
   /** Summary rows — vault amount, est. fee, refundable deposit, total. */
   rows: ConfirmRow[];
   /** Network fees for the Est. Fee breakdown sheet. */
@@ -50,6 +52,7 @@ export const CreateVaultConfirmStep: React.FC<
   recoveryAddress,
   onPressCopyRecovery,
   recoveryLabel = "External recovery address",
+  recoveryTooltip,
   rows,
   fees = [],
   confirmTitle = "Swipe to confirm",
@@ -74,6 +77,9 @@ export const CreateVaultConfirmStep: React.FC<
           chainBadge="Kaspa"
           address={recoveryAddress}
           onPressCopy={onPressCopyRecovery}
+          onPressInfo={
+            recoveryTooltip ? () => setTooltip(recoveryTooltip) : undefined
+          }
         />
 
         {/* Summary */}
@@ -83,11 +89,14 @@ export const CreateVaultConfirmStep: React.FC<
               key={i}
               label={row.label}
               value={row.value}
+              // The fee sheet opens from the row's ⓘ, like every other
+              // explainer — onPressValue would turn the value into a blue link.
               onPressInfo={
-                row.tooltip ? () => setTooltip(row.tooltip!) : undefined
-              }
-              onPressValue={
-                row.opensFeeSheet ? () => setFeeOpen(true) : undefined
+                row.opensFeeSheet
+                  ? () => setFeeOpen(true)
+                  : row.tooltip
+                    ? () => setTooltip(row.tooltip!)
+                    : undefined
               }
             />
           ))}
