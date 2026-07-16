@@ -124,142 +124,143 @@ export const NameCreatePage: React.FC<NameCreatePageProps> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Domain Card */}
-        <View style={styles.cardWrap}>
-          <View style={styles.card}>
-            <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
-              <Defs>
-                <LinearGradient
-                  id="cardGradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="100%"
-                  y2="100%"
-                >
-                  <Stop offset="0%" stopColor={CARD_GRADIENT[0]} />
-                  <Stop offset="100%" stopColor={CARD_GRADIENT[1]} />
-                </LinearGradient>
-              </Defs>
-              <Rect width="100%" height="100%" fill="url(#cardGradient)" />
-            </Svg>
-            <View style={styles.cardNameWrap}>
-              <Text
-                allowFontScaling={false}
-                style={styles.cardName}
-                numberOfLines={2}
-              >
-                {hasDomain ? `${domain}${suffix}` : suffix}
-              </Text>
-            </View>
-            {formatIconSource && (
-              <View style={styles.cardLogoRow}>
-                <Image
-                  source={formatIconSource}
-                  style={styles.cardLogo}
-                  resizeMode="contain"
-                  accessibilityLabel={formatLabel}
-                />
-              </View>
-            )}
-            {isAvailable && (
-              <View style={styles.verifiedBadge}>
-                <BadgeCheck
-                  size={20}
-                  color={colors.primary}
-                  fill={colors.white}
-                  strokeWidth={2}
-                />
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Domain Name input */}
-        <View style={styles.field}>
-          <Text allowFontScaling={false} style={styles.fieldLabel}>
-            Domain Name
-          </Text>
-          <Input
-            value={domain}
-            onChangeText={onDomainChange}
-            placeholder={`yourdomain${suffix}`}
-            error={error}
-            rightIcon={
-              hasDomain && !error && isAvailable ? (
-                <CircleCheck size={20} color={colors.success} />
-              ) : undefined
-            }
-          />
-        </View>
-
-        {/* Domain Price / Est. Fee panel */}
-        {showDetails && (
-          <View style={styles.detailsCard}>
-            <TouchableOpacity
-              style={styles.detailsRow}
-              onPress={() => setIsPriceSheetOpen(true)}
-              activeOpacity={0.7}
-            >
-              <View style={styles.detailsRowContent}>
-                <View style={styles.detailsRowLabel}>
-                  <Text allowFontScaling={false} style={styles.detailsRowTitle}>
-                    Domain Price
-                  </Text>
-                  <Info size={16} color={typography.t600} strokeWidth={2} />
-                </View>
-                <View style={styles.detailsRowValue}>
-                  <Text allowFontScaling={false} style={styles.detailsAmount}>
-                    {domainPriceAmount}
-                  </Text>
-                  {domainPriceUsd ? (
-                    <Text allowFontScaling={false} style={styles.detailsAmountUsd}>
-                      {domainPriceUsd}
-                    </Text>
-                  ) : null}
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.detailsRow, styles.detailsRowBorder]}
-              onPress={() => setIsFeeSheetOpen(true)}
-              disabled={!feeBreakdown?.length}
-              activeOpacity={feeBreakdown?.length ? 0.7 : 1}
-            >
-              <View style={styles.detailsRowContent}>
-                <View style={styles.detailsRowLabel}>
-                  <Text allowFontScaling={false} style={styles.detailsRowTitle}>
-                    Estimated Fee
-                  </Text>
-                  {!!feeBreakdown?.length && (
-                    <Info size={16} color={typography.t600} strokeWidth={2} />
-                  )}
-                </View>
-                <View style={styles.detailsRowValue}>
-                  <Text allowFontScaling={false} style={styles.detailsAmount}>
-                    {estFeeAmount}
-                  </Text>
-                  {estFeeUsd ? (
-                    <Text allowFontScaling={false} style={styles.detailsAmountUsd}>
-                      {estFeeUsd}
-                    </Text>
-                  ) : null}
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Bottom Action Bar */}
       <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Domain Card */}
+          <View style={styles.cardWrap}>
+            <View style={styles.card}>
+              <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
+                <Defs>
+                  <LinearGradient
+                    id="cardGradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <Stop offset="0%" stopColor={CARD_GRADIENT[0]} />
+                    <Stop offset="100%" stopColor={CARD_GRADIENT[1]} />
+                  </LinearGradient>
+                </Defs>
+                <Rect width="100%" height="100%" fill="url(#cardGradient)" />
+              </Svg>
+              <View style={styles.cardNameWrap}>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.cardName}
+                  numberOfLines={2}
+                >
+                  {hasDomain ? `${domain}${suffix}` : suffix}
+                </Text>
+              </View>
+              {formatIconSource && (
+                <View style={styles.cardLogoRow}>
+                  <Image
+                    source={formatIconSource}
+                    style={styles.cardLogo}
+                    resizeMode="contain"
+                    accessibilityLabel={formatLabel}
+                  />
+                </View>
+              )}
+              {isAvailable && (
+                <View style={styles.verifiedBadge}>
+                  <BadgeCheck
+                    size={20}
+                    color={colors.primary}
+                    fill={colors.white}
+                    strokeWidth={2}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
+
+          {/* Domain Name input */}
+          <View style={styles.field}>
+            <Text allowFontScaling={false} style={styles.fieldLabel}>
+              Domain Name
+            </Text>
+            <Input
+              value={domain}
+              onChangeText={onDomainChange}
+              placeholder={`yourdomain${suffix}`}
+              error={error}
+              rightIcon={
+                hasDomain && !error && isAvailable ? (
+                  <CircleCheck size={20} color={colors.success} />
+                ) : undefined
+              }
+            />
+          </View>
+
+          {/* Domain Price / Est. Fee panel */}
+          {showDetails && (
+            <View style={styles.detailsCard}>
+              <TouchableOpacity
+                style={styles.detailsRow}
+                onPress={() => setIsPriceSheetOpen(true)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.detailsRowContent}>
+                  <View style={styles.detailsRowLabel}>
+                    <Text allowFontScaling={false} style={styles.detailsRowTitle}>
+                      Domain Price
+                    </Text>
+                    <Info size={16} color={typography.t600} strokeWidth={2} />
+                  </View>
+                  <View style={styles.detailsRowValue}>
+                    <Text allowFontScaling={false} style={styles.detailsAmount}>
+                      {domainPriceAmount}
+                    </Text>
+                    {domainPriceUsd ? (
+                      <Text allowFontScaling={false} style={styles.detailsAmountUsd}>
+                        {domainPriceUsd}
+                      </Text>
+                    ) : null}
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.detailsRow, styles.detailsRowBorder]}
+                onPress={() => setIsFeeSheetOpen(true)}
+                disabled={!feeBreakdown?.length}
+                activeOpacity={feeBreakdown?.length ? 0.7 : 1}
+              >
+                <View style={styles.detailsRowContent}>
+                  <View style={styles.detailsRowLabel}>
+                    <Text allowFontScaling={false} style={styles.detailsRowTitle}>
+                      Estimated Fee
+                    </Text>
+                    {!!feeBreakdown?.length && (
+                      <Info size={16} color={typography.t600} strokeWidth={2} />
+                    )}
+                  </View>
+                  <View style={styles.detailsRowValue}>
+                    <Text allowFontScaling={false} style={styles.detailsAmount}>
+                      {estFeeAmount}
+                    </Text>
+                    {estFeeUsd ? (
+                      <Text allowFontScaling={false} style={styles.detailsAmountUsd}>
+                        {estFeeUsd}
+                      </Text>
+                    ) : null}
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+        </ScrollView>
+
+        {/* Bottom Action Bar */}
         <View style={styles.bottomBar}>
           {insufficientFundsMessage ? (
             <View style={styles.messageRow}>
@@ -315,6 +316,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundScreen,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
 
   // ── Scroll Content ───────────────────────────────────────────────────────
