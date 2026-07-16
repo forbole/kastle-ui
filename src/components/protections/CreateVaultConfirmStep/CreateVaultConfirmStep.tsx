@@ -111,9 +111,13 @@ export const CreateVaultConfirmStep: React.FC<
             <DetailKVRow
               key={i}
               label={row.label}
-              labelColor={typography.t800}
+              // Text/Title Color — Nicole's semantic set is t900/t600/t400;
+              // the node's raw typography800 binding bypasses it.
+              labelColor={typography.t900}
               value={row.value}
               emphasis={row.emphasis}
+              // Figma draws a hairline under every row; the filled total has none
+              divider={!row.emphasis && i < rows.length - 1}
               // The fee sheet opens from the row's ⓘ, like every other
               // explainer — onPressValue would turn the value into a blue link.
               onPressInfo={
