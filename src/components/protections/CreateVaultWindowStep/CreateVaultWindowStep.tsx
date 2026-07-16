@@ -9,6 +9,7 @@ import {
 import { Check, Clock } from "lucide-react-native";
 import { Alert, AlertSeverity } from "../../Alert/Alert";
 import {
+  border,
   colors,
   info,
   primary,
@@ -231,18 +232,20 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: colors.textSecondary,
   },
+  // Figma checkbox: 16 square, r6, 2px b400 outline — filled with the brighter
+  // p600 (colors.link, #13DCFF) when checked, not the p500 brand tone.
   check: {
-    width: spacing.s5,
-    height: spacing.s5,
-    borderRadius: borderRadius.full,
+    width: spacing.s4,
+    height: spacing.s4,
+    borderRadius: borderRadius.md,
     borderWidth: borderWidth.bw2,
-    borderColor: colors.border,
+    borderColor: border.b400,
     alignItems: "center",
     justifyContent: "center",
   },
   checkSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: colors.link,
+    borderColor: colors.link,
   },
   actionBar: {
     paddingHorizontal: spacing.s5,

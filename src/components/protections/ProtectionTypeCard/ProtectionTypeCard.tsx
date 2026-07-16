@@ -1,8 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { ChevronRight } from "lucide-react-native";
 import {
   background,
   colors,
+  secondary,
   spacing,
   borderRadius,
   borderWidth,
@@ -53,13 +55,15 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
         <Text allowFontScaling={false} style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-        {!isActive ? (
+        {isActive ? (
+          <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
+        ) : (
           <View style={styles.soonBadge}>
             <Text allowFontScaling={false} style={styles.soonLabel}>
               {soonLabel}
             </Text>
           </View>
-        ) : null}
+        )}
       </View>
 
       <Text allowFontScaling={false} style={styles.description}>
