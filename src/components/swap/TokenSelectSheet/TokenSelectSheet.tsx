@@ -1,7 +1,9 @@
-import React, { useState, useCallback, useRef, memo } from "react";
+import React, { useState, useCallback, useEffect, useRef, memo } from "react";
 import {
+  Animated,
   Dimensions,
   Keyboard,
+  Platform,
   View,
   StyleSheet,
   Text,
@@ -190,6 +192,40 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
   const searchInputRef = useRef<TextInput>(null);
 
+  // This sheet's container has a fixed height (92% of the *original* screen
+  // height, captured once) instead of sizing to its content, so it doesn't
+  // shrink when Android's Modal auto-resizes on keyboard show (the Dialog's
+  // windowSoftInputMode is hardcoded to adjustResize) — it's still anchored
+  // bottom:0 but now taller than the resized window, so its top (handle,
+  // title, search bar) overflows past the top edge and gets clipped.
+  // Counteract by translating the whole sheet back down by the keyboard
+  // height so it fits within the resized window again. (Kept local to this
+  // sheet — ActionSheet itself no longer does this; other sheets built on it
+  // size to their content and don't need it, since the resize alone already
+  // lands them correctly above the keyboard for free.)
+  const keyboardOffset = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (!isOpen || Platform.OS !== "android") return;
+    const show = Keyboard.addListener("keyboardDidShow", (e) => {
+      Animated.timing(keyboardOffset, {
+        toValue: e.endCoordinates.height,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    });
+    const hide = Keyboard.addListener("keyboardDidHide", () => {
+      Animated.timing(keyboardOffset, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }).start();
+    });
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, [isOpen, keyboardOffset]);
+
   const handleSearchChange = useCallback(
     (q: string) => {
       if (onSearchChange) {
@@ -248,7 +284,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose} heightRatio={0.92}>
-      <View style={styles.container}>
+      <Animated.View style={[styles.container, { transform: [{ translateY: keyboardOffset }] }]}>
         {/* Drag handle */}
         <View style={styles.handlebarWrapper}>
           <View style={styles.handlebar} />
@@ -323,7 +359,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
         {/* iOS home indicator */}
         <View style={styles.homeIndicator} />
-      </View>
+      </Animated.View>
     </ActionSheet>
   );
 };

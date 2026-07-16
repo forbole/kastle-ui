@@ -119,7 +119,7 @@ const mediumBtn = {
 };
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, paddingHorizontal: spacing.s5, paddingTop: spacing.s4, paddingBottom: spacing.s6 },
+  screen: { flex: 1, paddingHorizontal: spacing.s5, paddingTop: spacing.s4, paddingBottom: spacing.s4 },
   tabWrap: { alignItems: "center", marginBottom: spacing.s5 },
   spacer: { flex: 1, minHeight: spacing.s6 },
   addBtn: {

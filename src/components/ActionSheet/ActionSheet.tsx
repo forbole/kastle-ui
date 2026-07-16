@@ -4,7 +4,6 @@ import {
   Dimensions,
   Keyboard,
   Modal,
-  Platform,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -35,9 +34,6 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
 }) => {
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
-  const keyboardOffset = useRef(new Animated.Value(0)).current;
-  // Combine sheet slide animation + keyboard compensation into one value
-  const combinedTranslateY = useRef(Animated.add(translateY, keyboardOffset)).current;
 
   const animateIn = useCallback(() => {
     Keyboard.dismiss();
@@ -68,14 +64,9 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
           duration: ANIMATION_DURATION,
           useNativeDriver: true,
         }),
-        Animated.timing(keyboardOffset, {
-          toValue: 0,
-          duration: ANIMATION_DURATION,
-          useNativeDriver: true,
-        }),
       ]).start(() => onFinish?.());
     },
-    [translateY, backdropOpacity, keyboardOffset],
+    [translateY, backdropOpacity],
   );
 
   useEffect(() => {
@@ -85,27 +76,6 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
       animateOut();
     }
   }, [isOpen, animateIn, animateOut]);
-
-  // Android: Modal hardcodes adjustResize, so the keyboard shrinks the modal
-  // view and pushes the sheet upward. Counteract by translating it back down.
-  useEffect(() => {
-    if (!isOpen || Platform.OS !== 'android') return;
-    const show = Keyboard.addListener('keyboardDidShow', (e) => {
-      Animated.timing(keyboardOffset, {
-        toValue: e.endCoordinates.height,
-        duration: 500,
-        useNativeDriver: true,
-      }).start();
-    });
-    const hide = Keyboard.addListener('keyboardDidHide', () => {
-      Animated.timing(keyboardOffset, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: true,
-      }).start();
-    });
-    return () => { show.remove(); hide.remove(); };
-  }, [isOpen, keyboardOffset]);
 
   const handleClose = useCallback(() => {
     if (!closeOnBackdropPress) return;
@@ -131,7 +101,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
       <Animated.View
         renderToHardwareTextureAndroid
         collapsable={false}
-        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY: combinedTranslateY }] }]}
+        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }] }]}
         pointerEvents="box-none"
       >
         {/* Top tap zone — tapping the handlebar area closes the sheet */}
