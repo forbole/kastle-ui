@@ -18,6 +18,8 @@ import {
 export interface ConfirmRow {
   label: string;
   value: string;
+  /** Total row — bold, on a filled background (Figma 12757:476249). */
+  emphasis?: boolean;
   /** ⓘ tooltip opened from the label. */
   tooltip?: { title: string; description: string };
   /** Tapping the value opens the fee-breakdown sheet. */
@@ -91,6 +93,7 @@ export const CreateVaultConfirmStep: React.FC<
               label={row.label}
               labelColor={typography.t800}
               value={row.value}
+              emphasis={row.emphasis}
               // The fee sheet opens from the row's ⓘ, like every other
               // explainer — onPressValue would turn the value into a blue link.
               onPressInfo={

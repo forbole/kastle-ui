@@ -38,7 +38,7 @@ const ROWS: ConfirmRow[] = [
     },
   },
   { label: "Est. Fee", value: "~ 1.0001 KAS", opensFeeSheet: true },
-  { label: "Total from wallet", value: "20,001.5001 KAS" },
+  { label: "Total from wallet", value: "20,001.5001 KAS", emphasis: true },
 ];
 
 // ⚠️ Figma's breakdown is "Creation fees" ($11 KAS) + "Network fees"; the shared
