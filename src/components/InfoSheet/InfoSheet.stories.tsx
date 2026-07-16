@@ -76,3 +76,20 @@ export const EstimatedFee: Story = {
       "The estimated network fee required to process this transaction on the Kaspa blockchain. The actual fee may vary slightly based on network conditions.",
   },
 };
+
+/**
+ * Confirm variant — the same sheet with its button row shown (Figma
+ * I12802:628368;13540:55551, the clawback "Withdraw now?" dialog).
+ */
+export const Confirm: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    title: "Withdraw now?",
+    description:
+      "Funds will go to your recovery address right away. Only you can access it.",
+    actions: [
+      { label: "Back", variant: "outline" },
+      { label: "Withdraw now", variant: "warning" },
+    ],
+  },
+};

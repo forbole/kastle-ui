@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { Timer } from "lucide-react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Info, Timer } from "lucide-react-native";
 import { colors, primary, spacing, textStyles } from "../../../config/theme";
 
 export interface CountdownRingProps {
@@ -8,6 +8,8 @@ export interface CountdownRingProps {
   time: string;
   /** Caption above the time, e.g. "Funds leave in". */
   label?: string;
+  /** If set: a 12px ⓘ after the label (opens the "Funds leave in" tooltip). */
+  onPressInfo?: () => void;
   /** Ring outer diameter in px (Figma default 208). */
   size?: number;
 }
@@ -25,6 +27,7 @@ const RING_THICKNESS = 13;
 export const CountdownRing: React.FC<CountdownRingProps> = ({
   time,
   label,
+  onPressInfo,
   size = 208,
 }) => {
   return (
@@ -36,9 +39,20 @@ export const CountdownRing: React.FC<CountdownRingProps> = ({
     >
       <View style={styles.content}>
         {label ? (
-          <Text allowFontScaling={false} style={styles.label} numberOfLines={1}>
-            {label}
-          </Text>
+          <View style={styles.labelRow}>
+            <Text
+              allowFontScaling={false}
+              style={styles.label}
+              numberOfLines={1}
+            >
+              {label}
+            </Text>
+            {onPressInfo ? (
+              <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
+                <Info size={12} color={colors.textSecondary} strokeWidth={2} />
+              </TouchableOpacity>
+            ) : null}
+          </View>
         ) : null}
         <View style={styles.timerRow}>
           <Timer size={16} color={colors.textPrimary} strokeWidth={2} />
@@ -62,6 +76,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s2,
     paddingHorizontal: spacing.s2,
+  },
+  // Figma: label + ⓘ in a horizontal row, gap 4
+  labelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s1,
   },
   label: {
     ...textStyles.bodyNormalXS,
