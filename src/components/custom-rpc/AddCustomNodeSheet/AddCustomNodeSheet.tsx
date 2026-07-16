@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { Info } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
+import { InlineActionSheet } from "../../InlineActionSheet";
 import { Input } from "../../Input";
 import { ButtonGroup } from "../../ButtonGroup";
 import {
@@ -13,6 +14,13 @@ import {
   background,
   border,
 } from "../../../config/theme";
+
+// iOS: RN's Modal opens a separate native surface that KeyboardAvoidingView
+// can't measure correctly, so the sheet never rises above the keyboard —
+// use InlineActionSheet (no Modal, renders in the normal view tree) instead.
+// Android: ActionSheet (Modal-based) already works correctly via the
+// platform's own adjustResize, so leave it as-is there.
+const Sheet = Platform.OS === "ios" ? InlineActionSheet : ActionSheet;
 
 export interface AddCustomNodeSheetProps {
   isOpen: boolean;
@@ -43,7 +51,7 @@ export const AddCustomNodeSheet: React.FC<AddCustomNodeSheetProps> = ({
   const canAdd = name.trim().length > 0 && url.trim().length > 0 && !isValidating;
 
   return (
-    <ActionSheet isOpen={isOpen} onClose={onClose}>
+    <Sheet isOpen={isOpen} onClose={onClose}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.keyboardAvoidingView}
@@ -92,7 +100,7 @@ export const AddCustomNodeSheet: React.FC<AddCustomNodeSheetProps> = ({
           </View>
         </View>
       </KeyboardAvoidingView>
-    </ActionSheet>
+    </Sheet>
   );
 };
 
