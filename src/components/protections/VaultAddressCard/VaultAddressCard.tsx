@@ -43,8 +43,14 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
     return (
       <View style={styles.card}>
         <View style={styles.header}>
-          {/* Label + info icon sit together on the left (per Figma) */}
-          <View style={styles.labelRow}>
+          {/* Label + info icon sit together on the left (per Figma). The whole
+              label row is the tap target, and the ⓘ takes the label's colour. */}
+          <TouchableOpacity
+            style={styles.labelRow}
+            onPress={onPressInfo}
+            disabled={!onPressInfo}
+            activeOpacity={0.7}
+          >
             <Text
               allowFontScaling={false}
               style={styles.label}
@@ -52,10 +58,10 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
             >
               {label}
             </Text>
-            <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
+            {onPressInfo ? (
               <Info size={16} color={colors.textPrimary} strokeWidth={2} />
-            </TouchableOpacity>
-          </View>
+            ) : null}
+          </TouchableOpacity>
           {chainBadge ? (
             <View style={styles.badge}>
               <Text allowFontScaling={false} style={styles.badgeText}>
