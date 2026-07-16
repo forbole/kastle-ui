@@ -33,6 +33,7 @@ import {
 } from "../../../config/theme";
 
 const VAULT_IMAGE = require("../../../../assets/vault.png");
+const KASPA_LOGO = require("../../../../assets/kaspa-logo.png");
 
 export interface VaultDetailRow {
   label: string;
@@ -41,6 +42,8 @@ export interface VaultDetailRow {
   subValue?: string;
   /** Renders a StatusPill instead of value text (Vault Status row). */
   pill?: { label: string; status: StatusPillStatus };
+  /** Shows the Kaspa token logo after the label (Vault amount row). */
+  tokenLogo?: boolean;
   onPressValue?: () => void;
   /** Optional ⓘ tooltip opened from the row label. */
   tooltip?: { title: string; description: string };
@@ -220,6 +223,17 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
               {rows.map((row, i) => (
                 <DetailKVRow
                   key={i}
+                  // Figma's table draws a hairline under every row but the last
+                  divider={i < rows.length - 1}
+                  labelIcon={
+                    row.tokenLogo ? (
+                      <Image
+                        source={KASPA_LOGO}
+                        style={styles.tokenLogo}
+                        contentFit="contain"
+                      />
+                    ) : undefined
+                  }
                   label={row.label}
                   // Vault details uses white labels (Figma), not the muted
                   // default the activity rows ship with.
@@ -365,6 +379,10 @@ const styles = StyleSheet.create({
     ...textStyles.bodySemiboldMD,
     color: colors.textSecondary,
     paddingVertical: spacing.s3,
+  },
+  tokenLogo: {
+    width: spacing.s5,
+    height: spacing.s5,
   },
   // Figma wraps the rows in a table card (r16, bg50)
   detailsCard: {
