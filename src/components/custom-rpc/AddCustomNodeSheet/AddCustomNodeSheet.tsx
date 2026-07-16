@@ -52,6 +52,15 @@ export const AddCustomNodeSheet: React.FC<AddCustomNodeSheetProps> = ({
   // adjustResize), so only apply the padding on iOS.
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   useEffect(() => {
+    // ActionSheet's Modal doesn't unmount children when closed (it just
+    // hides natively), so without this guard the listeners below stay
+    // active the whole time this component is mounted — picking up
+    // keyboard events from anywhere else in the app and leaving a stale
+    // keyboardHeight baked in for the next time the sheet opens.
+    if (!isOpen) {
+      setKeyboardHeight(0);
+      return;
+    }
     const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
     const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
     const showSub = Keyboard.addListener(showEvent, (e) =>
@@ -62,14 +71,14 @@ export const AddCustomNodeSheet: React.FC<AddCustomNodeSheetProps> = ({
       showSub.remove();
       hideSub.remove();
     };
-  }, []);
+  }, [isOpen]);
 
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose}>
       <View
         style={[
           styles.container,
-          Platform.OS === "ios" && { paddingBottom: keyboardHeight },
+          Platform.OS === "ios" && { paddingBottom: spacing.s8 + keyboardHeight },
         ]}
       >
         <View style={styles.handleWrap}>
