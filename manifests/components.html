@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">57 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">44/57 infos</a><span class="filter-pill ok" aria-disabled="true">215 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">57 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">44/57 infos</a><span class="filter-pill ok" aria-disabled="true">216 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.5s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>2.0s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -4501,9 +4501,9 @@ title?: string = &quot;Verified Apps&quot;</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ExploreUrlBar</h2>
       <div class="badges">
-        <label for="c-26-explore-components-exploreurlbar-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-26-explore-components-exploreurlbar-props" class="badge ok as-toggle">8 prop types</label>
         <label for="c-26-explore-components-exploreurlbar-info" class="badge info as-toggle">1 info</label>
-        <label for="c-26-explore-components-exploreurlbar-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-26-explore-components-exploreurlbar-stories" class="badge ok as-toggle">3 stories</label>
         
       </div>
     </div>
@@ -4535,17 +4535,32 @@ title?: string = &quot;Verified Apps&quot;</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">5 prop types</span>
+              <span class="badge ok">8 prop types</span>
             </div>
             <pre><code>Component: src/components/explore/ExploreUrlBar/ExploreUrlBar.tsx::ExploreUrlBar</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>onBackPress?: () =&gt; void
+            <pre><code>/**
+ * Lets the address bar be typed into, e.g. only when no dApp is connected. Default: false (read-only, matches prior behavior).
+ */
+editable?: boolean = false
+
+onBackPress?: () =&gt; void
 
 onDisconnectPress?: () =&gt; void
 
 onRefreshPress?: () =&gt; void
 
 onSharePress?: () =&gt; void
+
+/**
+ * Fires as the user types. Only relevant when `editable`.
+ */
+onUrlChange?: (url: string) =&gt; void
+
+/**
+ * Fires when the user submits the typed URL (e.g. pressing return). Only relevant when `editable`.
+ */
+onUrlSubmit?: (url: string) =&gt; void
 
 url?: string = &quot;&quot;</code></pre>
           </div>
@@ -4580,6 +4595,15 @@ url?: string = &quot;&quot;</code></pre>
               
               
               <pre><code>const LongUrl = () =&gt; &lt;ExploreUrlBar url=&quot;app.some-very-long-domain-name.example.com/some/path&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Editable</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">e.g. no dApp connected yet — lets the user type/edit the URL directly.</div>
+              <pre><code>const Editable = () =&gt; &lt;ExploreUrlBar url=&quot;&quot; editable /&gt;;</code></pre>
             </div>
         </div>
     
