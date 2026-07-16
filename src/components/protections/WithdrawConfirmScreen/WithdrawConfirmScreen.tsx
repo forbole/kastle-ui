@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
-import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow/DetailKVRow";
+import { DetailTable } from "../DetailTable/DetailTable";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import { SwipeToConfirm } from "../../SwipeToConfirm/SwipeToConfirm";
 import {
@@ -92,18 +92,15 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
         />
 
         {/* Summary */}
-        <View style={styles.card}>
-          {rows.map((row, i) => (
-            <DetailKVRow
-              key={i}
-              label={row.label}
-              value={row.value}
-              onPressInfo={
-                row.tooltip ? () => setTooltip(row.tooltip!) : undefined
-              }
-            />
-          ))}
-        </View>
+        <DetailTable
+          rows={rows.map((row) => ({
+            label: row.label,
+            value: row.value,
+            onPressInfo: row.tooltip
+              ? () => setTooltip(row.tooltip!)
+              : undefined,
+          }))}
+        />
       </ScrollView>
 
       <View style={styles.actionBar}>
