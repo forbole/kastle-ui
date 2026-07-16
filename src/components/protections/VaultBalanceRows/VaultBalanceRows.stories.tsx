@@ -27,9 +27,26 @@ type Story = StoryObj<typeof meta>;
 /** Values pulled from Figma (home dashboard, node 13381:90879). */
 export const Default: Story = {
   args: {
+    state: "default",
     availableValue: "$500.54",
     lockedValue: "$12,000.3787",
   },
+};
+
+/**
+ * Scanning (Figma 13385:267708) — Available resolved; the Locked row reports
+ * "Scanning for vaults..." in textSecondary with no balance yet.
+ */
+export const Scanning: Story = {
+  args: {
+    state: "scanning",
+    availableValue: "$500.54",
+  },
+};
+
+/** Loading (Figma 13385:269388) — both balances render as skeletons. */
+export const Loading: Story = {
+  args: { state: "loading" },
 };
 
 const styles = StyleSheet.create({

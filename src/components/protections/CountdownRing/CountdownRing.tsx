@@ -6,7 +6,7 @@ import { colors, primary, spacing, textStyles } from "../../../config/theme";
 export interface CountdownRingProps {
   /** Big countdown text, e.g. "30d:11h:44m". */
   time: string;
-  /** Caption above the time, e.g. "Funds leave when this ends". */
+  /** Caption above the time, e.g. "Funds leave in". */
   label?: string;
   /** Ring outer diameter in px (Figma default 208). */
   size?: number;

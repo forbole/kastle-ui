@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ChevronRight, Coins, Lock } from "lucide-react-native";
+import { ChevronRight, Coins, Loader, Lock } from "lucide-react-native";
+import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
 import {
   colors,
   spacing,
@@ -8,11 +9,22 @@ import {
   textStyles,
 } from "../../../config/theme";
 
+/** Home "Protected assets" states (Figma 13385:286750 variants). */
+export type VaultBalanceState = "default" | "scanning" | "loading";
+
 export interface VaultBalanceRowsProps {
+  /**
+   * - `default` — both balances resolved
+   * - `scanning` — searching the chain: Locked row becomes a status line
+   * - `loading` — balances still fetching: values render as skeletons
+   */
+  state?: VaultBalanceState;
   availableLabel?: string;
-  availableValue: string;
+  availableValue?: string;
   lockedLabel?: string;
-  lockedValue: string;
+  lockedValue?: string;
+  /** Status line shown in place of the Locked row while scanning. */
+  scanningLabel?: string;
   /** Tapping the Locked row opens the vaults list. */
   onPressLocked?: () => void;
 }
@@ -22,12 +34,16 @@ export interface VaultBalanceRowsProps {
  * borders collapse (Figma node 13381:90879). Body-only, pure.
  */
 export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
+  state = "default",
   availableLabel = "Available",
   availableValue,
   lockedLabel = "Locked",
   lockedValue,
+  scanningLabel = "Scanning for vaults...",
   onPressLocked,
 }) => {
+  const loading = state === "loading";
+
   return (
     <View style={styles.stack}>
       <View style={styles.row}>
@@ -40,32 +56,70 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
           </Text>
         </View>
         <View style={styles.valueCol}>
-          <Text allowFontScaling={false} style={styles.value} numberOfLines={1}>
-            {availableValue}
-          </Text>
+          {loading ? (
+            <SkeletonBlock width={163} height={16} />
+          ) : (
+            <Text
+              allowFontScaling={false}
+              style={styles.value}
+              numberOfLines={1}
+            >
+              {availableValue}
+            </Text>
+          )}
         </View>
       </View>
 
-      <TouchableOpacity
-        style={styles.row}
-        onPress={onPressLocked}
-        activeOpacity={0.8}
-      >
-        <View style={styles.iconBox}>
-          <Lock size={16} color={colors.textPrimary} strokeWidth={2} />
+      {/* While scanning the Locked row has no balance yet — it reports progress */}
+      {state === "scanning" ? (
+        <View style={styles.row}>
+          <View style={styles.iconBox}>
+            <Loader size={16} color={colors.textPrimary} strokeWidth={2} />
+          </View>
+          <View style={styles.scanningCol}>
+            <Text
+              allowFontScaling={false}
+              style={styles.scanningLabel}
+              numberOfLines={1}
+            >
+              {scanningLabel}
+            </Text>
+          </View>
         </View>
-        <View style={styles.labelCol}>
-          <Text allowFontScaling={false} style={styles.label} numberOfLines={1}>
-            {lockedLabel}
-          </Text>
-        </View>
-        <View style={styles.valueCol}>
-          <Text allowFontScaling={false} style={styles.value} numberOfLines={1}>
-            {lockedValue}
-          </Text>
-          <ChevronRight size={16} color={colors.textPrimary} strokeWidth={2} />
-        </View>
-      </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.row}
+          onPress={onPressLocked}
+          activeOpacity={0.8}
+        >
+          <View style={styles.iconBox}>
+            <Lock size={16} color={colors.textPrimary} strokeWidth={2} />
+          </View>
+          <View style={styles.labelCol}>
+            <Text
+              allowFontScaling={false}
+              style={styles.label}
+              numberOfLines={1}
+            >
+              {lockedLabel}
+            </Text>
+          </View>
+          <View style={styles.valueCol}>
+            {loading ? (
+              <SkeletonBlock width={139} height={16} />
+            ) : (
+              <Text
+                allowFontScaling={false}
+                style={styles.value}
+                numberOfLines={1}
+              >
+                {lockedValue}
+              </Text>
+            )}
+            <ChevronRight size={16} color={colors.textPrimary} strokeWidth={2} />
+          </View>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -110,5 +164,12 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: colors.textPrimary,
     flexShrink: 1,
+  },
+  scanningCol: {
+    flex: 1,
+  },
+  scanningLabel: {
+    ...textStyles.bodyNormalSM,
+    color: colors.textSecondary,
   },
 });
