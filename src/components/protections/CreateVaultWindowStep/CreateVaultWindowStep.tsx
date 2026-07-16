@@ -232,12 +232,13 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: colors.textSecondary,
   },
-  // Figma checkbox: 16 square, r6, 2px b400 outline — filled with the brighter
-  // p600 (colors.link, #13DCFF) when checked, not the p500 brand tone.
+  // 16px, 2px b400 outline, filled with the brighter p600 (colors.link,
+  // #13DCFF) when checked. Round per Nicole — the Figma node draws it as a
+  // 6px-radius square.
   check: {
     width: spacing.s4,
     height: spacing.s4,
-    borderRadius: borderRadius.md,
+    borderRadius: borderRadius.full,
     borderWidth: borderWidth.bw2,
     borderColor: border.b400,
     alignItems: "center",

@@ -4,6 +4,8 @@ import { View, StyleSheet } from "react-native";
 import { VaultCard, VaultCardProps } from "./VaultCard";
 import { background, spacing } from "../../../config/theme";
 
+const VAULT_IMAGE = require("../../../../assets/vault.png");
+
 const meta: Meta<typeof VaultCard> = {
   title: "Protections/Components/VaultCard",
   component: VaultCard,
@@ -12,7 +14,7 @@ const meta: Meta<typeof VaultCard> = {
     viewport: { defaultViewport: "iphone14" },
     layout: "fullscreen",
   },
-  args: { onPress: () => {} },
+  args: { onPress: () => {}, illustration: VAULT_IMAGE },
   decorators: [
     (Story) => (
       <View style={styles.screen}>

@@ -72,7 +72,10 @@ export interface VaultDetailScreenProps {
   onPressCopyAddress?: () => void;
   backupTitle?: string;
   backupNote?: string;
+  /** Fired when Done is tapped — the card hides itself either way. */
   onPressBackupDone?: () => void;
+  /** Start with the backup card already dismissed (user has backed up). */
+  backupDone?: boolean;
   /** Read-only detail rows (amount, window, recovery, deposit…). */
   detailsTitle?: string;
   rows?: VaultDetailRow[];
@@ -108,6 +111,7 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
   backupTitle = "Backup your vault address",
   backupNote,
   onPressBackupDone,
+  backupDone = false,
   detailsTitle = "Details",
   rows = [],
   actionLabel = "Withdraw now",
@@ -121,6 +125,8 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
     { title: string; description: string } | null
   >(null);
   const [confirming, setConfirming] = React.useState(false);
+  // Done dismisses the backup card; the parent still hears about it.
+  const [dismissedBackup, setDismissedBackup] = React.useState(backupDone);
 
   // The action raises the confirm sheet when one is supplied.
   const handleAction = () => {
@@ -165,8 +171,9 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
           </View>
         ) : null}
 
-        {/* Backup your vault address — not shown while withdrawing (per Figma) */}
-        {status !== "withdrawing" ? (
+        {/* Backup your vault address — hidden while withdrawing (per Figma) and
+            once the user has confirmed they saved it */}
+        {status !== "withdrawing" && !dismissedBackup ? (
         <View style={styles.backupCard}>
           <View style={styles.backupHeader}>
             <View style={styles.backupTitleRow}>
@@ -174,13 +181,19 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
                 {backupTitle}
               </Text>
             </View>
-            {onPressBackupDone ? (
-              <TouchableOpacity onPress={onPressBackupDone} hitSlop={8}>
-                <Text allowFontScaling={false} style={styles.backupDone}>
-                  Done
-                </Text>
-              </TouchableOpacity>
-            ) : null}
+            <TouchableOpacity
+              style={styles.backupDoneHit}
+              onPress={() => {
+                setDismissedBackup(true);
+                onPressBackupDone?.();
+              }}
+              hitSlop={12}
+              activeOpacity={0.7}
+            >
+              <Text allowFontScaling={false} style={styles.backupDone}>
+                Done
+              </Text>
+            </TouchableOpacity>
           </View>
           <VaultAddressCard
             address={vaultAddress}
@@ -328,6 +341,14 @@ const styles = StyleSheet.create({
     ...textStyles.bodySemiboldSM,
     color: warning.w600,
     flexShrink: 1,
+  },
+  // "Done" is 12px — give it a real 32-high target instead of bare text
+  backupDoneHit: {
+    height: spacing.s8,
+    paddingHorizontal: spacing.s3,
+    justifyContent: "center",
+    // cancel the padding so the label still sits flush with the card edge
+    marginRight: -spacing.s3,
   },
   backupDone: {
     // Figma: 12 Medium (not the 14 semibold the other section links use)
