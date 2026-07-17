@@ -40,7 +40,8 @@ export interface WithdrawConfirmScreenProps {
   recoveryLabel?: string;
   chainBadge?: string;
   onPressCopyRecovery?: () => void;
-  onPressRecoveryInfo?: () => void;
+  /** Explainer opened from the recovery card's ⓘ (Figma 13391:560165). */
+  recoveryTooltip?: { title: string; description: string };
   /** Summary rows — arrives in / amount / est. fee. */
   rows: WithdrawConfirmRow[];
   /** Fee breakdown for the Est. Fee sheet (Network / Kastle fees). */
@@ -63,7 +64,7 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
   recoveryLabel = "External recovery address",
   chainBadge = "Kaspa",
   onPressCopyRecovery,
-  onPressRecoveryInfo,
+  recoveryTooltip,
   rows,
   fees = [],
   confirmTitle = "Swipe to confirm",
@@ -97,7 +98,9 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
           chainBadge={chainBadge}
           address={recoveryAddress}
           onPressCopy={onPressCopyRecovery}
-          onPressInfo={onPressRecoveryInfo}
+          onPressInfo={
+            recoveryTooltip ? () => setTooltip(recoveryTooltip) : undefined
+          }
         />
 
         {/* Summary */}
