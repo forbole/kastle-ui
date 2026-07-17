@@ -259,7 +259,10 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
           dangerNote
             ? {
                 text: dangerNote,
-                variant: "error",
+                // ⚠️ Figma binds this to Text/Invalid Color (red), but Nicole's
+                // call is amber — the whole withdrawing screen is amber-themed
+                // and red clashes. Flagged; follow Nicole over the node.
+                variant: "warning",
                 // Figma "Error message": no icon, centred
                 hideIcon: true,
                 alwaysCenter: true,

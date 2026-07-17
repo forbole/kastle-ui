@@ -36,8 +36,14 @@ export interface InfoSheetProps {
   onClose: () => void;
   /** Sheet title */
   title: string;
-  /** Body description text */
+  /** Body description text. Ignored when `descriptionRich` is set. */
   description: string;
+  /**
+   * Rich body: an array of runs. `emphasis` runs render white + semibold
+   * (e.g. the "Step 1/2/3" headings in the How-a-Vault-works sheet), the rest
+   * stay in the muted body colour. Rendered inline in one paragraph.
+   */
+  descriptionRich?: { text: string; emphasis?: boolean }[];
   /**
    * Optional button row (Figma shows/hides it on the same Actionsheet).
    * Omit for a plain tooltip; pass two for a confirm dialog.
@@ -50,6 +56,7 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
   onClose,
   title,
   description,
+  descriptionRich,
   actions,
 }) => {
   return (
@@ -74,7 +81,21 @@ export const InfoSheet: React.FC<InfoSheetProps> = ({
 
           {/* Description */}
           <View style={styles.descriptionSection}>
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.description]}>{description}</Text>
+            <Text
+              allowFontScaling={false}
+              style={[textStyles.bodyNormalMDRelaxed, styles.description]}
+            >
+              {descriptionRich
+                ? descriptionRich.map((run, i) => (
+                    <Text
+                      key={i}
+                      style={run.emphasis ? styles.descriptionEmphasis : undefined}
+                    >
+                      {run.text}
+                    </Text>
+                  ))
+                : description}
+            </Text>
           </View>
 
           {/* Optional confirm/cancel row — equal-width buttons, gap 12 */}
@@ -175,6 +196,12 @@ const styles = StyleSheet.create({
   },
   description: {
     color: typography.t700,
+  },
+  // Figma 12824:656344 — step headings are white + semibold
+  descriptionEmphasis: {
+    color: typography.t900,
+    fontFamily: fontFamilies["600"],
+    fontWeight: fontWeight.semibold,
   },
 
   // Buttons (Figma: 40 high, r9999, 16 Medium, row gap 12)

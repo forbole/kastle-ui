@@ -7,6 +7,7 @@ import {
   borderWidth,
   colors,
   fontFamilies,
+  fontSize,
   fontWeight,
   spacing,
   textStyles,
@@ -83,6 +84,7 @@ export const DetailTable: React.FC<DetailTableProps> = ({ rows }) => (
                     style={[
                       styles.value,
                       hasActions && styles.valueShrink,
+                      hasActions && styles.valueSmall,
                       row.emphasis && styles.bold,
                     ]}
                   >
@@ -197,6 +199,10 @@ const styles = StyleSheet.create({
   valueShrink: {
     flexShrink: 1,
     minWidth: 0,
+  },
+  // Address values are 12 (Nicole) — the truncated hash reads better smaller
+  valueSmall: {
+    fontSize: fontSize.xs,
   },
   subValue: {
     ...textStyles.bodyNormalXS,

@@ -151,6 +151,8 @@ export const CreateVaultConfirmStep: React.FC<
       <EstFeeSheet
         isOpen={feeOpen}
         onClose={() => setFeeOpen(false)}
+        // Figma 13350:255319 — vault sheet wording
+        subtitle="The estimated total cost for this transaction"
         fees={fees}
       />
     </View>
