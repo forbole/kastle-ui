@@ -38,6 +38,16 @@ export const Pending: Story = {
   args: { status: "pending" },
 };
 
+/** Vault — Locked (green dot indicator) */
+export const LockedDot: Story = {
+  args: { status: "success", label: "Locked", indicator: "dot" },
+};
+
+/** Vault — Withdrawing (amber dot indicator) */
+export const WithdrawingDot: Story = {
+  args: { status: "pending", label: "Withdrawing", indicator: "dot" },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,

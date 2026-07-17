@@ -16,8 +16,8 @@ export type AlertSeverity = "info" | "success" | "warning" | "error";
 
 export interface AlertProps {
   severity: AlertSeverity;
-  /** Primary text (bold). */
-  title: string;
+  /** Primary text (bold). Omit for a description-only alert. */
+  title?: string;
   /** Secondary text (body). */
   children: React.ReactNode;
   icon?: React.ReactNode;
@@ -29,7 +29,9 @@ const SEVERITY_CONFIG: Record<
   { bg: string; border: string; text: string; icon: typeof Info }
 > = {
   info: {
-    bg: infoColors.background,
+    // Nicole updated the info alert to the blue soft-background tint
+    // (Figma "Info/Warning soft background" #0973a8 @ 24%, fill + stroke)
+    bg: infoColors.softBackground,
     border: infoColors.softBackground,
     text: infoColors.i800,
     icon: Info,
@@ -79,12 +81,14 @@ export const Alert: React.FC<AlertProps> = ({
         </View>
       )}
       <View style={styles.content}>
-        <Text
-          allowFontScaling={false}
-          style={[textStyles.bodySemiboldSM, { color: config.text }]}
-        >
-          {title}
-        </Text>
+        {title ? (
+          <Text
+            allowFontScaling={false}
+            style={[textStyles.bodySemiboldSM, { color: config.text }]}
+          >
+            {title}
+          </Text>
+        ) : null}
         {typeof children === "string" ? (
           <Text
             allowFontScaling={false}
@@ -119,6 +123,5 @@ const styles = StyleSheet.create({
   },
   body: {
     ...textStyles.bodyNormalSM,
-    opacity: 0.6,
   },
 });

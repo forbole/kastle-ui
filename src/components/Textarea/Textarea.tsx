@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextStyle,
   View,
 } from "react-native";
 import { AlertCircle, Eye, ScanLine } from "lucide-react-native";
@@ -29,6 +30,16 @@ export interface TextareaProps {
   placeholder?: string;
   error?: string;
   disabled?: boolean;
+  /** Non-editable (read-only) display without the dimmed `disabled` look. */
+  editable?: boolean;
+  /** Override the input text style (e.g. a 14px read-only value). */
+  textStyle?: TextStyle;
+  /** Custom trailing icon (top-right). Overrides the default scan icon. */
+  rightIcon?: React.ReactNode;
+  /** Override the box min height (default 160 — the recovery-phrase textarea). */
+  minHeight?: number;
+  /** Always reserve the error line's height so showing/hiding it never shifts layout. */
+  reserveErrorSpace?: boolean;
   secureTextEntry?: boolean;
   /** Visual-only scan icon (top-right). No onPress — Paul wires later. */
   scanIcon?: boolean;
@@ -49,6 +60,11 @@ export const Textarea: React.FC<TextareaProps> = ({
   placeholder,
   error,
   disabled = false,
+  editable = true,
+  textStyle,
+  rightIcon,
+  minHeight,
+  reserveErrorSpace = false,
   secureTextEntry = false,
   scanIcon = true,
   masked = false,
@@ -66,10 +82,11 @@ export const Textarea: React.FC<TextareaProps> = ({
     focused && !invalid && styles.boxFocused,
     invalid && styles.boxInvalid,
     disabled && styles.boxDisabled,
+    minHeight != null && { minHeight },
   ];
 
   return (
-    <View>
+    <View style={styles.root}>
       {masked ? (
         <TouchableOpacity
           onPress={onPressMask}
@@ -95,14 +112,15 @@ export const Textarea: React.FC<TextareaProps> = ({
       ) : (
         <View style={boxStyle}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, !editable && styles.inputReadOnly, textStyle]}
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}
             placeholderTextColor={typography.t400}
-            editable={!disabled}
+            editable={editable && !disabled}
             secureTextEntry={secureTextEntry}
             multiline
+            scrollEnabled={editable}
             textAlignVertical="top"
             autoCapitalize="none"
             autoCorrect={false}
@@ -116,29 +134,41 @@ export const Textarea: React.FC<TextareaProps> = ({
               onBlur?.();
             }}
           />
-          {scanIcon && (
+          {rightIcon ? (
+            <View style={styles.scanWrapper}>{rightIcon}</View>
+          ) : scanIcon ? (
             <TouchableOpacity onPress={onPressScan} style={styles.scanWrapper}>
               <ScanLine size={20} color={primary.p500} strokeWidth={2} />
             </TouchableOpacity>
-          )}
+          ) : null}
         </View>
       )}
-      {invalid && (
-        <View style={styles.errorRow}>
-          <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
-          <Text
-            allowFontScaling={false}
-            style={[textStyles.bodyNormalSM, styles.errorText]}
-          >
-            {error}
-          </Text>
+      {invalid || reserveErrorSpace ? (
+        <View
+          style={[styles.errorRow, reserveErrorSpace && styles.errorRowReserved]}
+        >
+          {invalid ? (
+            <>
+              <AlertCircle size={18} color={errorColors.e600} strokeWidth={2} />
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalSM, styles.errorText]}
+              >
+                {error}
+              </Text>
+            </>
+          ) : null}
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // Fill the parent's width instead of hugging content
+  root: {
+    alignSelf: "stretch",
+  },
   box: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -171,6 +201,11 @@ const styles = StyleSheet.create({
     color: typography.t900,
     ...textStyles.bodyNormalMD,
   },
+  // Read-only value is muted (Figma Typography/typography600) — what you typed
+  // stays t900; what the app is showing you does not.
+  inputReadOnly: {
+    color: typography.t600,
+  },
   scanWrapper: {
     paddingTop: 0,
   },
@@ -202,6 +237,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.s2,
     marginTop: spacing.s4,
+  },
+  errorRowReserved: {
+    minHeight: spacing.s5,
   },
   errorText: {
     color: errorColors.e600,

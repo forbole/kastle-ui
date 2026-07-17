@@ -9,44 +9,59 @@ export interface StatusPillProps {
   status: StatusPillStatus;
   /** Override the default label ("Success" / "Failed" / "Pending"). */
   label?: string;
+  /** Left indicator: lucide icon (default) or a small filled dot. */
+  indicator?: "icon" | "dot";
 }
 
+/**
+ * Figma binds the badge label to the 800 tone of each status ramp
+ * (Success/success800 etc.) over its own `<status> background`. The 500/600
+ * tones are the brand/indicator colours and read too dark on these fills.
+ */
 const STATUS_CONFIG: Record<
   StatusPillStatus,
   {
     icon: typeof CircleCheck;
     label: string;
     color: string;
+    indicatorColor: string;
     bg: string;
   }
 > = {
   success: {
     icon: CircleCheck,
     label: "Success",
-    color: colors.success,
+    color: success.s800,
+    indicatorColor: colors.success,
     bg: success.background,
   },
   failed: {
     icon: CircleX,
     label: "Failed",
-    color: colors.danger,
+    color: error.e800,
+    indicatorColor: colors.danger,
     bg: error.background,
   },
   pending: {
     icon: ClockFading,
     label: "Pending",
-    color: warning.w500,
+    color: warning.w800,
+    indicatorColor: warning.w500,
     bg: warning.background,
   },
 };
 
-export const StatusPill: React.FC<StatusPillProps> = ({ status, label }) => {
+export const StatusPill: React.FC<StatusPillProps> = ({ status, label, indicator = "icon" }) => {
   const config = STATUS_CONFIG[status];
   const Icon = config.icon;
 
   return (
     <View style={[styles.pill, { backgroundColor: config.bg }]}>
-      <Icon size={12} color={config.color} strokeWidth={2.5} />
+      {indicator === "dot" ? (
+        <View style={[styles.dot, { backgroundColor: config.indicatorColor }]} />
+      ) : (
+        <Icon size={12} color={config.indicatorColor} strokeWidth={2.5} />
+      )}
       <Text
         allowFontScaling={false}
         style={[textStyles.bodyNormalXS, styles.label, { color: config.color }]}
@@ -69,5 +84,10 @@ const styles = StyleSheet.create({
   },
   label: {
     lineHeight: 16,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 9999,
   },
 });

@@ -17,8 +17,16 @@ import { ExternalLink } from "lucide-react-native";
 import { ActionSheet } from "../ActionSheet";
 
 export interface EstFeeRow {
-  /** Network name, e.g. "Kaspa", "Kasplex" */
-  networkName: string;
+  /** Network name, e.g. "Kaspa", "Kasplex" — renders as "<name> network fees". */
+  networkName?: string;
+  /**
+   * Free-form label that overrides the "<networkName> network fees" wording,
+   * e.g. "Network fees" / "Kastle fees" / "Creation fees" (vault breakdown,
+   * Figma 13350:255308).
+   */
+  label?: string;
+  /** Second line under the label (12px, muted) — e.g. the Creation fee note. */
+  description?: string;
   /** Fee amount with symbol, e.g. "0.00023 KAS" */
   fee: string;
   /** Optional USD equivalent, e.g. "≈ $0.01 USD" */
@@ -32,6 +40,11 @@ export interface EstFeeSheetProps {
   isOpen: boolean;
   /** Called when backdrop is pressed or Back is tapped */
   onClose: () => void;
+  /**
+   * Subtitle under the title. Defaults to the transfer wording; the vault
+   * breakdown passes "…for this transaction" (Figma 13350:255319).
+   */
+  subtitle?: string;
   /** Rows of network fees to display */
   fees: EstFeeRow[];
 }
@@ -43,6 +56,7 @@ export interface EstFeeSheetProps {
 export const EstFeeSheet: React.FC<EstFeeSheetProps> = ({
   isOpen,
   onClose,
+  subtitle = "The estimated total cost for this transfer",
   fees,
 }) => {
   return (
@@ -63,33 +77,50 @@ export const EstFeeSheet: React.FC<EstFeeSheetProps> = ({
           <View style={styles.titleSection}>
             <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.title]}>Est. Fee</Text>
             <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.subtitle]}>
-              The estimated total cost for this transfer
+              {subtitle}
             </Text>
             <View style={styles.divider} />
           </View>
 
           {/* Fee rows */}
           <View style={styles.feeList}>
-            {fees.map((fee, index) => (
-              <View key={index} style={styles.feeRow}>
-                {/* Label + external link icon */}
-                <View style={styles.feeLabel}>
-                  <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.feeLabelText]}>
-                    {fee.networkName} network fees
-                  </Text>
-                  {fee.infoUrl ? (
-                    <ExternalLink size={14} color={typography.t600} />
-                  ) : null}
+            {fees.map((fee, index) => {
+              const label =
+                fee.label ??
+                (fee.networkName ? `${fee.networkName} network fees` : "");
+              return (
+                <View
+                  key={index}
+                  // A description makes the row two lines — top-align the amount
+                  // to the label (Figma Creation-fees row is items-start).
+                  style={[styles.feeRow, fee.description && styles.feeRowTop]}
+                >
+                  {/* Label (+ optional external link) over an optional note */}
+                  <View style={styles.feeLabel}>
+                    <View style={styles.feeLabelRow}>
+                      <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.feeLabelText]}>
+                        {label}
+                      </Text>
+                      {fee.infoUrl ? (
+                        <ExternalLink size={14} color={typography.t600} />
+                      ) : null}
+                    </View>
+                    {fee.description ? (
+                      <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.feeDescription]}>
+                        {fee.description}
+                      </Text>
+                    ) : null}
+                  </View>
+                  {/* Amount */}
+                  <View style={styles.feeAmount}>
+                    <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.feeAmountText]}>{fee.fee}</Text>
+                    {fee.feeUsd ? (
+                      <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.feeAmountUsd]}>{fee.feeUsd}</Text>
+                    ) : null}
+                  </View>
                 </View>
-                {/* Amount */}
-                <View style={styles.feeAmount}>
-                  <Text allowFontScaling={false} style={[textStyles.bodyNormalMD, styles.feeAmountText]}>{fee.fee}</Text>
-                  {fee.feeUsd ? (
-                    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.feeAmountUsd]}>{fee.feeUsd}</Text>
-                  ) : null}
-                </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         </ScrollView>
 
@@ -169,15 +200,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: 10, // Figma row gap between label column and amount
+  },
+  // Two-line rows (a description present) top-align the amount to the label.
+  feeRowTop: {
+    alignItems: "flex-start",
   },
   feeLabel: {
+    flex: 1,
+    gap: 8, // Figma: 8 between the label and its description
+  },
+  feeLabelRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    flex: 1,
   },
   feeLabelText: {
     color: typography.t700, // #C1D5DE
+  },
+  feeDescription: {
+    color: typography.t400, // #4B7D92
   },
   feeAmount: {
     alignItems: "flex-end",
