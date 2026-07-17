@@ -176,8 +176,11 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         maximumFractionDigits={maximumFractionDigits}
       />
 
-      {/* Error + Continue */}
+      {/* Error + Continue — 46 clears the keypad above; the error slot keeps
+          its height so Continue never jumps (Figma 12831:678052) */}
       <BottomActionBar
+        paddingTop={46}
+        reserveMessage
         message={error ? { text: error, variant: "error" } : undefined}
         buttons={[
           {
@@ -207,7 +210,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-end",
     justifyContent: "center",
-    gap: spacing.s2,
+    // Figma: 12 between the token section and the usd section
+    gap: spacing.s3,
     paddingHorizontal: spacing.s5,
     overflow: "hidden",
   },
@@ -215,7 +219,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.s2,
+    // Figma: 10 between the amount and the Kaspa logo
+    gap: spacing.s2_5,
     maxWidth: "100%",
     alignSelf: "center",
   },
@@ -245,7 +250,8 @@ const styles = StyleSheet.create({
   fiatRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.s2,
+    // Figma: 0 between the usd value and the usd chip
+    gap: spacing.s0,
     alignSelf: "center",
   },
   fiat: {

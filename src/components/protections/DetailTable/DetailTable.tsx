@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
   labelWrap: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.s1,
+    // Figma: 8 between the label and its tooltip icon
+    gap: spacing.s2,
     flexShrink: 0,
   },
   label: {
