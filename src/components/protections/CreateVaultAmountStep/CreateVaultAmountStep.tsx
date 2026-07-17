@@ -252,15 +252,13 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalMD,
     color: colors.textSecondary,
   },
-  // Figma: r24 chip, pad [6,8], gap 6
+  // Figma: pad [6,8], gap 6 — no fill (the surface bg was mine)
   fiatChip: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s1_5,
     paddingVertical: spacing.s1_5,
     paddingHorizontal: spacing.s2,
-    borderRadius: borderRadius["3xl"],
-    backgroundColor: colors.backgroundSurface,
   },
   flag: {
     width: spacing.s4,

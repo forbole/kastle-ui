@@ -168,22 +168,23 @@ const styles = StyleSheet.create({
   list: {
     gap: spacing.s2,
   },
+  // Figma "Generic List" is a fixed 68 high (no spacing token lands on 68), so
+  // the 1→2px border on select can't resize it vertically; the +1 horizontal
+  // padding keeps the content from shifting sideways either.
   row: {
     flexDirection: "row",
     alignItems: "center",
+    height: 68,
     gap: spacing.s3,
     backgroundColor: colors.backgroundSurface,
     borderColor: colors.border,
     borderWidth: borderWidth.bw1,
     borderRadius: borderRadius["2xl"],
-    // +1 compensates the 1px thinner border so selecting never resizes the row
-    paddingVertical: spacing.s3 + 1,
     paddingHorizontal: spacing.s4 + 1,
   },
   rowSelected: {
     borderColor: colors.primary,
     borderWidth: borderWidth.bw2,
-    paddingVertical: spacing.s3,
     paddingHorizontal: spacing.s4,
   },
   rowText: {
