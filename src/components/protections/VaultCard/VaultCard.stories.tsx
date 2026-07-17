@@ -1,7 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { VaultCard, VaultCardProps } from "./VaultCard";
+import { VaultCard } from "./VaultCard";
 import { background, spacing } from "../../../config/theme";
 
 const VAULT_IMAGE = require("../../../../assets/vault.png");
@@ -38,7 +38,8 @@ export const Locked: Story = {
   args: {
     status: "locked",
     name: "Vault 1",
-    amount: "1,000,000.999999 KAS",
+    amount: "1,000,000.999999",
+    amountUnit: "KAS",
     caption: "3 days window",
   },
   decorators: [cellDecorator],
@@ -48,75 +49,31 @@ export const Withdrawing: Story = {
   args: {
     status: "withdrawing",
     name: "Vault 3",
-    amount: "1,200 KAS",
+    amount: "1,200",
+    amountUnit: "KAS",
     caption: "withdrawing",
     countdown: "20h:02m:02s",
   },
   decorators: [cellDecorator],
 };
 
-export const Complete: Story = {
+/**
+ * Overflow — a withdrawing vault whose amount fills the whole line. The number
+ * truncates with an ellipsis so "KAS" stays pinned on the same line and the
+ * card keeps its 222 height instead of the unit wrapping.
+ * ⚠️ The truncate-number / pin-unit behaviour is my proposal for the overflow
+ * case — Figma doesn't specify it. Confirm with Nicole.
+ */
+export const WithdrawingLongAmount: Story = {
   args: {
-    status: "complete",
-    name: "Vault 2",
-    amount: "2,000 KAS",
-    caption: "Withdrawn",
+    status: "withdrawing",
+    name: "Vault with a long name",
+    amount: "123,456,789,000.999999",
+    amountUnit: "KAS",
+    caption: "withdrawing",
+    countdown: "89d:23h:59m",
   },
   decorators: [cellDecorator],
-};
-
-// How vaults actually display — 2-column grid, top-left.
-const GRID: VaultCardProps[] = [
-  {
-    status: "locked",
-    name: "Vault 1",
-    amount: "1,000,000.999999 KAS",
-    caption: "3 days window",
-    onPress: () => {},
-  },
-  {
-    status: "withdrawing",
-    name: "Vault 3",
-    amount: "1,200 KAS",
-    caption: "withdrawing",
-    countdown: "20h:02m:02s",
-    onPress: () => {},
-  },
-  {
-    status: "locked",
-    name: "Vault 2",
-    amount: "2,000 KAS",
-    caption: "3 days window",
-    onPress: () => {},
-  },
-  {
-    status: "complete",
-    name: "Vault 4",
-    amount: "500 KAS",
-    caption: "Withdrawn",
-    onPress: () => {},
-  },
-];
-
-export const Grid: Story = {
-  render: () => {
-    const rows: VaultCardProps[][] = [];
-    for (let i = 0; i < GRID.length; i += 2) rows.push(GRID.slice(i, i + 2));
-    return (
-      <View style={styles.grid}>
-        {rows.map((row, ri) => (
-          <View key={ri} style={styles.gridRow}>
-            {row.map((vault, ci) => (
-              <View key={ci} style={styles.gridCell}>
-                <VaultCard {...vault} />
-              </View>
-            ))}
-            {row.length === 1 ? <View style={styles.gridCell} /> : null}
-          </View>
-        ))}
-      </View>
-    );
-  },
 };
 
 const styles = StyleSheet.create({
@@ -127,16 +84,5 @@ const styles = StyleSheet.create({
   },
   cell: {
     width: 173,
-  },
-  grid: {
-    alignSelf: "stretch",
-    gap: spacing.s2,
-  },
-  gridRow: {
-    flexDirection: "row",
-    gap: spacing.s2,
-  },
-  gridCell: {
-    flex: 1,
   },
 });

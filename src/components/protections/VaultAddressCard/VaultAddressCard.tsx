@@ -86,6 +86,8 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
       editable={false}
       scanIcon={false}
       minHeight={0}
+      // Figma read-only vault address is 14, not the shared Textarea's 16
+      textStyle={styles.bareValue}
       rightIcon={
         <TouchableOpacity onPress={onPressCopy} hitSlop={8}>
           <Copy size={16} color={colors.textSecondary} strokeWidth={1.5} />
@@ -96,6 +98,9 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
 };
 
 const styles = StyleSheet.create({
+  bareValue: {
+    ...textStyles.bodyNormalSM,
+  },
   // bg50 per Nicole — Figma fills this card with white 5%, which composites a
   // shade off the bg50 summary card sitting right below it.
   card: {
