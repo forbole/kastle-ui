@@ -172,7 +172,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-    gap: spacing.s1_5,
+    // Figma: 8 between the amount and the chevron
+    gap: spacing.s2,
   },
   value: {
     ...textStyles.bodyNormalSM,

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextStyle,
   View,
 } from "react-native";
 import { AlertCircle, Eye, ScanLine } from "lucide-react-native";
@@ -31,6 +32,8 @@ export interface TextareaProps {
   disabled?: boolean;
   /** Non-editable (read-only) display without the dimmed `disabled` look. */
   editable?: boolean;
+  /** Override the input text style (e.g. a 14px read-only value). */
+  textStyle?: TextStyle;
   /** Custom trailing icon (top-right). Overrides the default scan icon. */
   rightIcon?: React.ReactNode;
   /** Override the box min height (default 160 — the recovery-phrase textarea). */
@@ -58,6 +61,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   error,
   disabled = false,
   editable = true,
+  textStyle,
   rightIcon,
   minHeight,
   reserveErrorSpace = false,
@@ -108,7 +112,7 @@ export const Textarea: React.FC<TextareaProps> = ({
       ) : (
         <View style={boxStyle}>
           <TextInput
-            style={[styles.input, !editable && styles.inputReadOnly]}
+            style={[styles.input, !editable && styles.inputReadOnly, textStyle]}
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}

@@ -22,15 +22,17 @@ import {
 
 const VAULT_IMAGE = require("../../../../assets/vault.png");
 
-export type VaultStatus = "locked" | "withdrawing" | "complete";
+export type VaultStatus = "locked" | "withdrawing";
 
 export interface VaultCardProps {
   /** Vault lifecycle status — drives the status pill + timer visibility. */
   status: VaultStatus;
   /** Vault name, e.g. "Vault 1". */
   name: string;
-  /** Primary amount line, e.g. "1,000,000.999999 KAS". */
+  /** Amount number, e.g. "1,000,000.999999". Truncates before the unit wraps. */
   amount: string;
+  /** Token unit, e.g. "KAS" — pinned beside the amount, never wraps off. */
+  amountUnit?: string;
   /** Secondary line under the amount, e.g. "3 days window" or "withdrawing". */
   caption?: string;
   /** Countdown string, e.g. "20:02:02" — only shown while withdrawing. */
@@ -47,13 +49,13 @@ export interface VaultCardProps {
 const STATUS_PILL: Record<VaultStatus, { status: StatusPillStatus; label: string }> = {
   locked: { status: "success", label: "Locked" },
   withdrawing: { status: "pending", label: "Withdrawing" },
-  complete: { status: "success", label: "Complete" },
 };
 
 export const VaultCard: React.FC<VaultCardProps> = ({
   status,
   name,
   amount,
+  amountUnit,
   caption,
   countdown,
   illustration,
@@ -84,9 +86,26 @@ export const VaultCard: React.FC<VaultCardProps> = ({
             {name}
           </Text>
           <View>
-            <Text allowFontScaling={false} style={styles.subtextLine} numberOfLines={1}>
-              {amount}
-            </Text>
+            {/* Amount + unit on one line: the number shrinks/truncates so the
+                unit never wraps off, keeping every card the same height. */}
+            <View style={styles.amountRow}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.subtextLine, styles.amountNumber]}
+                numberOfLines={1}
+              >
+                {amount}
+              </Text>
+              {amountUnit ? (
+                <Text
+                  allowFontScaling={false}
+                  style={[styles.subtextLine, styles.amountUnit]}
+                  numberOfLines={1}
+                >
+                  {amountUnit}
+                </Text>
+              ) : null}
+            </View>
             {caption ? (
               <Text allowFontScaling={false} style={styles.subtextLine} numberOfLines={1}>
                 {caption}
@@ -147,6 +166,21 @@ const styles = StyleSheet.create({
   },
   textBlock: {
     gap: spacing.s1,
+  },
+  amountRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s1,
+  },
+  // flexShrink + minWidth:0 lets the number shrink below its content width, so
+  // the ellipsis lands on the number...
+  amountNumber: {
+    flexShrink: 1,
+    minWidth: 0,
+  },
+  // ...and the unit never shrinks, so "KAS" stays whole on the same line.
+  amountUnit: {
+    flexShrink: 0,
   },
   title: {
     ...textStyles.bodySemiboldSM,
