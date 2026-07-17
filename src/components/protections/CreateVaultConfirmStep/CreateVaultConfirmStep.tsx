@@ -1,6 +1,7 @@
 import React from "react";
 import {
   View,
+  Text,
   StyleSheet,
   ScrollView,
   ImageSourcePropType,
@@ -26,6 +27,8 @@ const SIGN_IMAGE = require("../../../../assets/sign.png");
 export interface ConfirmRow {
   label: string;
   value: string;
+  /** Second line under the value, e.g. a fiat conversion. */
+  subValue?: string;
   /** Total row — bold, on a filled background (Figma 12757:476249). */
   emphasis?: boolean;
   /** ⓘ tooltip opened from the label. */
@@ -51,6 +54,8 @@ export interface CreateVaultConfirmStepProps {
   onConfirm?: () => void;
   confirmDisabled?: boolean;
   confirmLoading?: boolean;
+  /** Footer line under the swipe (Figma "footer message", node 12757:461001). */
+  footer?: string;
 }
 
 /**
@@ -71,6 +76,7 @@ export const CreateVaultConfirmStep: React.FC<
   fees = [],
   confirmTitle = "Swipe to confirm",
   onConfirm,
+  footer,
   confirmDisabled,
   confirmLoading,
 }) => {
@@ -110,6 +116,7 @@ export const CreateVaultConfirmStep: React.FC<
           rows={rows.map((row) => ({
             label: row.label,
             value: row.value,
+            subValue: row.subValue,
             emphasis: row.emphasis,
             // The fee sheet opens from the row's ⓘ, like every other explainer.
             onPressInfo: row.opensFeeSheet
@@ -128,6 +135,11 @@ export const CreateVaultConfirmStep: React.FC<
           isLoading={confirmLoading}
           title={confirmTitle}
         />
+        {footer ? (
+          <Text allowFontScaling={false} style={styles.footer}>
+            {footer}
+          </Text>
+        ) : null}
       </View>
 
       <InfoSheet
@@ -153,10 +165,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s4,
     paddingBottom: spacing.s4,
-    gap: spacing.s4,
+    // Figma: 8 between the address card and the quote table
+    gap: spacing.s2,
   },
   illustration: {
     alignItems: "center",
+    // Figma: 16 between the image and the address card (8 gap + 8)
+    marginBottom: spacing.s2,
   },
   illustrationImage: {
     width: 237,
@@ -173,5 +188,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s3,
     paddingBottom: spacing.s5,
+    gap: spacing.s3,
+  },
+  footer: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "center",
   },
 });

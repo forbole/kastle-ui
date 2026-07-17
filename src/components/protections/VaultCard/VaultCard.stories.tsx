@@ -67,8 +67,8 @@ export const Withdrawing: Story = {
 export const WithdrawingLongAmount: Story = {
   args: {
     status: "withdrawing",
-    name: "Vault with a long name",
-    amount: "123,456,789,000.999999",
+    name: "Vault 3",
+    amount: "1,000,000,000.9999999",
     amountUnit: "KAS",
     caption: "withdrawing",
     countdown: "89d:23h:59m",
