@@ -67,6 +67,9 @@ const meta: Meta<typeof CreateVaultConfirmStep> = {
     },
     rows: ROWS,
     fees: FEES,
+    // Figma footer message (node 12757:461001)
+    footer:
+      "You can't change this later. To use different settings, close the vault and make a new one.",
     onPressCopyRecovery: () => {},
     onConfirm: () => {},
   },

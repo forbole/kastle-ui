@@ -209,13 +209,12 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: colors.textSecondary,
   },
-  // 16px, 2px b400 outline, filled with the brighter p600 (colors.link,
-  // #13DCFF) when checked. Round per Nicole — the Figma node draws it as a
-  // 6px-radius square.
+  // Figma 12757:304731: 16px, 6px-radius square (not a circle), 2px b400
+  // outline, filled with the brighter p600 (colors.link, #13DCFF) when checked.
   check: {
     width: spacing.s4,
     height: spacing.s4,
-    borderRadius: borderRadius.full,
+    borderRadius: borderRadius.md,
     borderWidth: borderWidth.bw2,
     borderColor: border.b400,
     alignItems: "center",
