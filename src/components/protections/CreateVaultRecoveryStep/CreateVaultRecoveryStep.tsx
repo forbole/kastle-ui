@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Textarea } from "../../Textarea/Textarea";
 import { Alert, AlertSeverity } from "../../Alert/Alert";
+import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
 import {
   colors,
   spacing,
@@ -99,18 +100,15 @@ export const CreateVaultRecoveryStep: React.FC<
         ))}
       </ScrollView>
 
-      <View style={styles.actionBar}>
-        <TouchableOpacity
-          style={[styles.continue, continueDisabled && styles.continueDisabled]}
-          onPress={onPressContinue}
-          disabled={continueDisabled}
-          activeOpacity={0.85}
-        >
-          <Text allowFontScaling={false} style={styles.continueLabel}>
-            {continueLabel}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <BottomActionBar
+        buttons={[
+          {
+            label: continueLabel,
+            onPress: onPressContinue,
+            disabled: continueDisabled,
+          },
+        ]}
+      />
     </View>
   );
 };
@@ -135,24 +133,5 @@ const styles = StyleSheet.create({
   subtitle: {
     ...textStyles.bodyNormalSM,
     color: colors.textSecondary,
-  },
-  actionBar: {
-    paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s3,
-    paddingBottom: spacing.s5,
-  },
-  continue: {
-    backgroundColor: colors.primary,
-    borderRadius: borderRadius.full,
-    paddingVertical: spacing.s4,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  continueDisabled: {
-    opacity: 0.4,
-  },
-  continueLabel: {
-    ...textStyles.bodySemiboldMD,
-    color: colors.white,
   },
 });
