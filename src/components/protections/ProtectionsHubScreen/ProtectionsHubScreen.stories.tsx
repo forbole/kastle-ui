@@ -50,9 +50,50 @@ const meta: Meta<typeof ProtectionsHubScreen> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Hub with Vault active + Allowance / Legacy coming soon. */
+/**
+ * "user never create a vault" (Figma 12744:292828) — the Vault card sells the
+ * feature: full caption + Set up.
+ */
 export const Default: Story = {
   args: { cards: CARDS },
+};
+
+/** Vaults exist and all are locked — status pill, no CTA (Figma 13385:419530). */
+export const VaultLocked: Story = {
+  args: {
+    cards: [
+      { ...CARDS[0], pill: { label: "Locked", status: "success" }, ctaLabel: undefined },
+      ...CARDS.slice(1),
+    ],
+  },
+};
+
+/** One vault counting down. */
+export const OneVaultWithdrawing: Story = {
+  args: {
+    cards: [
+      {
+        ...CARDS[0],
+        pill: { label: "1 vault withdrawing", status: "pending" },
+        ctaLabel: undefined,
+      },
+      ...CARDS.slice(1),
+    ],
+  },
+};
+
+/** Several at once — the label pluralises. */
+export const TwoVaultsWithdrawing: Story = {
+  args: {
+    cards: [
+      {
+        ...CARDS[0],
+        pill: { label: "2 vaults withdrawing", status: "pending" },
+        ctaLabel: undefined,
+      },
+      ...CARDS.slice(1),
+    ],
+  },
 };
 
 const styles = StyleSheet.create({
