@@ -63,52 +63,62 @@ export const ProtectionsBanner: React.FC<ProtectionsBannerProps> = ({
       onPress={onPress}
       activeOpacity={0.9}
     >
-      {/* Artwork sits behind the copy, 364 wide in a 353 box, offset -6 */}
+      {/* Artwork bleeds off the right so the vault always hugs that edge,
+          whatever the banner's width */}
       <Image
         source={illustration ?? BANNER_ARTWORK}
         style={styles.artwork}
-        contentFit="cover"
+        contentFit="contain"
+        contentPosition="right"
       />
 
-      <View style={styles.shieldWrap}>
-        <Shield size={18} color={colors.white} strokeWidth={2} />
-      </View>
-
-      <View style={styles.content}>
-        <Text allowFontScaling={false} style={styles.title} numberOfLines={1}>
-          {title}
-        </Text>
-        <Text allowFontScaling={false} style={styles.body}>
-          {body}
-        </Text>
-        {ctaLabel ? (
-          <TouchableOpacity onPress={onPressCta} hitSlop={8}>
-            <Text allowFontScaling={false} style={styles.ctaLabel}>
-              {ctaLabel}
+      {/* Content is kept off the vault: [shield + text] then a 46 gap, then
+          the close — that reserved right zone (Figma v2 Frame 1410127719) is
+          what the graphic shows through. */}
+      <View style={styles.contentRow}>
+        <View style={styles.left}>
+          <Shield size={18} color={colors.white} strokeWidth={2} />
+          <View style={styles.textCol}>
+            <Text
+              allowFontScaling={false}
+              style={styles.title}
+              numberOfLines={1}
+            >
+              {title}
             </Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
+            <Text allowFontScaling={false} style={styles.body}>
+              {body}
+            </Text>
+            {ctaLabel ? (
+              <TouchableOpacity onPress={onPressCta} hitSlop={8}>
+                <Text allowFontScaling={false} style={styles.ctaLabel}>
+                  {ctaLabel}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        </View>
 
-      {onPressDismiss ? (
-        <TouchableOpacity
-          style={styles.dismiss}
-          onPress={onPressDismiss}
-          hitSlop={8}
-        >
-          <X size={12} color={colors.white} strokeWidth={2.5} />
-        </TouchableOpacity>
-      ) : null}
+        <View style={styles.rightZone}>
+          {onPressDismiss ? (
+            <TouchableOpacity
+              style={styles.dismiss}
+              onPress={onPressDismiss}
+              hitSlop={8}
+            >
+              <X size={12} color={colors.white} strokeWidth={2.5} />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  // Figma: 353×113, bg50, r16, pad [16,16,8,16], gap 12
+  // Figma: 113 high, bg50, r16, pad [16,16,8,16]
   container: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    gap: spacing.s3,
     height: 113,
     paddingTop: spacing.s4,
     paddingRight: spacing.s4,
@@ -124,20 +134,34 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     overflow: "hidden",
   },
-  // 364 wide inside a 353 box, x = -6 — deliberately overflows both edges
+  // Vault glued to the right edge so it survives any banner width; the 364-wide
+  // art bleeds off, contentPosition keeps the safe pinned right.
   artwork: {
     position: "absolute",
-    left: -6,
+    right: -6,
     top: 0,
     width: 364,
     height: 118,
   },
-  shieldWrap: {
-    width: 18,
+  // Figma v2 "Frame 1410127719": row, gap 46 — the gap is the vault's zone
+  contentRow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.s12 - 2, // 46
   },
-  content: {
+  left: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.s3,
+  },
+  textCol: {
     flex: 1,
     gap: spacing.s1,
+  },
+  rightZone: {
+    width: spacing.s5, // 20 — the close button's column
   },
   title: {
     // ⚠️ Figma binds this to no variable — raw #f4f3f2, which has no theme.ts
