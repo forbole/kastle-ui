@@ -5,6 +5,7 @@ import {
   WithdrawConfirmScreen,
   WithdrawConfirmRow,
 } from "./WithdrawConfirmScreen";
+import { EstFeeRow } from "../../EstFeeSheet/EstFeeSheet";
 import { background } from "../../../config/theme";
 
 // Copy + values pulled from Figma (Withdrawal / confirm, node 12802:619523).
@@ -23,14 +24,16 @@ const ROWS: WithdrawConfirmRow[] = [
     label: "Est. Fee",
     value: "0 KAS",
     subValue: "≈ $0 USD",
-    // ⚠️ Copy reused from the existing InfoSheet "Est. Fee" — no vault-specific
-    // Est. Fee tooltip exists in Figma; confirm this applies here.
-    tooltip: {
-      title: "Est. Fee",
-      description:
-        "The estimated network fee required to process this transaction on the Kaspa blockchain. The actual fee may vary slightly based on network conditions.",
-    },
+    // Figma 13393:63687 — the ⓘ opens the fee-breakdown sheet, not a tooltip.
+    opensFeeSheet: true,
   },
+];
+
+// Withdraw fee breakdown per Figma 13393:63687 — Network + Kastle fees, no
+// creation fee (nothing is created). Labels are Figma copy; amounts are demo.
+const FEES: EstFeeRow[] = [
+  { label: "Network fees", fee: "~ 0.0001 KAS", feeUsd: "≈ $0.00 USD" },
+  { label: "Kastle fees", fee: "0 KAS", feeUsd: "≈ $0.00 USD" },
 ];
 
 const meta: Meta<typeof WithdrawConfirmScreen> = {
@@ -45,6 +48,7 @@ const meta: Meta<typeof WithdrawConfirmScreen> = {
     recoveryAddress:
       "kaspa:qrpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7m28f",
     rows: ROWS,
+    fees: FEES,
     onPressCopyRecovery: () => {},
     onConfirm: () => {},
   },

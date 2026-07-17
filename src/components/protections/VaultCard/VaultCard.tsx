@@ -115,7 +115,14 @@ export const VaultCard: React.FC<VaultCardProps> = ({
           {showTimer ? (
             <View style={styles.timerRow}>
               <Timer size={16} color={colors.textPrimary} strokeWidth={2} />
-              <Text allowFontScaling={false} style={styles.timerText}>
+              <Text
+                allowFontScaling={false}
+                style={styles.timerText}
+                numberOfLines={1}
+                // Shrink the number before the icon ever gets pushed off
+                adjustsFontSizeToFit
+                minimumFontScale={0.7}
+              >
                 {countdown}
               </Text>
             </View>
@@ -198,6 +205,7 @@ const styles = StyleSheet.create({
   timerText: {
     ...textStyles.headingMD,
     color: colors.textPrimary,
+    flexShrink: 1,
     // Tabular figures so the ticking countdown doesn't reflow each second
     fontVariant: ["tabular-nums"],
   },

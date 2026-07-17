@@ -21,7 +21,11 @@ export interface VaultIntroScreenProps {
   /** ⓘ link above the buttons (Figma: "How a Vault works?"). */
   infoLabel?: string;
   /** Sheet the ⓘ link raises. */
-  infoSheet?: { title: string; description: string };
+  infoSheet?: {
+    title: string;
+    description?: string;
+    descriptionRich?: { text: string; emphasis?: boolean }[];
+  };
   /** Fires alongside the sheet, if the parent wants to know. */
   onPressInfo?: () => void;
 }
@@ -95,6 +99,7 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
         onClose={() => setInfoOpen(false)}
         title={infoSheet?.title ?? ""}
         description={infoSheet?.description ?? ""}
+        descriptionRich={infoSheet?.descriptionRich}
       />
     </View>
   );
