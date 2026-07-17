@@ -43,9 +43,11 @@ const SAMPLE: VaultCardProps[] = [
  *  the case that proves the grid + scrolling. */
 const SAMPLE_SIX: VaultCardProps[] = [
   {
+    // Overflow demo — the number truncates so "KAS" stays on the line and the
+    // card keeps its height, next to normal-length cards.
     status: "withdrawing",
     name: "Vault 6",
-    amount: "45,000",
+    amount: "1,000,000,000.9999999",
     amountUnit: "KAS",
     caption: "withdrawing",
     countdown: "89d:23h:59m",

@@ -51,15 +51,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * "user never create a vault" (Figma 12744:292828) — the Vault card sells the
- * feature: full caption + Set up.
+ * No vault yet (Figma 12744:292828) — the Vault card sells the feature:
+ * full caption + Set up.
  */
-export const Default: Story = {
+export const NoVaultYet: Story = {
   args: { cards: CARDS },
 };
 
 /** Vaults exist and all are locked — status pill, no CTA (Figma 13385:419530). */
-export const VaultLocked: Story = {
+export const AllLocked: Story = {
   args: {
     cards: [
       { ...CARDS[0], pill: { label: "Locked", status: "success" }, ctaLabel: undefined },
@@ -69,7 +69,7 @@ export const VaultLocked: Story = {
 };
 
 /** One vault counting down. */
-export const OneVaultWithdrawing: Story = {
+export const OneWithdrawing: Story = {
   args: {
     cards: [
       {
@@ -83,7 +83,7 @@ export const OneVaultWithdrawing: Story = {
 };
 
 /** Several at once — the label pluralises. */
-export const TwoVaultsWithdrawing: Story = {
+export const TwoWithdrawing: Story = {
   args: {
     cards: [
       {

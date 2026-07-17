@@ -38,6 +38,16 @@ export interface BottomActionBarProps {
    * shift the layout relative to each other.
    */
   message?: BottomActionMessage;
+  /**
+   * Keep the message row's height even when there's no message, so toggling an
+   * error never nudges the buttons (used above the keypad on the amount step).
+   */
+  reserveMessage?: boolean;
+  /** Footer line under the buttons (Figma "footer message"). */
+  footer?: string;
+  /** Override the top padding (default 12). The amount step needs 46 to clear
+   *  the keypad above it. */
+  paddingTop?: number;
   /** Buttons, rendered top to bottom. */
   buttons: BottomActionButton[];
 }
@@ -55,6 +65,9 @@ const SINGLE_LINE_HEIGHT = 21;
 
 export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   message,
+  reserveMessage = false,
+  footer,
+  paddingTop,
   buttons,
 }) => {
   // Figma uses the same ⓘ glyph for both slots and recolours it to match the
@@ -82,7 +95,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   ) : null;
 
   return (
-    <View style={styles.bar}>
+    <View style={[styles.bar, paddingTop != null && { paddingTop }]}>
       {message ? (
         message.onPress ? (
           <TouchableOpacity onPress={message.onPress} activeOpacity={0.7}>
@@ -91,6 +104,9 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
         ) : (
           messageRow
         )
+      ) : reserveMessage ? (
+        // Empty row of the message's height so the buttons never jump
+        <View style={styles.messageReserve} />
       ) : null}
 
       {buttons.map((button, i) => {
@@ -123,6 +139,12 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
           </TouchableOpacity>
         );
       })}
+
+      {footer ? (
+        <Text allowFontScaling={false} style={styles.footer}>
+          {footer}
+        </Text>
+      ) : null}
     </View>
   );
 };
@@ -150,6 +172,15 @@ const styles = StyleSheet.create({
   messageText: {
     ...textStyles.bodyNormalSM,
     flexShrink: 1,
+  },
+  // Reserves the single-line message height when there's no message
+  messageReserve: {
+    height: SINGLE_LINE_HEIGHT,
+  },
+  footer: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "center",
   },
   button: {
     height: spacing.s12,

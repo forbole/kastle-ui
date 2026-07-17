@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: border.b400, // #203C49
-    marginTop: 16,
+    // titleSection's gap already spaces the divider — marginTop here doubled it
   },
 
   // Description

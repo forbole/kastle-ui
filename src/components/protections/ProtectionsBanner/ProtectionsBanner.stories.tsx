@@ -5,7 +5,7 @@ import { ProtectionsBanner } from "./ProtectionsBanner";
 import { background, spacing } from "../../../config/theme";
 
 const meta: Meta<typeof ProtectionsBanner> = {
-  title: "Protections/Components/ProtectionsBanner",
+  title: "Home/ProtectionsBanner",
   component: ProtectionsBanner,
   parameters: {
     backgrounds: { default: "kastle" },

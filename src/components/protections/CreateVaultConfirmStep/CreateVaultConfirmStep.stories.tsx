@@ -13,6 +13,7 @@ const ROWS: ConfirmRow[] = [
   {
     label: "Vault amount",
     value: "20,000 KAS",
+    subValue: "$200.232 USD",
     tooltip: {
       title: "Vault amount",
       description:
