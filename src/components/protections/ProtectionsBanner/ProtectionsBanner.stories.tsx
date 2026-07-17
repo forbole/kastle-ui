@@ -11,7 +11,7 @@ const meta: Meta<typeof ProtectionsBanner> = {
     backgrounds: { default: "kastle" },
     viewport: { defaultViewport: "iphone14" },
   },
-  args: { onPress: () => {}, onPressCta: () => {} },
+  args: { onPress: () => {}, onPressCta: () => {}, onPressDismiss: () => {} },
   decorators: [
     (Story) => (
       <View style={styles.decorator}>
