@@ -8,6 +8,7 @@ import {
 import { Image } from "expo-image";
 import { VaultAddressCard } from "../VaultAddressCard/VaultAddressCard";
 import { DetailTable } from "../DetailTable/DetailTable";
+import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet/EstFeeSheet";
 import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import { SwipeToConfirm } from "../../SwipeToConfirm/SwipeToConfirm";
 import {
@@ -27,6 +28,8 @@ export interface WithdrawConfirmRow {
   subValue?: string;
   /** ⓘ tooltip opened from the label. */
   tooltip?: { title: string; description: string };
+  /** Tapping the row's ⓘ opens the fee-breakdown sheet (Est. Fee row). */
+  opensFeeSheet?: boolean;
 }
 
 export interface WithdrawConfirmScreenProps {
@@ -40,6 +43,8 @@ export interface WithdrawConfirmScreenProps {
   onPressRecoveryInfo?: () => void;
   /** Summary rows — arrives in / amount / est. fee. */
   rows: WithdrawConfirmRow[];
+  /** Fee breakdown for the Est. Fee sheet (Network / Kastle fees). */
+  fees?: EstFeeRow[];
   confirmTitle?: string;
   onConfirm?: () => void;
   confirmDisabled?: boolean;
@@ -60,6 +65,7 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
   onPressCopyRecovery,
   onPressRecoveryInfo,
   rows,
+  fees = [],
   confirmTitle = "Swipe to confirm",
   onConfirm,
   confirmDisabled,
@@ -68,6 +74,7 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
   const [tooltip, setTooltip] = React.useState<
     { title: string; description: string } | null
   >(null);
+  const [feeOpen, setFeeOpen] = React.useState(false);
 
   return (
     <View style={styles.body}>
@@ -99,9 +106,12 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
             label: row.label,
             value: row.value,
             subValue: row.subValue,
-            onPressInfo: row.tooltip
-              ? () => setTooltip(row.tooltip!)
-              : undefined,
+            // The Est. Fee row opens the breakdown sheet; other rows a tooltip.
+            onPressInfo: row.opensFeeSheet
+              ? () => setFeeOpen(true)
+              : row.tooltip
+                ? () => setTooltip(row.tooltip!)
+                : undefined,
           }))}
         />
       </ScrollView>
@@ -120,6 +130,13 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
         onClose={() => setTooltip(null)}
         title={tooltip?.title ?? ""}
         description={tooltip?.description ?? ""}
+      />
+      <EstFeeSheet
+        isOpen={feeOpen}
+        onClose={() => setFeeOpen(false)}
+        // Figma 13393:63698 — vault sheet wording
+        subtitle="The estimated total cost for this transaction"
+        fees={fees}
       />
     </View>
   );

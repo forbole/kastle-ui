@@ -26,8 +26,8 @@ export interface BottomActionButton {
 
 export interface BottomActionMessage {
   text: string;
-  /** `info` — link blue (default); `error` — danger red. */
-  variant?: "info" | "error";
+  /** `info` — link blue (default); `error` — danger red; `warning` — amber. */
+  variant?: "info" | "error" | "warning";
   /** Hide the leading ⓘ (Figma's withdraw danger line has no icon). */
   hideIcon?: boolean;
   /** Keep it centred even when it wraps (default: centre single, left multi). */
@@ -80,7 +80,11 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   // Figma uses the same ⓘ glyph for both slots and recolours it to match the
   // text — icon colour always follows its adjacent label.
   const messageColor =
-    message?.variant === "error" ? colors.danger : colors.link;
+    message?.variant === "error"
+      ? colors.danger
+      : message?.variant === "warning"
+        ? warning.w500
+        : colors.link;
 
   // A short message centres under the button; once it wraps it reads as a
   // paragraph, so it goes left-aligned with the icon pinned to the first line.

@@ -42,10 +42,18 @@ const ROWS: ConfirmRow[] = [
   { label: "Total from wallet", value: "20,001.5001 KAS", emphasis: true },
 ];
 
-// ⚠️ Figma's breakdown is "Creation fees" ($11 KAS) + "Network fees"; the shared
-// EstFeeSheet only renders "<network> network fees" rows — flagged for Nicole.
+// Fee breakdown per Figma 13350:255308 — labels + the creation note are the
+// exact Figma copy; the KAS amounts are demo sample data (like every other value
+// in this story), filled by the data layer 去頭去尾.
 const FEES: EstFeeRow[] = [
-  { networkName: "Kaspa", fee: "~ 1.0001 KAS", feeUsd: "≈ $0.23 USD" },
+  { label: "Network fees", fee: "~ 0.0001 KAS", feeUsd: "≈ $0.00 USD" },
+  { label: "Kastle fees", fee: "1 KAS", feeUsd: "≈ $0.23 USD" },
+  {
+    label: "Creation fees",
+    fee: "$11 KAS",
+    description:
+      "A one-time fee to create the vault on-chain. Withdraw and cancel are free.",
+  },
 ];
 
 const meta: Meta<typeof CreateVaultConfirmStep> = {

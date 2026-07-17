@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Copy, Info } from "lucide-react-native";
-import { Textarea } from "../../Textarea/Textarea";
 import {
   background,
+  border,
   borderWidth,
   borderRadius,
   colors,
@@ -29,8 +29,6 @@ export interface VaultAddressCardProps {
   /** Info affordance in the labeled header (opens an explainer). */
   onPressInfo?: () => void;
 }
-
-const noop = () => {};
 
 export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
   address,
@@ -78,28 +76,51 @@ export const VaultAddressCard: React.FC<VaultAddressCardProps> = ({
     );
   }
 
-  // Bare read-only field (reuses the shared Textarea) — used on the vault detail.
+  // Bare read-only field (vault detail backup box). A wrapping Text, not a
+  // TextInput — it hugs its content and never shows a scrollbar (Figma box
+  // #1a303a, r12, pad [12,16]).
   return (
-    <Textarea
-      value={address}
-      onChangeText={noop}
-      editable={false}
-      scanIcon={false}
-      minHeight={0}
-      // Figma read-only vault address is 14, not the shared Textarea's 16
-      textStyle={styles.bareValue}
-      rightIcon={
-        <TouchableOpacity onPress={onPressCopy} hitSlop={8}>
-          <Copy size={16} color={colors.textSecondary} strokeWidth={1.5} />
-        </TouchableOpacity>
-      }
-    />
+    <View style={styles.bareBox}>
+      <Text allowFontScaling={false} style={styles.bareValue}>
+        {address}
+      </Text>
+      <TouchableOpacity
+        onPress={onPressCopy}
+        hitSlop={8}
+        style={styles.bareCopy}
+      >
+        <Copy size={16} color={colors.textSecondary} strokeWidth={1.5} />
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // Figma backup box: bg100, r12, pad [12,16], row with the copy icon top-right.
+  // Fills the parent width (stretch) and hugs its height — the address wraps to
+  // as many lines as it needs, no scroll.
+  bareBox: {
+    alignSelf: "stretch",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.s2,
+    backgroundColor: background.bg100,
+    borderColor: border.b300,
+    borderWidth: borderWidth.bw1,
+    borderRadius: borderRadius.xl,
+    paddingVertical: spacing.s3,
+    paddingHorizontal: spacing.s4,
+  },
   bareValue: {
     ...textStyles.bodyNormalSM,
+    color: colors.textSecondary,
+    // flex + minWidth:0 gives the Text a bounded width so the long address
+    // wraps instead of pushing the copy icon off the row.
+    flex: 1,
+    minWidth: 0,
+  },
+  bareCopy: {
+    paddingTop: spacing.s0_5,
   },
   // bg50 per Nicole — Figma fills this card with white 5%, which composites a
   // shade off the bg50 summary card sitting right below it.

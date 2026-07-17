@@ -55,7 +55,11 @@ export interface CreateVaultAmountStepProps {
   /** Info link in the action bar (blue). */
   infoLabel?: string;
   /** Content for the info sheet opened by the info link. */
-  infoSheet?: { title: string; description: string };
+  infoSheet?: {
+    title: string;
+    description?: string;
+    descriptionRich?: { text: string; emphasis?: boolean }[];
+  };
   continueLabel?: string;
   onPressContinue?: () => void;
   continueDisabled?: boolean;
@@ -196,6 +200,7 @@ export const CreateVaultAmountStep: React.FC<CreateVaultAmountStepProps> = ({
         onClose={() => setInfoOpen(false)}
         title={infoSheet?.title ?? ""}
         description={infoSheet?.description ?? ""}
+        descriptionRich={infoSheet?.descriptionRich}
       />
     </View>
   );
