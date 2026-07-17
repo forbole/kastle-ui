@@ -63,6 +63,7 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
       </View>
 
       <BottomActionBar
+        messagePaddingVertical={16}
         message={
           infoLabel
             ? {
@@ -111,10 +112,11 @@ const styles = StyleSheet.create({
     gap: spacing.s8,
     paddingHorizontal: spacing.s5,
   },
-  // Figma "vault" illustration is 256×186
+  // Figma "vault" frame 248×213. The asset is 1.195:1, so the box matches that
+  // aspect (256×214) — a 256×186 box letterboxed it down to ~222 wide.
   illustrationImage: {
     width: 256,
-    height: 186,
+    height: 214,
   },
   textGroup: {
     gap: spacing.s3,

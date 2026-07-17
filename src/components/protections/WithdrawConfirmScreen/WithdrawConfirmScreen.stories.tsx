@@ -18,8 +18,19 @@ const ROWS: WithdrawConfirmRow[] = [
         "The wait before your funds reach the external recovery address. It's the protection window you set. You can cancel any time before it ends.",
     },
   },
-  { label: "Amount", value: "1,250.00 KAS" },
-  { label: "Est. Fee", value: "0 KAS" },
+  { label: "Amount", value: "1,250.00 KAS", subValue: "≈ $24,000 USD" },
+  {
+    label: "Est. Fee",
+    value: "0 KAS",
+    subValue: "≈ $0 USD",
+    // ⚠️ Copy reused from the existing InfoSheet "Est. Fee" — no vault-specific
+    // Est. Fee tooltip exists in Figma; confirm this applies here.
+    tooltip: {
+      title: "Est. Fee",
+      description:
+        "The estimated network fee required to process this transaction on the Kaspa blockchain. The actual fee may vary slightly based on network conditions.",
+    },
+  },
 ];
 
 const meta: Meta<typeof WithdrawConfirmScreen> = {

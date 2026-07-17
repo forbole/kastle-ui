@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Info } from "lucide-react-native";
+import { Copy, ExternalLink, Info } from "lucide-react-native";
 import {
   background,
   borderRadius,
@@ -27,6 +27,10 @@ export interface DetailTableRow {
   emphasis?: boolean;
   /** Renders an ⓘ after the label; the whole row becomes the tap target. */
   onPressInfo?: () => void;
+  /** Address rows: a copy icon after the value. */
+  onPressCopy?: () => void;
+  /** Address rows: an external-link icon after the value. */
+  onPressExternal?: () => void;
 }
 
 export interface DetailTableProps {
@@ -67,16 +71,33 @@ export const DetailTable: React.FC<DetailTableProps> = ({ rows }) => (
           </View>
 
           <View style={styles.valueCol}>
-            {row.valueNode ??
-              (row.value !== undefined ? (
-                <Text
-                  allowFontScaling={false}
-                  numberOfLines={2}
-                  style={[styles.value, row.emphasis && styles.bold]}
-                >
-                  {row.value}
-                </Text>
-              ) : null)}
+            <View style={styles.valueLine}>
+              {row.valueNode ??
+                (row.value !== undefined ? (
+                  <Text
+                    allowFontScaling={false}
+                    numberOfLines={2}
+                    style={[styles.value, row.emphasis && styles.bold]}
+                  >
+                    {row.value}
+                  </Text>
+                ) : null)}
+              {/* Address rows: copy + open on-chain */}
+              {row.onPressCopy ? (
+                <TouchableOpacity onPress={row.onPressCopy} hitSlop={8}>
+                  <Copy size={16} color={colors.textSecondary} strokeWidth={2} />
+                </TouchableOpacity>
+              ) : null}
+              {row.onPressExternal ? (
+                <TouchableOpacity onPress={row.onPressExternal} hitSlop={8}>
+                  <ExternalLink
+                    size={16}
+                    color={colors.textSecondary}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </View>
             {row.subValue ? (
               <Text allowFontScaling={false} style={styles.subValue}>
                 {row.subValue}
@@ -152,6 +173,12 @@ const styles = StyleSheet.create({
   valueCol: {
     alignItems: "flex-end",
     gap: spacing.s0_5,
+    flexShrink: 1,
+  },
+  valueLine: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
     flexShrink: 1,
   },
   value: {
