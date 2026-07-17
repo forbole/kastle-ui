@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { ChevronRight } from "lucide-react-native";
+import { StatusPill, StatusPillStatus } from "../../StatusPill/StatusPill";
 import {
   background,
   colors,
@@ -18,6 +19,12 @@ export interface ProtectionTypeCardProps {
   description: string;
   /** "active" → chevron + CTA button; "soon" → muted, "Soon" badge, no CTA. */
   status?: ProtectionStatus;
+  /**
+   * Live status once the user owns vaults — e.g. "Locked" / "1 vault
+   * withdrawing". Shown before the chevron; the CTA drops away because the
+   * card's job changes from "set this up" to "here's where yours are".
+   */
+  pill?: { label: string; status: StatusPillStatus };
   /** CTA label (active only). */
   ctaLabel?: string;
   /** "Soon" badge label. */
@@ -37,6 +44,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   title,
   description,
   status = "active",
+  pill,
   ctaLabel,
   soonLabel = "Soon",
   onPress,
@@ -56,7 +64,16 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           {title}
         </Text>
         {isActive ? (
-          <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
+          <View style={styles.headerRight}>
+            {pill ? (
+              <StatusPill
+                status={pill.status}
+                label={pill.label}
+                indicator="dot"
+              />
+            ) : null}
+            <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
+          </View>
         ) : (
           <View style={styles.soonBadge}>
             <Text allowFontScaling={false} style={styles.soonLabel}>
@@ -98,6 +115,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: spacing.s2,
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.s2,
   },
   title: {
