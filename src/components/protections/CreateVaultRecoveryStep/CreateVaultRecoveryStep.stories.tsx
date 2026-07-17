@@ -19,8 +19,11 @@ const ALERTS: RecoveryAlert[] = [
   },
 ];
 
-const Demo: React.FC<{ error?: string }> = ({ error }) => {
-  const [address, setAddress] = React.useState("");
+const Demo: React.FC<{ error?: string; initial?: string }> = ({
+  error,
+  initial = "",
+}) => {
+  const [address, setAddress] = React.useState(initial);
   return (
     <CreateVaultRecoveryStep
       address={address}
@@ -60,6 +63,13 @@ type Story = StoryObj<typeof meta>;
 /** Empty field — Continue disabled until an address is entered. */
 export const Default: Story = {
   render: () => <Demo />,
+};
+
+/** Filled — a valid address entered, Continue enabled (Figma 13493:967389). */
+export const Filled: Story = {
+  render: () => (
+    <Demo initial="kaspa:qpzpfwcsqsxhxwup26r55fd0ghqlhyugz8k7cu9trv4k2v9x3n" />
+  ),
 };
 
 /** Invalid address — error space is reserved, so nothing shifts. */
