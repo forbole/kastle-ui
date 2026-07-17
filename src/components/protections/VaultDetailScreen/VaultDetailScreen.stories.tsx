@@ -143,8 +143,8 @@ export const Locked: Story = {
   },
 };
 
-/** Locked, after the user taps Done — the backup card is gone. */
-export const LockedBackedUp: Story = {
+/** Locked, once the address is saved — the backup prompt has done its job. */
+export const LockedAddressSaved: Story = {
   args: {
     status: "locked",
     backupNote: BACKUP_NOTE,

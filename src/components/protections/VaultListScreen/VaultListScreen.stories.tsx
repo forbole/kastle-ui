@@ -44,6 +44,29 @@ const SAMPLE: VaultCardProps[] = [
   },
 ];
 
+/** Six vaults — an odd count would leave the last row half-empty, so this is
+ *  the case that proves the grid + scrolling. */
+const SAMPLE_SIX: VaultCardProps[] = [
+  {
+    status: "withdrawing",
+    name: "Vault 6",
+    amount: "45,000 KAS",
+    caption: "withdrawing",
+    countdown: "89d:23h:59m",
+    illustration: VAULT_IMAGE,
+    onPress: () => {},
+  },
+  {
+    status: "locked",
+    name: "Vault 5",
+    amount: "12.5 KAS",
+    caption: "90 days window",
+    illustration: VAULT_IMAGE,
+    onPress: () => {},
+  },
+  ...SAMPLE,
+];
+
 const meta: Meta<typeof VaultListScreen> = {
   title: "Protections/Screens/VaultListScreen",
   component: VaultListScreen,
@@ -67,9 +90,9 @@ const meta: Meta<typeof VaultListScreen> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Multiple vaults in the 2-column grid. */
+/** Six vaults in the 2-column grid — newest first, so Vault 1 sits at the bottom. */
 export const Populated: Story = {
-  args: { vaults: SAMPLE, totalAmount: "$12,152,000.375" },
+  args: { vaults: SAMPLE_SIX, totalAmount: "$12,152,000.375" },
 };
 
 /** A single vault (odd count — second cell stays empty). */
@@ -82,9 +105,13 @@ export const Scanning: Story = {
   args: { vaults: [], scanning: true, totalAmount: "$12,152,000.375" },
 };
 
-/** Balance hidden behind dots (tap the eye to reveal — the toggle is live). */
+/** Balance hidden behind **** (tap the eye to reveal — the toggle is live). */
 export const BalanceHidden: Story = {
-  args: { vaults: SAMPLE, totalAmount: "$12,152,000.375", defaultBalanceHidden: true },
+  args: {
+    vaults: SAMPLE_SIX,
+    totalAmount: "$12,152,000.375",
+    defaultBalanceHidden: true,
+  },
 };
 
 const styles = StyleSheet.create({

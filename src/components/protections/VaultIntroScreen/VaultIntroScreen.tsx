@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, ImageSourcePropType } from "react-native";
 import { Image } from "expo-image";
 import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
+import { InfoSheet } from "../../InfoSheet/InfoSheet";
 import { colors, spacing, textStyles } from "../../../config/theme";
 
 const VAULT_INTRO_IMAGE = require("../../../../assets/vault-intro.png");
@@ -19,6 +20,9 @@ export interface VaultIntroScreenProps {
   onPressSecondary?: () => void;
   /** ⓘ link above the buttons (Figma: "How a Vault works?"). */
   infoLabel?: string;
+  /** Sheet the ⓘ link raises. */
+  infoSheet?: { title: string; description: string };
+  /** Fires alongside the sheet, if the parent wants to know. */
   onPressInfo?: () => void;
 }
 
@@ -36,8 +40,10 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
   secondaryLabel,
   onPressSecondary,
   infoLabel,
+  infoSheet,
   onPressInfo,
 }) => {
+  const [infoOpen, setInfoOpen] = React.useState(false);
   return (
     <View style={styles.body}>
       <View style={styles.content}>
@@ -59,7 +65,14 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
       <BottomActionBar
         message={
           infoLabel
-            ? { text: infoLabel, variant: "info", onPress: onPressInfo }
+            ? {
+                text: infoLabel,
+                variant: "info",
+                onPress: () => {
+                  if (infoSheet) setInfoOpen(true);
+                  onPressInfo?.();
+                },
+              }
             : undefined
         }
         buttons={[
@@ -74,6 +87,13 @@ export const VaultIntroScreen: React.FC<VaultIntroScreenProps> = ({
               ]
             : []),
         ]}
+      />
+
+      <InfoSheet
+        isOpen={infoOpen}
+        onClose={() => setInfoOpen(false)}
+        title={infoSheet?.title ?? ""}
+        description={infoSheet?.description ?? ""}
       />
     </View>
   );

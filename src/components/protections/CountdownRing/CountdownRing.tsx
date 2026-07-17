@@ -95,5 +95,8 @@ const styles = StyleSheet.create({
   time: {
     ...textStyles.headingXL,
     color: colors.textPrimary,
+    // Proportional digits are each a different width, so a ticking countdown
+    // reflows on every second. Tabular figures lock them to one width.
+    fontVariant: ["tabular-nums"],
   },
 });

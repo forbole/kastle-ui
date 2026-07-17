@@ -164,6 +164,8 @@ const styles = StyleSheet.create({
   timerText: {
     ...textStyles.headingMD,
     color: colors.textPrimary,
+    // Tabular figures so the ticking countdown doesn't reflow each second
+    fontVariant: ["tabular-nums"],
   },
   button: {
     height: spacing.s8,
