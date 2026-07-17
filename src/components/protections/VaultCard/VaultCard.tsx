@@ -22,6 +22,21 @@ import {
 
 const VAULT_IMAGE = require("../../../../assets/vault.png");
 
+/**
+ * adjustsFontSizeToFit is a no-op in RN-web, so it silently fell back to
+ * ellipsis on the Storybook/web preview — Nicole wants the number to shrink,
+ * never truncate. Same length-tier approach as CreateVaultAmountStep's
+ * AMOUNT_TIERS: "20h:02m:02s" / "89d:23h:59m" (both 11 chars) are the two
+ * real countdown formats and need the 16px tier to clear the card's narrow
+ * column; the 15-char tier is a safety floor for longer edge cases.
+ * ⚠️ Thresholds are approximate — confirm against Figma.
+ */
+const TIMER_TIERS = [
+  { maxLen: 8, style: textStyles.headingMD },
+  { maxLen: 11, style: textStyles.headingSM },
+  { maxLen: 15, style: textStyles.headingXS },
+];
+
 export type VaultStatus = "locked" | "withdrawing";
 
 export interface VaultCardProps {
@@ -64,6 +79,9 @@ export const VaultCard: React.FC<VaultCardProps> = ({
 }) => {
   const pill = STATUS_PILL[status];
   const showTimer = status === "withdrawing" && !!countdown;
+  const timerFontStyle =
+    TIMER_TIERS.find((t) => (countdown?.length ?? 0) <= t.maxLen)?.style ??
+    textStyles.headingXS;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
@@ -117,11 +135,12 @@ export const VaultCard: React.FC<VaultCardProps> = ({
               <Timer size={16} color={colors.textPrimary} strokeWidth={2} />
               <Text
                 allowFontScaling={false}
-                style={styles.timerText}
+                style={[timerFontStyle, styles.timerText]}
                 numberOfLines={1}
-                // Shrink the number before the icon ever gets pushed off
+                // adjustsFontSizeToFit fine-tunes within the tier on native;
+                // TIMER_TIERS above is what actually shrinks it on web.
                 adjustsFontSizeToFit
-                minimumFontScale={0.7}
+                minimumFontScale={0.85}
               >
                 {countdown}
               </Text>
@@ -202,8 +221,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s1,
   },
+  // Font comes from TIMER_TIERS (applied before this style in the array) —
+  // no size/weight here, or it would override the tier.
   timerText: {
-    ...textStyles.headingMD,
     color: colors.textPrimary,
     flexShrink: 1,
     // Tabular figures so the ticking countdown doesn't reflow each second
