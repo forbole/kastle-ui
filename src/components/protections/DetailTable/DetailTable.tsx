@@ -55,48 +55,83 @@ export const DetailTable: React.FC<DetailTableProps> = ({ rows }) => (
       const last = i === rows.length - 1;
       const divider = !row.emphasis && !last;
       const hasActions = !!(row.onPressCopy || row.onPressExternal);
+      // Address rows carry a tooltip AND copy/external actions at once — one
+      // row-wide touchable would swallow the icon taps into onPressInfo. Split
+      // into independent zones: label -> tooltip, value+copy -> copy, the
+      // external icon stays its own separate target.
+      const splitZones = hasActions && !!row.onPressInfo;
+
+      const labelContent = (
+        <>
+          <Text
+            allowFontScaling={false}
+            style={[styles.label, row.emphasis && styles.bold]}
+          >
+            {row.label}
+          </Text>
+          {/* Icon colour follows its adjacent label */}
+          {row.labelIcon ??
+            (row.onPressInfo ? (
+              <Info size={14} color={typography.t900} strokeWidth={2} />
+            ) : null)}
+        </>
+      );
+
+      const labelWrap = splitZones ? (
+        <TouchableOpacity
+          style={styles.labelWrap}
+          onPress={row.onPressInfo}
+          hitSlop={8}
+          activeOpacity={0.7}
+        >
+          {labelContent}
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.labelWrap}>{labelContent}</View>
+      );
+
+      const valueText =
+        row.valueNode ??
+        (row.value !== undefined ? (
+          <Text
+            allowFontScaling={false}
+            // Address values are already ellipsised — keep them on one line so
+            // they don't wrap beside the icons on narrow phones.
+            numberOfLines={hasActions ? 1 : 2}
+            style={[
+              styles.value,
+              hasActions && styles.valueShrink,
+              hasActions && styles.valueSmall,
+              row.emphasis && styles.bold,
+            ]}
+          >
+            {row.value}
+          </Text>
+        ) : null);
+
+      // The address text and the copy icon share one tap target.
+      const valueAndCopy = row.onPressCopy ? (
+        <TouchableOpacity
+          style={styles.valueCopyTap}
+          onPress={row.onPressCopy}
+          hitSlop={4}
+          activeOpacity={0.7}
+        >
+          {valueText}
+          <Copy size={16} color={colors.textSecondary} strokeWidth={2} />
+        </TouchableOpacity>
+      ) : (
+        valueText
+      );
 
       const content = (
         <>
-          <View style={styles.labelWrap}>
-            <Text
-              allowFontScaling={false}
-              style={[styles.label, row.emphasis && styles.bold]}
-            >
-              {row.label}
-            </Text>
-            {/* Icon colour follows its adjacent label */}
-            {row.labelIcon ??
-              (row.onPressInfo ? (
-                <Info size={14} color={typography.t900} strokeWidth={2} />
-              ) : null)}
-          </View>
+          {labelWrap}
 
           <View style={styles.valueCol}>
             <View style={styles.valueLine}>
-              {row.valueNode ??
-                (row.value !== undefined ? (
-                  <Text
-                    allowFontScaling={false}
-                    // Address values are already ellipsised — keep them on one
-                    // line so they don't wrap beside the icons on narrow phones.
-                    numberOfLines={hasActions ? 1 : 2}
-                    style={[
-                      styles.value,
-                      hasActions && styles.valueShrink,
-                      hasActions && styles.valueSmall,
-                      row.emphasis && styles.bold,
-                    ]}
-                  >
-                    {row.value}
-                  </Text>
-                ) : null)}
-              {/* Address rows: copy + open on-chain */}
-              {row.onPressCopy ? (
-                <TouchableOpacity onPress={row.onPressCopy} hitSlop={8}>
-                  <Copy size={16} color={colors.textSecondary} strokeWidth={2} />
-                </TouchableOpacity>
-              ) : null}
+              {valueAndCopy}
+              {/* Open on-chain — its own tap target, separate from copy */}
               {row.onPressExternal ? (
                 <TouchableOpacity onPress={row.onPressExternal} hitSlop={8}>
                   <ExternalLink
@@ -122,7 +157,9 @@ export const DetailTable: React.FC<DetailTableProps> = ({ rows }) => (
         row.emphasis && styles.rowEmphasis,
       ];
 
-      return row.onPressInfo ? (
+      // Whole-row tap only when info is the row's single purpose — once
+      // actions are present each zone handles its own tap (see splitZones).
+      return row.onPressInfo && !hasActions ? (
         <TouchableOpacity
           key={i}
           style={rowStyle}
@@ -189,6 +226,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s2,
     flexShrink: 1,
+  },
+  // Address text + copy icon as one tap target
+  valueCopyTap: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
+    flexShrink: 1,
+    minWidth: 0,
   },
   value: {
     ...textStyles.bodyNormalSM,
