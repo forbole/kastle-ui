@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Info, Timer } from "lucide-react-native";
-import { colors, primary, spacing, textStyles } from "../../../config/theme";
+import { colors, spacing, textStyles, warning } from "../../../config/theme";
 
 export interface CountdownRingProps {
-  /** Big countdown text, e.g. "30d:11h:44m". */
+  /** Big countdown text, e.g. "2d:23h:59m". */
   time: string;
   /** Caption above the time, e.g. "Funds leave in". */
   label?: string;
-  /** If set: a 12px ⓘ after the label (opens the "Funds leave in" tooltip). */
+  /** If set: an ⓘ after the label; the whole label row is the tap target. */
   onPressInfo?: () => void;
   /** Ring outer diameter in px (Figma default 208). */
   size?: number;
@@ -17,10 +17,13 @@ export interface CountdownRingProps {
 /**
  * Withdrawing-state countdown ring on the vault detail screen.
  *
- * Figma (node 12831:692572) is a solid donut ring — a full circle stroked in
- * `primary.p50`, ~13px thick — NOT a conic gradient or a progress arc. Built
- * as a plain bordered View (no react-native-svg needed). Centre holds the
- * caption + timer; the vault illustration sits ABOVE the ring, not inside it.
+ * Figma (13409:25553) stacks two 208px arcs at innerRadius 0.87 (≈13.5px
+ * thick): a base ring in `Warning/Warning soft background` (amber @ 24%) and a
+ * `start` arc in `Warning/warning500` on top — the progress sweep.
+ *
+ * ⚠️ Only the base ring is drawn. The sweep needs an arc, which needs
+ * `react-native-svg` — not a dependency here (Paul's call). Flagged to Nicole;
+ * until then the ring shows the track without the progress.
  */
 const RING_THICKNESS = 13;
 
@@ -30,6 +33,17 @@ export const CountdownRing: React.FC<CountdownRingProps> = ({
   onPressInfo,
   size = 208,
 }) => {
+  const labelRow = label ? (
+    <View style={styles.labelRow}>
+      <Text allowFontScaling={false} style={styles.label} numberOfLines={1}>
+        {label}
+      </Text>
+      {onPressInfo ? (
+        <Info size={12} color={colors.textSecondary} strokeWidth={2} />
+      ) : null}
+    </View>
+  ) : null;
+
   return (
     <View
       style={[
@@ -38,22 +52,14 @@ export const CountdownRing: React.FC<CountdownRingProps> = ({
       ]}
     >
       <View style={styles.content}>
-        {label ? (
-          <View style={styles.labelRow}>
-            <Text
-              allowFontScaling={false}
-              style={styles.label}
-              numberOfLines={1}
-            >
-              {label}
-            </Text>
-            {onPressInfo ? (
-              <TouchableOpacity onPress={onPressInfo} hitSlop={8}>
-                <Info size={12} color={colors.textSecondary} strokeWidth={2} />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-        ) : null}
+        {/* The whole label is the tap target, not just the ⓘ */}
+        {onPressInfo && label ? (
+          <TouchableOpacity onPress={onPressInfo} hitSlop={8} activeOpacity={0.7}>
+            {labelRow}
+          </TouchableOpacity>
+        ) : (
+          labelRow
+        )}
         <View style={styles.timerRow}>
           <Timer size={16} color={colors.textPrimary} strokeWidth={2} />
           <Text allowFontScaling={false} style={styles.time} numberOfLines={1}>
@@ -68,7 +74,8 @@ export const CountdownRing: React.FC<CountdownRingProps> = ({
 const styles = StyleSheet.create({
   ring: {
     borderWidth: RING_THICKNESS,
-    borderColor: primary.p50,
+    // Figma "Ellipse 2" — Warning/Warning soft background (amber @ 24%)
+    borderColor: warning.softBackground,
     alignItems: "center",
     justifyContent: "center",
   },
