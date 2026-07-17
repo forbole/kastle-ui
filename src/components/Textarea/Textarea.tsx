@@ -86,7 +86,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   ];
 
   return (
-    <View>
+    <View style={styles.root}>
       {masked ? (
         <TouchableOpacity
           onPress={onPressMask}
@@ -165,6 +165,10 @@ export const Textarea: React.FC<TextareaProps> = ({
 };
 
 const styles = StyleSheet.create({
+  // Fill the parent's width instead of hugging content
+  root: {
+    alignSelf: "stretch",
+  },
   box: {
     flexDirection: "row",
     alignItems: "flex-start",
