@@ -48,6 +48,8 @@ const BASE_ROWS: VaultDetailRow[] = [
   {
     label: "Vault address",
     value: "kaspa:pq8z…v4k2",
+    onPressCopy: () => {},
+    onPressExternal: () => {},
     tooltip: {
       title: "Vault address",
       description:
@@ -57,6 +59,8 @@ const BASE_ROWS: VaultDetailRow[] = [
   {
     label: "Recovery address",
     value: "kaspa:pfdf…v45s",
+    onPressCopy: () => {},
+    onPressExternal: () => {},
     tooltip: {
       title: "External recovery address",
       description:
@@ -163,11 +167,39 @@ export const WithdrawingMoreThanOneDay: Story = {
 };
 
 /**
- * Clawback — under one day left (Figma 13393:34423). Countdown switches to
- * HH:MM:SS so the last day reads as urgent.
+ * Clawback — under one day left (Figma 13393:34423). Countdown ticks live in
+ * HH:MM:SS so the last day reads as urgent. Ticking lives in the story; the
+ * app feeds an updated string each second.
  */
+const pad = (n: number) => String(n).padStart(2, "0");
+const TickingOneDayLeft: React.FC = () => {
+  const { height } = useWindowDimensions();
+  const [remaining, setRemaining] = React.useState(23 * 3600 + 11 * 60 + 44);
+  React.useEffect(() => {
+    const id = setInterval(
+      () => setRemaining((r) => (r > 0 ? r - 1 : 0)),
+      1000
+    );
+    return () => clearInterval(id);
+  }, []);
+  const h = Math.floor(remaining / 3600);
+  const m = Math.floor((remaining % 3600) / 60);
+  const s = remaining % 60;
+  return (
+    <View style={[styles.decorator, { height }]}>
+      <VaultDetailScreen
+        vaultAddress={VAULT_ADDRESS}
+        onPressCopyAddress={() => {}}
+        onPressAction={() => {}}
+        onPressBackupDone={() => {}}
+        {...withdrawingArgs(`${pad(h)}h:${pad(m)}m:${pad(s)}s`)}
+      />
+    </View>
+  );
+};
+
 export const WithdrawingOneDayLeft: Story = {
-  args: withdrawingArgs("23h:11m:44s"),
+  render: () => <TickingOneDayLeft />,
 };
 
 /** Clawback — longest window (Figma 13393:86085), 90-day protection. */

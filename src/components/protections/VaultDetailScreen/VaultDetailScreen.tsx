@@ -45,6 +45,10 @@ export interface VaultDetailRow {
   /** Shows the Kaspa token logo after the label (Vault amount row). */
   tokenLogo?: boolean;
   onPressValue?: () => void;
+  /** Address rows: copy the value. */
+  onPressCopy?: () => void;
+  /** Address rows: open the value on-chain. */
+  onPressExternal?: () => void;
   /** Optional ⓘ tooltip opened from the row label. */
   tooltip?: { title: string; description: string };
 }
@@ -241,6 +245,8 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
                 onPressInfo: row.tooltip
                   ? () => setTooltip(row.tooltip!)
                   : undefined,
+                onPressCopy: row.onPressCopy,
+                onPressExternal: row.onPressExternal,
               }))}
             />
           </View>
@@ -249,7 +255,17 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
 
       {/* Primary action — the danger line sits inside the bar, above the button */}
       <BottomActionBar
-        message={dangerNote ? { text: dangerNote, variant: "error" } : undefined}
+        message={
+          dangerNote
+            ? {
+                text: dangerNote,
+                variant: "error",
+                // Figma "Error message": no icon, centred
+                hideIcon: true,
+                alwaysCenter: true,
+              }
+            : undefined
+        }
         buttons={[{ label: actionLabel, variant, onPress: handleAction }]}
       />
 
@@ -309,7 +325,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     gap: spacing.s2,
-    paddingVertical: spacing.s1,
+    // Figma 13367:16830: 8 top/bottom (was 4)
+    paddingVertical: spacing.s2,
   },
   noteText: {
     ...textStyles.bodyNormalXS,
