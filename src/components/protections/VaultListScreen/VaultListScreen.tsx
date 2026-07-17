@@ -154,6 +154,8 @@ const styles = StyleSheet.create({
   },
   grid: {
     gap: spacing.s2,
+    // Breathing room under the last row when the list scrolls to the bottom
+    paddingBottom: spacing.s6,
   },
   gridRow: {
     flexDirection: "row",
