@@ -10,17 +10,10 @@ const VAULT_IMAGE = require("../../../../assets/vault.png");
 // Newest first — Vault 1 (oldest) sits at the bottom.
 const SAMPLE: VaultCardProps[] = [
   {
-    status: "complete",
-    name: "Vault 4",
-    amount: "500 KAS",
-    caption: "Withdrawn",
-    illustration: VAULT_IMAGE,
-    onPress: () => {},
-  },
-  {
     status: "withdrawing",
     name: "Vault 3",
-    amount: "1,200 KAS",
+    amount: "1,200",
+    amountUnit: "KAS",
     caption: "withdrawing",
     countdown: "20h:02m:02s",
     illustration: VAULT_IMAGE,
@@ -29,7 +22,8 @@ const SAMPLE: VaultCardProps[] = [
   {
     status: "locked",
     name: "Vault 2",
-    amount: "2,000 KAS",
+    amount: "2,000",
+    amountUnit: "KAS",
     caption: "3 days window",
     illustration: VAULT_IMAGE,
     onPress: () => {},
@@ -37,7 +31,8 @@ const SAMPLE: VaultCardProps[] = [
   {
     status: "locked",
     name: "Vault 1",
-    amount: "1,000,000.999999 KAS",
+    amount: "1,000,000.999999",
+    amountUnit: "KAS",
     caption: "3 days window",
     illustration: VAULT_IMAGE,
     onPress: () => {},
@@ -50,7 +45,8 @@ const SAMPLE_SIX: VaultCardProps[] = [
   {
     status: "withdrawing",
     name: "Vault 6",
-    amount: "45,000 KAS",
+    amount: "45,000",
+    amountUnit: "KAS",
     caption: "withdrawing",
     countdown: "89d:23h:59m",
     illustration: VAULT_IMAGE,
@@ -59,7 +55,8 @@ const SAMPLE_SIX: VaultCardProps[] = [
   {
     status: "locked",
     name: "Vault 5",
-    amount: "12.5 KAS",
+    amount: "12.5",
+    amountUnit: "KAS",
     caption: "90 days window",
     illustration: VAULT_IMAGE,
     onPress: () => {},
