@@ -23,6 +23,8 @@ const SIGN_IMAGE = require("../../../../assets/sign.png");
 export interface WithdrawConfirmRow {
   label: string;
   value: string;
+  /** Second line under the value, e.g. a fiat conversion. */
+  subValue?: string;
   /** ⓘ tooltip opened from the label. */
   tooltip?: { title: string; description: string };
 }
@@ -96,6 +98,7 @@ export const WithdrawConfirmScreen: React.FC<WithdrawConfirmScreenProps> = ({
           rows={rows.map((row) => ({
             label: row.label,
             value: row.value,
+            subValue: row.subValue,
             onPressInfo: row.tooltip
               ? () => setTooltip(row.tooltip!)
               : undefined,
@@ -130,12 +133,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s4,
     paddingBottom: spacing.s4,
-    gap: spacing.s4,
+    // Figma: 8 between the address card and the quote table
+    gap: spacing.s2,
   },
   illustration: {
     height: 160,
     alignItems: "center",
     justifyContent: "center",
+    // 8 gap + 8 = 16 to the address card
+    marginBottom: spacing.s2,
   },
   illustrationImage: {
     width: 237,

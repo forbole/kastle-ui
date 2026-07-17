@@ -28,6 +28,10 @@ export interface BottomActionMessage {
   text: string;
   /** `info` — link blue (default); `error` — danger red. */
   variant?: "info" | "error";
+  /** Hide the leading ⓘ (Figma's withdraw danger line has no icon). */
+  hideIcon?: boolean;
+  /** Keep it centred even when it wraps (default: centre single, left multi). */
+  alwaysCenter?: boolean;
   onPress?: () => void;
 }
 
@@ -48,6 +52,8 @@ export interface BottomActionBarProps {
   /** Override the top padding (default 12). The amount step needs 46 to clear
    *  the keypad above it. */
   paddingTop?: number;
+  /** Vertical padding around the message row (Figma intro info link = 16). */
+  messagePaddingVertical?: number;
   /** Buttons, rendered top to bottom. */
   buttons: BottomActionButton[];
 }
@@ -68,6 +74,7 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   reserveMessage = false,
   footer,
   paddingTop,
+  messagePaddingVertical,
   buttons,
 }) => {
   // Figma uses the same ⓘ glyph for both slots and recolours it to match the
@@ -79,15 +86,31 @@ export const BottomActionBar: React.FC<BottomActionBarProps> = ({
   // paragraph, so it goes left-aligned with the icon pinned to the first line.
   const [wrapped, setWrapped] = React.useState(false);
 
+  const centered = message?.alwaysCenter || !wrapped;
+
   const messageRow = message ? (
-    <View style={[styles.message, wrapped ? styles.messageWrapped : styles.messageSingle]}>
-      <Info size={16} color={messageColor} strokeWidth={2} />
+    <View
+      style={[
+        styles.message,
+        centered ? styles.messageSingle : styles.messageWrapped,
+        messagePaddingVertical != null && {
+          paddingVertical: messagePaddingVertical,
+        },
+      ]}
+    >
+      {message.hideIcon ? null : (
+        <Info size={16} color={messageColor} strokeWidth={2} />
+      )}
       <Text
         allowFontScaling={false}
         onLayout={(e) =>
           setWrapped(e.nativeEvent.layout.height > SINGLE_LINE_HEIGHT * 1.5)
         }
-        style={[styles.messageText, { color: messageColor }]}
+        style={[
+          styles.messageText,
+          { color: messageColor },
+          message.alwaysCenter && styles.messageCenterText,
+        ]}
       >
         {message.text}
       </Text>
@@ -172,6 +195,9 @@ const styles = StyleSheet.create({
   messageText: {
     ...textStyles.bodyNormalSM,
     flexShrink: 1,
+  },
+  messageCenterText: {
+    textAlign: "center",
   },
   // Reserves the single-line message height when there's no message
   messageReserve: {
