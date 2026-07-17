@@ -53,6 +53,7 @@ export const DetailTable: React.FC<DetailTableProps> = ({ rows }) => (
     {rows.map((row, i) => {
       const last = i === rows.length - 1;
       const divider = !row.emphasis && !last;
+      const hasActions = !!(row.onPressCopy || row.onPressExternal);
 
       const content = (
         <>
@@ -76,8 +77,14 @@ export const DetailTable: React.FC<DetailTableProps> = ({ rows }) => (
                 (row.value !== undefined ? (
                   <Text
                     allowFontScaling={false}
-                    numberOfLines={2}
-                    style={[styles.value, row.emphasis && styles.bold]}
+                    // Address values are already ellipsised — keep them on one
+                    // line so they don't wrap beside the icons on narrow phones.
+                    numberOfLines={hasActions ? 1 : 2}
+                    style={[
+                      styles.value,
+                      hasActions && styles.valueShrink,
+                      row.emphasis && styles.bold,
+                    ]}
                   >
                     {row.value}
                   </Text>
@@ -185,6 +192,11 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: typography.t900,
     textAlign: "right",
+  },
+  // Address values shrink (ellipsis) instead of wrapping beside the icons
+  valueShrink: {
+    flexShrink: 1,
+    minWidth: 0,
   },
   subValue: {
     ...textStyles.bodyNormalXS,
