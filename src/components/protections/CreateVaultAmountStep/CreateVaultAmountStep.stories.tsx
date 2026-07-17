@@ -59,7 +59,7 @@ export const Default: Story = {
 
 /** Validation error replaces the info link — same row height, no jump. */
 export const Error: Story = {
-  render: () => <Demo error="Amount exceeds your balance" />,
+  render: () => <Demo error="Oh, you don’t have enough funds" />,
 };
 
 const styles = StyleSheet.create({

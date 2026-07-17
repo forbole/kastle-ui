@@ -74,7 +74,7 @@ export const Filled: Story = {
 
 /** Invalid address — error space is reserved, so nothing shifts. */
 export const Error: Story = {
-  render: () => <Demo error="Invalid Kaspa address" />,
+  render: () => <Demo error="That's not a valid Kaspa address." />,
 };
 
 const styles = StyleSheet.create({
