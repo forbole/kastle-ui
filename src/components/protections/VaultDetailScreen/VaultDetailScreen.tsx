@@ -352,9 +352,9 @@ const styles = StyleSheet.create({
     marginRight: -spacing.s3,
   },
   backupDone: {
-    // Figma: 12 Medium (not the 14 semibold the other section links use)
+    // Figma 13367:16830: 14 Medium, primary
     fontFamily: fontFamilies["500"],
-    fontSize: fontSize.xs,
+    fontSize: fontSize.sm,
     fontWeight: fontWeight.medium,
     color: colors.primary,
   },

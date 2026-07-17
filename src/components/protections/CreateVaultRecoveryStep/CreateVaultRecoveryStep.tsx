@@ -93,11 +93,15 @@ export const CreateVaultRecoveryStep: React.FC<
           reserveErrorSpace
         />
 
-        {alerts.map((alert, i) => (
-          <Alert key={i} severity={alert.severity ?? "info"} title={alert.title}>
-            {alert.body}
-          </Alert>
-        ))}
+        {/* The two alerts sit 8 apart (Figma); the content gap keeps 16 to the
+            input above */}
+        <View style={styles.alerts}>
+          {alerts.map((alert, i) => (
+            <Alert key={i} severity={alert.severity ?? "info"} title={alert.title}>
+              {alert.body}
+            </Alert>
+          ))}
+        </View>
       </ScrollView>
 
       <BottomActionBar
@@ -122,6 +126,9 @@ const styles = StyleSheet.create({
     paddingTop: spacing.s4,
     paddingBottom: spacing.s4,
     gap: spacing.s4,
+  },
+  alerts: {
+    gap: spacing.s2,
   },
   heading: {
     gap: spacing.s1,

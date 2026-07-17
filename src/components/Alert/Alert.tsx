@@ -29,7 +29,9 @@ const SEVERITY_CONFIG: Record<
   { bg: string; border: string; text: string; icon: typeof Info }
 > = {
   info: {
-    bg: infoColors.background,
+    // Nicole updated the info alert to the blue soft-background tint
+    // (Figma "Info/Warning soft background" #0973a8 @ 24%, fill + stroke)
+    bg: infoColors.softBackground,
     border: infoColors.softBackground,
     text: infoColors.i800,
     icon: Info,
