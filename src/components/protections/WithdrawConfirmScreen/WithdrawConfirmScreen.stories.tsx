@@ -47,6 +47,12 @@ const meta: Meta<typeof WithdrawConfirmScreen> = {
   args: {
     recoveryAddress:
       "kaspa:qrpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7m28f",
+    // Figma 13391:560165 — same instance CreateVaultConfirmStep reuses.
+    recoveryTooltip: {
+      title: "External recovery address",
+      description:
+        "Where your vault sends funds in any scenario — emergency clawback or normal withdrawal.",
+    },
     rows: ROWS,
     fees: FEES,
     onPressCopyRecovery: () => {},
