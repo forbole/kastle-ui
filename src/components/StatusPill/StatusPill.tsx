@@ -9,6 +9,12 @@ export interface StatusPillProps {
   status: StatusPillStatus;
   /** Override the default label ("Success" / "Failed" / "Pending"). */
   label?: string;
+  /**
+   * Leading indicator. "glyph" (default) uses the status icon
+   * (check / clock / cross). "dot" uses a small coloured dot — used for
+   * network-status badges (e.g. "Network: Smooth").
+   */
+  icon?: "glyph" | "dot";
 }
 
 const STATUS_CONFIG: Record<
@@ -40,13 +46,21 @@ const STATUS_CONFIG: Record<
   },
 };
 
-export const StatusPill: React.FC<StatusPillProps> = ({ status, label }) => {
+export const StatusPill: React.FC<StatusPillProps> = ({
+  status,
+  label,
+  icon = "glyph",
+}) => {
   const config = STATUS_CONFIG[status];
   const Icon = config.icon;
 
   return (
     <View style={[styles.pill, { backgroundColor: config.bg }]}>
-      <Icon size={12} color={config.color} strokeWidth={2.5} />
+      {icon === "dot" ? (
+        <View style={[styles.dot, { backgroundColor: config.color }]} />
+      ) : (
+        <Icon size={12} color={config.color} strokeWidth={2.5} />
+      )}
       <Text
         allowFontScaling={false}
         style={[textStyles.bodyNormalXS, styles.label, { color: config.color }]}
@@ -66,6 +80,11 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.s1,
     borderRadius: 9999,
     alignSelf: "flex-start",
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 9999,
   },
   label: {
     lineHeight: 16,

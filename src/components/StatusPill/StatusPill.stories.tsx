@@ -38,6 +38,11 @@ export const Pending: Story = {
   args: { status: "pending" },
 };
 
+/** Dot variant — network status badge (e.g. Fee & Speed sheet) */
+export const NetworkDot: Story = {
+  args: { status: "success", label: "Network: Smooth", icon: "dot" },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,
