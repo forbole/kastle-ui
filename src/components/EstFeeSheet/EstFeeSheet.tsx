@@ -9,7 +9,6 @@ import {
   background,
   border,
   typography,
-  white,
   borderRadius,
   textStyles,
 } from "../../config/theme";

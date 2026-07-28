@@ -11,7 +11,6 @@ import { Image } from "expo-image";
 import {
   background,
   border,
-  primary,
   info,
   success,
   error,

@@ -102,7 +102,7 @@ const meta: Meta<typeof KaspaSignTxSheet> = {
     onClose: () => {},
     appName: "Kaspa Finance",
     appUrl: "app.kaspafinance.io",
-    appIcon: { uri: iconImage },
+    appIcon: iconImage,
     networkBadge: "Kaspa",
     fromAddress:
       "kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7",

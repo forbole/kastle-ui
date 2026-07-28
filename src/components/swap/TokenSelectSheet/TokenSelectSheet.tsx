@@ -253,7 +253,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
   );
 
   const handleTokenSelect = useCallback(
-    (token: TokenInfo) => {
+    (_token: TokenInfo) => {
       onClose();
     },
     [onClose],

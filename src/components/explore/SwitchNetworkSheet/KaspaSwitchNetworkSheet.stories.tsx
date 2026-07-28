@@ -60,10 +60,10 @@ const meta: Meta<typeof KaspaSwitchNetworkSheet> = {
     onClose: () => {},
     appName: "Zealous Swap",
     appUrl: "app.zealousswap.io",
-    appIcon: { uri: iconImage },
+    appIcon: iconImage,
     targetNetworkName: "Kaspa",
     targetNetworkBadge: "Mainnet",
-    targetNetworkIcon: { uri: iconImage },
+    targetNetworkIcon: iconImage,
   },
   argTypes: {
     onConfirm: { action: "confirm" },
