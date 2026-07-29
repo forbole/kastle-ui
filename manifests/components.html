@@ -582,7 +582,7 @@
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.7s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.9s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -1949,7 +1949,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.com&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     accounts={defaultAccounts} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -1979,7 +1979,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.com&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     accounts={[
       {
         id: &quot;1&quot;,
@@ -3747,7 +3747,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
     toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
@@ -3770,7 +3770,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
     toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
@@ -3779,8 +3779,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     estFees={[
       { networkName: &quot;Kaspa&quot;, fee: &quot;0.00023 KAS&quot;, feeUsd: &quot;≈ $0.01 USD&quot; },
       { networkName: &quot;Kasplex&quot;, fee: &quot;0.00150 KAS&quot;, feeUsd: &quot;≈ $0.05 USD&quot; },
-    ]}
-    contractAddress={undefined} /&gt;;</code></pre>
+    ]} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -3794,7 +3793,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kasplex&quot;
     fromAddress=&quot;0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3&quot;
     toAddress=&quot;0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B&quot;
@@ -3939,7 +3938,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     targetNetworkName=&quot;Polygon&quot;
     targetNetworkChainId=&quot;Chain ID: 137&quot; /&gt;;</code></pre>
             </div>
@@ -3971,10 +3970,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     targetNetworkName=&quot;Polygon&quot;
     targetNetworkChainId=&quot;Chain ID: 137&quot;
-    targetNetworkIcon={{ uri: iconImage }} /&gt;;</code></pre>
+    targetNetworkIcon={iconImage} /&gt;;</code></pre>
             </div>
         </div>
     
@@ -4236,22 +4235,22 @@ supportedNetworks?: Array&lt;{
     appName=&quot;Zealous Swap&quot;
     category=&quot;Defi&quot;
     description=&quot;Zealous Swap is the pioneering AMM-based decentralized exchange (DEX) on the Kaspa ecosystem, enabling fast token swaps, liquidity provision, and staking with innovative features like an NFT-based fee system, protocol-owned liquidity, and an insurance fund for enhanced security.&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     isVerified
     supportedNetworks={[
-      { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
-      { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
-      { name: &quot;Other&quot;, icon: { uri: iconImage } },
+      { name: &quot;Kaspa&quot;, icon: iconImage },
+      { name: &quot;KRC-20&quot;, icon: iconImage },
+      { name: &quot;Other&quot;, icon: iconImage },
     ]}
     socialLinks={[
-      { name: &quot;Twitter&quot;, icon: { uri: iconImage }, url: &quot;https://twitter.com&quot; },
+      { name: &quot;Twitter&quot;, icon: iconImage, url: &quot;https://twitter.com&quot; },
       {
         name: &quot;Telegram&quot;,
-        icon: { uri: iconImage },
+        icon: iconImage,
         url: &quot;https://telegram.org&quot;,
       },
-      { name: &quot;Discord&quot;, icon: { uri: iconImage }, url: &quot;https://discord.com&quot; },
-      { name: &quot;Medium&quot;, icon: { uri: iconImage }, url: &quot;https://medium.com&quot; },
+      { name: &quot;Discord&quot;, icon: iconImage, url: &quot;https://discord.com&quot; },
+      { name: &quot;Medium&quot;, icon: iconImage, url: &quot;https://medium.com&quot; },
     ]} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -4265,22 +4264,22 @@ supportedNetworks?: Array&lt;{
     appName=&quot;DeFi Protocol&quot;
     category=&quot;DeFi&quot;
     description=&quot;A revolutionary DeFi protocol that enables seamless token swaps and liquidity mining with advanced yield farming strategies.&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     isVerified
     supportedNetworks={[
-      { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
-      { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
-      { name: &quot;Other&quot;, icon: { uri: iconImage } },
+      { name: &quot;Kaspa&quot;, icon: iconImage },
+      { name: &quot;KRC-20&quot;, icon: iconImage },
+      { name: &quot;Other&quot;, icon: iconImage },
     ]}
     socialLinks={[
-      { name: &quot;Twitter&quot;, icon: { uri: iconImage }, url: &quot;https://twitter.com&quot; },
+      { name: &quot;Twitter&quot;, icon: iconImage, url: &quot;https://twitter.com&quot; },
       {
         name: &quot;Telegram&quot;,
-        icon: { uri: iconImage },
+        icon: iconImage,
         url: &quot;https://telegram.org&quot;,
       },
-      { name: &quot;Discord&quot;, icon: { uri: iconImage }, url: &quot;https://discord.com&quot; },
-      { name: &quot;Medium&quot;, icon: { uri: iconImage }, url: &quot;https://medium.com&quot; },
+      { name: &quot;Discord&quot;, icon: iconImage, url: &quot;https://discord.com&quot; },
+      { name: &quot;Medium&quot;, icon: iconImage, url: &quot;https://medium.com&quot; },
     ]} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -4294,12 +4293,12 @@ supportedNetworks?: Array&lt;{
     appName=&quot;Zealous Swap&quot;
     category=&quot;Defi&quot;
     description=&quot;Zealous Swap is the pioneering AMM-based decentralized exchange (DEX) on the Kaspa ecosystem, enabling fast token swaps, liquidity provision, and staking with innovative features like an NFT-based fee system, protocol-owned liquidity, and an insurance fund for enhanced security.&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     isVerified
     supportedNetworks={[
-      { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
-      { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
-      { name: &quot;Other&quot;, icon: { uri: iconImage } },
+      { name: &quot;Kaspa&quot;, icon: iconImage },
+      { name: &quot;KRC-20&quot;, icon: iconImage },
+      { name: &quot;Other&quot;, icon: iconImage },
     ]}
     socialLinks={[]} /&gt;;</code></pre>
             </div>
@@ -4314,22 +4313,22 @@ supportedNetworks?: Array&lt;{
     appName=&quot;Super Long Application Name That Might Cause Layout Issues&quot;
     category=&quot;DeFi&quot;
     description=&quot;This story demonstrates how the component handles very long application names that might cause layout issues or text overflow problems in the UI.&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     isVerified
     supportedNetworks={[
-      { name: &quot;Kaspa&quot;, icon: { uri: iconImage } },
-      { name: &quot;KRC-20&quot;, icon: { uri: iconImage } },
-      { name: &quot;Other&quot;, icon: { uri: iconImage } },
+      { name: &quot;Kaspa&quot;, icon: iconImage },
+      { name: &quot;KRC-20&quot;, icon: iconImage },
+      { name: &quot;Other&quot;, icon: iconImage },
     ]}
     socialLinks={[
-      { name: &quot;Twitter&quot;, icon: { uri: iconImage }, url: &quot;https://twitter.com&quot; },
+      { name: &quot;Twitter&quot;, icon: iconImage, url: &quot;https://twitter.com&quot; },
       {
         name: &quot;Telegram&quot;,
-        icon: { uri: iconImage },
+        icon: iconImage,
         url: &quot;https://telegram.org&quot;,
       },
-      { name: &quot;Discord&quot;, icon: { uri: iconImage }, url: &quot;https://discord.com&quot; },
-      { name: &quot;Medium&quot;, icon: { uri: iconImage }, url: &quot;https://medium.com&quot; },
+      { name: &quot;Discord&quot;, icon: iconImage, url: &quot;https://discord.com&quot; },
+      { name: &quot;Medium&quot;, icon: iconImage, url: &quot;https://medium.com&quot; },
     ]} /&gt;;</code></pre>
             </div>
         </div>
@@ -5705,7 +5704,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Kaspa Finance&quot;
     appUrl=&quot;app.kaspafinance.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kaspa&quot;
     fromAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7&quot;
     rows={defaultRows}
@@ -5726,7 +5725,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Kaspa Finance&quot;
     appUrl=&quot;app.kaspafinance.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kaspa&quot;
     fromAddress={undefined}
     rows={defaultRows}
@@ -5747,7 +5746,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Kaspa Finance&quot;
     appUrl=&quot;app.kaspafinance.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kaspa&quot;
     fromAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7&quot;
     rows={defaultRows}
@@ -5789,7 +5788,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Kaspa Finance&quot;
     appUrl=&quot;app.kaspafinance.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kaspa&quot;
     fromAddress=&quot;kaspa:qpl7evxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7&quot;
     rows={defaultRows}
@@ -5811,7 +5810,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Kaspa Finance&quot;
     appUrl=&quot;app.kaspafinance.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     networkBadge=&quot;Kaspa&quot;
     fromAddress={undefined}
     rows={[
@@ -5945,10 +5944,10 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     targetNetworkName=&quot;Kaspa&quot;
     targetNetworkBadge=&quot;Mainnet&quot;
-    targetNetworkIcon={{ uri: iconImage }} /&gt;;</code></pre>
+    targetNetworkIcon={iconImage} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -5962,7 +5961,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     targetNetworkName=&quot;Kaspa&quot;
     targetNetworkBadge=&quot;Testnet&quot;
     targetNetworkIcon={undefined} /&gt;;</code></pre>
@@ -5982,7 +5981,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     appIcon={undefined}
     targetNetworkName=&quot;Kaspa&quot;
     targetNetworkBadge=&quot;Mainnet&quot;
-    targetNetworkIcon={{ uri: iconImage }} /&gt;;</code></pre>
+    targetNetworkIcon={iconImage} /&gt;;</code></pre>
             </div>
         </div>
     
@@ -7994,7 +7993,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     message={sampleMessage} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -8024,7 +8023,7 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     onClose={() =&gt; {}}
     appName=&quot;Zealous Swap&quot;
     appUrl=&quot;app.zealousswap.io&quot;
-    appIcon={{ uri: iconImage }}
+    appIcon={iconImage}
     message=&quot;Hello Kastle!&quot; /&gt;;</code></pre>
             </div>
         </div>
