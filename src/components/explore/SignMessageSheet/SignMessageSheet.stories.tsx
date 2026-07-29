@@ -59,7 +59,7 @@ const meta: Meta<typeof SignMessageSheet> = {
     onClose: () => {},
     appName: "Zealous Swap",
     appUrl: "app.zealousswap.io",
-    appIcon: { uri: iconImage },
+    appIcon: iconImage,
     message: sampleMessage,
   },
   argTypes: {

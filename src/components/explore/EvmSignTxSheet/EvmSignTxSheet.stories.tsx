@@ -77,7 +77,7 @@ const meta: Meta<typeof EvmSignTxSheet> = {
     onClose: () => {},
     appName: "Zealous Swap",
     appUrl: "app.zealousswap.io",
-    appIcon: { uri: iconImage },
+    appIcon: iconImage,
     networkBadge: "Kasplex",
     fromAddress: "0xdc1f452e0D7A2e0978d4D6b4b3e3b3e3b3e3b3e3",
     toAddress: "0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B",
@@ -103,9 +103,7 @@ export const Default: Story = {
 
 export const WithoutContractAddress: Story = {
   render: (args) => <SheetDemo {...args} />,
-  args: {
-    contractAddress: undefined,
-  },
+  args: {},
 };
 
 export const WithoutRawDetails: Story = {

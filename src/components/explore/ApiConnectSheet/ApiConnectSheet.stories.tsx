@@ -71,7 +71,7 @@ const meta: Meta<typeof ApiConnectSheet> = {
     onClose: () => {},
     appName: "Zealous Swap",
     appUrl: "app.zealousswap.com",
-    appIcon: { uri: iconImage },
+    appIcon: iconImage,
     accounts: defaultAccounts,
   },
   argTypes: {

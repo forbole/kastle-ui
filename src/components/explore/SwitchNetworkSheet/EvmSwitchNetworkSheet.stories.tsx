@@ -56,7 +56,7 @@ const meta: Meta<typeof EvmSwitchNetworkSheet> = {
     onClose: () => {},
     appName: "Zealous Swap",
     appUrl: "app.zealousswap.io",
-    appIcon: { uri: iconImage },
+    appIcon: iconImage,
     targetNetworkName: "Polygon",
     targetNetworkChainId: "Chain ID: 137",
   },
@@ -84,7 +84,7 @@ export const NoIcon: Story = {
 export const WithNetworkIcon: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
-    targetNetworkIcon: { uri: iconImage },
+    targetNetworkIcon: iconImage,
   },
 };
 
