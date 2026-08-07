@@ -28,9 +28,22 @@ import {
  * Button — pure UI, no data logic.
  *
  * Figma: fileKey bd49NycFuloqaJvXaib8wx, node 11821:49142 ("Kastle Component (Mobile)").
- * Only the 5 action×variant combinations below are built — this is a deliberate
- * scope decision (see kastle-ui PR description), not an oversight. Passing any
- * other combination is a TypeScript error by construction (discriminated union).
+ * 6 of 8 requested action×variant combinations are built. `secondary`+`text` was
+ * added in this pass. `primary`+`outline` and `secondary`+`transparent` are
+ * NOT built — verified against the full metadata dump of this Figma node
+ * (crosstab below) that no such action×variant pairing exists anywhere in the
+ * component set. Per the "colour role is not derivable" rule, that gap is
+ * reported (see PR description), not guessed. Passing any un-built
+ * combination is a TypeScript error by construction (discriminated union).
+ *
+ * Full action×Variant crosstab actually present in Figma (9 pairs, not a full
+ * cross product — verified via `grep -o 'action=[a-zA-Z]*, size=[a-z]*,
+ * Variant=[a-zA-Z ]*'` over the node's metadata XML, deduped):
+ *   primary:   Solid, Linked, Transparent Button
+ *   secondary: Outlined, Linked
+ *   negative:  Solid, Outlined, Linked
+ *   Tertiary:  Transparent Button
+ *   Warning:   Linked
  */
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
@@ -46,6 +59,7 @@ export type ButtonComboProps =
   | { action: "primary"; variant: "text" }
   | { action: "primary"; variant: "transparent" }
   | { action: "secondary"; variant: "outline" }
+  | { action: "secondary"; variant: "text" }
   | { action: "negative"; variant: "solid" };
 
 export type ButtonProps = ButtonComboProps & {
@@ -69,6 +83,7 @@ type ComboKey =
   | "primary-text"
   | "primary-transparent"
   | "secondary-outline"
+  | "secondary-text"
   | "negative-solid";
 
 function comboKey(action: ButtonComboProps["action"], variant: ButtonComboProps["variant"]): ComboKey {
@@ -119,14 +134,25 @@ const SIZE_STYLES: Record<
 
 /**
  * Per-combo, per-size overrides where Figma's actual bound value breaks the
- * shared scale above. Currently one: negative-solid/md is 44px tall, not 40.
- * This is NOT a derived value — it is Figma's literal bound value
- * (Spacing/11 = 44, node 7592:30546 and its isDisabled sibling 7592:30541
- * both confirm it) — flagged in the PR description as a likely Figma
- * inconsistency for Nicole to confirm, not silently "corrected" here.
+ * shared scale above. Both entries are Figma's literal bound values, not
+ * guesses — flagged in the PR description as likely Figma inconsistencies
+ * for Nicole to confirm, not silently "corrected" here.
+ *
+ * - negative-solid/md is 44px tall, not 40 (Spacing/11 = 44, node 7592:30546
+ *   and its isDisabled sibling 7592:30541 both confirm it).
+ * - secondary-text/xl is bound to the "lg" text style (18px), not "xl"
+ *   (20px) — confirmed on BOTH the default (8085:62748) and pressed
+ *   (8085:62733) xl nodes, both returning "Text-medium/lg : 18px" from
+ *   get_variable_defs, while xs/sm/md/lg on the same combo all bind
+ *   correctly to their own size's text style. Two independent state nodes
+ *   agreeing rules out a one-off tool glitch — this looks like a genuine
+ *   Figma authoring slip on this specific combo.
  */
-const SIZE_OVERRIDES: Partial<Record<ComboKey, Partial<Record<ButtonSize, { height: number }>>>> = {
+const SIZE_OVERRIDES: Partial<
+  Record<ComboKey, Partial<Record<ButtonSize, { height?: number; fontSize?: number }>>>
+> = {
   "negative-solid": { md: { height: spacing.s11 } },
+  "secondary-text": { xl: { fontSize: fontSize.lg } },
 };
 
 // ---------------------------------------------------------------------------
@@ -177,6 +203,16 @@ const COMBO_STYLES: Record<ComboKey, ComboStyle> = {
     // the default state's pattern (border colour == text colour).
     pressedBorderColor: typography.t700,
     borderWidth: borderWidth.bw1,
+    borderRadius: borderRadius.full,
+  },
+  "secondary-text": {
+    // Figma (node 8085:62348 default / 8085:62333 pressed, action=secondary,
+    // Variant=Linked): textColor = Typography/typography500 (#7b9aaa),
+    // pressedTextColor = Typography/typography700 (#c1d5de) — identically
+    // the same two colours secondary-outline uses, confirming "secondary"
+    // consistently maps to the typography500/700 pair regardless of variant.
+    textColor: typography.t500,
+    pressedTextColor: typography.t700,
     borderRadius: borderRadius.full,
   },
   "negative-solid": {

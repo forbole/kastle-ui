@@ -19,6 +19,7 @@ const COMBOS: { combo: ButtonComboProps; title: string }[] = [
   { combo: { action: "primary", variant: "text" }, title: "primary / text (Figma: Linked)" },
   { combo: { action: "primary", variant: "transparent" }, title: "primary / transparent" },
   { combo: { action: "secondary", variant: "outline" }, title: "secondary / outline" },
+  { combo: { action: "secondary", variant: "text" }, title: "secondary / text (Figma: Linked)" },
   { combo: { action: "negative", variant: "solid" }, title: "negative / solid" },
 ];
 
@@ -35,9 +36,14 @@ function SectionLabel({ children }: { children: string }) {
 }
 
 /**
- * All 5 built action×variant combinations, each across all 5 sizes.
- * This is the primary state-coverage story: 25 (combo × size) Button
+ * All 6 built action×variant combinations, each across all 5 sizes.
+ * This is the primary state-coverage story: 30 (combo × size) Button
  * instances in the default (unpressed, enabled) state.
+ *
+ * NOT included (2/8 requested combos): primary/outline, secondary/transparent
+ * — zero matching Figma instances found for either action×variant pairing
+ * anywhere in the component set (see Button.tsx's crosstab comment and the
+ * PR description). Reported, not guessed.
  */
 export const AllCombosAllSizes: Story = {
   render: () => (

@@ -1,7 +1,7 @@
 ## What changed
-Adds a new pure-UI `Button` component to `kastle-ui` (`src/components/Button/`) — React Native + StyleSheet + `theme.ts`, no existing Button previously existed in this repo. Covers 5 action×variant combinations (see below) at all 5 sizes, with Storybook stories for default/disabled/loading/long-label states.
+Adds a new pure-UI `Button` component to `kastle-ui` (`src/components/Button/`) — React Native + StyleSheet + `theme.ts`, no existing Button previously existed in this repo. Covers 6 action×variant combinations (see below) at all 5 sizes, with Storybook stories for default/disabled/loading/long-label states.
 
-⚠️ **Scope note:** a scope-correction message from Nicole reportedly expanded this to 8 combinations (adding `primary`+`outline`, `secondary`+`text`, `secondary`+`transparent`). That message did not reach this agent — see the delivery report for details. This PR ships only the original 5. The 3 additional combinations are NOT built.
+⚠️ **Scope note (updated, follow-up pass):** the corrected brief asked for 3 more combinations: `primary`+`outline`, `secondary`+`text`, `secondary`+`transparent`. Of those, `secondary`+`text` is now built (6/8 total). `primary`+`outline` and `secondary`+`transparent` are **not** built — verified against the full Figma metadata dump for node `11821:49142` that neither action×variant pairing exists anywhere in the component set (crosstab in Button.tsx's header comment and in the delivery report). Per the "colour role is not derivable" rule, this is reported, not guessed.
 
 ## Why
 kastle-mobile has no reusable Button — every screen hand-rolls buttons or reaches for the legacy Gluestack `components/ui/button`, which is being phased out. This is the first shared kastle-ui Button, built component-first per the repo's "component-first, then pages" phase.
