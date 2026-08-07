@@ -18,6 +18,7 @@ const COMBOS: { combo: ButtonComboProps; title: string }[] = [
   { combo: { action: "primary", variant: "solid" }, title: "primary / solid" },
   { combo: { action: "primary", variant: "text" }, title: "primary / text (Figma: Linked)" },
   { combo: { action: "primary", variant: "transparent" }, title: "primary / transparent" },
+  { combo: { action: "primary", variant: "outline" }, title: "primary / outline (⚠️ derived, no Figma mockup)" },
   { combo: { action: "secondary", variant: "outline" }, title: "secondary / outline" },
   { combo: { action: "secondary", variant: "text" }, title: "secondary / text (Figma: Linked)" },
   { combo: { action: "negative", variant: "solid" }, title: "negative / solid" },
@@ -36,14 +37,19 @@ function SectionLabel({ children }: { children: string }) {
 }
 
 /**
- * All 6 built action×variant combinations, each across all 5 sizes.
- * This is the primary state-coverage story: 30 (combo × size) Button
+ * All 7 built action×variant combinations, each across all 5 sizes.
+ * This is the primary state-coverage story: 35 (combo × size) Button
  * instances in the default (unpressed, enabled) state.
  *
- * NOT included (2/8 requested combos): primary/outline, secondary/transparent
- * — zero matching Figma instances found for either action×variant pairing
- * anywhere in the component set (see Button.tsx's crosstab comment and the
- * PR description). Reported, not guessed.
+ * `primary`/`outline` is derived (no Figma mockup exists for it) — see the
+ * DERIVED comment on its COMBO_STYLES entry in Button.tsx for the 3 verified
+ * source rules it composes.
+ *
+ * NOT included, and never will be: `secondary`/`transparent`. This is not a
+ * gap — it is not a real variant. kastle-mobile's Gluestack `variant.transparent`
+ * rule hardcodes background and text colour with no `action` term, so
+ * `secondary`+`transparent` renders pixel-identical to `primary`+`transparent`.
+ * See Button.tsx's file header and PR-DESCRIPTION.md for the citation.
  */
 export const AllCombosAllSizes: Story = {
   render: () => (

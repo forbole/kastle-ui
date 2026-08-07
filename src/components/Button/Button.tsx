@@ -28,13 +28,11 @@ import {
  * Button — pure UI, no data logic.
  *
  * Figma: fileKey bd49NycFuloqaJvXaib8wx, node 11821:49142 ("Kastle Component (Mobile)").
- * 6 of 8 requested action×variant combinations are built. `secondary`+`text` was
- * added in this pass. `primary`+`outline` and `secondary`+`transparent` are
- * NOT built — verified against the full metadata dump of this Figma node
- * (crosstab below) that no such action×variant pairing exists anywhere in the
- * component set. Per the "colour role is not derivable" rule, that gap is
- * reported (see PR description), not guessed. Passing any un-built
- * combination is a TypeScript error by construction (discriminated union).
+ * 7 of the 8 requested action×variant combinations are built. `secondary`+`text`
+ * and `primary`+`outline` were added in this pass. `secondary`+`transparent` is
+ * intentionally NOT built — see the note below. This is not "8 minus a gap";
+ * 7 is the correct, final count. Passing any un-built combination is a
+ * TypeScript error by construction (discriminated union).
  *
  * Full action×Variant crosstab actually present in Figma (9 pairs, not a full
  * cross product — verified via `grep -o 'action=[a-zA-Z]*, size=[a-z]*,
@@ -44,6 +42,29 @@ import {
  *   negative:  Solid, Outlined, Linked
  *   Tertiary:  Transparent Button
  *   Warning:   Linked
+ * Neither `primary`+`Outlined` nor `secondary`+`Transparent Button` appears
+ * here. That crosstab alone left both as unresolved colour roles — reported,
+ * not guessed, in the prior pass. Cross-checking against the source of truth
+ * production actually runs (kastle-mobile's Gluestack `tva` definition,
+ * `components/ui/button/index.tsx`) resolved both differently:
+ *
+ * - `primary`+`outline` IS real and IS built. `index.tsx`'s `variant.outline`
+ *   entry is an empty string (`:130-143`) — outline defers text colour to
+ *   `action` instead of overriding it, so `primary`+`outline` genuinely
+ *   renders differently from the already-built `secondary`+`outline` (whose
+ *   colours came from `action.secondary`, not from `variant.outline`). Built
+ *   here as a *derived* combo — see the DERIVED comment on its COMBO_STYLES
+ *   entry below for the 3 source rules it composes.
+ *
+ * - `secondary`+`transparent` is NOT a real variant and will not be built.
+ *   `index.tsx`'s `variant.transparent` entry (`:60-61`, `:142-143`) hardcodes
+ *   both background (`bg-white/5`) and text colour (`text-typography-950`)
+ *   with no `action` term anywhere in either rule. So the 6 production call
+ *   sites passing `action="secondary" variant="transparent"` render
+ *   pixel-identical to `primary`+`transparent` — the `action="secondary"`
+ *   prop on those sites is a no-op in the current Gluestack implementation.
+ *   This is recorded, not fixed: per §0A those are shipped production call
+ *   sites, not this component's to change.
  */
 
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
@@ -58,6 +79,7 @@ export type ButtonComboProps =
   | { action: "primary"; variant: "solid" }
   | { action: "primary"; variant: "text" }
   | { action: "primary"; variant: "transparent" }
+  | { action: "primary"; variant: "outline" }
   | { action: "secondary"; variant: "outline" }
   | { action: "secondary"; variant: "text" }
   | { action: "negative"; variant: "solid" };
@@ -82,6 +104,7 @@ type ComboKey =
   | "primary-solid"
   | "primary-text"
   | "primary-transparent"
+  | "primary-outline"
   | "secondary-outline"
   | "secondary-text"
   | "negative-solid";
@@ -192,6 +215,30 @@ const COMBO_STYLES: Record<ComboKey, ComboStyle> = {
     pressedBorderColor: border.b200,
     borderWidth: borderWidth.bw1,
     borderRadius: borderRadius["2xl"],
+  },
+  "primary-outline": {
+    // ⚠️ DERIVED — no Figma node exists for this combo (verified: neither
+    // `primary` nor `Outlined` co-occur anywhere in the Figma component set's
+    // metadata crosstab, see file header). Built instead by composing 3
+    // independently-verified rules, not invented:
+    //   1. "outline" shape = no fill, borderColor == textColor, bw1, full
+    //      radius — taken from this file's own `secondary-outline` entry.
+    //   2. `primary`'s unfilled text colour is primary.p500 (default) /
+    //      primary.p700 (pressed) — taken from this file's own
+    //      `primary-text` entry, itself sourced from Figma.
+    //   3. Gluestack's `variant.outline` rule is an empty string
+    //      (kastle-mobile components/ui/button/index.tsx:130-143) — outline
+    //      defers text/border colour to `action` instead of overriding it,
+    //      which is why `primary`+`outline` is a genuinely distinct
+    //      combination from `secondary`+`outline` and not a duplicate.
+    // Flagged for Nicole to confirm — this is derived from verified rules,
+    // not read directly off a Figma mockup.
+    textColor: primary.p500,
+    pressedTextColor: primary.p700,
+    borderColor: primary.p500,
+    pressedBorderColor: primary.p700,
+    borderWidth: borderWidth.bw1,
+    borderRadius: borderRadius.full,
   },
   "secondary-outline": {
     textColor: typography.t500,
