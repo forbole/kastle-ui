@@ -7,6 +7,9 @@ import { spacing, typography } from "../../config/theme";
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
+  // Built ahead of demand: nothing outside this folder imports Button yet.
+  // Cleared only when Nicole confirms UAT — not when it first gets used (§3E).
+  tags: ["unverified"],
 };
 export default meta;
 
