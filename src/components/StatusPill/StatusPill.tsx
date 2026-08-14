@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { CircleCheck, CircleX, ClockFading } from "lucide-react-native";
+import { CircleCheck, CircleX, ClockFading, Undo2 } from "lucide-react-native";
 import { colors, error, spacing, success, textStyles, warning } from "../../config/theme";
 
-export type StatusPillStatus = "success" | "failed" | "pending";
+export type StatusPillStatus = "success" | "failed" | "pending" | "refunded";
 
 export interface StatusPillProps {
   status: StatusPillStatus;
@@ -35,8 +35,14 @@ const STATUS_CONFIG: Record<
   pending: {
     icon: ClockFading,
     label: "Pending",
-    color: warning.w500,
+    color: warning.w800,
     bg: warning.background,
+  },
+  refunded: {
+    icon: Undo2,
+    label: "Refunded",
+    color: success.s800,
+    bg: success.background,
   },
 };
 

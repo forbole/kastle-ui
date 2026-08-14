@@ -2,9 +2,19 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { Image, View, StyleSheet } from "react-native";
 import { ActivityScreen, ActivityScreenItem } from "./ActivityScreen";
+import { StatusPill } from "../../../../components/StatusPill";
 import { colors } from "../../../../config/theme";
 
 const placeholderLogo = require("../../../../../assets/icon.png");
+
+// Status is a KV row at the TOP of `details` — between the transfer card and
+// Fees — never a pill beside the subtitle. Nicole standardised every story on
+// this 2026-08-14; the fixtures below are the same nine sheets reached by
+// tapping a row, so they must render identically to their
+// `ActivityDetailSheet.stories.tsx` counterparts. Written verbatim as
+// `{ label: "Status", value: "", valueNode: <StatusPill status="…" /> }`
+// (ActivityDetailSheet.stories.tsx:76 / :143). No `valueSubtext` — these nine
+// never had one and none may be invented.
 
 const providerPrefix = (
   <Image
@@ -26,31 +36,33 @@ const swapTxs: ActivityScreenItem[] = [
     dateTime: "8 Oct | 02:03",
     amountNumber: "+1,000,000.87", amountSymbol: "NACHO",
     amountUsd: "≈ $9,486.17 USD",
-    isPositive: true,
-    sheetTitle: "Swap KAS → NACHO",
-    sheetSubtitle: "8 Oct, 2025 | 02:03",
-    status: "success",
-    transfer: {
-      fromImage: placeholderLogo,
-      fromSymbol: "KAS",
-      fromChainImage: placeholderLogo,
-      toImage: placeholderLogo,
-      toSymbol: "NACHO",
-      toChainImage: placeholderLogo,
-      fallback: placeholderLogo,
-      sentLabel: "Paid",
-      sentAmount: "1,000 KAS",
-      sentUsd: "≈ $9,486.17 USD",
-      receivedAmount: "1,000,000.87 NACHO",
-      receivedUsd: "≈ $9,486.17 USD",
+    tone: "credit",
+    sheet: {
+      title: "Swap KAS → NACHO",
+      subtitle: "8 Oct, 2025 | 02:03",
+      transfer: {
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "NACHO",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Paid",
+        sentAmount: "1,000 KAS",
+        sentUsd: "≈ $9,486.17 USD",
+        receivedAmount: "1,000,000.87 NACHO",
+        receivedUsd: "≈ $9,486.17 USD",
+      },
+      details: [
+        { label: "Status", value: "", valueNode: <StatusPill status="success" /> },
+        { label: "Fees", value: "0.0002 KAS" },
+        { label: "Rate", value: "1 KAS ≈ 0.032799 NACHO" },
+        { label: "Slippage", value: "0.3%" },
+        { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
+        { label: "Transaction", value: "View", onPressValue: () => {} },
+      ],
     },
-    details: [
-      { label: "Fees", value: "0.0002 KAS" },
-      { label: "Rate", value: "1 KAS ≈ 0.032799 NACHO" },
-      { label: "Slippage", value: "0.3%" },
-      { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
-      { label: "Transaction", value: "View", onPressValue: () => {} },
-    ],
   },
   {
     id: "s2",
@@ -64,31 +76,33 @@ const swapTxs: ActivityScreenItem[] = [
     dateTime: "8 Oct | 02:03",
     amountNumber: "+21.4545", amountSymbol: "NACHO",
     amountUsd: "≈ $1,454.55 USD",
-    isPositive: true,
-    sheetTitle: "Swap KAS → NACHO",
-    sheetSubtitle: "8 Oct, 2025 | 02:03",
-    status: "success",
-    transfer: {
-      fromImage: placeholderLogo,
-      fromSymbol: "KAS",
-      fromChainImage: placeholderLogo,
-      toImage: placeholderLogo,
-      toSymbol: "NACHO",
-      toChainImage: placeholderLogo,
-      fallback: placeholderLogo,
-      sentLabel: "Paid",
-      sentAmount: "0.5 KAS",
-      sentUsd: "≈ $1,454.55 USD",
-      receivedAmount: "21.4545 NACHO",
-      receivedUsd: "≈ $1,454.55 USD",
+    tone: "credit",
+    sheet: {
+      title: "Swap KAS → NACHO",
+      subtitle: "8 Oct, 2025 | 02:03",
+      transfer: {
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "NACHO",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Paid",
+        sentAmount: "0.5 KAS",
+        sentUsd: "≈ $1,454.55 USD",
+        receivedAmount: "21.4545 NACHO",
+        receivedUsd: "≈ $1,454.55 USD",
+      },
+      details: [
+        { label: "Status", value: "", valueNode: <StatusPill status="success" /> },
+        { label: "Fees", value: "0.0002 KAS" },
+        { label: "Rate", value: "1 KAS ≈ 42.91 NACHO" },
+        { label: "Slippage", value: "0.3%" },
+        { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
+        { label: "Transaction", value: "View", onPressValue: () => {} },
+      ],
     },
-    details: [
-      { label: "Fees", value: "0.0002 KAS" },
-      { label: "Rate", value: "1 KAS ≈ 42.91 NACHO" },
-      { label: "Slippage", value: "0.3%" },
-      { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
-      { label: "Transaction", value: "View", onPressValue: () => {} },
-    ],
   },
   {
     id: "s3",
@@ -102,31 +116,33 @@ const swapTxs: ActivityScreenItem[] = [
     dateTime: "5 Oct | 11:30",
     amountNumber: "+87.484822", amountSymbol: "NACHO",
     amountUsd: "≈ $98.45 USD",
-    isPositive: true,
-    sheetTitle: "Swap KAS → NACHO",
-    sheetSubtitle: "5 Oct, 2025 | 11:30",
-    status: "success",
-    transfer: {
-      fromImage: placeholderLogo,
-      fromSymbol: "KAS",
-      fromChainImage: placeholderLogo,
-      toImage: placeholderLogo,
-      toSymbol: "NACHO",
-      toChainImage: placeholderLogo,
-      fallback: placeholderLogo,
-      sentLabel: "Paid",
-      sentAmount: "2 KAS",
-      sentUsd: "≈ $98.45 USD",
-      receivedAmount: "87.484822 NACHO",
-      receivedUsd: "≈ $98.45 USD",
+    tone: "credit",
+    sheet: {
+      title: "Swap KAS → NACHO",
+      subtitle: "5 Oct, 2025 | 11:30",
+      transfer: {
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "NACHO",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Paid",
+        sentAmount: "2 KAS",
+        sentUsd: "≈ $98.45 USD",
+        receivedAmount: "87.484822 NACHO",
+        receivedUsd: "≈ $98.45 USD",
+      },
+      details: [
+        { label: "Status", value: "", valueNode: <StatusPill status="success" /> },
+        { label: "Fees", value: "0.0002 KAS" },
+        { label: "Rate", value: "1 KAS ≈ 43.74 NACHO" },
+        { label: "Slippage", value: "0.3%" },
+        { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
+        { label: "Transaction", value: "View", onPressValue: () => {} },
+      ],
     },
-    details: [
-      { label: "Fees", value: "0.0002 KAS" },
-      { label: "Rate", value: "1 KAS ≈ 43.74 NACHO" },
-      { label: "Slippage", value: "0.3%" },
-      { label: "Provider", value: "Zealous Swap", valuePrefix: providerPrefix },
-      { label: "Transaction", value: "View", onPressValue: () => {} },
-    ],
   },
 ];
 
@@ -143,30 +159,32 @@ const bridgeTxs: ActivityScreenItem[] = [
     dateTime: "8 Oct | 03:45",
     amountNumber: "+1,000,000.8", amountSymbol: "NACHO",
     amountUsd: "≈ $9,486.17 USD",
-    isPositive: true,
-    sheetTitle: "Bridge KAS (Kaspa → Kasplex)",
-    sheetSubtitle: "8 Oct, 2025 | 03:45",
-    status: "success",
-    transfer: {
-      fromImage: placeholderLogo,
-      fromSymbol: "KAS",
-      fromChainImage: placeholderLogo,
-      toImage: placeholderLogo,
-      toSymbol: "KAS",
-      toChainImage: placeholderLogo,
-      fallback: placeholderLogo,
-      sentLabel: "Sent",
-      sentAmount: "1,000,000 NACHO",
-      sentUsd: "≈ $9,486.17 USD",
-      receivedAmount: "1,000,000.8 NACHO",
-      receivedUsd: "≈ $9,486.17 USD",
+    tone: "credit",
+    sheet: {
+      title: "Bridge KAS (Kaspa → Kasplex)",
+      subtitle: "8 Oct, 2025 | 03:45",
+      transfer: {
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "KAS",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Sent",
+        sentAmount: "1,000,000 NACHO",
+        sentUsd: "≈ $9,486.17 USD",
+        receivedAmount: "1,000,000.8 NACHO",
+        receivedUsd: "≈ $9,486.17 USD",
+      },
+      details: [
+        { label: "Status", value: "", valueNode: <StatusPill status="success" /> },
+        { label: "Fees", value: "0.0002 KAS" },
+        { label: "Provider", value: "Kurve Bridge", valuePrefix: providerPrefix },
+        { label: "Source TX", value: "View", onPressValue: () => {} },
+        { label: "Destination TX", value: "View", onPressValue: () => {} },
+      ],
     },
-    details: [
-      { label: "Fees", value: "0.0002 KAS" },
-      { label: "Provider", value: "Kurve Bridge", valuePrefix: providerPrefix },
-      { label: "Source TX", value: "View", onPressValue: () => {} },
-      { label: "Destination TX", value: "View", onPressValue: () => {} },
-    ],
   },
   {
     id: "b2",
@@ -180,30 +198,32 @@ const bridgeTxs: ActivityScreenItem[] = [
     dateTime: "7 Oct | 11:00",
     amountNumber: "+240", amountSymbol: "KAS",
     amountUsd: "≈ $240.00 USD",
-    isPositive: true,
-    sheetTitle: "Bridge KAS (Kasplex → Kaspa)",
-    sheetSubtitle: "7 Oct, 2025 | 11:00",
-    status: "success",
-    transfer: {
-      fromImage: placeholderLogo,
-      fromSymbol: "KAS",
-      fromChainImage: placeholderLogo,
-      toImage: placeholderLogo,
-      toSymbol: "KAS",
-      toChainImage: placeholderLogo,
-      fallback: placeholderLogo,
-      sentLabel: "Sent",
-      sentAmount: "240 KAS",
-      sentUsd: "≈ $240.00 USD",
-      receivedAmount: "240 KAS",
-      receivedUsd: "≈ $240.00 USD",
+    tone: "credit",
+    sheet: {
+      title: "Bridge KAS (Kasplex → Kaspa)",
+      subtitle: "7 Oct, 2025 | 11:00",
+      transfer: {
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "KAS",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Sent",
+        sentAmount: "240 KAS",
+        sentUsd: "≈ $240.00 USD",
+        receivedAmount: "240 KAS",
+        receivedUsd: "≈ $240.00 USD",
+      },
+      details: [
+        { label: "Status", value: "", valueNode: <StatusPill status="success" /> },
+        { label: "Fees", value: "0.0002 KAS" },
+        { label: "Provider", value: "Kurve Bridge", valuePrefix: providerPrefix },
+        { label: "Source TX", value: "View", onPressValue: () => {} },
+        { label: "Destination TX", value: "View", onPressValue: () => {} },
+      ],
     },
-    details: [
-      { label: "Fees", value: "0.0002 KAS" },
-      { label: "Provider", value: "Kurve Bridge", valuePrefix: providerPrefix },
-      { label: "Source TX", value: "View", onPressValue: () => {} },
-      { label: "Destination TX", value: "View", onPressValue: () => {} },
-    ],
   },
 ];
 
@@ -258,6 +278,86 @@ export const BridgeLoaded: Story = {
 
 export const BridgeEmpty: Story = {
   args: { pageType: "bridge", state: "empty" },
+};
+
+// Bridge counterpart of `SwapLoadingMore` — same shape, only `pageType` and the
+// fixture differ. Named `BridgeLoadingMore`, not `BridgeLoadMore`, to stay
+// symmetrical with the sibling that already exists (`<Feature><State>`).
+export const BridgeLoadingMore: Story = {
+  args: {
+    pageType: "bridge",
+    state: "loaded",
+    transactions: bridgeTxs,
+    loadingMore: true,
+  },
+};
+
+// `BridgeInProgressFirst` and its `bridgeTxsWithAttention` fixture were removed
+// 2026-08-14 (Nicole): it duplicated `BridgeStuck`. Both are "bridge list with
+// an in-flight row", and `BridgeStuck` additionally lets you tap through to the
+// Withdraw flow, so it is the strictly more useful of the two. In-progress-first
+// ordering is now unconditional, so it needs no dedicated story to demonstrate
+// it. The fixture was deleted along with the story because nothing else used it
+// (`grep -rn "bridgeTxsWithAttention" src/` → only its own definition and that
+// one story); `bridgeTxs` is shared by three stories and stays.
+
+// A bridge that passed the 48h window and can be withdrawn. The withdraw props
+// live on the item's `sheet`, so opening the sheet FROM THE LIST is the only way
+// this story can show the amber Withdraw button — which is exactly what the
+// prop-by-prop forward used to break (the button rendered in the
+// ActivityDetailSheet story and nowhere else).
+const bridgeTxStuckPastWindow: ActivityScreenItem[] = [
+  {
+    id: "b6",
+    title: "Bridging",
+    pair: {
+      fromImage: placeholderLogo,
+      toImage: placeholderLogo,
+      chainImage: placeholderLogo,
+      fallback: placeholderLogo,
+    },
+    dateTime: "6 Oct | 14:20",
+    amountNumber: "+1,000", amountSymbol: "iKAS",
+    amountUsd: "≈ $210.00 USD",
+    tone: "neutral",
+    attention: 1,
+    isInProgress: true,
+    sheet: {
+      title: "Bridge KAS (Kaspa → Igra)",
+      subtitle: "6 Oct, 2025 | 14:20",
+      transfer: {
+        fromImage: placeholderLogo,
+        fromSymbol: "KAS",
+        fromChainImage: placeholderLogo,
+        toImage: placeholderLogo,
+        toSymbol: "iKAS",
+        toChainImage: placeholderLogo,
+        fallback: placeholderLogo,
+        sentLabel: "Sent",
+        sentAmount: "1,000 KAS",
+        sentUsd: "≈ $210.00 USD",
+        receivedAmount: "1,000 iKAS",
+        receivedUsd: "≈ $210.00 USD",
+      },
+      details: [
+        { label: "Status", value: "", valueNode: <StatusPill status="pending" /> },
+        { label: "Provider", value: "KAT Bridge", valuePrefix: providerPrefix },
+        { label: "Source TX", value: "View", onPressValue: () => {} },
+      ],
+      notice:
+        "Nothing was lost — withdrawing returns the full amount, including the fee, to your wallet.",
+      withdrawAmount: "1,000 iKAS",
+      onWithdrawConfirm: () => console.log("withdraw confirmed"),
+    },
+  },
+];
+
+export const BridgeStuck: Story = {
+  args: {
+    pageType: "bridge",
+    state: "loaded",
+    transactions: [...bridgeTxStuckPastWindow, ...bridgeTxs],
+  },
 };
 
 const styles = StyleSheet.create({
