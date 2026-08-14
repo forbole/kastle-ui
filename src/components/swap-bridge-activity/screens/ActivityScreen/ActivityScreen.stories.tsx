@@ -340,9 +340,17 @@ const bridgeTxStuckPastWindow: ActivityScreenItem[] = [
         receivedUsd: "≈ $210.00 USD",
       },
       details: [
-        { label: "Status", value: "", valueNode: <StatusPill status="pending" /> },
+        {
+          label: "Status",
+          value: "Submitted",
+          valueNode: <StatusPill status="pending" label="Submitted" />,
+          valueSubtext: "The bridge couldn't process this in time",
+          valueSubtextTone: "warning" as const,
+        },
+        { label: "Fees", value: "0.5 iKAS" },
         { label: "Provider", value: "KAT Bridge", valuePrefix: providerPrefix },
         { label: "Source TX", value: "View", onPressValue: () => {} },
+        { label: "Destination TX", value: "-" },
       ],
       notice:
         "Nothing was lost — withdrawing returns the full amount, including the fee, to your wallet.",
