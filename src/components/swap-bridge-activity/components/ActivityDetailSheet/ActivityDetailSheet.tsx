@@ -102,7 +102,7 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
     <ActionSheet
       isOpen={visible}
       onClose={onClose}
-      heightRatio={0.95}
+      topInset={spacing.s20}
       closeOnBackdropPress={!isWithdrawing}
     >
       <View style={styles.container}>
@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing.s3,
     paddingBottom: spacing.s4,
     gap: spacing.s3,
+    backgroundColor: background.bg100,
   },
   noticeSection: {
     alignItems: "center",
