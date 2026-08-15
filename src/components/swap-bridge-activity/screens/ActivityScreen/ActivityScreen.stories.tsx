@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { Image, View, StyleSheet } from "react-native";
 import { ActivityScreen, ActivityScreenItem } from "./ActivityScreen";
 import { StatusPill } from "../../../../components/StatusPill";
+import { BRIDGE_EXIT_COPY } from "../../bridgeExitCopy";
 import { colors } from "../../../../config/theme";
 
 const placeholderLogo = require("../../../../../assets/icon.png");
@@ -157,7 +158,7 @@ const bridgeTxs: ActivityScreenItem[] = [
       fallback: placeholderLogo,
     },
     dateTime: "8 Oct | 03:45",
-    amountNumber: "+1,000,000.8", amountSymbol: "NACHO",
+    amountNumber: "+1,000,000.8", amountSymbol: "KAS",
     amountUsd: "≈ $9,486.17 USD",
     tone: "credit",
     sheet: {
@@ -172,9 +173,9 @@ const bridgeTxs: ActivityScreenItem[] = [
         toChainImage: placeholderLogo,
         fallback: placeholderLogo,
         sentLabel: "Sent",
-        sentAmount: "1,000,000 NACHO",
+        sentAmount: "1,000,000 KAS",
         sentUsd: "≈ $9,486.17 USD",
-        receivedAmount: "1,000,000.8 NACHO",
+        receivedAmount: "1,000,000.8 KAS",
         receivedUsd: "≈ $9,486.17 USD",
       },
       details: [
@@ -317,34 +318,35 @@ const bridgeTxStuckPastWindow: ActivityScreenItem[] = [
       fallback: placeholderLogo,
     },
     dateTime: "6 Oct | 14:20",
-    amountNumber: "+1,000", amountSymbol: "iKAS",
-    amountUsd: "≈ $210.00 USD",
+    amountNumber: "+999.5", amountSymbol: "KAS",
+    amountUsd: "≈ $100.17 USD",
     tone: "neutral",
     attention: 1,
     isInProgress: true,
     sheet: {
-      title: "Bridge KAS (Kaspa → Igra)",
+      title: "Bridge iKAS (Igra → Kaspa)",
       subtitle: "6 Oct, 2025 | 14:20",
       transfer: {
         fromImage: placeholderLogo,
-        fromSymbol: "KAS",
+        fromSymbol: "iKAS",
         fromChainImage: placeholderLogo,
         toImage: placeholderLogo,
-        toSymbol: "iKAS",
+        toSymbol: "KAS",
         toChainImage: placeholderLogo,
         fallback: placeholderLogo,
         sentLabel: "Sent",
-        sentAmount: "1,000 KAS",
-        sentUsd: "≈ $210.00 USD",
-        receivedAmount: "1,000 iKAS",
-        receivedUsd: "≈ $210.00 USD",
+        sentAmount: "1,000 iKAS",
+        sentUsd: "≈ $100.17 USD",
+        receivedLabel: "You'll receive",
+        receivedAmount: "999.5 KAS",
+        receivedUsd: "≈ $100.17 USD",
       },
       details: [
         {
           label: "Status",
-          value: "Submitted",
-          valueNode: <StatusPill status="pending" label="Submitted" />,
-          valueSubtext: "The bridge couldn't process this in time",
+          value: BRIDGE_EXIT_COPY.submitted,
+          valueNode: <StatusPill status="pending" label={BRIDGE_EXIT_COPY.submitted} />,
+          valueSubtext: BRIDGE_EXIT_COPY.stuckSubtext,
           valueSubtextTone: "warning" as const,
         },
         { label: "Fees", value: "0.5 iKAS" },
@@ -352,8 +354,7 @@ const bridgeTxStuckPastWindow: ActivityScreenItem[] = [
         { label: "Source TX", value: "View", onPressValue: () => {} },
         { label: "Destination TX", value: "-" },
       ],
-      notice:
-        "Nothing was lost — withdrawing returns the full amount, including the fee, to your wallet.",
+      notice: BRIDGE_EXIT_COPY.withdrawNotice,
       withdrawAmount: "1,000 iKAS",
       onWithdrawConfirm: () => console.log("withdraw confirmed"),
     },

@@ -17,7 +17,7 @@ import {
  *
  * The two halves are kept in SEPARATE shapes on purpose. Both `ActivityRowProps`
  * and `ActivityDetailSheetProps` have a `title` (the row's is "Bridged", the
- * sheet's is "Bridge KAS (Kaspa → Igra)"), so a single flat object could never
+ * sheet's is "Bridge iKAS (Igra → Kaspa)"), so a single flat object could never
  * be spread into both. Nesting the sheet half under `sheet` means each side is
  * a clean rest-spread in the render below, and neither can silently drop a prop.
  */

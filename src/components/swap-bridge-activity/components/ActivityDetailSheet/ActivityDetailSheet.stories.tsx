@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { Image, TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { ActivityDetailSheet } from "./ActivityDetailSheet";
 import { StatusPill } from "../../../../components/StatusPill";
+import { BRIDGE_EXIT_COPY } from "../../bridgeExitCopy";
 import { colors, spacing, textStyles } from "../../../../config/theme";
 
 const placeholderLogo = require("../../../../../assets/icon.png");
@@ -215,9 +216,9 @@ const bridgeExitDetailsRefundTx = [
  */
 const stuckStatusRow = {
   label: "Status",
-  value: "Submitted",
-  valueNode: <StatusPill status="pending" label="Submitted" />,
-  valueSubtext: "The bridge couldn't process this in time",
+  value: BRIDGE_EXIT_COPY.submitted,
+  valueNode: <StatusPill status="pending" label={BRIDGE_EXIT_COPY.submitted} />,
+  valueSubtext: BRIDGE_EXIT_COPY.stuckSubtext,
   valueSubtextTone: "warning" as const,
 };
 
@@ -225,15 +226,15 @@ const stuckStatusRow = {
 export const BridgeSubmitted: Story = {
   render: () => (
     <SheetHarness
-      title="Bridge KAS (Igra → Kaspa)"
+      title="Bridge iKAS (Igra → Kaspa)"
       subtitle="8 Oct, 2025 | 02:03"
       transfer={bridgeExitTransfer}
       details={[
         {
           label: "Status",
           value: "",
-          valueNode: <StatusPill status="pending" label="Submitted" />,
-          valueSubtext: "Usually done within 48 hours",
+          valueNode: <StatusPill status="pending" label={BRIDGE_EXIT_COPY.submitted} />,
+          valueSubtext: BRIDGE_EXIT_COPY.submittedSubtext,
         },
         ...bridgeExitDetailsNoDestination,
       ]}
@@ -245,15 +246,15 @@ export const BridgeSubmitted: Story = {
 export const BridgeConfirmed: Story = {
   render: () => (
     <SheetHarness
-      title="Bridge KAS (Igra → Kaspa)"
+      title="Bridge iKAS (Igra → Kaspa)"
       subtitle="8 Oct, 2025 | 02:03"
       transfer={bridgeExitTransfer}
       details={[
         {
           label: "Status",
           value: "",
-          valueNode: <StatusPill status="pending" label="Confirmed" />,
-          valueSubtext: "Confirmed by the bridge. Nothing to do",
+          valueNode: <StatusPill status="pending" label={BRIDGE_EXIT_COPY.confirmed} />,
+          valueSubtext: BRIDGE_EXIT_COPY.confirmedSubtext,
         },
         ...bridgeExitDetailsNoDestination,
       ]}
@@ -269,14 +270,14 @@ export const BridgeConfirmed: Story = {
 export const BridgeRefundable: Story = {
   render: () => (
     <SheetHarness
-      title="Bridge KAS (Igra → Kaspa)"
+      title="Bridge iKAS (Igra → Kaspa)"
       subtitle="8 Oct, 2025 | 02:03"
       transfer={bridgeExitTransfer}
       details={[
         stuckStatusRow,
         ...bridgeExitDetailsNoDestination,
       ]}
-      notice="Nothing was lost — withdrawing returns the full amount, including the fee, to your wallet."
+      notice={BRIDGE_EXIT_COPY.withdrawNotice}
       withdrawAmount="1,000 iKAS"
       onWithdrawConfirm={() => console.log("withdraw confirmed")}
     />
@@ -292,14 +293,14 @@ export const BridgeRefundable: Story = {
 export const BridgeWithdrawing: Story = {
   render: () => (
     <SheetHarness
-      title="Bridge KAS (Igra → Kaspa)"
+      title="Bridge iKAS (Igra → Kaspa)"
       subtitle="8 Oct, 2025 | 02:03"
       transfer={bridgeExitTransfer}
       details={[
         stuckStatusRow,
         ...bridgeExitDetailsNoDestination,
       ]}
-      notice="Nothing was lost — withdrawing returns the full amount, including the fee, to your wallet."
+      notice={BRIDGE_EXIT_COPY.withdrawNotice}
       withdrawAmount="1,000 iKAS"
       onWithdrawConfirm={() => console.log("withdraw confirmed")}
       isWithdrawing
@@ -311,7 +312,7 @@ export const BridgeWithdrawing: Story = {
 export const BridgeRefunded: Story = {
   render: () => (
     <SheetHarness
-      title="Bridge KAS (Igra → Kaspa)"
+      title="Bridge iKAS (Igra → Kaspa)"
       subtitle="8 Oct, 2025 | 02:03"
       transfer={{
         fromImage: placeholderLogo,

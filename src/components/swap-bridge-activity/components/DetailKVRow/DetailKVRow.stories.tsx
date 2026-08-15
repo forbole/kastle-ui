@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { DetailKVRow } from "./DetailKVRow";
 import { StatusPill } from "../../../StatusPill";
+import { BRIDGE_EXIT_COPY } from "../../bridgeExitCopy";
 import { background } from "../../../../config/theme";
 
 const meta: Meta<typeof DetailKVRow> = {
@@ -65,9 +66,9 @@ export const LongValue: Story = {
 export const StatusConfirmed: Story = {
   args: {
     label: "Status",
-    value: "Confirmed",
-    valueNode: <StatusPill status="pending" label="Confirmed" />,
-    valueSubtext: "Confirmed by the bridge. Nothing to do",
+    value: BRIDGE_EXIT_COPY.confirmed,
+    valueNode: <StatusPill status="pending" label={BRIDGE_EXIT_COPY.confirmed} />,
+    valueSubtext: BRIDGE_EXIT_COPY.confirmedSubtext,
   },
 };
 
@@ -81,9 +82,9 @@ export const StatusConfirmed: Story = {
 export const StatusWithdrawable: Story = {
   args: {
     label: "Status",
-    value: "Submitted",
-    valueNode: <StatusPill status="pending" label="Submitted" />,
-    valueSubtext: "The bridge couldn't process this in time",
+    value: BRIDGE_EXIT_COPY.submitted,
+    valueNode: <StatusPill status="pending" label={BRIDGE_EXIT_COPY.submitted} />,
+    valueSubtext: BRIDGE_EXIT_COPY.stuckSubtext,
     valueSubtextTone: "warning",
   },
 };
