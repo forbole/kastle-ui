@@ -102,7 +102,7 @@ export const ActivityDetailSheet: React.FC<ActivityDetailSheetProps> = ({
     <ActionSheet
       isOpen={visible}
       onClose={onClose}
-      topInset={spacing.s20}
+      topInset={spacing.s12}
       closeOnBackdropPress={!isWithdrawing}
     >
       <View style={styles.container}>
