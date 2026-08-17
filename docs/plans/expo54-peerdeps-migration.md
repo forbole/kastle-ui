@@ -63,6 +63,7 @@ Peer ranges span SDK 53 *and* 54 ships — an SDK 53 consumer stays installable 
 3. `babel-preset-expo ~54.0.12` added explicitly — referenced by `babel.config.js`, no longer hoisted once expo left `dependencies`.
 4. `@storybook/react@10.5.8` added explicitly — imported by `*.stories.tsx`, no longer hoisted by `@storybook/react-native-web-vite` 10.5.x.
 5. `@storybook/react-native` pinned to 10.4.3 + npm override forcing nested `@storybook/react-native-ui@10.4.3`: the 10.5.4 UI package peer-pins `react-native-reanimated@4.5.1` *exactly*, incompatible with Expo Go SDK 54's embedded ~4.1.x. Dev-only — consumers never install either.
+   **Exit condition:** remove the `@storybook/react-native-ui` override and the `@storybook/react-native` 10.4.3 pin when either (a) Storybook RN's peer range accepts reanimated ~4.1.x, or (b) Expo Go ships reanimated ≥4.5. Re-check at every Storybook major/minor bump and every Expo SDK upgrade.
 6. Lockfile regenerated from scratch (`rm -rf node_modules package-lock.json && npm install`).
 7. Local cleanup (untracked, not committed): deleted file-sync artifacts `.github/workflows/ci 2.yml`, `eslint.config 2.mjs` (stray flat config was a live lint hazard).
 
@@ -86,3 +87,4 @@ Peer ranges span SDK 53 *and* 54 ships — an SDK 53 consumer stays installable 
 - Leo/Nicole: real-device Expo Go verification of on-device Storybook, both platforms, per the on-device verification runbook.
 - Nicole: switch to standard Play Store Expo Go (SDK 54); rebase detail-sheet-height PR if lockfile conflicts.
 - Leo: mark Notion task #5 Done after the kastle-mobile overrides-removal PR lands.
+- Unpin `@storybook/react-native` (10.4.3) + drop the `@storybook/react-native-ui` override once the exit condition in constraint 5 is met — re-check at each Storybook major/minor bump and each Expo SDK upgrade.
