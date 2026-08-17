@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { DualAssetImage, DualAssetImageProps } from "../../../../components/DualAssetImage";
-import { borderRadius, borderWidth, colors, spacing, textStyles, warning } from "../../../../config/theme";
+import { borderRadius, borderWidth, colors, spacing, textStyles, typography, warning } from "../../../../config/theme";
 
 export interface ActivityRowProps {
   /** Short row title, e.g. "Swapped" or "Bridged". */
@@ -21,10 +21,18 @@ export interface ActivityRowProps {
   amountSymbol?: string;
   /** USD equivalent. e.g. "≈ $9,486.17 USD" */
   amountUsd: string;
-  /** True renders amount in success colour (green). Default false uses textPrimary. */
-  isPositive?: boolean;
-  /** True renders amount in warning colour (amber) — overrides isPositive. */
-  isPending?: boolean;
+  /**
+   * Amount colour role. `"credit"` = success green, `"neutral"` = default textPrimary.
+   * Defaults to `"neutral"`.
+   * There is no `"pending"` tone — Figma node 14032-351038 confirms the Bridging row's
+   * amount is bound to `typography900` (white/neutral), not amber.
+   */
+  tone?: "neutral" | "credit";
+  /**
+   * Top-right attention badge — renders that number inside the amber circle.
+   * `0` / omitted = no badge.
+   */
+  attention?: number;
   /** Tap handler — opens detail sheet in caller. */
   onPress?: () => void;
 }
@@ -36,15 +44,12 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
   amountNumber,
   amountSymbol,
   amountUsd,
-  isPositive = false,
-  isPending = false,
+  tone = "neutral",
+  attention,
   onPress,
 }) => {
-  const amountColor = isPending
-    ? warning.w500
-    : isPositive
-      ? colors.success
-      : colors.textPrimary;
+  const amountColor = tone === "credit" ? colors.success : colors.textPrimary;
+  const showAttention = Boolean(attention);
 
   return (
     <TouchableOpacity
@@ -53,6 +58,14 @@ export const ActivityRow: React.FC<ActivityRowProps> = ({
       activeOpacity={0.7}
       disabled={!onPress}
     >
+      {showAttention && (
+        <View style={styles.attentionBadge}>
+          <Text allowFontScaling={false} style={[textStyles.bodySemibold2XS, styles.attentionNumber]}>
+            {attention}
+          </Text>
+        </View>
+      )}
+
       <DualAssetImage {...pair} />
 
       <View style={styles.middle}>
@@ -141,5 +154,30 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     color: colors.textMuted,
+  },
+  // ⚠️ Badge size/offset (16px circle, -4/-4 corner overlap) is a structural
+  // assumption — not pinned by a Figma node for this task. Colour (warning.w400) is
+  // the only value the spec fixed; flag to Nicole if the size reads wrong on device.
+  attentionBadge: {
+    position: "absolute",
+    top: -spacing.s1,
+    right: -spacing.s1,
+    minWidth: spacing.s4,
+    height: spacing.s4,
+    paddingHorizontal: spacing.s0_5,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: borderRadius.full,
+    backgroundColor: warning.w400,
+    zIndex: 1,
+  },
+  attentionNumber: {
+    // Badge count is white (typography.t900) on the amber badge (warning.w400 #E77828).
+    // Nicole's call, 2026-08-14: follow the iOS notification-badge convention —
+    // coloured fill + white numeral.
+    // ⚠️ Known, accepted trade-off: white on #E77828 is ~2.95:1, below WCAG AA 4.5:1.
+    // Nicole decided this knowingly — a badge count is a platform convention, and is
+    // not treated as body copy.
+    color: typography.t900,
   },
 });

@@ -38,6 +38,21 @@ export const Pending: Story = {
   args: { status: "pending" },
 };
 
+/** Bridge withdrawal returned in full — green, distinct icon from Success */
+export const Refunded: Story = {
+  args: { status: "refunded" },
+};
+
+/** Bridge Activity label override — still status="pending" under the hood */
+export const Submitted: Story = {
+  args: { status: "pending", label: "Submitted" },
+};
+
+/** Bridge Activity label override — still status="pending" under the hood */
+export const Confirmed: Story = {
+  args: { status: "pending", label: "Confirmed" },
+};
+
 const styles = StyleSheet.create({
   decorator: {
     flex: 1,

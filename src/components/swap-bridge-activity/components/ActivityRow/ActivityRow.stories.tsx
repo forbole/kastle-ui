@@ -34,39 +34,64 @@ const meta: Meta<typeof ActivityRow> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Swap on Kaspa — green positive amount */
-export const Swap: Story = {
+/** Swap on Kaspa — tone="credit", green positive amount */
+export const SwapDefault: Story = {
   args: {
     title: "Swapped",
     dateTime: "8 Oct | 02:03",
     amountNumber: "+1,234",
     amountSymbol: "NACHO",
     amountUsd: "≈ $12.34 USD",
-    isPositive: true,
+    tone: "credit",
   },
 };
 
-/** Bridge cross-chain — title shows chain names */
-export const Bridge: Story = {
+/** Bridge cross-chain — tone="credit" — title shows chain names */
+export const BridgeDefault: Story = {
   args: {
     title: "Bridged",
     dateTime: "8 Oct | 03:45",
     amountNumber: "+240",
     amountSymbol: "KAS",
     amountUsd: "≈ $240.00 USD",
-    isPositive: true,
+    tone: "credit",
   },
 };
 
-/** Pending — amount renders in amber warning colour */
-export const Pending: Story = {
+/** Bridging — transfer still in flight, amount stays neutral white */
+export const Bridging: Story = {
   args: {
-    title: "Swapped",
+    title: "Bridging",
     dateTime: "8 Oct | 02:03",
     amountNumber: "+1,234",
-    amountSymbol: "NACHO",
+    amountSymbol: "iKAS",
     amountUsd: "≈ $12.34 USD",
-    isPending: true,
+    tone: "neutral",
+  },
+};
+
+/** Refunded — money came back, amount reads as a credit (green) */
+export const BridgeRefunded: Story = {
+  args: {
+    title: "Refunded",
+    dateTime: "8 Oct | 02:03",
+    amountNumber: "+1,000",
+    amountSymbol: "iKAS",
+    amountUsd: "≈ $1,000.00 USD",
+    tone: "credit",
+  },
+};
+
+/** Bridging, past 48h — the badge tells the user there is something to withdraw */
+export const BridgingWithdrawable: Story = {
+  args: {
+    title: "Bridging",
+    dateTime: "8 Oct | 02:03",
+    amountNumber: "+1,234",
+    amountSymbol: "iKAS",
+    amountUsd: "≈ $12.34 USD",
+    tone: "neutral",
+    attention: 1,
   },
 };
 
@@ -78,7 +103,7 @@ export const LongAmount: Story = {
     amountNumber: "+1,000,000,000.888888",
     amountSymbol: "NACHO",
     amountUsd: "≈ $9,486.17 USD",
-    isPositive: true,
+    tone: "credit",
   },
 };
 
@@ -90,7 +115,7 @@ export const WithoutImages: Story = {
     amountNumber: "+1,234",
     amountSymbol: "NACHO",
     amountUsd: "≈ $12.34 USD",
-    isPositive: true,
+    tone: "credit",
     pair: {
       fromImage: undefined,
       toImage: undefined,

@@ -14,6 +14,7 @@ import {
   colors,
   spacing,
   textStyles,
+  typography,
 } from "../../../../config/theme";
 
 export interface AssetTransferCardProps {
@@ -38,11 +39,22 @@ export interface AssetTransferCardProps {
   sentLabel: string;
   sentAmount: string;
   sentUsd: string;
+  /** Strikes through the Sent amount — the transfer never completed (refund case). */
+  isSentStruck?: boolean;
 
-  /** Label for the incoming amount row. Defaults to "Received". */
+  /**
+   * Label for the incoming amount row. Defaults to "Received".
+   * The row is omitted entirely when `receivedAmount` is not supplied — a refunded
+   * transfer shows Sent + Refunded only, never a "Received 0" line.
+   */
   receivedLabel?: string;
-  receivedAmount: string;
-  receivedUsd: string;
+  receivedAmount?: string;
+  receivedUsd?: string;
+
+  /** Third amount row below Received, e.g. "Refunded". Needs all three values. */
+  extraLabel?: string;
+  extraAmount?: string;
+  extraUsd?: string;
 }
 
 export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
@@ -56,9 +68,13 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
   sentLabel,
   sentAmount,
   sentUsd,
+  isSentStruck = false,
   receivedLabel = "Received",
   receivedAmount,
   receivedUsd,
+  extraLabel,
+  extraAmount,
+  extraUsd,
 }) => (
   <View style={styles.card}>
     {/* From → To row */}
@@ -105,23 +121,41 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
     <View style={styles.amountRow}>
       <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amountLabel]}>{sentLabel}</Text>
       <View style={styles.amountRight}>
-        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amount]}>
+        <Text
+          allowFontScaling={false}
+          style={[textStyles.bodyNormalSM, styles.amount, isSentStruck && styles.amountStruck]}
+        >
           {sentAmount}
         </Text>
         <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.amountUsd]}>{sentUsd}</Text>
       </View>
     </View>
 
-    {/* Received row */}
-    <View style={styles.amountRow}>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amountLabel]}>{receivedLabel}</Text>
-      <View style={styles.amountRight}>
-        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amount]}>
-          {receivedAmount}
-        </Text>
-        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.amountUsd]}>{receivedUsd}</Text>
+    {/* Received row — omitted when the transfer never arrived */}
+    {receivedAmount !== undefined && (
+      <View style={styles.amountRow}>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amountLabel]}>{receivedLabel}</Text>
+        <View style={styles.amountRight}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amount]}>
+            {receivedAmount}
+          </Text>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.amountUsd]}>{receivedUsd}</Text>
+        </View>
       </View>
-    </View>
+    )}
+
+    {/* Extra row, e.g. Refunded */}
+    {extraLabel && extraAmount && extraUsd && (
+      <View style={styles.amountRow}>
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amountLabel]}>{extraLabel}</Text>
+        <View style={styles.amountRight}>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.amount]}>
+            {extraAmount}
+          </Text>
+          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.amountUsd]}>{extraUsd}</Text>
+        </View>
+      </View>
+    )}
   </View>
 );
 
@@ -175,7 +209,12 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   amount: {
-    color: colors.textPrimary,
+    // Figma node 14090:409577 binds the amount to typography800. Same hex as
+    // colors.textPrimary (t900) — the token role is what differs.
+    color: typography.t800,
+  },
+  amountStruck: {
+    textDecorationLine: "line-through",
   },
   amountUsd: {
     color: colors.textMuted,

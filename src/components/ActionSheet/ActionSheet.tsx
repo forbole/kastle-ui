@@ -23,6 +23,18 @@ export interface ActionSheetProps {
   closeOnBackdropPress?: boolean;
   /** Max height as a ratio of screen height (0–1). Default: 0.86 */
   heightRatio?: number;
+  /**
+   * Fixed gap (in px) to leave between the top of the screen and the top of
+   * the sheet, giving `maxHeight = SCREEN_HEIGHT - topInset`.
+   *
+   * Use this instead of `heightRatio` when the sheet should expose the same
+   * amount of backdrop on every device, rather than a percentage that shrinks
+   * on small screens.
+   *
+   * ⚠️ Takes precedence: when both `topInset` and `heightRatio` are provided,
+   * `topInset` wins and `heightRatio` is ignored.
+   */
+  topInset?: number;
 }
 
 export const ActionSheet: React.FC<ActionSheetProps> = ({
@@ -31,7 +43,10 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
   children,
   closeOnBackdropPress = true,
   heightRatio = 0.86,
+  topInset,
 }) => {
+  const maxHeight =
+    topInset !== undefined ? SCREEN_HEIGHT - topInset : SCREEN_HEIGHT * heightRatio;
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -101,7 +116,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
       <Animated.View
         renderToHardwareTextureAndroid
         collapsable={false}
-        style={[styles.sheetWrapper, { maxHeight: SCREEN_HEIGHT * heightRatio, transform: [{ translateY }] }]}
+        style={[styles.sheetWrapper, { maxHeight, transform: [{ translateY }] }]}
         pointerEvents="box-none"
       >
         {/* Top tap zone — tapping the handlebar area closes the sheet */}
