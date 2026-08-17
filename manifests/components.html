@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">57 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">44/57 infos</a><span class="filter-pill ok" aria-disabled="true">216 stories ok</span></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><span class="filter-pill ok" aria-disabled="true">58 components ok</span><a class="filter-pill info" data-k="infos" href="#filter-infos">45/58 infos</a><span class="filter-pill ok" aria-disabled="true">234 stories ok</span></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.9s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>1.4s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -604,7 +604,7 @@
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ActionSheet</h2>
       <div class="badges">
-        <label for="c-0-components-actionsheet-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-0-components-actionsheet-props" class="badge ok as-toggle">6 prop types</label>
         <label for="c-0-components-actionsheet-info" class="badge info as-toggle">1 info</label>
         <label for="c-0-components-actionsheet-stories" class="badge ok as-toggle">1 story</label>
         
@@ -638,7 +638,7 @@
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">5 prop types</span>
+              <span class="badge ok">6 prop types</span>
             </div>
             <pre><code>Component: src/components/ActionSheet/ActionSheet.tsx::ActionSheet</code></pre>
             <pre><code>Props:</code></pre>
@@ -665,7 +665,20 @@ isOpen: boolean
 /**
  * Called when the backdrop is pressed or the sheet is dismissed
  */
-onClose: () =&gt; void</code></pre>
+onClose: () =&gt; void
+
+/**
+ * Fixed gap (in px) to leave between the top of the screen and the top of
+ * the sheet, giving `maxHeight = SCREEN_HEIGHT - topInset`.
+ * 
+ * Use this instead of `heightRatio` when the sheet should expose the same
+ * amount of backdrop on every device, rather than a percentage that shrinks
+ * on small screens.
+ * 
+ * ⚠️ Takes precedence: when both `topInset` and `heightRatio` are provided,
+ * `topInset` wins and `heightRatio` is ignored.
+ */
+topInset?: number</code></pre>
           </div>
         </div>
     
@@ -818,9 +831,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> ActivityDetailSheet</h2>
       <div class="badges">
-        <label for="c-2-swap-bridge-activity-components-activitydetailsheet-props" class="badge ok as-toggle">7 prop types</label>
+        <label for="c-2-swap-bridge-activity-components-activitydetailsheet-props" class="badge ok as-toggle">11 prop types</label>
         <label for="c-2-swap-bridge-activity-components-activitydetailsheet-info" class="badge info as-toggle">1 info</label>
-        <label for="c-2-swap-bridge-activity-components-activitydetailsheet-stories" class="badge ok as-toggle">4 stories</label>
+        <label for="c-2-swap-bridge-activity-components-activitydetailsheet-stories" class="badge ok as-toggle">8 stories</label>
         
       </div>
     </div>
@@ -852,21 +865,44 @@ import { View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">7 prop types</span>
+              <span class="badge ok">11 prop types</span>
             </div>
             <pre><code>Component: src/components/swap-bridge-activity/components/ActivityDetailSheet/ActivityDetailSheet.tsx::ActivityDetailSheet</code></pre>
             <pre><code>Props:</code></pre>
             <pre><code>/**
- * Standalone label/value rows below the transfer card (Fees, Rate, Slippage, Provider, TX links).
+ * Standalone label/value rows below the transfer card (Status, Fees, Rate,
+ * Slippage, Provider, TX links). The Status row is just another entry here —
+ * pass `valueNode` (a `StatusPill`) plus `valueSubtext` for the line under it.
  */
 details: DetailKVRowProps[]
+
+/**
+ * Extra content pinned to the bottom of the sheet, OUTSIDE the ScrollView —
+ * it does not scroll with the details. Rendered under the Withdraw button
+ * when both are present.
+ */
+footer?: React.ReactNode
+
+/**
+ * Withdrawal in flight — locks the backdrop of both sheets and the confirm
+ * sheet&#39;s buttons (mirrors `KaspaSignTxSheet`&#39;s `closeOnBackdropPress={!isSigning}`).
+ */
+isWithdrawing?: boolean = false
+
+/**
+ * Full-width explanatory text pinned above the footer, below the KV rows.
+ * Centred, `colors.textSecondary`, no background / border / icon
+ * (Figma node I14044:370631;14040:361300;1395:155422).
+ * A plain string is wrapped in a styled `Text`; any other node renders as-is.
+ */
+notice?: React.ReactNode
 
 onClose: () =&gt; void
 
 /**
- * Optional transaction status pill rendered next to the subtitle.
+ * Called after the user confirms in the stacked `WithdrawConfirmSheet`.
  */
-status?: &quot;success&quot; | &quot;failed&quot; | &quot;pending&quot;
+onWithdrawConfirm?: () =&gt; void
 
 /**
  * Secondary line under title, e.g. &quot;8 Oct, 2025 | 02:03&quot;
@@ -883,7 +919,16 @@ title: string
  */
 transfer: AssetTransferCardProps
 
-visible: boolean</code></pre>
+visible: boolean
+
+/**
+ * Formatted amount used in the confirm sheet title, e.g. &quot;1,000 iKAS&quot;.
+ * The amber Withdraw button renders only when BOTH `withdrawAmount` and
+ * `onWithdrawConfirm` are supplied — `claimRefund` reverts in every state
+ * except &quot;submitted, past the 48h window&quot;, so the button must never be shown
+ * anywhere else (the user would burn gas on a guaranteed-failing tx).
+ */
+withdrawAmount?: string</code></pre>
           </div>
         </div>
     
@@ -895,7 +940,7 @@ visible: boolean</code></pre>
                 <div class="row">
                   <span class="ex-name">Imports</span>
                 </div>
-                <pre><code>import { ActivityDetailSheet } from "kastle-ui";
+                <pre><code>import { ActivityDetailSheet, StatusPill } from "kastle-ui";
 import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
               </div>
           
@@ -911,7 +956,6 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
   &lt;SheetHarness
     title=&quot;Swap KAS → NACHO&quot;
     subtitle=&quot;8 Oct, 2025 | 02:03&quot;
-    status=&quot;success&quot;
     transfer={{
       fromImage: placeholderLogo,
       fromSymbol: &quot;KAS&quot;,
@@ -927,6 +971,11 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
       receivedUsd: &quot;≈ $9,486.01 USD&quot;,
     }}
     details={[
+      // Status is a KV row between the transfer card and Fees, never a pill
+      // beside the subtitle — Nicole standardised all nine stories on this
+      // 2026-08-14. No Figma node covers the success case, so it follows the
+      // pending pattern (14085:392178) with the status value unchanged.
+      { label: &quot;Status&quot;, value: &quot;&quot;, valueNode: &lt;StatusPill status=&quot;success&quot; /&gt; },
       { label: &quot;Fees&quot;, value: &quot;0.0002 KAS&quot; },
       { label: &quot;Rate&quot;, value: &quot;1 KAS ≈ 0.032799 NACHO&quot; },
       { label: &quot;Slippage&quot;, value: &quot;0.3%&quot; },
@@ -947,7 +996,6 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
   &lt;SheetHarness
     title=&quot;Bridge KAS (Kaspa → Kasplex)&quot;
     subtitle=&quot;8 Oct, 2025 | 02:03&quot;
-    status=&quot;success&quot;
     transfer={{
       fromImage: placeholderLogo,
       fromSymbol: &quot;KAS&quot;,
@@ -963,6 +1011,8 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
       receivedUsd: &quot;≈ $9,486.17 USD&quot;,
     }}
     details={[
+      // See SwapSuccess — Status is always a KV row here.
+      { label: &quot;Status&quot;, value: &quot;&quot;, valueNode: &lt;StatusPill status=&quot;success&quot; /&gt; },
       { label: &quot;Fees&quot;, value: &quot;0.0002 KAS&quot; },
       { label: &quot;Provider&quot;, value: &quot;Kurve Bridge&quot;, valuePrefix: providerPrefix },
       { label: &quot;Source TX&quot;, value: &quot;View&quot;, onPressValue: () =&gt; console.log(&quot;open source&quot;) },
@@ -982,7 +1032,6 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
   &lt;SheetHarness
     title=&quot;Swap KAS → NACHO&quot;
     subtitle=&quot;8 Oct, 2025 | 02:03&quot;
-    status=&quot;pending&quot;
     transfer={{
       fromImage: placeholderLogo,
       fromSymbol: &quot;KAS&quot;,
@@ -994,10 +1043,14 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
       sentLabel: &quot;Paid&quot;,
       sentAmount: &quot;1,000 KAS&quot;,
       sentUsd: &quot;≈ $9,486.17 USD&quot;,
-      receivedAmount: &quot;-&quot;,
-      receivedUsd: &quot;Pending&quot;,
+      receivedLabel: &quot;You&#39;ll receive&quot;,
+      receivedAmount: &quot;999.9996 NACHO&quot;,
+      receivedUsd: &quot;≈ $9,486.01 USD&quot;,
     }}
     details={[
+      // Figma node 14085:392178 — Status is a KV row between the transfer card
+      // and Fees, NOT a pill beside the subtitle.
+      { label: &quot;Status&quot;, value: &quot;&quot;, valueNode: &lt;StatusPill status=&quot;pending&quot; /&gt; },
       { label: &quot;Fees&quot;, value: &quot;0.0002 KAS&quot; },
       { label: &quot;Rate&quot;, value: &quot;1 KAS ≈ 0.032799 NACHO&quot; },
       { label: &quot;Slippage&quot;, value: &quot;0.3%&quot; },
@@ -1009,35 +1062,132 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Bridge Pending</span>
+                <span class="ex-name">Bridge Submitted</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Bridge pending — amber status pill</div>
-              <pre><code>const BridgePending = () =&gt; (
+              <div class="hint">Bridge exit just submitted — inside the normal 48-hour window, nothing to do.</div>
+              <pre><code>const BridgeSubmitted = () =&gt; (
   &lt;SheetHarness
-    title=&quot;Bridge KAS (Kaspa → Kasplex)&quot;
+    title=&quot;Bridge iKAS (Igra → Kaspa)&quot;
     subtitle=&quot;8 Oct, 2025 | 02:03&quot;
-    status=&quot;pending&quot;
+    transfer={bridgeExitTransfer}
+    details={[
+      {
+        label: &quot;Status&quot;,
+        value: &quot;&quot;,
+        valueNode: &lt;StatusPill status=&quot;pending&quot; label={BRIDGE_EXIT_COPY.submitted} /&gt;,
+        valueSubtext: BRIDGE_EXIT_COPY.submittedSubtext,
+      },
+      ...bridgeExitDetailsNoDestination,
+    ]}
+  /&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Confirmed</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridge acknowledged the transfer — still amber, but there is nothing for the user to do.</div>
+              <pre><code>const BridgeConfirmed = () =&gt; (
+  &lt;SheetHarness
+    title=&quot;Bridge iKAS (Igra → Kaspa)&quot;
+    subtitle=&quot;8 Oct, 2025 | 02:03&quot;
+    transfer={bridgeExitTransfer}
+    details={[
+      {
+        label: &quot;Status&quot;,
+        value: &quot;&quot;,
+        valueNode: &lt;StatusPill status=&quot;pending&quot; label={BRIDGE_EXIT_COPY.confirmed} /&gt;,
+        valueSubtext: BRIDGE_EXIT_COPY.confirmedSubtext,
+      },
+      ...bridgeExitDetailsNoDestination,
+    ]}
+  /&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Refundable</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Past 48 hours and still unacknowledged — the ONLY state that shows Withdraw. `claimRefund` reverts everywhere else, so a button there would cost the user gas on a guaranteed failure.</div>
+              <pre><code>const BridgeRefundable = () =&gt; (
+  &lt;SheetHarness
+    title=&quot;Bridge iKAS (Igra → Kaspa)&quot;
+    subtitle=&quot;8 Oct, 2025 | 02:03&quot;
+    transfer={bridgeExitTransfer}
+    details={[
+      stuckStatusRow,
+      ...bridgeExitDetailsNoDestination,
+    ]}
+    notice={BRIDGE_EXIT_COPY.withdrawNotice}
+    withdrawAmount=&quot;1,000 iKAS&quot;
+    onWithdrawConfirm={() =&gt; console.log(&quot;withdraw confirmed&quot;)}
+  /&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Withdrawing</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Withdrawal in flight — same args as `BridgeRefundable` plus `isWithdrawing`. The Withdraw button is locked at 40% opacity, and the backdrop no longer dismisses. In the real feature this state is only visible between the confirm tap and the tx going out; the story exists so the state is reviewable at all.</div>
+              <pre><code>const BridgeWithdrawing = () =&gt; (
+  &lt;SheetHarness
+    title=&quot;Bridge iKAS (Igra → Kaspa)&quot;
+    subtitle=&quot;8 Oct, 2025 | 02:03&quot;
+    transfer={bridgeExitTransfer}
+    details={[
+      stuckStatusRow,
+      ...bridgeExitDetailsNoDestination,
+    ]}
+    notice={BRIDGE_EXIT_COPY.withdrawNotice}
+    withdrawAmount=&quot;1,000 iKAS&quot;
+    onWithdrawConfirm={() =&gt; console.log(&quot;withdraw confirmed&quot;)}
+    isWithdrawing
+  /&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Refunded</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Refund landed — Sent is struck through and a Refunded row is added, no Received row.</div>
+              <pre><code>const BridgeRefunded = () =&gt; (
+  &lt;SheetHarness
+    title=&quot;Bridge iKAS (Igra → Kaspa)&quot;
+    subtitle=&quot;8 Oct, 2025 | 02:03&quot;
     transfer={{
       fromImage: placeholderLogo,
-      fromSymbol: &quot;KAS&quot;,
+      fromSymbol: &quot;iKAS&quot;,
       fromChainImage: placeholderLogo,
       toImage: placeholderLogo,
       toSymbol: &quot;KAS&quot;,
       toChainImage: placeholderLogo,
       fallback: placeholderLogo,
       sentLabel: &quot;Sent&quot;,
-      sentAmount: &quot;1,000 KAS&quot;,
-      sentUsd: &quot;≈ $9,486.17 USD&quot;,
-      receivedAmount: &quot;-&quot;,
-      receivedUsd: &quot;Pending&quot;,
+      sentAmount: &quot;1,000 iKAS&quot;,
+      sentUsd: &quot;≈ $100.17 USD&quot;,
+      isSentStruck: true,
+      extraLabel: &quot;Refunded&quot;,
+      extraAmount: &quot;1,000 iKAS&quot;,
+      extraUsd: &quot;≈ $100.17 USD&quot;,
     }}
     details={[
-      { label: &quot;Fees&quot;, value: &quot;0.0002 KAS&quot; },
-      { label: &quot;Provider&quot;, value: &quot;Kurve Bridge&quot;, valuePrefix: providerPrefix },
-      { label: &quot;Source TX&quot;, value: &quot;View&quot;, onPressValue: () =&gt; console.log(&quot;open source&quot;) },
-      { label: &quot;Destination TX&quot;, value: &quot;-&quot; },
+      {
+        label: &quot;Status&quot;,
+        value: &quot;&quot;,
+        valueNode: &lt;StatusPill status=&quot;refunded&quot; /&gt;,
+        valueSubtext: &quot;Returned in full, fee included&quot;,
+      },
+      ...bridgeExitDetailsRefundTx,
     ]}
   /&gt;
 );</code></pre>
@@ -1060,7 +1210,7 @@ import { Image, Text, TouchableOpacity, View } from "react-native";</code></pre>
       <div class="badges">
         <label for="c-3-swap-bridge-activity-components-activityrow-props" class="badge ok as-toggle">9 prop types</label>
         <label for="c-3-swap-bridge-activity-components-activityrow-info" class="badge info as-toggle">1 info</label>
-        <label for="c-3-swap-bridge-activity-components-activityrow-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-3-swap-bridge-activity-components-activityrow-stories" class="badge ok as-toggle">7 stories</label>
         
       </div>
     </div>
@@ -1112,19 +1262,15 @@ amountSymbol?: string
 amountUsd: string
 
 /**
+ * Top-right attention badge — renders that number inside the amber circle.
+ * `0` / omitted = no badge.
+ */
+attention?: number
+
+/**
  * Date + time, e.g. &quot;8 Oct | 02:03&quot;.
  */
 dateTime: string
-
-/**
- * True renders amount in warning colour (amber) — overrides isPositive.
- */
-isPending?: boolean = false
-
-/**
- * True renders amount in success colour (green). Default false uses textPrimary.
- */
-isPositive?: boolean = false
 
 /**
  * Tap handler — opens detail sheet in caller.
@@ -1139,7 +1285,15 @@ pair: DualAssetImageProps
 /**
  * Short row title, e.g. &quot;Swapped&quot; or &quot;Bridged&quot;.
  */
-title: string</code></pre>
+title: string
+
+/**
+ * Amount colour role. `&quot;credit&quot;` = success green, `&quot;neutral&quot;` = default textPrimary.
+ * Defaults to `&quot;neutral&quot;`.
+ * There is no `&quot;pending&quot;` tone — Figma node 14032-351038 confirms the Bridging row&#39;s
+ * amount is bound to `typography900` (white/neutral), not amber.
+ */
+tone?: &quot;neutral&quot; | &quot;credit&quot; = &quot;neutral&quot;</code></pre>
           </div>
         </div>
     
@@ -1158,12 +1312,12 @@ import { View } from "react-native";</code></pre>
           
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Swap</span>
+                <span class="ex-name">Swap Default</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Swap on Kaspa — green positive amount</div>
-              <pre><code>const Swap = () =&gt; &lt;ActivityRow
+              <div class="hint">Swap on Kaspa — tone=&quot;credit&quot;, green positive amount</div>
+              <pre><code>const SwapDefault = () =&gt; &lt;ActivityRow
     pair={{
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -1176,16 +1330,16 @@ import { View } from "react-native";</code></pre>
     amountNumber=&quot;+1,234&quot;
     amountSymbol=&quot;NACHO&quot;
     amountUsd=&quot;≈ $12.34 USD&quot;
-    isPositive /&gt;;</code></pre>
+    tone=&quot;credit&quot; /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Bridge</span>
+                <span class="ex-name">Bridge Default</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Bridge cross-chain — title shows chain names</div>
-              <pre><code>const Bridge = () =&gt; &lt;ActivityRow
+              <div class="hint">Bridge cross-chain — tone=&quot;credit&quot; — title shows chain names</div>
+              <pre><code>const BridgeDefault = () =&gt; &lt;ActivityRow
     pair={{
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -1198,16 +1352,16 @@ import { View } from "react-native";</code></pre>
     amountNumber=&quot;+240&quot;
     amountSymbol=&quot;KAS&quot;
     amountUsd=&quot;≈ $240.00 USD&quot;
-    isPositive /&gt;;</code></pre>
+    tone=&quot;credit&quot; /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Pending</span>
+                <span class="ex-name">Bridging</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Pending — amount renders in amber warning colour</div>
-              <pre><code>const Pending = () =&gt; &lt;ActivityRow
+              <div class="hint">Bridging — transfer still in flight, amount stays neutral white</div>
+              <pre><code>const Bridging = () =&gt; &lt;ActivityRow
     pair={{
       fromImage: placeholderLogo,
       toImage: placeholderLogo,
@@ -1215,12 +1369,57 @@ import { View } from "react-native";</code></pre>
       fallback: placeholderLogo,
     }}
     onPress={() =&gt; console.log(&quot;row pressed&quot;)}
-    title=&quot;Swapped&quot;
+    title=&quot;Bridging&quot;
     dateTime=&quot;8 Oct | 02:03&quot;
     amountNumber=&quot;+1,234&quot;
-    amountSymbol=&quot;NACHO&quot;
+    amountSymbol=&quot;iKAS&quot;
     amountUsd=&quot;≈ $12.34 USD&quot;
-    isPending /&gt;;</code></pre>
+    tone=&quot;neutral&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Refunded</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Refunded — money came back, amount reads as a credit (green)</div>
+              <pre><code>const BridgeRefunded = () =&gt; &lt;ActivityRow
+    pair={{
+      fromImage: placeholderLogo,
+      toImage: placeholderLogo,
+      chainImage: placeholderLogo,
+      fallback: placeholderLogo,
+    }}
+    onPress={() =&gt; console.log(&quot;row pressed&quot;)}
+    title=&quot;Refunded&quot;
+    dateTime=&quot;8 Oct | 02:03&quot;
+    amountNumber=&quot;+1,000&quot;
+    amountSymbol=&quot;iKAS&quot;
+    amountUsd=&quot;≈ $1,000.00 USD&quot;
+    tone=&quot;credit&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridging Withdrawable</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridging, past 48h — the badge tells the user there is something to withdraw</div>
+              <pre><code>const BridgingWithdrawable = () =&gt; &lt;ActivityRow
+    pair={{
+      fromImage: placeholderLogo,
+      toImage: placeholderLogo,
+      chainImage: placeholderLogo,
+      fallback: placeholderLogo,
+    }}
+    onPress={() =&gt; console.log(&quot;row pressed&quot;)}
+    title=&quot;Bridging&quot;
+    dateTime=&quot;8 Oct | 02:03&quot;
+    amountNumber=&quot;+1,234&quot;
+    amountSymbol=&quot;iKAS&quot;
+    amountUsd=&quot;≈ $12.34 USD&quot;
+    tone=&quot;neutral&quot;
+    attention={1} /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -1242,7 +1441,7 @@ import { View } from "react-native";</code></pre>
     amountNumber=&quot;+1,000,000,000.888888&quot;
     amountSymbol=&quot;NACHO&quot;
     amountUsd=&quot;≈ $9,486.17 USD&quot;
-    isPositive /&gt;;</code></pre>
+    tone=&quot;credit&quot; /&gt;;</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -1264,7 +1463,7 @@ import { View } from "react-native";</code></pre>
     amountNumber=&quot;+1,234&quot;
     amountSymbol=&quot;NACHO&quot;
     amountUsd=&quot;≈ $12.34 USD&quot;
-    isPositive /&gt;;</code></pre>
+    tone=&quot;credit&quot; /&gt;;</code></pre>
             </div>
         </div>
     
@@ -1284,7 +1483,7 @@ import { View } from "react-native";</code></pre>
       <div class="badges">
         <label for="c-4-swap-bridge-activity-screens-activityscreen-props" class="badge ok as-toggle">5 prop types</label>
         
-        <label for="c-4-swap-bridge-activity-screens-activityscreen-stories" class="badge ok as-toggle">7 stories</label>
+        <label for="c-4-swap-bridge-activity-screens-activityscreen-stories" class="badge ok as-toggle">9 stories</label>
         
       </div>
     </div>
@@ -1342,7 +1541,7 @@ transactions?: ActivityScreenItem[] = []</code></pre>
                 <div class="row">
                   <span class="ex-name">Imports</span>
                 </div>
-                <pre><code>import { ActivityScreen } from "kastle-ui";
+                <pre><code>import { ActivityScreen, StatusPill } from "kastle-ui";
 import { Image, View } from "react-native";</code></pre>
               </div>
           
@@ -1409,6 +1608,27 @@ import { Image, View } from "react-native";</code></pre>
               
               
               <pre><code>const BridgeEmpty = () =&gt; &lt;ActivityScreen pageType=&quot;bridge&quot; state=&quot;empty&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Loading More</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const BridgeLoadingMore = () =&gt; &lt;ActivityScreen pageType=&quot;bridge&quot; state=&quot;loaded&quot; transactions={bridgeTxs} loadingMore /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Stuck</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const BridgeStuck = () =&gt; &lt;ActivityScreen
+    pageType=&quot;bridge&quot;
+    state=&quot;loaded&quot;
+    transactions={[...bridgeTxStuckPastWindow, ...bridgeTxs]} /&gt;;</code></pre>
             </div>
         </div>
     
@@ -2011,9 +2231,9 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> AssetTransferCard</h2>
       <div class="badges">
-        <label for="c-10-swap-bridge-activity-components-assettransfercard-props" class="badge ok as-toggle">13 prop types</label>
+        <label for="c-10-swap-bridge-activity-components-assettransfercard-props" class="badge ok as-toggle">17 prop types</label>
         <label for="c-10-swap-bridge-activity-components-assettransfercard-info" class="badge info as-toggle">1 info</label>
-        <label for="c-10-swap-bridge-activity-components-assettransfercard-stories" class="badge ok as-toggle">2 stories</label>
+        <label for="c-10-swap-bridge-activity-components-assettransfercard-stories" class="badge ok as-toggle">5 stories</label>
         
       </div>
     </div>
@@ -2045,11 +2265,20 @@ import { Text, TouchableOpacity, View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">13 prop types</span>
+              <span class="badge ok">17 prop types</span>
             </div>
             <pre><code>Component: src/components/swap-bridge-activity/components/AssetTransferCard/AssetTransferCard.tsx::AssetTransferCard</code></pre>
             <pre><code>Props:</code></pre>
-            <pre><code>/**
+            <pre><code>extraAmount?: string
+
+/**
+ * Third amount row below Received, e.g. &quot;Refunded&quot;. Needs all three values.
+ */
+extraLabel?: string
+
+extraUsd?: string
+
+/**
  * Default image fallback for any missing token / chain image.
  */
 fallback?: ImageSourcePropType
@@ -2069,14 +2298,21 @@ fromImage?: ImageSourcePropType
  */
 fromSymbol: string
 
-receivedAmount: string
+/**
+ * Strikes through the Sent amount — the transfer never completed (refund case).
+ */
+isSentStruck?: boolean = false
+
+receivedAmount?: string
 
 /**
  * Label for the incoming amount row. Defaults to &quot;Received&quot;.
+ * The row is omitted entirely when `receivedAmount` is not supplied — a refunded
+ * transfer shows Sent + Refunded only, never a &quot;Received 0&quot; line.
  */
 receivedLabel?: string = &quot;Received&quot;
 
-receivedUsd: string
+receivedUsd?: string
 
 sentAmount: string
 
@@ -2119,12 +2355,12 @@ import { View } from "react-native";</code></pre>
           
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Swap</span>
+                <span class="ex-name">Swap Default</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Swap success — paid KAS, received NACHO</div>
-              <pre><code>const Swap = () =&gt; &lt;AssetTransferCard
+              <div class="hint">Swap completed — the default state. The funds have arrived, so the incoming row falls back to the default `receivedLabel` of &quot;Received&quot; (contrast with `SwapPending`, which overrides it to &quot;You&#39;ll receive&quot;). Paid KAS, received NACHO.</div>
+              <pre><code>const SwapDefault = () =&gt; &lt;AssetTransferCard
     fromImage={placeholderLogo}
     fromChainImage={placeholderLogo}
     toImage={placeholderLogo}
@@ -2140,12 +2376,34 @@ import { View } from "react-native";</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Bridge</span>
+                <span class="ex-name">Swap Pending</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Bridge success — same symbol across chains</div>
-              <pre><code>const Bridge = () =&gt; &lt;AssetTransferCard
+              <div class="hint">Swap still pending — nothing has arrived yet, so the incoming row reads &quot;You&#39;ll receive&quot; (Figma node 14085:392178)</div>
+              <pre><code>const SwapPending = () =&gt; &lt;AssetTransferCard
+    fromImage={placeholderLogo}
+    fromChainImage={placeholderLogo}
+    toImage={placeholderLogo}
+    toChainImage={placeholderLogo}
+    fallback={placeholderLogo}
+    fromSymbol=&quot;KAS&quot;
+    toSymbol=&quot;NACHO&quot;
+    sentLabel=&quot;Paid&quot;
+    sentAmount=&quot;1,000 KAS&quot;
+    sentUsd=&quot;≈ $9,486.17 USD&quot;
+    receivedLabel=&quot;You&#39;ll receive&quot;
+    receivedAmount=&quot;999.9996 NACHO&quot;
+    receivedUsd=&quot;≈ $9,486.01 USD&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridge completed — the default state. The funds have landed, so the incoming row falls back to the default `receivedLabel` of &quot;Received&quot; (contrast with `BridgePending`, which overrides it to &quot;You&#39;ll receive&quot;). Same symbol across chains.</div>
+              <pre><code>const BridgeDefault = () =&gt; &lt;AssetTransferCard
     fromImage={placeholderLogo}
     fromChainImage={placeholderLogo}
     toImage={placeholderLogo}
@@ -2158,6 +2416,51 @@ import { View } from "react-native";</code></pre>
     sentUsd=&quot;≈ $9,486.17 USD&quot;
     receivedAmount=&quot;1,000 KAS&quot;
     receivedUsd=&quot;≈ $9,486.17 USD&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Pending</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridge still pending — the funds have not landed yet, so the incoming row reads &quot;You&#39;ll receive&quot; (Figma node 14044:370631)</div>
+              <pre><code>const BridgePending = () =&gt; &lt;AssetTransferCard
+    fromImage={placeholderLogo}
+    fromChainImage={placeholderLogo}
+    toImage={placeholderLogo}
+    toChainImage={placeholderLogo}
+    fallback={placeholderLogo}
+    fromSymbol=&quot;iKAS&quot;
+    toSymbol=&quot;KAS&quot;
+    sentLabel=&quot;Sent&quot;
+    sentAmount=&quot;1,000 iKAS&quot;
+    sentUsd=&quot;≈ $100.17 USD&quot;
+    receivedLabel=&quot;You&#39;ll receive&quot;
+    receivedAmount=&quot;999.5 KAS&quot;
+    receivedUsd=&quot;≈ $100.17 USD&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bridge Refunded</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Refunded — the bridge never delivered, so there is no Received row (Figma node 14090:409577). ⚠️ Deliberate divergence from Figma — do NOT &quot;fix&quot; `extraAmount` back to &quot;999.9 KAS&quot;. - Figma writes the refunded amount as `999.9 KAS`. - This story writes `1,000 iKAS`. - The code is right on both counts. A refund returns the token that was locked, which on this leg is iKAS (the `fromSymbol`), not KAS. And the amount must equal the sent amount: the paired sub-row reads &quot;Returned in full, fee included&quot;, so anything under the 1,000 iKAS sent — 999.9 included — contradicts its own label. - Nicole decided on 2026-08-14 to leave Figma as-is rather than correct it, since those are dummy numbers; the code carries the correct values.</div>
+              <pre><code>const BridgeRefunded = () =&gt; &lt;AssetTransferCard
+    fromImage={placeholderLogo}
+    fromChainImage={placeholderLogo}
+    toImage={placeholderLogo}
+    toChainImage={placeholderLogo}
+    fallback={placeholderLogo}
+    fromSymbol=&quot;iKAS&quot;
+    toSymbol=&quot;KAS&quot;
+    sentLabel=&quot;Sent&quot;
+    sentAmount=&quot;1,000 iKAS&quot;
+    sentUsd=&quot;≈ $100.17 USD&quot;
+    isSentStruck
+    extraLabel=&quot;Refunded&quot;
+    extraAmount=&quot;1,000 iKAS&quot;
+    extraUsd=&quot;≈ $100.17 USD&quot; /&gt;;</code></pre>
             </div>
         </div>
     
@@ -2910,9 +3213,9 @@ import { View } from "react-native";</code></pre>
     <div class="title">
       <h2><span class="status-dot dot-ok"></span> DetailKVRow</h2>
       <div class="badges">
-        <label for="c-16-swap-bridge-activity-components-detailkvrow-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-16-swap-bridge-activity-components-detailkvrow-props" class="badge ok as-toggle">7 prop types</label>
         <label for="c-16-swap-bridge-activity-components-detailkvrow-info" class="badge info as-toggle">1 info</label>
-        <label for="c-16-swap-bridge-activity-components-detailkvrow-stories" class="badge ok as-toggle">5 stories</label>
+        <label for="c-16-swap-bridge-activity-components-detailkvrow-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -2944,30 +3247,58 @@ import { View } from "react-native";</code></pre>
           <div class="note ok">
             <div class="row">
               <span class="ex-name">Prop types <small>(react-docgen)</small></span>
-              <span class="badge ok">5 prop types</span>
+              <span class="badge ok">7 prop types</span>
             </div>
             <pre><code>Component: src/components/swap-bridge-activity/components/DetailKVRow/DetailKVRow.tsx::DetailKVRow</code></pre>
             <pre><code>Props:</code></pre>
             <pre><code>label: string
 
 /**
- * If set: the whole row becomes pressable and appends an external-link icon.
+ * If set: the whole row becomes pressable and an external-link icon is rendered
+ * to the LEFT of the value (Figma node 14085:392178, &quot;Transaction&quot; row —
+ * `Icon (size)` precedes the &quot;View&quot; text inside the same 8px-gap flex row;
+ * same in 14044:370631). Corrected 2026-08-14 — it used to render on the right.
  */
 onPressValue?: () =&gt; void
 
 value: string
 
 /**
- * Override value text colour. Default behaviour:
- *   - `onPressValue` set → `colors.primary` (blue link)
- *   - otherwise → `colors.textPrimary`
+ * Optional node that REPLACES the `value` Text entirely (e.g. a `StatusPill`).
+ * `value` stays required for backward compat with existing callers, but is not
+ * rendered when `valueNode` is set. Priority when both `value` and `valueNode`
+ * are given: `valueNode` wins — `value` is not rendered.
+ * `valuePrefix` still renders to the left of whichever one shows (value or valueNode).
  */
-valueColor?: string
+valueNode?: React.ReactNode
 
 /**
  * Optional node rendered immediately to the left of the value (e.g. provider logo).
+ * 
+ * Ordering when `onPressValue` is ALSO set (icon-left, see `onPressValue`):
+ * `[ExternalLink] [valuePrefix] [value]` — the link icon sits outside the prefix so
+ * that this prop keeps its documented contract of being *immediately* left of the
+ * value. No Figma node combines the two (Provider has a prefix and no link;
+ * Transaction / Source TX have a link and no prefix), so this order is a
+ * ⚠️ 估 — a code-side decision, not something Figma pins down. 2026-08-14.
  */
-valuePrefix?: React.ReactNode</code></pre>
+valuePrefix?: React.ReactNode
+
+/**
+ * Optional line rendered below the value (or valueNode), right-aligned,
+ * `typography.t700` (Figma node 14079:388213, Status row subtext —
+ * &quot;Text-normal/xs&quot; 12px / `typography700` #C1D5DE).
+ */
+valueSubtext?: string
+
+/**
+ * Styling of `valueSubtext`.
+ *   - `&quot;default&quot;` (default) → `typography.t700` grey, no icon.
+ *   - `&quot;warning&quot;` → amber `warning.w500` + a leading `TriangleAlert` (size 12),
+ *     matching the stuck-bridge alert line in `ActivityDetailSheet`.
+ * Additive and backward compatible: omitting it keeps the original grey line.
+ */
+valueSubtextTone?: &quot;default&quot; | &quot;warning&quot; = &quot;default&quot;</code></pre>
           </div>
         </div>
     
@@ -2979,7 +3310,7 @@ valuePrefix?: React.ReactNode</code></pre>
                 <div class="row">
                   <span class="ex-name">Imports</span>
                 </div>
-                <pre><code>import { DetailKVRow } from "kastle-ui";
+                <pre><code>import { DetailKVRow, StatusPill } from "kastle-ui";
 import { View } from "react-native";</code></pre>
               </div>
           
@@ -2995,32 +3326,14 @@ import { View } from "react-native";</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
-                <span class="ex-name">Value Positive</span>
+                <span class="ex-name">External Link</span>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Coloured value — green (positive)</div>
-              <pre><code>const ValuePositive = () =&gt; &lt;DetailKVRow label=&quot;Swap To&quot; value=&quot;+1,232.4456 NACHO&quot; valueColor={colors.success} /&gt;;</code></pre>
-            </div>
-            <div class="note ok">
-              <div class="row">
-                <span class="ex-name">Value Negative</span>
-                <span class="badge ok">story ok</span>
-              </div>
-              
-              <div class="hint">Coloured value — red (negative)</div>
-              <pre><code>const ValueNegative = () =&gt; &lt;DetailKVRow label=&quot;Swap From&quot; value=&quot;-1000 KAS&quot; valueColor={colors.danger} /&gt;;</code></pre>
-            </div>
-            <div class="note ok">
-              <div class="row">
-                <span class="ex-name">Pressable</span>
-                <span class="badge ok">story ok</span>
-              </div>
-              
-              <div class="hint">Pressable — external link icon, whole row tappable</div>
-              <pre><code>const Pressable = () =&gt; &lt;DetailKVRow
-    label=&quot;TX Hash&quot;
-    value=&quot;9dhd...432ds&quot;
+              <div class="hint">Explorer link — the whole row is tappable and gets an external-link icon. This is the ONLY story that should render as a link; it passes `onPressValue` explicitly. See the `actions` note in `meta.parameters` above.</div>
+              <pre><code>const ExternalLink = () =&gt; &lt;DetailKVRow
+    label=&quot;Source TX&quot;
+    value=&quot;View&quot;
     onPressValue={() =&gt; console.log(&quot;open explorer&quot;)} /&gt;;</code></pre>
             </div>
             <div class="note ok">
@@ -3029,8 +3342,48 @@ import { View } from "react-native";</code></pre>
                 <span class="badge ok">story ok</span>
               </div>
               
-              <div class="hint">Long value — wraps onto second line</div>
-              <pre><code>const LongValue = () =&gt; &lt;DetailKVRow label=&quot;From&quot; value=&quot;240,000,000.123456 KAS (Kaspa Mainnet)&quot; /&gt;;</code></pre>
+              <div class="hint">Long value — stays on one line and truncates with a tail ellipsis.</div>
+              <pre><code>const LongValue = () =&gt; &lt;DetailKVRow label=&quot;Provider&quot; value=&quot;Kurve Bridge (Kaspa ↔ Ethereum Canonical Route)&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Status Confirmed</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Status — pill in place of the value text</div>
+              <pre><code>const StatusConfirmed = () =&gt; &lt;DetailKVRow
+    label=&quot;Status&quot;
+    value={BRIDGE_EXIT_COPY.confirmed}
+    valueNode={&lt;StatusPill status=&quot;pending&quot; label={BRIDGE_EXIT_COPY.confirmed} /&gt;}
+    valueSubtext={BRIDGE_EXIT_COPY.confirmedSubtext} /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Status Withdrawable</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Status, past 48h — the line under the pill says why a withdraw is offered. Uses `valueSubtextTone=&quot;warning&quot;` (amber + ⚠️), matching `ActivityDetailSheet → BridgeRefundable`. Nicole&#39;s call 2026-08-14: amber is the correct rendering, the plain grey line this story used to show did not exist anywhere in the product.</div>
+              <pre><code>const StatusWithdrawable = () =&gt; &lt;DetailKVRow
+    label=&quot;Status&quot;
+    value={BRIDGE_EXIT_COPY.submitted}
+    valueNode={&lt;StatusPill status=&quot;pending&quot; label={BRIDGE_EXIT_COPY.submitted} /&gt;}
+    valueSubtext={BRIDGE_EXIT_COPY.stuckSubtext}
+    valueSubtextTone=&quot;warning&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Status Refunded</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Status — refunded in full</div>
+              <pre><code>const StatusRefunded = () =&gt; &lt;DetailKVRow
+    label=&quot;Status&quot;
+    value=&quot;Refunded&quot;
+    valueNode={&lt;StatusPill status=&quot;refunded&quot; /&gt;}
+    valueSubtext=&quot;Returned in full, fee included&quot; /&gt;;</code></pre>
             </div>
         </div>
     
@@ -8151,7 +8504,7 @@ import { View } from "react-native";</code></pre>
       <div class="badges">
         <label for="c-51-components-statuspill-props" class="badge ok as-toggle">2 prop types</label>
         <label for="c-51-components-statuspill-info" class="badge info as-toggle">1 info</label>
-        <label for="c-51-components-statuspill-stories" class="badge ok as-toggle">3 stories</label>
+        <label for="c-51-components-statuspill-stories" class="badge ok as-toggle">6 stories</label>
         
       </div>
     </div>
@@ -8192,7 +8545,7 @@ import { View } from "react-native";</code></pre>
  */
 label?: string
 
-status: &quot;success&quot; | &quot;failed&quot; | &quot;pending&quot;</code></pre>
+status: &quot;success&quot; | &quot;failed&quot; | &quot;pending&quot; | &quot;refunded&quot;</code></pre>
           </div>
         </div>
     
@@ -8235,6 +8588,33 @@ import { View } from "react-native";</code></pre>
               
               <div class="hint">Transaction in-flight — amber</div>
               <pre><code>const Pending = () =&gt; &lt;StatusPill status=&quot;pending&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Refunded</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridge withdrawal returned in full — green, distinct icon from Success</div>
+              <pre><code>const Refunded = () =&gt; &lt;StatusPill status=&quot;refunded&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Submitted</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridge Activity label override — still status=&quot;pending&quot; under the hood</div>
+              <pre><code>const Submitted = () =&gt; &lt;StatusPill status=&quot;pending&quot; label=&quot;Submitted&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Confirmed</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Bridge Activity label override — still status=&quot;pending&quot; under the hood</div>
+              <pre><code>const Confirmed = () =&gt; &lt;StatusPill status=&quot;pending&quot; label=&quot;Confirmed&quot; /&gt;;</code></pre>
             </div>
         </div>
     
@@ -9197,6 +9577,127 @@ import { WalletOptionButton } from "kastle-ui";</code></pre>
               
               
               <pre><code>const Loading = () =&gt; &lt;WalletOptionButton onPress={() =&gt; {}} label=&quot;Create Wallet&quot; isLoading /&gt;;</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  no-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="WithdrawConfirmSheet">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> WithdrawConfirmSheet</h2>
+      <div class="badges">
+        <label for="c-57-swap-bridge-activity-components-withdrawconfirmsheet-props" class="badge ok as-toggle">5 prop types</label>
+        <label for="c-57-swap-bridge-activity-components-withdrawconfirmsheet-info" class="badge info as-toggle">1 info</label>
+        <label for="c-57-swap-bridge-activity-components-withdrawconfirmsheet-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./src/components/swap-bridge-activity/components/WithdrawConfirmSheet/WithdrawConfirmSheet.stories.tsx">swap-bridge-activity-components-withdrawconfirmsheet · ./src/components/swap-bridge-activity/components/WithdrawConfirmSheet/WithdrawConfirmSheet.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="c-57-swap-bridge-activity-components-withdrawconfirmsheet-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-57-swap-bridge-activity-components-withdrawconfirmsheet-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  <input id="c-57-swap-bridge-activity-components-withdrawconfirmsheet-props" class="tg tg-props" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+        <div class="panel panel-props">
+          <div class="note ok">
+            <div class="row">
+              <span class="ex-name">Prop types <small>(react-docgen)</small></span>
+              <span class="badge ok">5 prop types</span>
+            </div>
+            <pre><code>Component: src/components/swap-bridge-activity/components/WithdrawConfirmSheet/WithdrawConfirmSheet.tsx::WithdrawConfirmSheet</code></pre>
+            <pre><code>Props:</code></pre>
+            <pre><code>/**
+ * Formatted amount shown in the title, e.g. &quot;1,000 iKAS&quot;
+ */
+amount: string
+
+/**
+ * Action in flight — locks both buttons and the backdrop
+ */
+isLoading?: boolean = false
+
+/**
+ * Controls sheet visibility
+ */
+isOpen: boolean
+
+/**
+ * Called when the sheet is dismissed (Back button or backdrop)
+ */
+onClose: () =&gt; void
+
+/**
+ * Called when the user confirms the withdrawal
+ */
+onConfirm: () =&gt; void</code></pre>
+          </div>
+        </div>
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Text, TouchableOpacity, View } from "react-native";
+import { WithdrawConfirmSheet } from "kastle-ui";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Default</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">User tapped Withdraw on a stuck bridge transfer — confirm before sending.</div>
+              <pre><code>const Default = () =&gt; &lt;SheetDemo amount=&quot;1,000 iKAS&quot; /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Loading</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">Confirmed — the refund transaction is being submitted.</div>
+              <pre><code>const Loading = () =&gt; &lt;SheetDemo amount=&quot;1,000 iKAS&quot; isLoading /&gt;;</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Long Amount</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              <div class="hint">A large transfer, to check the title wraps instead of clipping.</div>
+              <pre><code>const LongAmount = () =&gt; &lt;SheetDemo amount=&quot;1,000,000.88888888 iKAS&quot; /&gt;;</code></pre>
             </div>
         </div>
     
