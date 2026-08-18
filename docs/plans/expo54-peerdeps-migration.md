@@ -64,6 +64,9 @@ Peer ranges span SDK 53 *and* 54 ships — an SDK 53 consumer stays installable 
 4. `@storybook/react@10.5.8` added explicitly — imported by `*.stories.tsx`, no longer hoisted by `@storybook/react-native-web-vite` 10.5.x.
 5. `@storybook/react-native` pinned to 10.4.3 + npm override forcing nested `@storybook/react-native-ui@10.4.3`: the 10.5.4 UI package peer-pins `react-native-reanimated@4.5.1` *exactly*, incompatible with Expo Go SDK 54's embedded ~4.1.x. Dev-only — consumers never install either.
    **Exit condition:** remove the `@storybook/react-native-ui` override and the `@storybook/react-native` 10.4.3 pin when either (a) Storybook RN's peer range accepts reanimated ~4.1.x, or (b) Expo Go ships reanimated ≥4.5. Re-check at every Storybook major/minor bump and every Expo SDK upgrade.
+
+   **`react-native-worklets` pinned 0.5.1 (PR #57):** matches Expo Go SDK 54's baked-in native side; reanimated 4.1.7 otherwise floats the JS side to 0.8.3 → `installTurboModule` arity mismatch → silent empty Storybook UI on Android Expo Go (no crash — Storybook's try/catch swallows the throw). **Exit condition:** unpin/re-evaluate at every Expo Go update, Expo SDK upgrade, or reanimated bump — verify JS worklets version matches the Expo Go native side. Not a consumer-facing pin: kastle-mobile builds JS+native from the same tree and is unaffected.
+
 6. Lockfile regenerated from scratch (`rm -rf node_modules package-lock.json && npm install`).
 7. Local cleanup (untracked, not committed): deleted file-sync artifacts `.github/workflows/ci 2.yml`, `eslint.config 2.mjs` (stray flat config was a live lint hazard).
 
