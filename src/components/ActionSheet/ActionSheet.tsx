@@ -4,6 +4,7 @@ import {
   Dimensions,
   Keyboard,
   Modal,
+  PanResponder,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -11,6 +12,11 @@ import {
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const ANIMATION_DURATION = 300;
+/** Drag past this many px, or flick faster than this, to dismiss. */
+const DISMISS_DISTANCE = 120;
+const DISMISS_VELOCITY = 0.7;
+/** Ignore drags shorter than this so taps still reach the children. */
+const DRAG_SLOP = 6;
 
 export interface ActionSheetProps {
   /** Controls visibility */
@@ -48,6 +54,10 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
   const maxHeight =
     topInset !== undefined ? SCREEN_HEIGHT - topInset : SCREEN_HEIGHT * heightRatio;
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
+  // PanResponder is created once; read onClose through a ref so a re-rendered
+  // parent's newer callback still wins.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
   const animateIn = useCallback(() => {
@@ -92,6 +102,42 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
     }
   }, [isOpen, animateIn, animateOut]);
 
+  // Drag-to-dismiss. PanResponder rather than react-native-gesture-handler:
+  // it drives the same Animated.Value the open/close timings already use, so
+  // the sheet stays on the native driver and the library stays dependency-free.
+  const pan = useRef(
+    PanResponder.create({
+      // Claim only a clear downward drag — a horizontal swipe or a tap must
+      // still reach the sheet's own content (lists, buttons, inputs).
+      onMoveShouldSetPanResponder: (_e, g) =>
+        g.dy > DRAG_SLOP && g.dy > Math.abs(g.dx) * 2,
+      onPanResponderMove: (_e, g) => {
+        // Downward only: dragging up must not lift the sheet off its anchor.
+        if (g.dy > 0) translateY.setValue(g.dy);
+      },
+      onPanResponderRelease: (_e, g) => {
+        if (g.dy > DISMISS_DISTANCE || g.vy > DISMISS_VELOCITY) {
+          animateOut(onCloseRef.current);
+          return;
+        }
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+          bounciness: 0,
+        }).start();
+      },
+      // A cancelled gesture (call, notification shade) must not strand the
+      // sheet mid-drag.
+      onPanResponderTerminate: () => {
+        Animated.spring(translateY, {
+          toValue: 0,
+          useNativeDriver: true,
+          bounciness: 0,
+        }).start();
+      },
+    }),
+  ).current;
+
   const handleClose = useCallback(() => {
     if (!closeOnBackdropPress) return;
     animateOut(onClose);
@@ -118,6 +164,7 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({
         collapsable={false}
         style={[styles.sheetWrapper, { maxHeight, transform: [{ translateY }] }]}
         pointerEvents="box-none"
+        {...pan.panHandlers}
       >
         {/* Top tap zone — tapping the handlebar area closes the sheet */}
         <TouchableWithoutFeedback onPress={() => animateOut(onClose)}>
