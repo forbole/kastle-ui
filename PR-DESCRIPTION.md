@@ -43,16 +43,20 @@ there is tracked separately.
 
 ## How it was checked
 
-- `reviewer` pass twice — 2026-08-07 returned `fail` on five items (three of
-  which turned out to be defects in our acceptance criteria, since corrected);
-  2026-08-25 returned `pass with waivers` and caught one regression, fixed
-  before this PR opened.
-- `tsc --noEmit` clean.
-- CI green, including the Storybook preview:
-  https://forbole.github.io/kastle-ui/preview/pr-59/
-- Fill-width measured in the running Storybook rather than reasoned about:
-  860px in a 900px viewport, 89px with `hug`, 460px at a 500px viewport.
-- Checked on a real Android device through Expo Go — no issues found (Nicole, 2026-08-25).
+- [x] Independent `reviewer` pass — twice. 2026-08-07 returned `fail` on five
+      items (three were defects in our own acceptance criteria, since fixed);
+      2026-08-25 returned `pass with waivers` and caught one regression, fixed
+      before this PR opened.
+- [x] `tsc --noEmit` — clean.
+- [x] CI green, Storybook preview deployed:
+      https://forbole.github.io/kastle-ui/preview/pr-59/
+- [x] Storybook, all 12 stories — reviewed live by Nicole, 2026-08-25.
+- [x] Fill-width measured rather than reasoned about — 860px in a 900px
+      viewport, 89px with `hug`, 460px at a 500px viewport.
+- [x] Real Android device via Expo Go — no issues found (Nicole, 2026-08-25).
+- [ ] iOS — not checked.
+- [ ] Used in a real screen — nothing imports `Button` yet, so it ships as
+      prep-build and stays tagged `unverified` until it does.
 
 Tap targets: `xs`/`sm`/`md` are shorter than 44pt, so the button carries
 vertical `hitSlop` derived from its resolved height — the tap area reaches 44
