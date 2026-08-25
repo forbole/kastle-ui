@@ -1,12 +1,13 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import { View, Text } from "react-native";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
+import { View, Text, StyleSheet } from "react-native";
 import { Button, ButtonComboProps, ButtonSize } from "./Button";
 import { spacing, typography, background } from "../../config/theme";
 
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
+  parameters: { layout: "fullscreen" },
   // Built ahead of demand: nothing outside this folder imports Button yet.
   // Cleared only when Nicole confirms UAT — not when it first gets used (§3E).
   tags: ["unverified"],
@@ -73,33 +74,38 @@ function SectionLabel({ children }: { children: string }) {
 // ---------------------------------------------------------------------------
 // Screen frame
 //
-// Storybook's canvas root is a plain block element, NOT a flex container — and
-// `alignSelf` (which is what `hug` sets) only does anything inside a flex
-// parent. Rendered bare, a Button therefore looks identical with `hug` on and
-// off, which is exactly what a real screen does NOT do: every RN screen is a
-// View, i.e. a flex column.
+// `alignSelf` — which is what `hug` sets — only does anything inside a flex
+// parent, and Storybook's canvas root is a plain block element. Rendered bare,
+// a Button looked identical with `hug` on and off; a real screen does not
+// behave that way, because every RN screen is a View, i.e. a flex column.
 //
-// So the args-based stories below render inside a 320-wide column — a phone
-// content column — and the dashed outline is that column's edge. With `hug`
-// off (the default) the button reaches both edges; with `hug` on it shrinks to
-// its label. The two overview stories opt out: they lay their samples out in
-// rows, where `alignSelf` moves things vertically and says nothing about width.
+// So these stories render inside the same shape a screen gives a button:
+// `flex: 1` + `layout: "fullscreen"`, following SwipeToConfirm.stories.tsx.
+// It is responsive on purpose — resize the Storybook canvas and the button
+// tracks it, which is what fill-width actually means.
+//
+// ⚠️ Deliberately NO `alignItems: "center"` here. SwipeToConfirm's frame centres
+// its child because that component is a fixed-width track; centring would force
+// every child to hug and would hide the very thing these stories exist to show.
+//
+// The two overview stories opt out: they lay samples out in rows, where
+// `alignSelf` moves things vertically and says nothing about width.
 // ---------------------------------------------------------------------------
+const screenStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: background.bg0,
+    paddingHorizontal: spacing.s5,
+    paddingVertical: spacing.s6,
+  },
+});
+
 const inScreen = {
   decorators: [
     (Story: React.ComponentType) => (
-      <View style={{ padding: spacing.s4, backgroundColor: background.bg0 }}>
-        <View
-          style={{
-            width: 320,
-            padding: spacing.s3,
-            borderWidth: 1,
-            borderStyle: "dashed" as const,
-            borderColor: typography.t500,
-          }}
-        >
-          <Story />
-        </View>
+      <View style={screenStyles.screen}>
+        <Story />
       </View>
     ),
   ],
