@@ -40,7 +40,7 @@ Captured via Storybook web (`npm run preview` on :6006) + Playwright against ins
 1. `negative`+`solid`+`md` is 44px tall in Figma vs 40px for every other action at `md` — real Figma data, not a guess, but looks like an inconsistency. Confirm intended.
 2. `secondary`/`outline` pressed border colour is a derived assumption (tracks pressed text colour) — Figma's pressed sample didn't expose a separate border variable.
 3. Several colour bindings (`typography800`, `typography500`, `typography700`, `typography950`) fall outside kastle-ui-context.md's documented "3 tones only" (t900/t600/t400) semantic set. Used as literally bound by Figma (traceable, not guessed) but flagged per the context doc's "stray binding" rule.
-4. `primary`+`solid` text-on-background contrast measures 2.09:1 (white on `primary.p500`) — fails WCAG AA 4.5:1 for normal text. `negative`+`solid` measures 3.76:1 — also fails 4.5:1. These are brand colours, not this agent's to change; flagged for Nicole/design decision.
+4. ~~Contrast~~ — see "Known, waived" below; measured again and waived on 2026-08-25.
 5. ~~`secondary`+`text`/xl is bound to the "lg" text style~~ — **resolved 2026-08-25.** It was never one combo's typo: re-opening Figma found **8 of 8 `size=xl` nodes** bound to `Text-medium/lg` (18px). The whole `xl` step is 18px; the per-combo override is gone and all 7 combos now render 18px. Nicole confirmed 2026-08-07.
 6. `primary`+`outline`'s colours are derived (composed from 3 verified rules, no Figma mockup — see COMBO_STYLES comment in Button.tsx). Contrast: `primary.p500` (#00C4E7) on `background.bg0` (#051D27) = **8.30:1** (default), `primary.p700` (#4BE8FC) on same background = **11.76:1** (pressed) — both pass WCAG AA. Please confirm the derivation is correct before this ships.
 
@@ -56,7 +56,7 @@ Four calls by Nicole, one regression caught by the second reviewer pass:
 
 ### Known, waived — not fixed in this PR
 
-1. **Contrast.** `primary`+`solid` is 2.09:1 (1.47:1 while pressed) and `negative`+`solid` is 3.76:1 (2.77:1 pressed) against WCAG AA's 4.5:1. These are brand colours, inherited from the production Gluestack button — not this component's to change.
-2. **Touch target.** `xs`/`sm`/`md` are 32/36/40pt tall against a 44pt guideline, and there is no `hitSlop`. Changing the size scale would diverge from Figma.
-3. **`primary`+`outline` has no Figma mockup.** Its colours are composed from three verified rules. Whether the combination should exist at all is still open.
+1. **Contrast.** `primary`+`solid` is 2.09:1 (1.65:1 while pressed, on `p600`) and `negative`+`solid` is 3.76:1 (2.77:1 pressed) against WCAG AA's 4.5:1. These are brand colours, inherited from the production Gluestack button — every blue and red button already shipped measures the same. Reviewed in Storybook and waived by Nicole on 2026-08-25; logged as W-004 in the team's waiver log.
+2. ~~**Touch target.**~~ **Fixed, not waived.** `xs`/`sm`/`md` are 32/36/40pt tall against the 44pt guideline. Rather than diverge from Figma's size scale, the button now carries vertical `hitSlop` derived from its resolved height — the tap area reaches 44 with no visual change, and `lg`/`xl` correctly get none.
+3. **`primary`+`outline` has no Figma mockup**, and its colours are composed from three verified rules. Nicole confirmed on 2026-08-25 that the combination should exist, so the gap is in the Figma component set rather than here; adding it there is tracked separately. Both of its states pass AA (8.30 / 11.76).
 
