@@ -54,9 +54,11 @@ there is tracked separately.
 - [x] Fill-width measured rather than reasoned about — 860px in a 900px
       viewport, 89px with `hug`, 460px at a 500px viewport.
 - [x] Real Android device via Expo Go — no issues found (Nicole, 2026-08-25).
-- [ ] iOS — not checked.
-- [ ] Used in a real screen — nothing imports `Button` yet, so it ships as
-      prep-build and stays tagged `unverified` until it does.
+**Out of reach from this PR, not skipped:** iOS is only testable after release —
+there is no simulator on this machine (`xcrun simctl` fails) and device testing
+happens through TestFlight once merged. And nothing imports `Button` yet, so it
+ships as prep-build, tagged `unverified`; the first real usage is what triggers
+its UAT.
 
 Tap targets: `xs`/`sm`/`md` are shorter than 44pt, so the button carries
 vertical `hitSlop` derived from its resolved height — the tap area reaches 44
