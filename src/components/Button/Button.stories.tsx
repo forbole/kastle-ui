@@ -70,31 +70,73 @@ function SectionLabel({ children }: { children: string }) {
 // free-form props left to the controls panel.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Screen frame
+//
+// Storybook's canvas root is a plain block element, NOT a flex container — and
+// `alignSelf` (which is what `hug` sets) only does anything inside a flex
+// parent. Rendered bare, a Button therefore looks identical with `hug` on and
+// off, which is exactly what a real screen does NOT do: every RN screen is a
+// View, i.e. a flex column.
+//
+// So the args-based stories below render inside a 320-wide column — a phone
+// content column — and the dashed outline is that column's edge. With `hug`
+// off (the default) the button reaches both edges; with `hug` on it shrinks to
+// its label. The two overview stories opt out: they lay their samples out in
+// rows, where `alignSelf` moves things vertically and says nothing about width.
+// ---------------------------------------------------------------------------
+const inScreen = {
+  decorators: [
+    (Story: React.ComponentType) => (
+      <View style={{ padding: spacing.s4, backgroundColor: background.bg0 }}>
+        <View
+          style={{
+            width: 320,
+            padding: spacing.s3,
+            borderWidth: 1,
+            borderStyle: "dashed" as const,
+            borderColor: typography.t500,
+          }}
+        >
+          <Story />
+        </View>
+      </View>
+    ),
+  ],
+};
+
 export const Primary: Story = {
+  ...inScreen,
   args: { action: "primary", variant: "solid" },
 };
 
 export const PrimaryText: Story = {
+  ...inScreen,
   args: { action: "primary", variant: "text" },
 };
 
 export const PrimaryTransparent: Story = {
+  ...inScreen,
   args: { action: "primary", variant: "transparent" },
 };
 
 export const PrimaryOutline: Story = {
+  ...inScreen,
   args: { action: "primary", variant: "outline" },
 };
 
 export const SecondaryOutline: Story = {
+  ...inScreen,
   args: { action: "secondary", variant: "outline" },
 };
 
 export const SecondaryText: Story = {
+  ...inScreen,
   args: { action: "secondary", variant: "text" },
 };
 
 export const NegativeSolid: Story = {
+  ...inScreen,
   args: { action: "negative", variant: "solid" },
 };
 
@@ -105,6 +147,7 @@ export const NegativeSolid: Story = {
  * covers every combo's disabled look.
  */
 export const Disabled: Story = {
+  ...inScreen,
   args: { action: "primary", variant: "solid", disabled: true },
 };
 
@@ -116,6 +159,7 @@ export const Disabled: Story = {
  * colour without a separate story per combo.
  */
 export const Loading: Story = {
+  ...inScreen,
   args: { action: "primary", variant: "solid", loading: true },
 };
 
