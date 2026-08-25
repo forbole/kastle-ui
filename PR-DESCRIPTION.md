@@ -54,6 +54,13 @@ there is tracked separately.
 - [x] Fill-width measured rather than reasoned about — 860px in a 900px
       viewport, 89px with `hug`, 460px at a 500px viewport.
 - [x] Real Android device via Expo Go — no issues found (Nicole, 2026-08-25).
+**Where it reaches users:** nothing imports `Button` on this branch, but #60
+converts `ButtonGroup` to use it, and `ButtonGroup` is already on a shipped
+path — `AddCustomNodeSheet` → `CustomRpcScreen` → `kastle-mobile`'s
+`app/(has-wallet)/custom-rpc.tsx` (merged 2026-07-20) → Settings → Custom RPC.
+So the first place to check this in a real build is that screen, after both PRs
+merge and `npm run update-ui` runs in `kastle-mobile`.
+
 **Out of reach from this PR, not skipped:** iOS is only testable after release —
 there is no simulator on this machine (`xcrun simctl` fails) and device testing
 happens through TestFlight once merged. And nothing imports `Button` yet, so it
