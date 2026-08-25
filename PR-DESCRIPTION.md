@@ -52,7 +52,7 @@ there is tracked separately.
   https://forbole.github.io/kastle-ui/preview/pr-59/
 - Fill-width measured in the running Storybook rather than reasoned about:
   860px in a 900px viewport, 89px with `hug`, 460px at a 500px viewport.
-- Not checked: Android via Expo Go.
+- Checked on a real Android device through Expo Go — no issues found (Nicole, 2026-08-25).
 
 Tap targets: `xs`/`sm`/`md` are shorter than 44pt, so the button carries
 vertical `hitSlop` derived from its resolved height — the tap area reaches 44
