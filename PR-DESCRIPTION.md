@@ -31,15 +31,32 @@ Gap found: theme.ts has no pre-composed `textStyles.bodyMedium*` preset (only No
 Captured via Storybook web (`npm run preview` on :6006) + Playwright against installed Chrome, story `components-button--all-combos-all-sizes` and others. See delivery report for what was checked; images live in the scratchpad, not committed.
 
 ## Testing
-- [x] Checked in Storybook web preview (`npm run preview`) — all 6 stories render, screenshotted
+- [x] Checked in Storybook web preview (`npm run preview`) — **12 stories** (7 combos + Disabled + Loading + LongLabel + 2 overview), Nicole reviewed live on 2026-08-25
 - [ ] Checked on Android phone via Expo Go — not done (no device access in this session)
 - [x] Checked component states: default (all 5×5), disabled, loading, long-label (with an important finding — see report)
-- [ ] Independent reviewer pass — not yet run (this is a PR draft only; Nicole/reviewer agent runs this before Leo sees it)
+- [x] Independent reviewer pass — **run twice**: 2026-08-07 (verdict `fail`, 5 items) and 2026-08-25 (verdict `pass with waivers`). Reports in `50-agent-output/reviewer/`
 
 ## Known open items (not blocking, flagged for Nicole)
 1. `negative`+`solid`+`md` is 44px tall in Figma vs 40px for every other action at `md` — real Figma data, not a guess, but looks like an inconsistency. Confirm intended.
 2. `secondary`/`outline` pressed border colour is a derived assumption (tracks pressed text colour) — Figma's pressed sample didn't expose a separate border variable.
 3. Several colour bindings (`typography800`, `typography500`, `typography700`, `typography950`) fall outside kastle-ui-context.md's documented "3 tones only" (t900/t600/t400) semantic set. Used as literally bound by Figma (traceable, not guessed) but flagged per the context doc's "stray binding" rule.
 4. `primary`+`solid` text-on-background contrast measures 2.09:1 (white on `primary.p500`) — fails WCAG AA 4.5:1 for normal text. `negative`+`solid` measures 3.76:1 — also fails 4.5:1. These are brand colours, not this agent's to change; flagged for Nicole/design decision.
-5. `secondary`+`text`/xl is bound in Figma to the "lg" text style (18px) instead of "xl" (20px) — confirmed on 2 independent xl state nodes (default + pressed). Taken as Figma's literal value, not silently corrected. Confirm intended.
+5. ~~`secondary`+`text`/xl is bound to the "lg" text style~~ — **resolved 2026-08-25.** It was never one combo's typo: re-opening Figma found **8 of 8 `size=xl` nodes** bound to `Text-medium/lg` (18px). The whole `xl` step is 18px; the per-combo override is gone and all 7 combos now render 18px. Nicole confirmed 2026-08-07.
 6. `primary`+`outline`'s colours are derived (composed from 3 verified rules, no Figma mockup — see COMBO_STYLES comment in Button.tsx). Contrast: `primary.p500` (#00C4E7) on `background.bg0` (#051D27) = **8.30:1** (default), `primary.p700` (#4BE8FC) on same background = **11.76:1** (pressed) — both pass WCAG AA. Please confirm the derivation is correct before this ships.
+
+## Changes since the first draft (2026-08-25)
+
+Four calls by Nicole, one regression caught by the second reviewer pass:
+
+- **`xl` type step is 18px** across all 7 combos (was 20px for 6 of them). Figma: 8/8 `size=xl` nodes bind `Text-medium/lg`.
+- **Fill width by default.** `alignSelf: "flex-start"` is gone from the base style; an opt-in `hug` prop replaces it. Production's Gluestack Button sets no width at all, so RN's default stretch is what real call sites get.
+- **Stories restructured to 12** — one per legal action×variant combo, plus Disabled, Loading, LongLabel and two overview stories. `size`, `label`, `disabled`, `loading` and `hug` are controls; `action`/`variant` are deliberately not, since the prop type is a discriminated union and free controls would compose pairs that do not exist.
+- **Story wrappers use `background.bg0`** instead of a raw hex.
+- **Reverted:** `hug` had been added to the two overview stories to "preserve their layout". It did the opposite — the rows set `alignItems: "center"`, and a child's `alignSelf` overrides that, so all 35 instances shifted to the top of their row. Removed.
+
+### Known, waived — not fixed in this PR
+
+1. **Contrast.** `primary`+`solid` is 2.09:1 (1.47:1 while pressed) and `negative`+`solid` is 3.76:1 (2.77:1 pressed) against WCAG AA's 4.5:1. These are brand colours, inherited from the production Gluestack button — not this component's to change.
+2. **Touch target.** `xs`/`sm`/`md` are 32/36/40pt tall against a 44pt guideline, and there is no `hitSlop`. Changing the size scale would diverge from Figma.
+3. **`primary`+`outline` has no Figma mockup.** Its colours are composed from three verified rules. Whether the combination should exist at all is still open.
+

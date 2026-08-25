@@ -93,6 +93,19 @@ export type ButtonProps = ButtonComboProps & {
   loading?: boolean;
   /** Defaults to `label` when omitted. */
   accessibilityLabel?: string;
+  /**
+   * Opt-in content-hug sizing. Defaults to `false` (fill width), because the
+   * production Gluestack Button (`kastle-mobile`'s `components/ui/button/index.tsx`)
+   * sets no width at all — RN's default `alignItems: "stretch"` then makes it
+   * fill its container, which is how production call sites actually behave.
+   *
+   * ⚠️ `alignSelf` is a cross-axis property: it controls width only inside a
+   * COLUMN parent. Inside a row it does nothing to width — it moves the button
+   * to the top of the row instead, overriding the row's `alignItems`. So `hug`
+   * is for a button in a column that should size to its label; it is not a
+   * general "make me small" switch.
+   */
+  hug?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -151,31 +164,35 @@ const SIZE_STYLES: Record<
     // Taken from the lg node (Spacing/3 = 12), which does expose it — lg and xl
     // are the two sizes Figma bound gap=12 on, vs. 8 for xs; sm/md/xl fill the gaps.
     gap: spacing.s3,
-    fontSize: fontSize.xl,
+    // fontSize.lg (18px), NOT fontSize.xl (20px) — Nicole confirmed 2026-08-07.
+    // `reviewer` sampled 6 Figma `xl` nodes across combos and all 6/6 bound to
+    // "Text-medium/lg : 18px", not to the xl (20px) text style. This used to be
+    // a per-combo override on just `secondary-text` (see SIZE_OVERRIDES below,
+    // now removed) — that left the other 6 combos wrong at 20px. It's the scale
+    // itself that's 18px, not one combo's exception.
+    fontSize: fontSize.lg,
   },
 };
 
 /**
  * Per-combo, per-size overrides where Figma's actual bound value breaks the
- * shared scale above. Both entries are Figma's literal bound values, not
- * guesses — flagged in the PR description as likely Figma inconsistencies
- * for Nicole to confirm, not silently "corrected" here.
+ * shared scale above. This entry is Figma's literal bound value, not a
+ * guess — flagged in the PR description as a likely Figma inconsistency for
+ * Nicole to confirm, not silently "corrected" here.
  *
  * - negative-solid/md is 44px tall, not 40 (Spacing/11 = 44, node 7592:30546
- *   and its isDisabled sibling 7592:30541 both confirm it).
- * - secondary-text/xl is bound to the "lg" text style (18px), not "xl"
- *   (20px) — confirmed on BOTH the default (8085:62748) and pressed
- *   (8085:62733) xl nodes, both returning "Text-medium/lg : 18px" from
- *   get_variable_defs, while xs/sm/md/lg on the same combo all bind
- *   correctly to their own size's text style. Two independent state nodes
- *   agreeing rules out a one-off tool glitch — this looks like a genuine
- *   Figma authoring slip on this specific combo.
+ *   and its isDisabled sibling 7592:30541 both confirm it — Nicole checked
+ *   this against Figma and confirmed `md` height is genuinely action-specific
+ *   here, not a bug. Do not remove.).
+ *
+ * There used to be a second override here (`secondary-text/xl → 18px`) — it
+ * is gone because the 18px value turned out to apply to the whole `xl` size,
+ * not just this one combo (see SIZE_STYLES.xl.fontSize above).
  */
 const SIZE_OVERRIDES: Partial<
   Record<ComboKey, Partial<Record<ButtonSize, { height?: number; fontSize?: number }>>>
 > = {
   "negative-solid": { md: { height: spacing.s11 } },
-  "secondary-text": { xl: { fontSize: fontSize.lg } },
 };
 
 // ---------------------------------------------------------------------------
@@ -196,7 +213,13 @@ interface ComboStyle {
 const COMBO_STYLES: Record<ComboKey, ComboStyle> = {
   "primary-solid": {
     backgroundColor: primary.p500,
-    pressedBackgroundColor: primary.p700,
+    // Pressed = primary600 (#13DCFF), not p700 (#4BE8FC). The reviewer re-opened
+    // the Figma pressed node on 2026-08-25 and found it bound to `Primary/primary600`;
+    // p700 came from kastle-mobile's Gluestack rule, which is a different source.
+    // Nicole confirmed the same day: follow Figma.
+    // ⚠️ This is a fidelity fix, not a contrast fix — white on p600 is 1.65:1,
+    // barely better than 1.47:1. The contrast question is tracked separately.
+    pressedBackgroundColor: primary.p600,
     textColor: typography.t800,
     pressedTextColor: typography.t800,
     borderRadius: borderRadius.full,
@@ -280,6 +303,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled = false,
   loading = false,
   accessibilityLabel,
+  hug = false,
   style,
 }) => {
   const [pressed, setPressed] = useState(false);
@@ -292,8 +316,20 @@ export const Button: React.FC<ButtonProps> = ({
   const textColor = pressed ? combo.pressedTextColor : combo.textColor;
   const borderColor = pressed ? combo.pressedBorderColor ?? combo.borderColor : combo.borderColor;
 
+  // hitSlop — Apple HIG's minimum tappable target is 44pt. The base size
+  // scale below `lg` is visually shorter than that (xs 32 / sm 36 / md 40),
+  // so we extend the *tappable* (not the visible) area with vertical hitSlop
+  // only, derived from SIZE_STYLES[size].height — never hardcoded per size —
+  // so lg/xl (already ≥44) correctly get 0. Horizontal is intentionally left
+  // at 0: the button fills its row's width by default (see `hug` above), so
+  // there's no horizontal gap to claim, and slopping sideways would overlap
+  // a neighbouring tap target. hitSlop does not participate in layout, so
+  // this is a zero visual change.
+  const verticalHitSlop = Math.max(0, (44 - SIZE_STYLES[size].height) / 2);
+
   return (
     <TouchableOpacity
+      hitSlop={{ top: verticalHitSlop, bottom: verticalHitSlop }}
       style={[
         styles.base,
         {
@@ -305,6 +341,7 @@ export const Button: React.FC<ButtonProps> = ({
           borderColor: borderColor,
           borderWidth: borderColor ? combo.borderWidth ?? borderWidth.bw1 : borderWidth.bw0,
         },
+        hug && styles.hug,
         disabled && styles.disabled,
         style,
       ]}
@@ -348,6 +385,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  hug: {
     alignSelf: "flex-start",
   },
   disabled: {
