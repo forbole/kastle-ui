@@ -4,7 +4,7 @@
 > Required by the UI Acceptance Criteria §1F / §2 / §3E. Usage is derived from the import graph,
 > never from a maintained remark — a hand-kept column rots silently, an import graph cannot.
 
-**54 components · 17 built ahead of demand · 6 entry points · 1 without a story**
+**53 components · 16 built ahead of demand · 6 entry points · 1 without a story**
 
 ## What the columns mean
 
@@ -19,7 +19,7 @@
 
 ⭐ **0 → 1 is the UAT trigger.** The first time a prep-build component gains a real importer, it must be reported for UAT.
 
-⚠️ **Why "Born" is a column and not a footnote:** §0A says the criteria govern new and changed code only. Without a per-component date, every pre-existing component shows up as a failure, the list reads as 16 problems instead of 0, and people stop reading it.
+⚠️ **Why "Born" is a column and not a footnote:** §0A says the criteria govern new and changed code only. Without a per-component date, every pre-existing component shows up as a failure, the list reads as 15 problems instead of 0, and people stop reading it.
 
 | Component | Used | Where | Story | UAT'd | Born | Status |
 |---|---|---|---|---|---|---|
@@ -52,7 +52,6 @@
 | `ImportHardwareWalletSheet` | **0** | — | ✅ | ⚠️ unknown | 2026-05-29 | prep-build — pre-dates the rule (§0A) |
 | `ImportWalletSheet` | 1 | `src/components/add-wallets/screen/CreateImportWalletScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-29 | shipped — in use |
 | `InfoSheet` | 2 | `src/components/explore/EvmSignTxSheet/EvmSignTxSheet.tsx` · `src/components/explore/KaspaSignTxSheet/KaspaSignTxSheet.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-03-23 | shipped — in use |
-| `InlineActionSheet` | **0** | — | ✅ | ⚠️ unknown | 2026-05-15 | prep-build — pre-dates the rule (§0A) |
 | `Input` | 3 | `src/components/PassphraseInput/PassphraseInput.tsx` · `src/components/custom-rpc/AddCustomNodeSheet/AddCustomNodeSheet.tsx` · `src/components/names/NameCreatePage/NameCreatePage.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-29 | shipped — in use |
 | `KaspaSignTxSheet` | **0** | — | ✅ | ⚠️ unknown | 2026-03-23 | prep-build — pre-dates the rule (§0A) |
 | `Layer2AssetImage` | 2 | `src/components/swap/TokenSelectSheet/TokenSelectSheet.tsx` · `src/components/swap-bridge-activity/components/AssetTransferCard/AssetTransferCard.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-08 | shipped — in use |
@@ -84,9 +83,9 @@ Every component built on or after 2026-08-03 that has no real importer carries `
 
 ## ⏸ Out of scope (§0A — pre-dates the rule)
 
-16 components were built ahead of demand **before 2026-08-03** and carry no tag. They are **not** failures: the criteria are not retroactive. Listed here only so the number is visible rather than hidden.
+15 components were built ahead of demand **before 2026-08-03** and carry no tag. They are **not** failures: the criteria are not retroactive. Listed here only so the number is visible rather than hidden.
 
-`AdvancedSettingsGroup` (2026-07-15) · `ApiConnectSheet` (2026-03-23) · `Banner` (2026-04-29) · `CommitRevealSheet` (2026-03-25) · `EvmSignTxSheet` (2026-03-23) · `ExploreApps` (2026-04-22) · `ExploreUrlBar` (2026-03-23) · `ImportHardwareWalletSheet` (2026-05-29) · `InlineActionSheet` (2026-05-15) · `KaspaSignTxSheet` (2026-03-23) · `NameList` (2026-07-13) · `RecentlyConnectedApps` (2026-03-23) · `RegisterNameActionSheet` (2026-07-14) · `RemoveWalletSheet` (2026-05-29) · `SignMessageSheet` (2026-03-25) · `TokenSelectSheet` (2026-05-08)
+`AdvancedSettingsGroup` (2026-07-15) · `ApiConnectSheet` (2026-03-23) · `Banner` (2026-04-29) · `CommitRevealSheet` (2026-03-25) · `EvmSignTxSheet` (2026-03-23) · `ExploreApps` (2026-04-22) · `ExploreUrlBar` (2026-03-23) · `ImportHardwareWalletSheet` (2026-05-29) · `KaspaSignTxSheet` (2026-03-23) · `NameList` (2026-07-13) · `RecentlyConnectedApps` (2026-03-23) · `RegisterNameActionSheet` (2026-07-14) · `RemoveWalletSheet` (2026-05-29) · `SignMessageSheet` (2026-03-25) · `TokenSelectSheet` (2026-05-08)
 
 ## ⚠️ No story file
 
