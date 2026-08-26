@@ -56,3 +56,9 @@ CLAUDE.md
 CLAUDE.local.md
 kastle-ui-context.md
 .claude/
+
+# graphify —— 本機 knowledge graph，唔上 git（跟 Leo 喺 kastle-mobile 嘅做法，PR #141）
+graphify-out/
+
+# graphify 自動生成，指住一個我哋已經 gitignore 咗嘅檔 —— 對我哋冇用，唔好上 git
+.gitattributes
