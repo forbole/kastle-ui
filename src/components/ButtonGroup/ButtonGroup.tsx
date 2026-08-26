@@ -1,16 +1,7 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
-import {
-  colors,
-  spacing,
-  borderRadius,
-  borderWidth,
-  typography,
-  primary,
-  fontFamilies,
-  fontWeight,
-  fontSize,
-} from "../../config/theme";
+import { View, StyleSheet } from "react-native";
+import { Button } from "../Button";
+import { spacing } from "../../config/theme";
 
 export interface ButtonGroupProps {
   primaryLabel: string;
@@ -24,6 +15,17 @@ export interface ButtonGroupProps {
 /**
  * Shared two-button footer (Cancel / primary action) — matches the Figma
  * "Bottom Action bar" Outline Button + Action Button pair used across sheets.
+ *
+ * Composed from `Button` since 2026-08-25. It previously hand-rolled two
+ * TouchableOpacity buttons whose styling was, value for value, what `Button`
+ * already produces for `secondary`+`outline` and `primary`+`solid` at `md`:
+ * 40pt tall, fully rounded, `typography.t500` border and label on the left,
+ * `primary.p500` with a white label on the right, 40% opacity when disabled.
+ * ButtonGroup predates the shared Button, which is why it was written that way.
+ *
+ * `flex: 1` on each button is required here and is not a fill-width override:
+ * `alignSelf` (Button's `hug`) is a cross-axis property, so inside this row it
+ * says nothing about width. Sharing the row is what `flex` does.
  */
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   primaryLabel,
@@ -35,51 +37,29 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
 }) => {
   return (
     <View style={styles.row}>
-      <TouchableOpacity style={styles.secondary} onPress={onSecondaryPress} activeOpacity={0.7}>
-        <Text allowFontScaling={false} numberOfLines={1} style={styles.secondaryText}>{secondaryLabel}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.primary, primaryDisabled && styles.primaryDisabled]}
+      <Button
+        action="secondary"
+        variant="outline"
+        size="md"
+        label={secondaryLabel}
+        onPress={onSecondaryPress}
+        style={styles.half}
+      />
+      <Button
+        action="primary"
+        variant="solid"
+        size="md"
+        label={primaryLabel}
         onPress={onPrimaryPress}
         disabled={primaryDisabled}
-        activeOpacity={0.8}
-      >
-        {primaryLoading ? (
-          <ActivityIndicator color={colors.white} />
-        ) : (
-          <Text allowFontScaling={false} numberOfLines={1} style={styles.primaryText}>{primaryLabel}</Text>
-        )}
-      </TouchableOpacity>
+        loading={primaryLoading}
+        style={styles.half}
+      />
     </View>
   );
 };
 
-const buttonText = {
-  fontFamily: fontFamilies["500"],
-  fontWeight: fontWeight.medium,
-  fontSize: fontSize.md, // 16
-};
-
 const styles = StyleSheet.create({
-  row: { flexDirection: "row", gap: spacing.s3 }, // gap 12
-  secondary: {
-    flex: 1,
-    height: spacing.s10, // 40
-    borderRadius: borderRadius.full,
-    borderWidth: borderWidth.bw1,
-    borderColor: typography.t500, // #7B9AAA
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  secondaryText: { ...buttonText, color: typography.t500 },
-  primary: {
-    flex: 1,
-    height: spacing.s10, // 40
-    borderRadius: borderRadius.full,
-    backgroundColor: primary.p500,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  primaryDisabled: { opacity: 0.4 },
-  primaryText: { ...buttonText, color: colors.white },
+  row: { flexDirection: "row", gap: spacing.s3 },
+  half: { flex: 1 },
 });
