@@ -60,7 +60,6 @@ path — `AddCustomNodeSheet` → `CustomRpcScreen` → `kastle-mobile`'s
 `app/(has-wallet)/custom-rpc.tsx` (merged 2026-07-20) → Settings → Custom RPC.
 So the first place to check this in a real build is that screen, after both PRs
 merge and `npm run update-ui` runs in `kastle-mobile`.
-
 **Out of reach from this PR, not skipped:** iOS is only testable after release —
 there is no simulator on this machine (`xcrun simctl` fails) and device testing
 happens through TestFlight once merged. And nothing imports `Button` yet, so it
