@@ -4,7 +4,7 @@
 > Required by the UI Acceptance Criteria §1F / §2 / §3E. Usage is derived from the import graph,
 > never from a maintained remark — a hand-kept column rots silently, an import graph cannot.
 
-**53 components · 17 built ahead of demand · 6 entry points · 1 without a story**
+**54 components · 17 built ahead of demand · 6 entry points · 1 without a story**
 
 ## What the columns mean
 
@@ -23,7 +23,7 @@
 
 | Component | Used | Where | Story | UAT'd | Born | Status |
 |---|---|---|---|---|---|---|
-| `ActionSheet` | 18 | `src/components/DomainPriceSheet/DomainPriceSheet.tsx` · `src/components/EstFeeSheet/EstFeeSheet.tsx` · `src/components/InfoSheet/InfoSheet.tsx` … +15 | ✅ | — (pre-dates the rule, §0A) | 2026-03-19 | shipped — in use |
+| `ActionSheet` | 19 | `src/components/DomainPriceSheet/DomainPriceSheet.tsx` · `src/components/EstFeeSheet/EstFeeSheet.tsx` · `src/components/InfoSheet/InfoSheet.tsx` … +16 | ✅ | — (pre-dates the rule, §0A) | 2026-03-19 | shipped — in use |
 | `ActionSheetListItem` | 3 | `src/components/add-wallets/ImportHardwareWalletSheet/ImportHardwareWalletSheet.tsx` · `src/components/add-wallets/ImportWalletSheet/ImportWalletSheet.tsx` · `src/components/names/RegisterNameActionSheet/RegisterNameActionSheet.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-29 | shipped — in use |
 | `ActivityDetailSheet` | 1 | `src/components/swap-bridge-activity/screens/ActivityScreen/ActivityScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
 | `ActivityRow` | 1 | `src/components/swap-bridge-activity/screens/ActivityScreen/ActivityScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
@@ -33,7 +33,7 @@
 | `AdvancedSettingsGroup` | **0** | — | ✅ | ⚠️ unknown | 2026-07-15 | prep-build — pre-dates the rule (§0A) |
 | `Alert` | 1 | `src/components/passphrase/screen/ImportPassphraseScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-29 | shipped — in use |
 | `ApiConnectSheet` | **0** | — | ✅ | ⚠️ unknown | 2026-03-23 | prep-build — pre-dates the rule (§0A) |
-| `AssetTransferCard` | 2 | `src/components/swap-bridge-activity/components/ActivityDetailSheet/ActivityDetailSheet.tsx` · `src/components/swap-bridge-activity/screens/ActivityScreen/ActivityScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
+| `AssetTransferCard` | 1 | `src/components/swap-bridge-activity/components/ActivityDetailSheet/ActivityDetailSheet.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
 | `Banner` | **0** | — | ✅ | ⚠️ unknown | 2026-04-29 | prep-build — pre-dates the rule (§0A) |
 | `Button` | **0** | — | ✅ | ❌ unverified | 2026-08-07 | prep-build |
 | `ButtonGroup` | 1 | `src/components/custom-rpc/AddCustomNodeSheet/AddCustomNodeSheet.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-07-15 | shipped — in use |
@@ -70,12 +70,13 @@
 | `SettingRow` | 1 | `src/components/settings/AdvancedSettingsGroup/AdvancedSettingsGroup.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-07-15 | shipped — in use |
 | `SignMessageSheet` | **0** | — | ✅ | ⚠️ unknown | 2026-03-25 | prep-build — pre-dates the rule (§0A) |
 | `SkeletonBlock` | 2 | `src/components/names/NameList/NameList.tsx` · `src/components/swap-bridge-activity/components/ActivitySkeletonRow/ActivitySkeletonRow.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
-| `StatusPill` | 2 | `src/components/swap-bridge-activity/components/ActivityDetailSheet/ActivityDetailSheet.tsx` · `src/components/swap-bridge-activity/screens/ActivityScreen/ActivityScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
+| `StatusPill` | 3 | `src/components/swap-bridge-activity/components/ActivityDetailSheet/ActivityDetailSheet.stories.tsx` · `src/components/swap-bridge-activity/components/DetailKVRow/DetailKVRow.stories.tsx` · `src/components/swap-bridge-activity/screens/ActivityScreen/ActivityScreen.stories.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-15 | shipped — in use |
 | `SwipeToConfirm` | 6 | `src/components/explore/CommitRevealSheet/CommitRevealSheet.tsx` · `src/components/explore/EvmSignTxSheet/EvmSignTxSheet.tsx` · `src/components/explore/KaspaSignTxSheet/KaspaSignTxSheet.tsx` … +3 | ✅ | — (pre-dates the rule, §0A) | 2026-03-23 | shipped — in use |
 | `Textarea` | 1 | `src/components/passphrase/screen/ImportRecoveryPhraseWithPassphraseScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-29 | shipped — in use |
 | `TokenSelectSheet` | **0** | — | ✅ | ⚠️ unknown | 2026-05-08 | prep-build — pre-dates the rule (§0A) |
 | `TransferConfirmPage` | **0** | — | ✅ | — (pre-dates the rule, §0A) | 2026-07-13 | entry point — consumed by `kastle-mobile` |
 | `WalletOptionButton` | 1 | `src/components/add-wallets/screen/CreateImportWalletScreen.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-05-29 | shipped — in use |
+| `WithdrawConfirmSheet` | 1 | `src/components/swap-bridge-activity/components/ActivityDetailSheet/ActivityDetailSheet.tsx` | ✅ | — (pre-dates the rule, §0A) | 2026-08-17 | shipped — in use |
 
 ## ✅ No §1F failures
 
