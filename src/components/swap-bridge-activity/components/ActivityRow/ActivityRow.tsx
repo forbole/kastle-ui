@@ -113,7 +113,9 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
-    height: 64,
+    // Figma binds the row to Spacing/16 (64) rather than letting it grow with
+    // the text, so the list keeps an even rhythm whatever the title wraps to.
+    height: spacing.s16,
     backgroundColor: colors.backgroundSurface,
     borderWidth: borderWidth.bw1,
     borderColor: colors.border,
