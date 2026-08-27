@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s3,
+    paddingTop: spacing.s6,
   },
   listContent: {
     paddingBottom: spacing.s6,

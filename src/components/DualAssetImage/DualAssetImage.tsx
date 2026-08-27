@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
-import { background } from "../../config/theme";
+import { background, primary } from "../../config/theme";
 
 export interface DualAssetImageProps {
   /** From-token image. Falls back to `fallback`, then to a plain coloured circle. */
@@ -24,14 +24,10 @@ export interface DualAssetImageProps {
    */
   tokenSize?: number;
   /**
-   * Chain badge diameter. Auto-computed from `size` (30%) if omitted.
+   * Chain badge diameter, ring included. Auto-computed from `size` (30%) if
+   * omitted.
    */
   chainSize?: number;
-  /**
-   * Overlap of to-token onto from-token, as fraction of tokenSize.
-   * 0.5 = to-token overlaps left half of its width onto from-token. (default: 0.5)
-   */
-  overlapRatio?: number;
 }
 
 const TokenCircle: React.FC<{
@@ -84,6 +80,10 @@ const ChainBadge: React.FC<{
   size: number;
 }> = ({ image, fallback, size }) => {
   const resolved = image ?? fallback;
+  // `size` is the VISIBLE badge diameter — Figma reads 12x12 for this node and
+  // Nicole confirmed on 2026-08-27 that her 24 / 26 / 12 figures describe the
+  // visible circles, not the ring-inclusive box. The separation ring therefore
+  // sits OUTSIDE `size`.
   const badgeBorder = 1;
   const outerSize = size + badgeBorder * 2;
 
@@ -127,60 +127,62 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
   size = 40,
   tokenSize: tokenSizeProp,
   chainSize: chainSizeProp,
-  overlapRatio = 0.5,
 }) => {
-  const tokenSize = tokenSizeProp ?? Math.round(size * 0.6);
-  const chainSize = chainSizeProp ?? Math.round(size * 0.3);
-  const overlap = Math.round(tokenSize * overlapRatio);
-  const toLeftOffset = tokenSize - overlap;
-
-  const clusterWidth = toLeftOffset + tokenSize;
-  const clusterLeft = Math.max(0, Math.round((size - clusterWidth) / 2));
-  const tokenTop = Math.round((size - tokenSize) / 2);
+  // Every number below is measured off Figma node
+  // I14032:351038;2143:630282;1567:308110 ("logo frame", 40x40), not chosen by
+  // feel. The two tokens sit on a DIAGONAL — back token flush top-left, front
+  // token flush bottom-right — and the front one carries a ring so it reads as
+  // being in front. The previous version put both on one horizontal baseline
+  // with a 50% overlap, which is the difference Nicole flagged on 2026-08-27.
+  // Expressed as ratios, not constants, so a non-40 `size` still composes.
+  //
+  // ⭐ All three figures are the VISIBLE circle diameters — Nicole's spec on
+  // 2026-08-27 is "左 24x24, 中 26x26, 右 12x12". Separation rings are drawn
+  // OUTSIDE those diameters, never inside them: an earlier attempt treated 26
+  // and 12 as ring-inclusive boxes, which rendered the middle token at 22 and
+  // the badge at 10 — smaller than before, which is why the change read as
+  // "no size change at all".
+  const tokenSize = tokenSizeProp ?? Math.round(size * 0.6); // 24 @ 40
+  const chainSize = chainSizeProp ?? Math.round(size * 0.3); // 12 @ 40
+  const frontRing = Math.max(1, Math.round(size * 0.05)); // 2 @ 40
+  const frontSize = Math.round(size * 0.65); // 26 @ 40 — visible teal
+  const frontBox = frontSize + frontRing * 2; // 30 @ 40 — ring included
+  // Ring hangs outside the visible circle, so the box is offset by its width to
+  // keep the CIRCLE flush right and 3px up from the frame's bottom edge.
+  const frontRight = -frontRing; // -2 @ 40
+  const frontBottom = Math.round(size * 0.075) - frontRing; // 1 @ 40
+  const chainLeft = Math.round(size * 0.8); // 32 @ 40
+  // Negative on purpose: the badge sits proud of the frame in the design.
+  const chainBottom = -Math.round(size * 0.025); // -1 @ 40
 
   return (
     <View style={{ width: size, height: size }}>
-      {/* From-token */}
-      <View style={[styles.absolute, { left: clusterLeft, top: tokenTop }]}>
-        <TokenCircle
-          image={fromImage}
-          fallback={fallback}
-          size={tokenSize}
-        />
+      {/* From-token — flush top-left */}
+      <View style={[styles.absolute, { left: 0, top: 0 }]}>
+        <TokenCircle image={fromImage} fallback={fallback} size={tokenSize} />
       </View>
 
-      {/* To-token + chain badge — badge sits bottom-right of the to-token */}
+      {/* To-token — flush bottom-right, ringed to separate it from the from-token */}
       <View
         style={[
           styles.absolute,
+          styles.frontToken,
           {
-            left: clusterLeft + toLeftOffset,
-            top: tokenTop,
-            width: tokenSize,
-            height: tokenSize,
+            right: frontRight,
+            bottom: frontBottom,
+            width: frontBox,
+            height: frontBox,
+            borderRadius: frontBox / 2,
+            borderWidth: frontRing,
           },
         ]}
       >
-        <TokenCircle
-          image={toImage}
-          fallback={fallback}
-          size={tokenSize}
-        />
-        <View
-          style={[
-            styles.absolute,
-            {
-              right: -Math.round(chainSize * 0.2),
-              bottom: -Math.round(chainSize * 0.1),
-            },
-          ]}
-        >
-          <ChainBadge
-            image={chainImage}
-            fallback={fallback}
-            size={chainSize}
-          />
-        </View>
+        <TokenCircle image={toImage} fallback={fallback} size={frontSize} />
+      </View>
+
+      {/* Chain badge — bottom-right of the whole frame */}
+      <View style={[styles.absolute, { left: chainLeft, bottom: chainBottom }]}>
+        <ChainBadge image={chainImage} fallback={fallback} size={chainSize} />
       </View>
     </View>
   );
@@ -202,7 +204,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: background.bg300,
   },
+  frontToken: {
+    // Figma binds this ring to primary/primary0. It is a NEW element — the old
+    // horizontal composition had no ring — so nothing existing changes colour.
+    borderColor: primary.p0,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   chainBadge: {
+    // ⛔ Figma specifies bg-black + a primary0 ring here. Deliberately NOT
+    // applied: background.bg100 is what production's own
+    // components/Layer2AssetImage uses on Dashboard / Swap / Bridge / Send, and
+    // Nicole ruled on 2026-08-27 that this pass changes layout only, never colour.
     overflow: "hidden",
     borderColor: background.bg100,
     backgroundColor: background.bg100,

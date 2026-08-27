@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
+    height: 64,
     backgroundColor: colors.backgroundSurface,
     borderWidth: borderWidth.bw1,
     borderColor: colors.border,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     flexShrink: 0,
-    gap: spacing.s1,
+    gap: spacing.s1_5,
   },
   title: {
     color: colors.textPrimary,

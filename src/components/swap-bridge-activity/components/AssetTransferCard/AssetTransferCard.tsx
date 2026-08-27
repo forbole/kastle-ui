@@ -8,6 +8,7 @@ import {
 import { ArrowRight } from "lucide-react-native";
 import { Layer2AssetImage } from "../../../../components/Layer2AssetImage";
 import {
+  background,
   border,
   borderRadius,
   borderWidth,
@@ -85,7 +86,7 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
           chainImage={fromChainImage}
           fallback={fallback}
           tokenImageSize={40}
-          chainImageSize={14}
+          chainImageSize={16}
         />
         <View style={styles.fromLabels}>
           <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.directionLabel]}>From</Text>
@@ -109,7 +110,7 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
           chainImage={toChainImage}
           fallback={fallback}
           tokenImageSize={40}
-          chainImageSize={14}
+          chainImageSize={16}
         />
       </View>
     </View>
@@ -161,9 +162,13 @@ export const AssetTransferCard: React.FC<AssetTransferCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.backgroundSurface,
+    // Figma node 14040:354811 binds the card to Background/background200
+    // (#1E3945) and its only border token is Border/border400 (#203C49).
+    // Previously colors.backgroundSurface (white 5%, ~#131F28 over the sheet)
+    // + border.b200 (#1A303A), which read noticeably darker than the design.
+    backgroundColor: background.bg200,
     borderWidth: borderWidth.bw1,
-    borderColor: border.b200,
+    borderColor: border.b400,
     borderRadius: borderRadius["2xl"],
     paddingVertical: spacing.s4,
     paddingHorizontal: spacing.s4,
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: borderWidth.bw1,
-    backgroundColor: border.b200,
+    backgroundColor: border.b400,
     marginHorizontal: -spacing.s4,
   },
 });
