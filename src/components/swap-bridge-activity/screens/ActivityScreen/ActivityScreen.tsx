@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import {
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -61,6 +62,10 @@ export interface ActivityScreenProps {
   loadingMore?: boolean;
   /** Retry handler for the error state. */
   onRetry?: () => void;
+  /** Pull-to-refresh spinner state for the loaded list. */
+  refreshing?: boolean;
+  /** Pull-to-refresh handler for the loaded list. */
+  onRefresh?: () => void;
 }
 
 /**
@@ -110,6 +115,8 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
   transactions = [],
   loadingMore = false,
   onRetry,
+  refreshing,
+  onRefresh,
 }) => {
   const [selected, setSelected] = useState<ActivityScreenItem | null>(null);
 
@@ -176,6 +183,11 @@ export const ActivityScreen: React.FC<ActivityScreenProps> = ({
         style={styles.list}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          onRefresh ? (
+            <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} />
+          ) : undefined
+        }
       >
         {displayedTransactions.map((tx) => {
           // Spread everything ActivityRow accepts, minus the screen-owned `id`

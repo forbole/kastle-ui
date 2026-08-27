@@ -273,6 +273,16 @@ export const SwapLoadingMore: Story = {
   },
 };
 
+export const SwapRefreshing: Story = {
+  args: {
+    pageType: "swap",
+    state: "loaded",
+    transactions: swapTxs,
+    refreshing: true,
+    onRefresh: () => console.log("refresh"),
+  },
+};
+
 export const BridgeLoaded: Story = {
   args: { pageType: "bridge", state: "loaded", transactions: bridgeTxs },
 };
