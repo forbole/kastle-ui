@@ -136,12 +136,20 @@ export const DualAssetImage: React.FC<DualAssetImageProps> = ({
   // with a 50% overlap, which is the difference Nicole flagged on 2026-08-27.
   // Expressed as ratios, not constants, so a non-40 `size` still composes.
   //
-  // ⭐ All three figures are the VISIBLE circle diameters — Nicole's spec on
-  // 2026-08-27 is "左 24x24, 中 26x26, 右 12x12". Separation rings are drawn
-  // OUTSIDE those diameters, never inside them: an earlier attempt treated 26
-  // and 12 as ring-inclusive boxes, which rendered the middle token at 22 and
-  // the badge at 10 — smaller than before, which is why the change read as
-  // "no size change at all".
+  // ⭐ All three figures are the VISIBLE circle diameters: 24 for the back
+  // token, 26 for the front one, 12 for the chain badge. Nicole confirmed on
+  // 2026-08-27 that BOTH separation strokes — the front token's and the badge's
+  // — are set to OUTSIDE in Figma, so each extends past its diameter rather
+  // than eating into it. That is why the front token reads visibly larger than
+  // the back one, which is the whole point of the composition.
+  //
+  // ⚠️ Do not re-derive these from `get_design_context`. That export flattens an
+  // outside stroke into a border-box `border-2` on `size-[26px]`, which reads as
+  // "26 total, 22 visible" — the opposite of the design. Two independent passes
+  // (this implementation's first attempt, and a review agent checking it) both
+  // took the export literally, and both landed the front token 4px and the badge
+  // 2px too small. Node bounds and the designer's own eye are the source here;
+  // the CSS export is not.
   const tokenSize = tokenSizeProp ?? Math.round(size * 0.6); // 24 @ 40
   const chainSize = chainSizeProp ?? Math.round(size * 0.3); // 12 @ 40
   const frontRing = Math.max(1, Math.round(size * 0.05)); // 2 @ 40
