@@ -113,6 +113,9 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
+    // Figma binds the row to Spacing/16 (64) rather than letting it grow with
+    // the text, so the list keeps an even rhythm whatever the title wraps to.
+    height: spacing.s16,
     backgroundColor: colors.backgroundSurface,
     borderWidth: borderWidth.bw1,
     borderColor: colors.border,
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     flexShrink: 0,
-    gap: spacing.s1,
+    gap: spacing.s1_5,
   },
   title: {
     color: colors.textPrimary,
@@ -135,7 +138,9 @@ const styles = StyleSheet.create({
   right: {
     flex: 1,
     alignItems: "flex-end",
-    gap: spacing.s1,
+    // Figma gives both columns the same 6px gap: in Frame 254045 and Frame
+    // 254046 alike the second line starts at y=23 under a 17-tall first line.
+    gap: spacing.s1_5,
   },
   amountRow: {
     flexDirection: "row",

@@ -45,6 +45,10 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     alignItems: "center",
+    // Mirrors ActivityRow's locked height. Without it the skeleton measured 66
+    // against the real row's 64, so the list nudged 2px per row the moment
+    // loading finished.
+    height: spacing.s16,
     backgroundColor: colors.backgroundSurface,
     borderWidth: borderWidth.bw1,
     borderColor: colors.border,
@@ -66,7 +70,8 @@ const styles = StyleSheet.create({
   },
   middle: {
     flex: 1,
-    gap: spacing.s1,
+    // Same gap ActivityRow uses, for the same reason.
+    gap: spacing.s1_5,
   },
   dateBlock: {
     marginTop: spacing.s0_5,

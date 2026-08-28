@@ -24,7 +24,6 @@ const meta: Meta<typeof DualAssetImage> = {
     size: { control: { type: "range", min: 24, max: 96, step: 2 } },
     tokenSize: { control: { type: "range", min: 12, max: 64, step: 2 } },
     chainSize: { control: { type: "range", min: 8, max: 32, step: 2 } },
-    overlapRatio: { control: { type: "range", min: 0.2, max: 0.7, step: 0.05 } },
   },
   decorators: [
     (Story) => (

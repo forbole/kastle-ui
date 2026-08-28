@@ -244,7 +244,10 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s3,
+    // Figma node 14032:351259 (bridge-activity/default): "Top nav" is 393x104
+    // at y=0 and "History Container" starts at y=128, so the gap under the
+    // header is 24, not the 12 this used to carry.
+    paddingTop: spacing.s6,
   },
   listContent: {
     paddingBottom: spacing.s6,
