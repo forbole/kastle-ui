@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Image as ExpoImage } from "expo-image";
 import Svg, { Defs, LinearGradient, Stop, Rect } from "react-native-svg";
-import { BadgeCheck, Info } from "lucide-react-native";
+import { BadgeCheck, Info, AlertCircle } from "lucide-react-native";
 import {
   colors,
   textStyles,
@@ -23,6 +23,7 @@ import {
   border,
   info,
   white,
+  error as errorColors,
 } from "../../../config/theme";
 import { SwipeToConfirm } from "../../SwipeToConfirm";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
@@ -66,6 +67,11 @@ export interface TransferConfirmPageProps {
   /** Swipe button label. */
   confirmTitle?: string;
   onConfirm: () => void;
+
+  /** Shown directly above the swipe button, centred, with an alert icon. */
+  errorMessage?: string;
+  /** Shown below the swipe button, centred, muted. Use for guidance, not errors. */
+  footerNote?: string;
 }
 
 /**
@@ -89,6 +95,8 @@ export const TransferConfirmPage: React.FC<TransferConfirmPageProps> = ({
   isConfirmLoading = false,
   confirmTitle = "Swipe to confirm",
   onConfirm,
+  errorMessage,
+  footerNote,
 }) => {
   const [isFeeSheetOpen, setIsFeeSheetOpen] = useState(false);
 
@@ -161,8 +169,7 @@ export const TransferConfirmPage: React.FC<TransferConfirmPageProps> = ({
           {/* Transfer row */}
           <View style={styles.row}>
             <Text allowFontScaling={false} style={styles.rowTitle}>
-              Transfer{" "}
-              <Text style={styles.rowTitleAccent}>{domainName}</Text>
+              Transfer <Text style={styles.rowTitleAccent}>{domainName}</Text>
             </Text>
           </View>
 
@@ -233,13 +240,27 @@ export const TransferConfirmPage: React.FC<TransferConfirmPageProps> = ({
 
       {/* Bottom Action Bar */}
       <View style={styles.bottomBar}>
+        {!!errorMessage && (
+          <View style={styles.errorRow}>
+            <View style={styles.errorIcon}>
+              <AlertCircle size={16} color={errorColors.e600} strokeWidth={2} />
+            </View>
+            <Text allowFontScaling={false} style={styles.errorText}>
+              {errorMessage}
+            </Text>
+          </View>
+        )}
         <SwipeToConfirm
           title={confirmTitle}
           onConfirm={onConfirm}
           isDisabled={isConfirmDisabled}
           isLoading={isConfirmLoading}
         />
-        <View style={styles.homeIndicator} />
+        {!!footerNote && (
+          <Text allowFontScaling={false} style={styles.footerNote}>
+            {footerNote}
+          </Text>
+        )}
       </View>
 
       {!!feeBreakdown?.length && (
@@ -322,7 +343,8 @@ const styles = StyleSheet.create({
 
   // ── Rows ─────────────────────────────────────────────────────────────────
   rows: {
-    gap: spacing.s3,
+    // Nicole 2026-09-10: row-to-row gap is 8, not 12.
+    gap: spacing.s2,
   },
   row: {
     width: "100%",
@@ -393,8 +415,41 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundScreen,
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s3,
+    // Nicole 2026-09-10 + ADR-005: the home indicator belongs to the app
+    // shell, not the library. Design asks for 16 below the button.
+    paddingBottom: spacing.s4,
   },
-  homeIndicator: {
-    height: 34,
+
+  // ── Message slots ────────────────────────────────────────────────────────
+  errorRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    gap: spacing.s2,
+    marginBottom: spacing.s3,
+    // Shrink the row to its content so the icon stays next to the text.
+    // Without this the Text fills the remaining width and centres inside
+    // that box, drifting away from the icon on wide viewports.
+    alignSelf: "center",
+    maxWidth: "100%",
+  },
+  errorIcon: {
+    // Nudges the icon down so it sits on the first text line, not the
+    // vertical center of the whole (possibly multi-line) message.
+    // (lineHeight 21 - icon 16) / 2 = 2.5, rounded up — same convention as
+    // Input.tsx's errorIcon (18px icon, same bodyNormalSM text).
+    marginTop: 3,
+  },
+  errorText: {
+    ...textStyles.bodyNormalSM,
+    color: errorColors.e600,
+    textAlign: "center",
+    flexShrink: 1,
+  },
+  footerNote: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "center",
+    marginTop: spacing.s3,
   },
 });
