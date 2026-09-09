@@ -77,3 +77,38 @@ export const LongDomainName: Story = {
     domainName: "super-long-kaspa-name-service-domain.kas",
   },
 };
+
+export const ErrorOnly: Story = {
+  args: {
+    errorMessage: "Insufficient balance to cover the network fee.",
+  },
+};
+
+export const FooterNoteOnly: Story = {
+  args: {
+    footerNote:
+      "This is one of two transactions needed to move where nicole.igra delivers.",
+  },
+};
+
+export const ErrorAndFooterNote: Story = {
+  args: {
+    errorMessage: "Insufficient balance to cover the network fee.",
+    footerNote:
+      "This is one of two transactions needed to move where nicole.igra delivers.",
+  },
+};
+
+export const Neither: Story = {
+  args: {
+    errorMessage: undefined,
+    footerNote: undefined,
+  },
+};
+
+export const ErrorWraps: Story = {
+  args: {
+    errorMessage:
+      "Failed to simulate transaction and estimate fee. Please try again.",
+  },
+};
