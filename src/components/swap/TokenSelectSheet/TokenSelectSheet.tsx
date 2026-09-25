@@ -26,6 +26,7 @@ import {
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
 import { Layer2AssetImage } from "../../Layer2AssetImage";
+import { VerifiedBadge } from "../../VerifiedBadge";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -37,6 +38,15 @@ export interface TokenInfo {
   amount?: string;
   logo?: ImageSourcePropType;
   chainLogo?: ImageSourcePropType;
+  /** Shows the verified checkmark next to the name. Unverified renders
+   * nothing in its place — no label, no placeholder. */
+  isVerified?: boolean;
+  /**
+   * Small text after the name for same-name disambiguation across
+   * standards, e.g. "KCC20" / "KRC20" (D-064). Omit when the name is
+   * unambiguous.
+   */
+  standardLabel?: string;
 }
 
 export type ChainFilter = string | null;
@@ -113,9 +123,17 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
 
       {/* Name + symbol */}
       <View style={styles.tokenMeta}>
-        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
-          {token.name}
-        </Text>
+        <View style={styles.tokenNameRow}>
+          <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
+            {token.name}
+          </Text>
+          {token.isVerified && <VerifiedBadge size={14} />}
+          {!!token.standardLabel && (
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.standardLabel]} numberOfLines={1}>
+              {token.standardLabel}
+            </Text>
+          )}
+        </View>
         {token.symbol ? (
           <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
             {token.symbol}
@@ -488,8 +506,17 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 4,
   },
+  tokenNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
   tokenName: {
     color: typography.t900,
+    flexShrink: 1,
+  },
+  standardLabel: {
+    color: typography.t500,
   },
   tokenAddress: {
     color: typography.t500,
