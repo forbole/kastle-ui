@@ -245,7 +245,12 @@ export const TokenItem = memo(({ token, isDisabled = false, onPress, fallback, f
               {token.name}
             </Text>
             {token.symbol ? (
-              <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalXS, styles.tokenAddress, flush && styles.tokenAddressFlush]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
                 {token.symbol}
               </Text>
             ) : null}
@@ -659,20 +664,26 @@ const styles = StyleSheet.create({
     color: typography.t900,
     flexShrink: 1,
   },
-  // lineHeight: 16 added round 6 audit (2026-09-26, team-lead — re-checked
-  // against Figma 14741:396213/398058's address line): colour (t500,
-  // #7B9AAA) and size (bodyNormalXS, 12px) already matched exactly;
-  // lineHeight was the one real diff — bodyNormalXS has no explicit
-  // lineHeight in theme.ts (falls back to the platform default, ~14-15px
-  // for 12px Figtree), Figma's address-line instance is a fixed 16px.
-  // Added here rather than to bodyNormalXS itself, since that preset is
-  // used across the whole app — this keeps the fix scoped to the address
-  // line specifically. ⚠️ Figma also shows letterSpacing 0.06px on this
-  // line — no theme.ts letterSpacing token is that close to zero-but-not-0
-  // (letterSpacing.normal is 0); not fixed, flagging rather than
-  // inventing a token.
+  // Kept identical to origin/main — this feeds the production Swap/Bridge
+  // sheet, unchanged here.
   tokenAddress: {
     color: typography.t500,
+  },
+  // lineHeight: 16 — round 6 reviewer FAIL fix (2026-09-26): the earlier
+  // round added this directly to tokenAddress above, which is shared with
+  // production Swap/Bridge rows (list variant, non-flush) — moved to its
+  // own flush-only style instead. Re-checked against Figma
+  // 14741:396213/398058's address line: colour (t500, #7B9AAA) and size
+  // (bodyNormalXS, 12px) already matched exactly; lineHeight was the one
+  // real diff — bodyNormalXS has no explicit lineHeight in theme.ts
+  // (falls back to the platform default, ~14-15px for 12px Figtree),
+  // Figma's address-line instance is a fixed 16px. Applied only when
+  // `flush` (SendSelectTokenPage's own usage) — production's non-flush
+  // list rows keep the exact origin/main tokenAddress above, untouched.
+  // ⚠️ Figma also shows letterSpacing 0.06px on this line — no theme.ts
+  // letterSpacing token is that close to zero-but-not-0 (letterSpacing.
+  // normal is 0); not fixed, flagging rather than inventing a token.
+  tokenAddressFlush: {
     lineHeight: 16,
   },
   tokenBalance: {
