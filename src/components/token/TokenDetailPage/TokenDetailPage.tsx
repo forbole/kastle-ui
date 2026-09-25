@@ -10,12 +10,12 @@ import {
   textStyles,
   typography,
   white,
-} from "../../config/theme";
-import { AssetImage, TokenStandard } from "../AssetImage";
-import { VerifiedBadge } from "../VerifiedBadge";
-import { Segmented, SegmentedOption } from "../Segmented";
-import { NetworkTypeChip } from "../NetworkTypeChip";
-import { DetailKVRow } from "../swap-bridge-activity/components/DetailKVRow";
+} from "../../../config/theme";
+import { AssetImage, TokenStandard } from "../../AssetImage";
+import { VerifiedBadge } from "../../VerifiedBadge";
+import { Segmented, SegmentedOption } from "../../Segmented";
+import { NetworkTypeChip } from "../../NetworkTypeChip";
+import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow";
 
 const TABS: SegmentedOption[] = [
   { label: "History", value: "history" },
