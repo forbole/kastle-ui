@@ -153,53 +153,61 @@ export const SendConfirmPage: React.FC<SendConfirmPageProps> = ({
             </Text>
           </View>
 
-          {/* Amount */}
-          <View style={styles.row}>
-            <View style={styles.valueRowContent}>
-              <Text allowFontScaling={false} style={styles.rowTitle}>
-                Amount
-              </Text>
-              <View style={styles.valueColumn}>
-                <Text allowFontScaling={false} style={styles.valueAmount}>
-                  {amount}
-                </Text>
-                {!!amountUsd && (
-                  <Text allowFontScaling={false} style={styles.valueAmountUsd}>
-                    {amountUsd}
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-
-          {/* Est. Fee */}
-          <TouchableOpacity
-            style={styles.row}
-            onPress={onEstFeePress}
-            disabled={!onEstFeePress}
-            activeOpacity={onEstFeePress ? 0.7 : 1}
-          >
-            <View style={styles.valueRowContent}>
-              <View style={styles.feeRowLabel}>
+          {/* Amount + Est. Fee — ONE merged card in Figma (round 5 item 7a,
+              2026-09-26): confirmed via get_design_context on both
+              14741:398568 (KCC20) / 398569 (KRC20) — the two rows share a
+              single border (mb-[-1px] collapses the shared edge into one
+              line), Amount gets only the top corners rounded, Est. Fee only
+              the bottom — NOT two separate fully-rounded cards like
+              Send-from/Send-to. Was previously built as two independent
+              `styles.row` cards with a gap between them. */}
+          <View style={styles.mergedCard}>
+            <View style={[styles.mergedRow, styles.mergedRowDivider]}>
+              <View style={styles.valueRowContent}>
                 <Text allowFontScaling={false} style={styles.rowTitle}>
-                  Est. Fee
+                  Amount
                 </Text>
-                {!!onEstFeePress && (
-                  <Info size={14} color={typography.t900} strokeWidth={2} />
-                )}
-              </View>
-              <View style={styles.valueColumn}>
-                <Text allowFontScaling={false} style={styles.valueAmount}>
-                  {estFeeAmount}
-                </Text>
-                {!!estFeeUsd && (
-                  <Text allowFontScaling={false} style={styles.valueAmountUsd}>
-                    {estFeeUsd}
+                <View style={styles.valueColumn}>
+                  <Text allowFontScaling={false} style={styles.valueAmount}>
+                    {amount}
                   </Text>
-                )}
+                  {!!amountUsd && (
+                    <Text allowFontScaling={false} style={styles.valueAmountUsd}>
+                      {amountUsd}
+                    </Text>
+                  )}
+                </View>
               </View>
             </View>
-          </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.mergedRow}
+              onPress={onEstFeePress}
+              disabled={!onEstFeePress}
+              activeOpacity={onEstFeePress ? 0.7 : 1}
+            >
+              <View style={styles.valueRowContent}>
+                <View style={styles.feeRowLabel}>
+                  <Text allowFontScaling={false} style={styles.rowTitle}>
+                    Est. Fee
+                  </Text>
+                  {!!onEstFeePress && (
+                    <Info size={14} color={typography.t900} strokeWidth={2} />
+                  )}
+                </View>
+                <View style={styles.valueColumn}>
+                  <Text allowFontScaling={false} style={styles.valueAmount}>
+                    {estFeeAmount}
+                  </Text>
+                  {!!estFeeUsd && (
+                    <Text allowFontScaling={false} style={styles.valueAmountUsd}>
+                      {estFeeUsd}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
 
@@ -235,7 +243,12 @@ const styles = StyleSheet.create({
   // ── Illustration ─────────────────────────────────────────────────────────
   illustrationWrap: {
     alignItems: "center",
-    paddingBottom: spacing.s2,
+    // No own paddingBottom (round 5 item 7a fix, 2026-09-26): this used to
+    // add spacing.s2 (8) on top of contentContainer's gap: spacing.s4 (16)
+    // between Sign and the rows block, totalling 24 — get_design_context on
+    // 14741:398568 shows the "Container" wrapping Sign + rows uses a flat
+    // gap-[16px], not 24. Removed the extra padding so the parent gap alone
+    // produces the correct 16.
   },
   illustration: {
     width: 237,
@@ -244,7 +257,10 @@ const styles = StyleSheet.create({
 
   // ── Rows (same "Textarea" card style as TransferConfirmPage's `row`) ────
   rows: {
-    gap: spacing.s3,
+    // Figma (14741:398568): the 3 top-level blocks (Send from / Send to /
+    // Amount+Fee) sit in a gap-[8px] container, not 12 (round 5 item 7a fix,
+    // 2026-09-26 — was spacing.s3).
+    gap: spacing.s2,
   },
   row: {
     width: "100%",
@@ -254,6 +270,27 @@ const styles = StyleSheet.create({
     borderColor: border.b200,
     backgroundColor: white["5%"],
     padding: spacing.s4,
+  },
+  // Amount + Est. Fee merged card (round 5 item 7a, 2026-09-26) — one
+  // bordered container, Amount row gets a bottom divider instead of its own
+  // border, same "outer border + owned card + divider row" pattern already
+  // used by TokenDetailPage's infoCard/infoRow/infoRowBorder.
+  mergedCard: {
+    width: "100%",
+    borderRadius: borderRadius["2xl"],
+    borderWidth: borderWidth.bw1,
+    borderColor: border.b200,
+    backgroundColor: white["5%"],
+    overflow: "hidden",
+  },
+  mergedRow: {
+    width: "100%",
+    gap: spacing.s2,
+    padding: spacing.s4,
+  },
+  mergedRowDivider: {
+    borderBottomWidth: borderWidth.bw1,
+    borderBottomColor: border.b200,
   },
   rowHeader: {
     flexDirection: "row",
