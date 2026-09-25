@@ -18,7 +18,10 @@ import { Search } from "lucide-react-native";
 import {
   background,
   border,
+  borderRadius,
+  borderWidth,
   primary,
+  spacing,
   typography,
   white,
   textStyles,
@@ -67,6 +70,15 @@ export interface TokenInfo {
    * TokenSelectSheet's own Swap sheet doesn't use this field.
    */
   chainKeys?: ChainFilter[];
+  /**
+   * Secondary line under `amount`, e.g. "≈ $3,466 USD" — round 5,
+   * 2026-09-26: added when merging TokenListRow (Home) into TokenItem
+   * (`variant="card"`). Optional; select-sheet rows (`variant="list"`,
+   * the default) don't show this in Figma, only Home's cards do — but
+   * the field is on the shared `TokenInfo` type either way, since
+   * whether it renders is the row's/variant's call, not the data's.
+   */
+  amountUsd?: string;
 }
 
 export type ChainFilter = string | null;
@@ -112,8 +124,10 @@ function formatBalance(balance?: string): string {
 
 export interface TokenItemProps {
   token: TokenInfo;
-  isDisabled: boolean;
-  onPress: (token: TokenInfo) => void;
+  /** Default false — select-sheet rows aren't disabled unless told to. Was required; made optional round 5 when merging TokenListRow (Home has no disabled concept). */
+  isDisabled?: boolean;
+  /** Default no-op — select-sheet rows are normally always interactive, but Home cards (variant="card") may be display-only. Was required; made optional round 5 for the same reason as `isDisabled`. */
+  onPress?: (token: TokenInfo) => void;
   /** Fallback image for token/chain logo when undefined or fails to load */
   fallback?: ImageSourcePropType;
   /**
@@ -124,24 +138,46 @@ export interface TokenItemProps {
    * own outer inset. The shared default (16px) is kept unchanged since
    * this component also feeds the production Swap/Bridge sheet; opt in
    * with `flush` where the host's own outer inset already accounts for
-   * it (e.g. SendSelectTokenPage).
+   * it (e.g. SendSelectTokenPage). Ignored when `variant="card"` — the
+   * card has its own 12px padding, see below.
    */
   flush?: boolean;
+  /**
+   * "list" (default) — Select sheet rows: shared 16px horizontal padding
+   * (or 0 with `flush`), no per-row card background/border.
+   * "card" — Home list rows (round 5, 2026-09-26: merged TokenListRow
+   * into TokenItem instead of keeping it a separate component — same
+   * structure, icon · name+secondary-line · amount+secondary-line, just
+   * a different row container). Each row is its own bordered card (bg
+   * `white["5%"]`, border `border.b200`, radius `2xl`, overflow hidden),
+   * 12px horizontal padding — Figma's Home list "Generic List" row,
+   * confirmed via get_design_context in the round-3 padding audit, not
+   * the select sheet's shared 16px default. Also renders
+   * `token.amountUsd` as a secondary line under the amount, which
+   * "list" rows never show (no Figma example has both).
+   */
+  variant?: "list" | "card";
 }
 
-export const TokenItem = memo(({ token, isDisabled, onPress, fallback, flush = false }: TokenItemProps) => {
+export const TokenItem = memo(({ token, isDisabled = false, onPress, fallback, flush = false, variant = "list" }: TokenItemProps) => {
   const handlePress = useCallback(() => {
-    onPress(token);
+    onPress?.(token);
   }, [token, onPress]);
 
   const formattedAmount = formatBalance(token.amount);
+  const isCard = variant === "card";
 
   return (
     <TouchableOpacity
-      style={[styles.tokenRow, flush && styles.tokenRowFlush, isDisabled && styles.tokenRowDisabled]}
+      style={[
+        styles.tokenRow,
+        flush && !isCard && styles.tokenRowFlush,
+        isCard && styles.tokenRowCard,
+        isDisabled && styles.tokenRowDisabled,
+      ]}
       onPress={handlePress}
-      disabled={isDisabled}
-      activeOpacity={0.7}
+      disabled={isDisabled || !onPress}
+      activeOpacity={onPress ? 0.7 : 1}
     >
       {/* Token logo + standard-driven chain badge (D-071) */}
       <AssetImage
@@ -166,8 +202,25 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback, flush = f
         ) : null}
       </View>
 
-      {/* Amount */}
-      {formattedAmount ? (
+      {/* Amount (+ USD line, card variant only) */}
+      {isCard ? (
+        <View style={styles.tokenAmountColumnCard}>
+          {formattedAmount ? (
+            <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
+              {formattedAmount}
+            </Text>
+          ) : null}
+          {!!token.amountUsd && (
+            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAmountUsd]} numberOfLines={1}>
+              {token.amountUsd}
+            </Text>
+          )}
+        </View>
+      ) : formattedAmount ? (
+        // Unchanged from before the merge: the "list" variant's amount is
+        // a bare Text sibling, not wrapped in a View — kept exactly as-is
+        // so the shared default (feeding the production Swap/Bridge
+        // sheet) has zero layout risk from this change.
         <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
           {formattedAmount}
         </Text>
@@ -528,6 +581,19 @@ const styles = StyleSheet.create({
   tokenRowFlush: {
     paddingHorizontal: 0,
   },
+  // Home list row (round 5, 2026-09-26 — merged from TokenListRow). Figma's
+  // "Generic List" row: bg white/5%, border border.b200, radius 2xl,
+  // overflow hidden, 12px horizontal padding — confirmed via
+  // get_design_context in the round-3 padding audit, not the select
+  // sheet's shared 16px default (which this overrides).
+  tokenRowCard: {
+    backgroundColor: white["5%"],
+    borderWidth: borderWidth.bw1,
+    borderColor: border.b200,
+    borderRadius: borderRadius["2xl"],
+    overflow: "hidden",
+    paddingHorizontal: spacing.s3,
+  },
   tokenRowDisabled: {
     opacity: 0.4,
   },
@@ -549,6 +615,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 14,
     maxWidth: 100,
+  },
+  tokenAmountColumnCard: {
+    alignItems: "flex-end",
+    gap: spacing.s1,
+  },
+  tokenAmountUsd: {
+    color: typography.t500,
   },
   emptyContainer: {
     paddingVertical: 32,

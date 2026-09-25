@@ -257,6 +257,48 @@ export const LongNamesWithAmount: Story = {
 };
 
 // ---------------------------------------------------------------------------
+// TokenItem variant="card" — Home list row (round 5, 2026-09-26: merged
+// TokenListRow into TokenItem instead of keeping it a separate component)
+// ---------------------------------------------------------------------------
+
+/** Single Home-list card row — bordered card, 12px padding, amount + USD line. */
+export const CardVariant: Story = {
+  render: () => (
+    <View style={storyStyles.cardDecorator}>
+      <TokenItem
+        variant="card"
+        token={{ name: "STICK", symbol: "$0.230", amount: "1,000,000", amountUsd: "≈ $3,466 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" }}
+      />
+    </View>
+  ),
+};
+
+/**
+ * A mixed card list, grouped by name — NOT sorted (Leo sync, 2026-09-25:
+ * keep grouping, e.g. all "NACHO" rows together; no verified-first sort).
+ * Rendered in exactly the order given, matching what TokenListRow's own
+ * MixedList story demonstrated before the merge.
+ */
+export const CardVariantList: Story = {
+  render: () => {
+    const tokens: TokenInfo[] = [
+      { name: "NACHO", symbol: "$0.230", amount: "1,000,000", amountUsd: "≈ $3,466 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+      { name: "NACHO", symbol: "$0.230", amount: "1,233,608.32787357", amountUsd: "≈ $51.419 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20" },
+      { name: "SCAMCOIN", symbol: "$0.00000001", amount: "500,000", amountUsd: "≈ $0.005 USD", logo: placeholderLogo },
+      { name: "ZEAL", symbol: "$0.230", amount: "2,000,000.2314", amountUsd: "≈ $204.435 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+      { name: "RUGPULL", symbol: "$0.000001", amount: "999,999", amountUsd: "≈ $1.00 USD", logo: placeholderLogo },
+    ];
+    return (
+      <View style={storyStyles.cardList}>
+        {tokens.map((t, i) => (
+          <TokenItem key={i} variant="card" token={t} />
+        ))}
+      </View>
+    );
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Styles
 // ---------------------------------------------------------------------------
 
@@ -270,6 +312,15 @@ const storyStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: background.bg0,
+  },
+  cardDecorator: {
+    backgroundColor: background.bg0,
+    padding: 20,
+  },
+  cardList: {
+    backgroundColor: background.bg0,
+    padding: 20,
+    gap: 8,
   },
   triggerBtn: {
     backgroundColor: primary.p500,
