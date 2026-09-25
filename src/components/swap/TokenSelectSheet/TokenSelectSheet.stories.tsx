@@ -204,13 +204,23 @@ export const WithVerifiedBadges: Story = {
   },
 };
 
-/** Same-name disambiguation (D-064) — KCC20 vs KRC20 versions of "KAS" side by side */
-export const SameNameDisambiguation: Story = {
+/**
+ * Same-name disambiguation (D-064) — KCC20 vs KRC20 versions of "NACHO"
+ * side by side, each shown verified and unverified (D-071, D-072,
+ * 2026-09-25). No text label distinguishes the pair — per D-072 Figma's
+ * Swap select frame (14739:360273) has no standard label after the name,
+ * so disambiguation is visual only: KCC20 rows keep the chain corner badge
+ * (Layer2AssetImage's `chainLogo`), KRC20 rows never show it, and the
+ * verified checkmark follows `isVerified` independently of standard.
+ */
+export const SameNameKCC20VsKRC20: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
     tokens: [
-      { name: "KAS", standardLabel: "KCC20", symbol: "KAS", amount: "1000000", logo: placeholderLogo, isVerified: true },
-      { name: "KAS", standardLabel: "KRC20", symbol: "KAS", amount: "1233608.32787357", logo: placeholderLogo, isVerified: true },
+      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: true },
+      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "500000", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: false },
+      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: true },
+      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "750000", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: false },
     ],
   },
 };

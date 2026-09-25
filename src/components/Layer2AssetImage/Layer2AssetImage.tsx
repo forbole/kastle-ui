@@ -23,6 +23,14 @@ export interface Layer2AssetImageProps {
    * Negative = badge sticks out to the right; 0 = flush with token edge.
    */
   chainImageRightPosition?: number;
+  /**
+   * Omits the chain badge entirely — not even the fallback circle renders.
+   * Default false (existing behaviour: badge always shows, falling back to
+   * `fallback` when `chainImage` is undefined). Added for KCC20 support
+   * (D-071): some callers need to suppress the badge per-token rather than
+   * per-image. Opt-in, so existing callers are unaffected.
+   */
+  hideChainBadge?: boolean;
 }
 
 export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
@@ -32,6 +40,7 @@ export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
   tokenImageSize = 40,
   chainImageSize = 18,
   chainImageRightPosition = -5,
+  hideChainBadge = false,
 }) => {
   const [tokenError, setTokenError] = useState(false);
 
@@ -73,24 +82,26 @@ export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
       </View>
 
       {/* Chain badge — bottom-aligned with the token, slightly past the right edge */}
-      <View
-        style={[
-          styles.chainBadge,
-          {
-            width: badgeSize,
-            height: badgeSize,
-            borderRadius: badgeSize / 2,
-            bottom: 0,
-            right: chainImageRightPosition,
-          },
-        ]}
-      >
-        <Image
-          source={resolvedChainImage}
-          style={{ width: chainImageSize, height: chainImageSize, borderRadius: chainImageSize / 2 }}
-          resizeMode="cover"
-        />
-      </View>
+      {!hideChainBadge && (
+        <View
+          style={[
+            styles.chainBadge,
+            {
+              width: badgeSize,
+              height: badgeSize,
+              borderRadius: badgeSize / 2,
+              bottom: 0,
+              right: chainImageRightPosition,
+            },
+          ]}
+        >
+          <Image
+            source={resolvedChainImage}
+            style={{ width: chainImageSize, height: chainImageSize, borderRadius: chainImageSize / 2 }}
+            resizeMode="cover"
+          />
+        </View>
+      )}
     </View>
   );
 };
