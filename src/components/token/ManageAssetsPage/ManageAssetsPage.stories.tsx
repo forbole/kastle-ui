@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { ManageAssetsSheet } from "./ManageAssetsSheet";
-import { ManageAssetsToken } from "./ManageAssetsSheet";
+import { ManageAssetsPage } from "./ManageAssetsPage";
+import { ManageAssetsToken } from "./ManageAssetsPage";
 import { background } from "../../../config/theme";
 
 const placeholderLogo = require("../../../../assets/icon.png");
@@ -19,17 +19,13 @@ const SAMPLE_TOKENS: ManageAssetsToken[] = [
   { id: "nacho-igra", name: "NACHO", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
 ];
 
-const meta: Meta<typeof ManageAssetsSheet> = {
-  title: "Token/ManageAssetsSheet",
-  component: ManageAssetsSheet,
+const meta: Meta<typeof ManageAssetsPage> = {
+  title: "Token/ManageAssetsPage",
+  component: ManageAssetsPage,
   parameters: {
     layout: "fullscreen",
     backgrounds: { default: "kastle" },
     viewport: { defaultViewport: "iphone14" },
-  },
-  args: {
-    isOpen: true,
-    onClose: () => {},
   },
   decorators: [
     (Story) => (
@@ -50,7 +46,7 @@ export const Default: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS);
     return (
-      <ManageAssetsSheet
+      <ManageAssetsPage
         {...args}
         tokens={tokens}
         onToggle={(id) =>
@@ -66,7 +62,7 @@ export const AllShown: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS.map((t) => ({ ...t, isHidden: false })));
     return (
-      <ManageAssetsSheet
+      <ManageAssetsPage
         {...args}
         tokens={tokens}
         onToggle={(id) =>
@@ -82,7 +78,7 @@ export const AllHidden: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS.map((t) => ({ ...t, isHidden: true })));
     return (
-      <ManageAssetsSheet
+      <ManageAssetsPage
         {...args}
         tokens={tokens}
         onToggle={(id) =>
@@ -105,7 +101,7 @@ export const SameNameAllStandards: Story = {
       { id: "4", name: "NACHO", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
     ]);
     return (
-      <ManageAssetsSheet
+      <ManageAssetsPage
         {...args}
         tokens={tokens}
         onToggle={(id) =>
