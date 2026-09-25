@@ -1,6 +1,6 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg";
-import { colors } from "../../config/theme";
+import { colors, primary } from "../../config/theme";
 
 export interface VerifiedBadgeProps {
   /** Icon diameter. Default 14 — matches the Token List row checkmark. */
@@ -23,15 +23,18 @@ const SEAL_PATH =
 const CHECK_PATH = "M6 8L7.33333 9.33333L10 6.66667";
 
 /**
- * Small checkmark badge for verified tokens (KCC20 support).
+ * Small checkmark badge for verified tokens. As of round 3 (2026-09-26),
+ * this only ever appears on Token Details (Leo approved Nicole's
+ * proposal: Home list and Select screens dropped the verified concept
+ * entirely) — see TokenDetailPage's `showVerified`/`showSecurityRow`.
  *
- * Colour is verified against Figma: node 14576:67577 (Token List, file
- * BdTDUVIHEeOjdlHSPij0xi) resolves the badge fill to `Success/success600`
- * (#2DD4BF), which is an exact match for `colors.success` (= `success.s600`)
- * in theme.ts. ⚠️ Colour is STILL pending Nicole as of round 3
- * (2026-09-26, team-lead: "Token details frame may use primary500 not
- * success600") — kept as `colors.success` for now, unchanged, per
- * instruction to leave it alone until she answers.
+ * Colour: `primary.p500` (`#00C4E7`, the brand colour) — Nicole's round-3
+ * decision, replacing the earlier `colors.success` (`#2DD4BF`, verified
+ * against Figma node 14576:67577 in an earlier round, back when this
+ * badge appeared in more places and was deliberately kept separate from
+ * TransferConfirmPage/NameDetailPage's own `primary.p500` badge as a
+ * different "verified" concept). Now that this badge is Token-Details-only,
+ * Nicole aligned it to the same brand colour those use.
  *
  * Round 3 (2026-09-26): replaced Lucide's `BadgeCheck` with this custom
  * SVG built from Figma's actual exported vector path (see SEAL_PATH/
@@ -45,20 +48,14 @@ const CHECK_PATH = "M6 8L7.33333 9.33333L10 6.66667";
  * not an icon `Path`. This is the first custom vector icon in the repo —
  * used the same `react-native-svg` import convention those two already
  * use, since there's nothing more specific to match.
- *
- * Deliberately NOT reusing TransferConfirmPage / NameDetailPage's existing
- * `isVerified` badge (BadgeCheck filled `primary.p500`) — that one binds to
- * a different Figma variable family (name-service verification). This is a
- * separate "verified" concept (token-list verification) with its own colour
- * binding; see the design-parity note above.
  */
 export const VerifiedBadge: React.FC<VerifiedBadgeProps> = ({ size = 14 }) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 16 16" fill="none">
       <Path
         d={SEAL_PATH}
-        fill={colors.success}
-        stroke={colors.success}
+        fill={primary.p500}
+        stroke={primary.p500}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
