@@ -177,14 +177,26 @@ const ChainVariant: React.FC<ChainAssetImageProps> = ({
   const resolvedChainImage = chainImage ?? fallback;
 
   // Preserves Layer2AssetImage's exact original default (badge always
-  // shows) when neither `standard` nor `hideChainBadge` is passed — only
-  // callers that opt into `standard` get the D-071 rule (TokenIcon's old
+  // shows, falling back to `fallback` when `chainImage` is missing) when
+  // neither `standard` nor `hideChainBadge` is passed — only callers that
+  // opt into `standard` get the full D-071 rule (TokenIcon's old
   // behaviour). Explicit `hideChainBadge` always wins over `standard`.
+  //
+  // Bug fix (round 6, 2026-09-26 — reviewer caught it in Storybook):
+  // when `standard` is omitted AND there's neither a `chainImage` NOR a
+  // `fallback`, this used to still show the badge — rendering an <Image>
+  // with an undefined source, i.e. an empty circle, not "no badge".
+  // Narrowed the undefined-standard branch to `!chainImage && !fallback`
+  // instead of a flat `false`. This changes nothing for existing callers
+  // that always pass a `fallback` (AssetTransferCard's own story always
+  // does) — the badge still shows the fallback image exactly as before.
+  // It only starts hiding the badge in the one case that previously had
+  // nothing to actually render.
   const effectiveHideChainBadge =
     hideChainBadge ??
     (standard !== undefined
       ? standard === "KRC20" || standard === "Native" || !chainImage
-      : false);
+      : !chainImage && !fallback);
 
   // Badge outer size includes the 1px border on each side
   const badgeSize = chainImageSize + 1;
