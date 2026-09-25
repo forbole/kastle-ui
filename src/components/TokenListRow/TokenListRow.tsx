@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View, ImageSourcePropType } from "react-native";
 import { spacing, textStyles, typography } from "../../config/theme";
 import { TokenIcon, TokenStandard } from "../TokenIcon";
-import { VerifiedBadge } from "../VerifiedBadge";
 
 export interface TokenListRowProps {
   /** Token name, e.g. "KAS", "NACHO". */
@@ -18,35 +17,10 @@ export interface TokenListRowProps {
    * KCC20/ERC20 show it only when `chainLogo` is also provided (D-071,
    * see TokenIcon for the full rule). */
   standard?: TokenStandard;
-  /**
-   * Small "{Network}-{Standard}" disambiguation line under the name, e.g.
-   * "Kaspa-KCC20" / "Kaspa-KRC20" / "Kasplex-ERC20" / "Igra-ERC20" —
-   * round 3, 2026-09-26: Nicole confirmed this is now drawn in Figma.
-   * Found in the "Asset hide option" section's Actionsheet (node
-   * `14767:28730` "Content", under "expanded" → "default" →
-   * "without chain identifier"), NOT the primary Home Dashboard list
-   * frame (`14767:29942`, "Verify indication" section) — that one still
-   * shows no sub-label, same as before. Applying it here anyway: same
-   * visual system (identical `typography.t500`/12px/lineHeight-16 token
-   * as `priceLabel`, verified via get_design_context — `#7B9AAA` =
-   * `secondary.s700` = `typography.t500`, exact match, not approximated),
-   * and it directly serves D-064's same-name disambiguation need, which
-   * IS the Home list's problem. Optional and purely additive — omitting
-   * it changes nothing.
-   */
-  standardLabel?: string;
   /** Formatted token amount, e.g. "1,000,000". */
   amount: string;
   /** Formatted USD equivalent, e.g. "≈ $3,466 USD". */
   amountUsd?: string;
-  /** Shows the verified checkmark next to the name. Unverified renders
-   * nothing in its place — no label, no placeholder, no colour change
-   * (Figma's Home list, node 14745:450124 row 4, shows an unverified row
-   * with the same text colour as verified rows, just without the check).
-   * Only ever renders for `standard === "KCC20"` (Leo sync, 2026-09-25:
-   * verification only exists for KCC20 — KRC20/ERC20 can never be
-   * verified) — enforced here regardless of what's passed. */
-  isVerified?: boolean;
   onPress?: () => void;
 }
 
@@ -55,6 +29,22 @@ export interface TokenListRowProps {
  * the balance header, Assets/NFT/Name/Text tabs, and bottom nav are
  * kastle-mobile's shell, out of scope here (repo boundary: nav/shell live
  * in kastle-mobile, not kastle-ui).
+ *
+ * ⚠️ No verified checkmark here (round 3, 2026-09-26 — Leo approved
+ * Nicole's proposal): the verified ✓ concept now only exists on Token
+ * Details. `isVerified` was removed entirely, not deprecated/no-op —
+ * confirmed via `git show origin/main:...` that this component doesn't
+ * exist on main at all, so there's no external consumer to break.
+ *
+ * ⚠️ No standard sub-label either (round 3, later correction): Nicole
+ * clarified the "{Network}-{Standard}" disambiguation line is for the
+ * future Manage Assets (hide/show) screen only — Home has no room for
+ * it. `standardLabel` (added earlier this round) was removed along with
+ * its story; the pattern itself (colour token, position under the name)
+ * is still noted here for whoever builds Manage Assets: same
+ * `typography.t500`/12px/lineHeight-16 token as `priceLabel`, found in
+ * the "Asset hide option" section's Actionsheet, node `14767:28730`
+ * "Content".
  *
  * Sort order (Leo sync, 2026-09-25 — settles the earlier "open question"):
  * NOT verified-first. Home keeps grouping — same-name tokens stay grouped
@@ -73,14 +63,10 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
   chainLogo,
   fallback,
   standard,
-  standardLabel,
   amount,
   amountUsd,
-  isVerified = false,
   onPress,
 }) => {
-  const showVerified = isVerified && standard === "KCC20";
-
   return (
     <TouchableOpacity
       style={styles.row}
@@ -100,7 +86,6 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
           >
             {name}
           </Text>
-          {showVerified && <VerifiedBadge size={14} />}
         </View>
         {!!priceLabel && (
           <Text
@@ -109,15 +94,6 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
             numberOfLines={1}
           >
             {priceLabel}
-          </Text>
-        )}
-        {!!standardLabel && (
-          <Text
-            allowFontScaling={false}
-            style={[textStyles.bodyNormalXS, styles.standardLabel]}
-            numberOfLines={1}
-          >
-            {standardLabel}
           </Text>
         )}
       </View>
@@ -169,9 +145,6 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   priceLabel: {
-    color: typography.t500,
-  },
-  standardLabel: {
     color: typography.t500,
   },
   amountColumn: {

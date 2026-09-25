@@ -50,14 +50,16 @@ export interface SendSelectTokenPageProps {
  *
  * Rows reuse the same `TokenItem` Swap select uses — the row markup in
  * Figma is structurally identical (logo + standard-driven corner badge +
- * name + optional secondary line + amount). The one difference: Figma's
- * current example rows here don't show a verified checkmark on any token
- * (unlike the Home list / Swap select frames, which do) — `TokenItem`
- * still supports `isVerified` since it's the same shared component, this
- * frame just has no verified example to confirm it against. Contract
- * address is passed as `TokenInfo.symbol` (already optional/conditional in
- * TokenItem) — native KAS has none, KRC20/KCC20 tokens do (Nicole's Figma
- * note). No KCC20/KRC20 text label (D-072).
+ * name + optional secondary line + amount), rendered `flush` (round 3:
+ * Figma's dropdown-item rows have zero internal horizontal padding here,
+ * unlike the shared TokenItem default which also feeds the production
+ * Swap/Bridge sheet — see TokenItem's `flush` prop doc comment). No
+ * verified checkmark on this screen at all (round 3, 2026-09-26 — Leo
+ * approved Nicole's proposal: verified only exists on Token Details now;
+ * `TokenInfo.isVerified` was removed). Contract address is passed as
+ * `TokenInfo.symbol` (already optional/conditional in TokenItem) — native
+ * KAS has none, KRC20/KCC20 tokens do (Nicole's Figma note). No KCC20/
+ * KRC20 text label (D-072).
  *
  * Network filter chips (Kaspa/KRC20/Kasplex/Igra) actually filter the list
  * — pure, local, by `TokenInfo.chainKeys` (single-select: see
@@ -150,7 +152,7 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
 
   const defaultRenderItem = useCallback(
     (token: TokenInfo, { onPress }: RenderItemParams) => (
-      <TokenItem token={token} isDisabled={false} onPress={onPress} />
+      <TokenItem token={token} isDisabled={false} onPress={onPress} flush />
     ),
     [],
   );
