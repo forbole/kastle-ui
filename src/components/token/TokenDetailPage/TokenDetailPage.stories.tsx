@@ -137,6 +137,50 @@ export const FullInfo: Story = {
   ),
 };
 
+/**
+ * Kasplex-ERC20 full info — round 6, 2026-09-26 (team-lead): ERC20
+ * variants weren't shown on any feature page. Nicole's source section
+ * `14590:112169` → "other token" → node `14592:272324` (the Kasplex
+ * frame, same reused "TTTT" example and Token Info numbers as
+ * FullInfo/KRC20 above — checked via screenshot, all three standard
+ * frames share identical placeholder values). Figma draws the chip as
+ * plain "Kasplex" — using the hyphen convention "Kasplex-ERC20" per
+ * Nicole's round-3 decision, same as every other chip label here. ID row
+ * reads "Contract Address" (idLabel's non-KCC20 default, not overridden).
+ * No Security row (KCC20-only rule).
+ *
+ * Network: "Kasplex" — NOT forced to "Kaspa" like the KCC20/KRC20 full
+ * info stories above. That earlier decision was specifically about
+ * KCC20/KRC20 (both run on the Kaspa L1, so Figma's drawn "Kasplex" there
+ * was a labelling mistake); Kasplex-ERC20 tokens genuinely run on the
+ * Kasplex network, so the frame's own drawn value is correct here, not a
+ * mistake to override.
+ */
+export const FullInfoKasplexERC20: Story = {
+  name: "Full info — Kasplex-ERC20",
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="TTTT"
+      logo={placeholderLogo}
+      priceLabel="$0.052"
+      standard="ERC20"
+      chipLabel="Kasplex-ERC20"
+      network="Kasplex"
+      variant="full"
+      totalMintedPercent="10%"
+      totalMintedFraction="(2.5B / 25B)"
+      mintCount="24% (480 /2,400)"
+      holderCount="9,998,095"
+      transferCount="9,998,095"
+      preallocationAmount="1,000,000"
+      defaultMintAmount="9,998,095"
+      decimal="8"
+      minter="kaspa:qpzp...pnwz"
+    />
+  ),
+};
+
 const storyStyles = StyleSheet.create({
   screen: {
     flex: 1,
