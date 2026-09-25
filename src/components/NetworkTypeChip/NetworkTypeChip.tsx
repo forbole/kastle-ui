@@ -2,69 +2,52 @@ import React from "react";
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
 import { borderRadius, borderWidth, info, primary, spacing, textStyles } from "../../config/theme";
 
-export type NetworkTypeChipTone = "info" | "pending";
-
 export interface NetworkTypeChipProps {
-  /** e.g. "Kaspa KCC20", "Kaspa KRC20", "Kasplex ERC20", "Igra ERC20", "Kaspa". */
+  /** e.g. "Kaspa-KCC20", "Kaspa-KRC20", "Kasplex-ERC20", "Igra-ERC20", "Kaspa". */
   label: string;
-  /**
-   * "info" (default) — Send Confirm's Send-from/Send-to chip. Token-bound,
-   * verified against LIVE instances on `14740:384946` (KCC20) and
-   * `14740:385348` (KRC20): border `primary.p300` / bg `info.background` /
-   * text `primary.p800`. Both standards use this same colour on that page.
-   * "pending" — Token Details header chip (`14745:449924`). Live instance
-   * measured as raw hex `#6FC7BA` border/text, `#182B29` bg — NOT bound to
-   * any Figma variable, doesn't match an existing theme.ts token, and
-   * Nicole has an open Figma comment on it. Named "pending" (not
-   * "success") because this colour is provisional, not a themed variant.
-   */
-  tone?: NetworkTypeChipTone;
   /** Optional small leading icon (Token Details header chip has one). */
   icon?: ImageSourcePropType;
 }
 
 /**
- * Rounded network/token-standard chip. ONE component (team-lead,
- * 2026-09-25: "Build ONE chip component from it") for both the Token
- * Details header (screen 2, `tone="pending"`) and Send Confirm's
- * Send-from/Send-to rows (screen 5, `tone="info"`, the default).
+ * Rounded network/token-standard chip. ONE component, ONE colour
+ * (team-lead, 2026-09-25: "Build ONE chip component from it"; Nicole,
+ * round 3, 2026-09-26: Token Details' chip uses the SAME token-bound
+ * colours as Send Confirm) — used for both the Token Details header
+ * (screen 2) and Send Confirm's Send-from/Send-to rows (screen 5).
  *
- * ⚠️ Colour provenance — read before changing this file. Figma's "option 1"
- * component set (node `14592:271520`, comment "new badge added" — 4 named
- * variants: "Kaspa KCC20", "Kaspa KRC20", "Kasplex ERC20", "Igra ERC20")
- * was initially treated as one shared source for both screens' colours
- * (2026-09-25). team-lead corrected that (2026-09-26): the direction was
- * ONE COMPONENT, not one colour — each screen's LIVE instance is the
- * colour source of truth, and they genuinely differ:
- *   - Send Confirm (`14740:384946`/`14740:385348`): `primary.p300` /
- *     `info.background` / `primary.p800` — a real, token-bound value.
- *   - Token Details (`14745:449924`): raw `#6FC7BA`/`#182B29` — unbound,
- *     pending Nicole's answer on her Figma comment.
- * `14592:271520`'s own children are Figma *component definitions*
- * ("symbol" nodes), not page instances — both `get_design_context` and
- * `get_variable_defs` reject them outright, so its exact colours were
- * never independently readable; the live-instance values above are what
- * this component actually renders.
- * ⚠️ "option 1"'s KCC20 pill renders FILLED (solid fill) in the
- * screenshot, unlike the other 3 (outline) — not built; no live instance
- * anywhere renders the filled treatment, so this stays one outline style
- * for every label/tone rather than guess an unverified fill colour.
+ * Colour: `border primary.p300` / `bg info.background` / `text
+ * primary.p800` — verified against LIVE instances on Send Confirm's
+ * `14740:384946` (KCC20) and `14740:385348` (KRC20). Both standards use
+ * this same colour on that page; Nicole confirmed Token Details should
+ * match it rather than keep its own separate (previously raw-hex,
+ * unbound) colour — the earlier `tone="info"|"pending"` split and its
+ * `#6FC7BA`/`#182B29` raw hex are gone, this is now the only colour.
+ *
+ * Label text: hyphenated, per Nicole's round-3 decision — "Kaspa-KCC20" /
+ * "Kaspa-KRC20" / "Kasplex-ERC20" / "Igra-ERC20" / "Kaspa" (native).
+ *
+ * ⚠️ Figma's "option 1" component set (node `14592:271520`) — its KCC20
+ * pill renders FILLED (solid fill) in the screenshot, unlike the other 3
+ * (outline). Not built: no live instance anywhere renders the filled
+ * treatment, so this stays one outline style for every label.
  */
-export const NetworkTypeChip: React.FC<NetworkTypeChipProps> = ({ label, tone = "info", icon }) => {
-  const isPending = tone === "pending";
+export const NetworkTypeChip: React.FC<NetworkTypeChipProps> = ({ label, icon }) => {
   return (
-    <View style={[styles.chip, isPending ? styles.chipPending : styles.chipInfo]}>
+    <View style={styles.chip}>
       {icon && <Image source={icon} style={styles.icon} resizeMode="cover" />}
-      <Text
-        allowFontScaling={false}
-        style={[textStyles.bodyNormalXS, styles.label, isPending ? styles.labelPending : styles.labelInfo]}
-        numberOfLines={1}
-      >
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.label]} numberOfLines={1}>
         {label}
       </Text>
     </View>
   );
 };
+
+// Figma's badge sub-node reads icon size 14/14 and radius 7 directly.
+// 14 = spacing.s3_5 (exact token match); 7 has no borderRadius token, but
+// it's exactly half of 14 (a full circle for a 14px-diameter icon), so
+// it's derived from the size token rather than a second raw number.
+const ICON_SIZE = spacing.s3_5;
 
 const styles = StyleSheet.create({
   chip: {
@@ -72,41 +55,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s1,
     borderWidth: borderWidth.bw1,
+    borderColor: primary.p300,
+    backgroundColor: info.background,
     borderRadius: borderRadius.full,
     paddingHorizontal: spacing.s2,
     paddingVertical: spacing.s1,
     alignSelf: "flex-start",
   },
-  chipInfo: {
-    borderColor: primary.p300,
-    backgroundColor: info.background,
-  },
-  chipPending: {
-    // TODO(token): pending Nicole — #6FC7BA/#182B29 are literal Figma hex,
-    // not bound to a Figma variable or an existing theme.ts token. See the
-    // component doc comment above for the full provenance. Replace with a
-    // real token once she answers the Figma comment.
-    borderColor: "#6FC7BA",
-    backgroundColor: "#182B29",
-  },
   icon: {
-    // TODO(token): pending Nicole — 14/14/7 are read off the Figma badge
-    // sub-node directly, not a spacing/borderRadius token (14 sits between
-    // spacing.s3_5 and s4; 7 is exactly half of 14, not on the radius
-    // scale). Leaving as literal px until confirmed.
-    width: 14,
-    height: 14,
-    borderRadius: 7,
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    borderRadius: ICON_SIZE / 2,
   },
   label: {
-    // TODO(token): pending Nicole — 16 matches no line-height already in
-    // use on bodyNormalXS elsewhere; literal px until confirmed.
+    // TODO(token): 16 matches no line-height token already in use on
+    // bodyNormalXS elsewhere in the repo — left as a literal px, not
+    // guessed at a nearby token that isn't actually the same value.
     lineHeight: 16,
-  },
-  labelInfo: {
     color: primary.p800,
-  },
-  labelPending: {
-    color: "#6FC7BA",
   },
 });

@@ -40,8 +40,8 @@ export interface TokenDetailPageProps {
   isVerified?: boolean;
   /** Drives the header icon's chain-badge (D-071) and the header chip's icon. */
   standard: TokenStandard;
-  /** Header chip label, e.g. "Kaspa KCC20" / "Kaspa KRC20" (text per
-   * Nicole+Leo sync, 2026-09-25). Figma keeps this chip on BOTH verified
+  /** Header chip label, e.g. "Kaspa-KCC20" / "Kaspa-KRC20" (hyphen form,
+   * Nicole's round-3 decision). Figma keeps this chip on BOTH verified
    * and unverified Token Details — D-072 only removed the Swap select's
    * text label, not this one. */
   chipLabel: string;
@@ -115,6 +115,10 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // even if the caller passes isVerified=true. Enforced here, not left to
   // the caller.
   const showVerified = isVerified && standard === "KCC20";
+  // Leo approved Nicole's proposal, round 3 (2026-09-26): the ✓ concept
+  // only exists on Token Details at all now — the Security row itself is
+  // hidden (not just its value) for Native/KRC20/ERC20, not only KCC20.
+  const showSecurityRow = standard === "KCC20";
 
   return (
     <View style={styles.container}>
@@ -145,7 +149,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               </Text>
             )}
           </View>
-          <NetworkTypeChip label={chipLabel} tone="pending" icon={chipIcon} />
+          <NetworkTypeChip label={chipLabel} icon={chipIcon} />
         </View>
 
         {activeTab === "assetInfo" ? (
@@ -157,16 +161,18 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               <View style={[styles.infoRow, styles.infoRowBorder]}>
                 <DetailKVRow label="Network" value={network} />
               </View>
-              <View style={[styles.infoRow, styles.infoRowBorder]}>
+              <View style={[styles.infoRow, showSecurityRow && styles.infoRowBorder]}>
                 <DetailKVRow label={covenantIdLabel} value={covenantId} />
               </View>
-              <View style={styles.infoRow}>
-                <DetailKVRow
-                  label="Security"
-                  value={showVerified ? "Verified" : "Unverified"}
-                  valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
-                />
-              </View>
+              {showSecurityRow && (
+                <View style={styles.infoRow}>
+                  <DetailKVRow
+                    label="Security"
+                    value={showVerified ? "Verified" : "Unverified"}
+                    valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
+                  />
+                </View>
+              )}
             </View>
           </View>
         ) : (

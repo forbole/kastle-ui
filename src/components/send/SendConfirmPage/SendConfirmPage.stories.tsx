@@ -40,17 +40,17 @@ const meta: Meta<typeof SendConfirmPage> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** KCC20 — Figma node 14741:398568. Chip label text per Nicole+Leo sync 2026-09-25 ("Kaspa KCC20", not Figma's still-hyphenated "Kaspa-KCC20"). */
+/** KCC20 — Figma node 14741:398568. Chip label "Kaspa-KCC20" — hyphen form, confirmed by Nicole (round 3). */
 export const KCC20: Story = {
   args: {
-    chipLabel: "Kaspa KCC20",
+    chipLabel: "Kaspa-KCC20",
   },
 };
 
 /** KRC20 — Figma node 14741:398569. */
 export const KRC20: Story = {
   args: {
-    chipLabel: "Kaspa KRC20",
+    chipLabel: "Kaspa-KRC20",
   },
 };
 
@@ -68,7 +68,7 @@ export const KAS: Story = {
 /** Est. Fee row pressable (fee breakdown callback wired) — info icon only shows when this is provided. */
 export const WithFeeBreakdownTrigger: Story = {
   args: {
-    chipLabel: "Kaspa KCC20",
+    chipLabel: "Kaspa-KCC20",
     onEstFeePress: () => {},
   },
 };
@@ -76,7 +76,7 @@ export const WithFeeBreakdownTrigger: Story = {
 /** Confirm button disabled, e.g. while fees are still loading. */
 export const ConfirmDisabled: Story = {
   args: {
-    chipLabel: "Kaspa KCC20",
+    chipLabel: "Kaspa-KCC20",
     isConfirmDisabled: true,
   },
 };
