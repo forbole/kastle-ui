@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
-import { borderRadius, borderWidth, info, primary, spacing, textStyles } from "../../config/theme";
+import { borderRadius, borderWidth, info, kcc20, primary, spacing, textStyles } from "../../config/theme";
 import { TokenStandard } from "../AssetImage";
 
 export interface NetworkTypeChipProps {
@@ -30,11 +30,12 @@ export interface NetworkTypeChipProps {
  *   - KCC20 (Send Confirm `14741:398568`, node
  *     `I14741:398568;3123:48196;...;735:211106;14733:345838`): raw hex
  *     `border`/`text #6FC7BA`, `bg #182B29` — NOT bound to any Figma
- *     variable. ⚠️ No exact theme.ts token matches. Nearest by Euclidean
- *     distance in RGB: `success.s700` (`#59DDCB`, diff ~35) for the
- *     border/text colour, `success.background` (`#042F2E`, diff ~21) for
- *     the bg — neither is close enough to treat as the same colour, so
- *     kept as literal hex rather than silently substituted.
+ *     variable. No exact theme.ts ramp matched (nearest: `success.s700`
+ *     `#59DDCB` diff ~35, `success.background` `#042F2E` diff ~21 — both
+ *     too far to reuse), so Nicole chose to add these as their own named
+ *     tokens (round 5, 2026-09-26) — `kcc20.text` / `kcc20.background` in
+ *     theme.ts — rather than keep the raw hex. Nicole is creating matching
+ *     Figma variables for these.
  *   - KRC20 (Send Confirm `14741:398569`, same node path): bound to real
  *     Figma variables — `border info/info300` (`#0a7694`) / `bg
  *     info/info-background` (`#1a282e`) / `text info/info800`
@@ -92,10 +93,8 @@ const styles = StyleSheet.create({
     backgroundColor: info.background,
   },
   chipKCC20: {
-    // TODO(token): no theme.ts token matches — see the component doc
-    // comment above for the nearest candidates and their hex diffs.
-    borderColor: "#6FC7BA",
-    backgroundColor: "#182B29",
+    borderColor: kcc20.text,
+    backgroundColor: kcc20.background,
   },
   icon: {
     width: ICON_SIZE,
@@ -112,6 +111,6 @@ const styles = StyleSheet.create({
     color: primary.p800,
   },
   labelKCC20: {
-    color: "#6FC7BA",
+    color: kcc20.text,
   },
 });
