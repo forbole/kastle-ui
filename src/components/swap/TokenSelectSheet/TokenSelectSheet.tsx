@@ -158,14 +158,16 @@ TokenItem.displayName = "TokenItem";
 // ChainFilterChip
 // ---------------------------------------------------------------------------
 
-interface ChainFilterChipProps {
+export interface ChainFilterChipProps {
   label: string;
   logo: ImageSourcePropType;
   isActive: boolean;
   onPress: () => void;
 }
 
-const ChainFilterChip = ({ label, logo, isActive, onPress }: ChainFilterChipProps) => (
+/** Exported so other screens with the same Kaspa/KRC20/Kasplex/Igra filter
+ * row (e.g. Send select) reuse this instead of re-styling their own. */
+export const ChainFilterChip = ({ label, logo, isActive, onPress }: ChainFilterChipProps) => (
   <TouchableOpacity
     style={[styles.chip, isActive && styles.chipActive]}
     onPress={onPress}
