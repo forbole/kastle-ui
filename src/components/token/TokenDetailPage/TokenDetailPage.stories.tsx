@@ -69,7 +69,12 @@ export const UnverifiedKCC20: Story = {
   ),
 };
 
-/** No Security row at all — only KCC20 gets one (round 3). */
+/**
+ * No Security row at all — only KCC20 gets one (round 3). ID row label
+ * reads "Contract Address" here (round 6, 2026-09-26 — team-lead):
+ * `idLabel` defaults to "Contract Address" for any non-KCC20 standard,
+ * not overridden in this story's args, so it's automatic.
+ */
 export const KRC20: Story = {
   render: (args) => (
     <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa-KRC20" />

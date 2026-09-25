@@ -54,22 +54,22 @@ export interface TokenDetailPageProps {
   /** Network row value, e.g. "Kaspa". */
   network: string;
   /**
-   * Covenant ID row value, e.g. "84b93d7f...48dj6" (caller formats the
-   * ellipsis). Row label changed from "Contract Address" to "Covenant ID"
-   * — Nicole updated Figma 2026-09-26; confirmed via get_design_context on
-   * both `14745:449924` (verified) and `14745:450123` (unverified), same
-   * label on both frames, value format unchanged.
+   * ID row value, e.g. "84b93d7f...48dj6" (caller formats the ellipsis).
+   * Prop name kept as `covenantId` (not renamed alongside `idLabel` below
+   * — not asked for, avoids an unrequested API change); the label shown
+   * next to it now varies by standard, see `idLabel`.
    */
   covenantId: string;
   /**
-   * Covenant ID row's label text. Default "Security" row's sibling label
-   * — kept as a prop, not hardcoded, per Leo sync 2026-09-25: Leo will
-   * confirm later whether this label varies for non-KCC20 tokens (Figma
-   * currently shows "Covenant ID" on both the verified and unverified
-   * KCC20 frames only — no KRC20/ERC20 Token Details frame exists yet to
-   * check against).
+   * ID row's label — defaults to "Covenant ID" for KCC20, "Contract
+   * Address" for every other standard (KRC20/ERC20/Native). Round 6,
+   * 2026-09-26 (team-lead): resolves the open question the previous round
+   * left ("Leo will confirm later whether this label varies for
+   * non-KCC20 tokens") — it does. Renamed from `covenantIdLabel` to this
+   * neutral name since it's no longer a single fixed default; still an
+   * overridable prop, not hardcoded.
    */
-  covenantIdLabel?: string;
+  idLabel?: string;
 
   /**
    * "basic" (default) — the 3-row Network/Covenant ID/Security list Figma
@@ -156,7 +156,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   chipIcon,
   network,
   covenantId,
-  covenantIdLabel = "Covenant ID",
+  idLabel = standard === "KCC20" ? "Covenant ID" : "Contract Address",
   variant = "basic",
   totalMintedPercent,
   totalMintedFraction,
@@ -188,7 +188,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // that only worked because basic was always exactly 2-or-3 rows.
   const infoRows: { key: string; node: React.ReactNode }[] = [
     { key: "network", node: <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} /> },
-    { key: "covenantId", node: <DetailKVRow label={covenantIdLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
+    { key: "covenantId", node: <DetailKVRow label={idLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
   ];
   if (variant === "full") {
     if (totalMintedPercent !== undefined) {
