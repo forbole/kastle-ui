@@ -26,7 +26,7 @@ const meta: Meta<typeof TokenDetailPage> = {
     chainLogo: placeholderLogo,
     chipIcon: placeholderLogo,
     network: "Kaspa",
-    contractAddress: "84b93d7f...48dj6",
+    covenantId: "84b93d7f...48dj6",
   },
   decorators: [
     (Story) => (

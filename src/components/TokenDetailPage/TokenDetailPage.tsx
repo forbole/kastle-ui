@@ -49,8 +49,14 @@ export interface TokenDetailPageProps {
 
   /** Network row value, e.g. "Kaspa". */
   network: string;
-  /** Contract Address row value, e.g. "84b93d7f...48dj6" (caller formats the ellipsis). */
-  contractAddress: string;
+  /**
+   * Covenant ID row value, e.g. "84b93d7f...48dj6" (caller formats the
+   * ellipsis). Row label changed from "Contract Address" to "Covenant ID"
+   * — Nicole updated Figma 2026-09-26; confirmed via get_design_context on
+   * both `14745:449924` (verified) and `14745:450123` (unverified), same
+   * label on both frames, value format unchanged.
+   */
+  covenantId: string;
 
   /** Controlled tab — "history" | "assetInfo". */
   activeTab: "history" | "assetInfo";
@@ -69,8 +75,8 @@ export interface TokenDetailPageProps {
  * wrapper, same convention as NameDetailPage / TransferConfirmPage.
  *
  * Today's Figma (nodes `14745:449924` verified, `14745:450123` unverified)
- * is much shorter than the original checklist: just Network, Contract
- * Address, Security — no Token Type / Mint Count / Transfer Count rows.
+ * is much shorter than the original checklist: just Network, Covenant ID,
+ * Security — no Token Type / Mint Count / Transfer Count rows.
  * Built to match Figma as drawn, per "Figma is source of truth" (Nicole,
  * 2026-09-25), not the longer checklist list from the earlier round.
  */
@@ -85,7 +91,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   chipLabel,
   chipIcon,
   network,
-  contractAddress,
+  covenantId,
   activeTab,
   onTabChange,
   historyContent,
@@ -97,6 +103,12 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
+        {/* Tabs — above the header card, matching Figma's actual order
+            (reviewer correction, 2026-09-26): the segmented control sits in
+            the fixed top region (14745:449924's "Top nav", y 0-156), the
+            header card is below it in "KNS list" (y 180+). */}
+        <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
+
         {/* Header card — icon, name + verified badge, price, standard chip. */}
         <View style={styles.headerCard}>
           <TokenIcon logo={logo} chainLogo={chainLogo} fallback={fallback} standard={standard} size={44} chainBadgeSize={20} />
@@ -116,9 +128,6 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           <NetworkTypeChip label={chipLabel} icon={chipIcon} />
         </View>
 
-        {/* Tabs */}
-        <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
-
         {activeTab === "assetInfo" ? (
           <View style={styles.section}>
             <Text allowFontScaling={false} style={styles.sectionTitle}>
@@ -129,7 +138,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
                 <DetailKVRow label="Network" value={network} />
               </View>
               <View style={[styles.infoRow, styles.infoRowBorder]}>
-                <DetailKVRow label="Contract Address" value={contractAddress} />
+                <DetailKVRow label="Covenant ID" value={covenantId} />
               </View>
               <View style={styles.infoRow}>
                 <DetailKVRow
