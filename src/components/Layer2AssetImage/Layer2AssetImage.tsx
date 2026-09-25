@@ -1,126 +1,21 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  ImageSourcePropType,
-} from "react-native";
-import { background } from "../../config/theme";
+import React from "react";
+import { AssetImage, ChainAssetImageProps } from "../AssetImage";
 
-export interface Layer2AssetImageProps {
-  /** Source for the main token image */
-  tokenImage?: ImageSourcePropType;
-  /** Source for the chain badge image */
-  chainImage?: ImageSourcePropType;
-  /** Fallback image used when tokenImage or chainImage is undefined or fails to load */
-  fallback?: ImageSourcePropType;
-  /** Diameter of the main token image (default: 40) */
-  tokenImageSize?: number;
-  /** Diameter of the chain badge image (default: 18) */
-  chainImageSize?: number;
-  /**
-   * How far the badge extends past the right edge of the token (default: -5).
-   * Negative = badge sticks out to the right; 0 = flush with token edge.
-   */
-  chainImageRightPosition?: number;
-  /**
-   * Omits the chain badge entirely — not even the fallback circle renders.
-   * Default false (existing behaviour: badge always shows, falling back to
-   * `fallback` when `chainImage` is undefined). Added for KCC20 support
-   * (D-071): some callers need to suppress the badge per-token rather than
-   * per-image. Opt-in, so existing callers are unaffected.
-   */
-  hideChainBadge?: boolean;
-}
+/**
+ * @deprecated Round 5, 2026-09-26 — Nicole: too many image components.
+ * `Layer2AssetImage`, `DualAssetImage`, and `TokenIcon` merged into one
+ * `AssetImage` (`variant="single" | "chain" | "dual"`). Use
+ * `<AssetImage variant="chain" .../>` in new code.
+ *
+ * Kept as a thin re-export, same name/prop shape, because kastle-mobile's
+ * `kastle-ui-port` imports this exact component by relative path
+ * (`components/kastle-ui-port/src/components/Layer2AssetImage`, confirmed
+ * via `git grep` on kastle-mobile's `origin/main`) — deleting or renaming
+ * it would break that port, not just this repo.
+ */
+export type Layer2AssetImageProps = ChainAssetImageProps;
 
-export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = ({
-  tokenImage,
-  chainImage,
-  fallback,
-  tokenImageSize = 40,
-  chainImageSize = 18,
-  chainImageRightPosition = -5,
-  hideChainBadge = false,
-}) => {
-  const [tokenError, setTokenError] = useState(false);
-
-  useEffect(() => {
-    setTokenError(false);
-  }, [tokenImage]);
-
-  const resolvedTokenImage = tokenError ? fallback : (tokenImage ?? fallback);
-  const resolvedChainImage = chainImage ?? fallback;
-
-  // Badge outer size includes the 1px border on each side
-  const badgeSize = chainImageSize + 1;
-  // Extra width the wrapper needs so the badge isn't clipped
-  const rightOverflow = Math.max(0, -chainImageRightPosition);
-  const wrapperWidth = tokenImageSize + rightOverflow;
-
-  return (
-    // Wrapper is tall as the token; wide enough to show the badge overflow
-    <View style={{ width: wrapperWidth, height: tokenImageSize }}>
-      {/* Token image — white circle underneath for transparent PNGs */}
-      <View
-        style={[
-          styles.tokenContainer,
-          { width: tokenImageSize, height: tokenImageSize, borderRadius: tokenImageSize / 2 },
-        ]}
-      >
-        <View
-          style={[
-            styles.whiteBg,
-            { width: tokenImageSize, height: tokenImageSize, borderRadius: tokenImageSize / 2 },
-          ]}
-        />
-        <Image
-          source={resolvedTokenImage}
-          style={{ width: tokenImageSize, height: tokenImageSize, borderRadius: tokenImageSize / 2 }}
-          resizeMode="cover"
-          onError={() => setTokenError(true)}
-        />
-      </View>
-
-      {/* Chain badge — bottom-aligned with the token, slightly past the right edge */}
-      {!hideChainBadge && (
-        <View
-          style={[
-            styles.chainBadge,
-            {
-              width: badgeSize,
-              height: badgeSize,
-              borderRadius: badgeSize / 2,
-              bottom: 0,
-              right: chainImageRightPosition,
-            },
-          ]}
-        >
-          <Image
-            source={resolvedChainImage}
-            style={{ width: chainImageSize, height: chainImageSize, borderRadius: chainImageSize / 2 }}
-            resizeMode="cover"
-          />
-        </View>
-      )}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  tokenContainer: {
-    overflow: "hidden",
-  },
-  whiteBg: {
-    position: "absolute",
-    backgroundColor: "#FFFFFF",
-  },
-  chainBadge: {
-    position: "absolute",
-    borderWidth: 1,
-    borderColor: background.bg100,
-    backgroundColor: background.bg100,
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+/** @deprecated See `Layer2AssetImageProps` above — use `AssetImage variant="chain"` in new code. */
+export const Layer2AssetImage: React.FC<Layer2AssetImageProps> = (props) => (
+  <AssetImage variant="chain" {...props} />
+);
