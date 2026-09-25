@@ -118,7 +118,14 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
                 </Text>
               </View>
             </View>
-            <Switch isEnabled={!item.isHidden} onToggle={() => onToggle(item.id)} />
+            <Switch
+              isEnabled={!item.isHidden}
+              onToggle={() => onToggle(item.id)}
+              // Distinguishes rows for screen readers when name+subLabel
+              // repeat (e.g. same-name NACHO across 4 standards) — the
+              // Switch itself has no visible text to derive a label from.
+              accessibilityLabel={`${item.name} ${item.subLabel}`}
+            />
           </View>
         )}
         ListEmptyComponent={

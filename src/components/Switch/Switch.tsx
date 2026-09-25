@@ -13,6 +13,13 @@ export interface SwitchProps {
   onToggle?: () => void;
   /** Disables interaction (still renders `isEnabled`'s colour/position). */
   isDisabled?: boolean;
+  /**
+   * Accessible name read by screen readers — this component has no
+   * visible text of its own to derive one from, so the caller must supply
+   * it (e.g. the row's token name) when the switch isn't already inside
+   * an accessible row that provides context on its own.
+   */
+  accessibilityLabel?: string;
 }
 
 const KNOB_SIZE = spacing.s5;
@@ -52,7 +59,12 @@ const KNOB_SIZE = spacing.s5;
 // already ≥44), zero visual change.
 const VERTICAL_HIT_SLOP = Math.max(0, (44 - spacing.s6) / 2);
 
-export const Switch: React.FC<SwitchProps> = ({ isEnabled, onToggle, isDisabled = false }) => {
+export const Switch: React.FC<SwitchProps> = ({
+  isEnabled,
+  onToggle,
+  isDisabled = false,
+  accessibilityLabel,
+}) => {
   return (
     <TouchableOpacity
       onPress={onToggle}
@@ -61,6 +73,9 @@ export const Switch: React.FC<SwitchProps> = ({ isEnabled, onToggle, isDisabled 
       // 0.7 — matches ChainFilterChip's activeOpacity (TokenSelectSheet.tsx), cited as the reference pattern above.
       activeOpacity={0.7}
       style={[styles.track, isEnabled ? styles.trackOn : styles.trackOff]}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: isEnabled, disabled: isDisabled }}
+      accessibilityLabel={accessibilityLabel}
     >
       <View style={[styles.knob, isEnabled ? styles.knobOn : styles.knobOff]} />
     </TouchableOpacity>
