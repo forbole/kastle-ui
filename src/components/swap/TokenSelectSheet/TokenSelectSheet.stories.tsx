@@ -45,14 +45,16 @@ const SAMPLE_TOKENS: TokenInfo[] = [
   },
 ];
 
-// Filter chip label text per Nicole+Leo sync, 2026-09-25 ("Swap: no
-// change except filter chip labels") — same substitution as
-// NetworkTypeChip's label text: Kasplex -> "Kasplex ERC20", Igra ->
-// "Igra ERC20". Native "Kaspa" is unchanged.
+// Filter chip label text — Nicole, round 3 (2026-09-26): filter chips
+// keep the SHORT labels ("Kaspa · KRC20 · Kasplex · Igra"), unchanged.
+// "it should be good like this, no need to change since it is just a
+// small chip." The long "{Network}-{Standard}" form is for
+// NetworkTypeChip only (Token Details header / Send Confirm), not filter
+// chips — reverts the substitution an earlier round wrongly applied here.
 const CHAIN_FILTERS = [
   { key: "evm_kas" as ChainFilter, label: "Kaspa", logo: placeholderLogo },
-  { key: "kasplex" as ChainFilter, label: "Kasplex ERC20", logo: placeholderLogo },
-  { key: "igra" as ChainFilter, label: "Igra ERC20", logo: placeholderLogo },
+  { key: "kasplex" as ChainFilter, label: "Kasplex", logo: placeholderLogo },
+  { key: "igra" as ChainFilter, label: "Igra", logo: placeholderLogo },
 ];
 
 // ---------------------------------------------------------------------------
