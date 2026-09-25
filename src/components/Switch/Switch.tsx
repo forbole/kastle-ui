@@ -15,7 +15,7 @@ export interface SwitchProps {
   isDisabled?: boolean;
 }
 
-const KNOB_SIZE = 20;
+const KNOB_SIZE = spacing.s5;
 
 /**
  * Small pill toggle switch — no existing Switch/Toggle component in this
@@ -37,13 +37,28 @@ const KNOB_SIZE = 20;
  * `colors.white` (`#FFFFFF`, the more authoritative resolved-variable
  * reading) rather than a raw `#fbfbfb` neither the design's own variable
  * list nor this repo's tokens actually name.
+ *
+ * ⚠️ Knob shadow: checked every `shadows.soft1-4`/`hard1-5` preset in
+ * theme.ts against Figma's `0px 1px 3px rgba(0,0,0,0.5)` — none match
+ * (they're all card/sheet-scale: radius 8-40, opacity 0.1-0.2). Kept as a
+ * literal per-platform shadow (`shadowColor`/`shadowOpacity`/`shadowRadius`
+ * on iOS, `elevation` on Android) rather than forcing an ill-fitting token
+ * onto a 20px knob.
  */
+// Touch target ≥44×44 (WCAG 2.1 AA, §3B) — the track is only 48×24
+// visually. Same derivation Button.tsx uses for its own sub-44pt sizes:
+// extend the *tappable* area with vertical hitSlop only (horizontal is
+// already ≥44), zero visual change.
+const VERTICAL_HIT_SLOP = Math.max(0, (44 - spacing.s6) / 2);
+
 export const Switch: React.FC<SwitchProps> = ({ isEnabled, onToggle, isDisabled = false }) => {
   return (
     <TouchableOpacity
       onPress={onToggle}
       disabled={isDisabled || !onToggle}
-      activeOpacity={0.8}
+      hitSlop={{ top: VERTICAL_HIT_SLOP, bottom: VERTICAL_HIT_SLOP }}
+      // 0.7 — matches ChainFilterChip's activeOpacity (TokenSelectSheet.tsx), cited as the reference pattern above.
+      activeOpacity={0.7}
       style={[styles.track, isEnabled ? styles.trackOn : styles.trackOff]}
     >
       <View style={[styles.knob, isEnabled ? styles.knobOn : styles.knobOff]} />
@@ -56,7 +71,7 @@ const styles = StyleSheet.create({
     width: spacing.s12,
     height: spacing.s6,
     borderRadius: borderRadius.full,
-    padding: 2,
+    padding: spacing.s0_5,
     justifyContent: "center",
   },
   trackOn: {
