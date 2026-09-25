@@ -4,7 +4,13 @@ import { View, StyleSheet } from "react-native";
 import { background } from "../../../config/theme";
 import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
 
-const placeholderLogo = require("../../../../assets/icon.png");
+// ⚠️ No real Kaspa brand logo exists in this repo (checked assets/ — only
+// icon.png/splash/favicon). Round 6, 2026-09-26 — reviewer: every logo
+// was the same placeholder "A" image, making D-071 hard to review
+// visually. picsum.photos seeded placeholder — same approach
+// Banner.stories.tsx already uses in this repo — NOT a real brand asset.
+const kaspaChainLogo = { uri: "https://picsum.photos/seed/kaspa-chain/64" };
+const tttLogo = { uri: "https://picsum.photos/seed/TTTT/80" };
 
 const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">) => {
   const [tab, setTab] = useState<"history" | "assetInfo">("assetInfo");
@@ -22,16 +28,21 @@ const meta: Meta<typeof TokenDetailPage> = {
   args: {
     name: "NACHO",
     priceLabel: "$0.00041",
-    logo: placeholderLogo,
-    chainLogo: placeholderLogo,
-    chipIcon: placeholderLogo,
+    logo: { uri: "https://picsum.photos/seed/NACHO/80" },
+    chainLogo: kaspaChainLogo,
+    chipIcon: kaspaChainLogo,
     network: "Kaspa",
     covenantId: "84b93d7f...48dj6",
   },
+  // Constrained to Figma's 393px frame width, centred (round 6,
+  // 2026-09-26 — reviewer: page stories were rendering full-width
+  // (1200px+) on the Storybook canvas, not comparable to Figma).
   decorators: [
     (Story) => (
-      <View style={storyStyles.decorator}>
-        <Story />
+      <View style={storyStyles.canvas}>
+        <View style={storyStyles.frame}>
+          <Story />
+        </View>
       </View>
     ),
   ],
@@ -108,6 +119,7 @@ export const FullInfo: Story = {
     <TokenDetailPageDemo
       {...args}
       name="TTTT"
+      logo={tttLogo}
       priceLabel="$0.052"
       isVerified
       standard="KCC20"
@@ -127,7 +139,13 @@ export const FullInfo: Story = {
 };
 
 const storyStyles = StyleSheet.create({
-  decorator: {
+  canvas: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: background.bg100,
+  },
+  frame: {
+    width: 393,
     flex: 1,
     backgroundColor: background.bg0,
   },

@@ -10,38 +10,53 @@ import { background, primary, textStyles, typography } from "../../../config/the
 
 const placeholderLogo = require("../../../../assets/icon.png");
 
+// ⚠️ No real Kaspa/Kasplex/Igra brand logos exist anywhere in this repo
+// (checked assets/ — only icon.png/splash/favicon — and grepped every
+// .stories.tsx for a distinct chain logo; found none). Round 6, 2026-09-26
+// — reviewer: every logo was the same placeholder "A" image, making D-071
+// (KCC20 badge vs KRC20 none vs Kasplex/Igra badges) impossible to review
+// visually in Storybook. Using picsum.photos seeded placeholders instead
+// — same remote-placeholder-image approach Banner.stories.tsx already
+// uses in this repo — NOT real brand assets, just visually distinct ones.
+const kaspaChainLogo = { uri: "https://picsum.photos/seed/kaspa-chain/64" };
+const tokenLogo = (seed: string) => ({ uri: `https://picsum.photos/seed/${seed}/80` });
+
+// No `standard` on these — matches the original data (undefined standard,
+// badge always shows via AssetImage's legacy default) so this fix only
+// swaps the placeholder image, it doesn't change which rows show a badge.
 const SAMPLE_TOKENS: TokenInfo[] = [
   {
     name: "KAS",
     symbol: "KAS",
     amount: "12.345678",
-    logo: placeholderLogo,
-    chainLogo: placeholderLogo,
+    logo: tokenLogo("KAS"),
+    chainLogo: kaspaChainLogo,
   },
   {
     name: "Wrapped KAS",
     symbol: "WKAS",
     amount: "0.5",
-    logo: placeholderLogo,
-    chainLogo: placeholderLogo,
+    logo: tokenLogo("WKAS"),
+    chainLogo: kaspaChainLogo,
   },
   {
     name: "iKAS",
     symbol: "iKAS",
     amount: "3.14",
-    logo: placeholderLogo,
-    chainLogo: placeholderLogo,
+    logo: tokenLogo("iKAS"),
+    chainLogo: kaspaChainLogo,
   },
   {
     name: "WiKAS",
     symbol: "WiKAS",
-    logo: placeholderLogo,
-    chainLogo: placeholderLogo,
+    logo: tokenLogo("WiKAS"),
+    chainLogo: kaspaChainLogo,
   },
   {
     name: "SomeToken",
     symbol: "STK",
-    chainLogo: placeholderLogo,
+    logo: tokenLogo("SomeToken"),
+    chainLogo: kaspaChainLogo,
   },
 ];
 
@@ -231,11 +246,13 @@ export const KCC20vsKRC20: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
     tokens: [
-      { name: "STICK", symbol: "STICK", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo },
-      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: placeholderLogo, chainLogo: placeholderLogo },
-      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo },
+      { name: "STICK", symbol: "STICK", amount: "1000000", logo: tokenLogo("STICK"), chainLogo: kaspaChainLogo, standard: "KCC20" },
+      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: tokenLogo("NACHO"), chainLogo: kaspaChainLogo },
+      // KRC20 never shows the badge (D-071) — chainLogo omitted, nothing
+      // to pass since it's never rendered.
+      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: tokenLogo("NACHO") },
+      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: tokenLogo("ZEAL"), chainLogo: kaspaChainLogo, standard: "KCC20" },
+      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: tokenLogo("SCAMCOIN") },
     ],
   },
 };
@@ -279,18 +296,27 @@ export const LongNamesWithAmount: Story = {
 export const CardVariantHome: Story = {
   name: "Card variant (Home)",
   render: () => {
+    // Amounts as raw numeric strings, no commas — formatBalance() does
+    // parseFloat() then re-adds its own comma formatting; a pre-formatted
+    // "1,000,000" parses as just `1` (round 6, 2026-09-26 fix).
     const tokens: TokenInfo[] = [
-      { name: "NACHO", symbol: "$0.230", amount: "1,000,000", amountUsd: "≈ $3,466 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "NACHO", symbol: "$0.230", amount: "1,233,608.32787357", amountUsd: "≈ $51.419 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20" },
-      { name: "SCAMCOIN", symbol: "$0.00000001", amount: "500,000", amountUsd: "≈ $0.005 USD", logo: placeholderLogo },
-      { name: "ZEAL", symbol: "$0.230", amount: "2,000,000.2314", amountUsd: "≈ $204.435 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "RUGPULL", symbol: "$0.000001", amount: "999,999", amountUsd: "≈ $1.00 USD", logo: placeholderLogo },
+      { name: "NACHO", symbol: "$0.230", amount: "1000000", amountUsd: "≈ $3,466 USD", logo: tokenLogo("NACHO-kcc20"), chainLogo: kaspaChainLogo, standard: "KCC20" },
+      { name: "NACHO", symbol: "$0.230", amount: "1233608.32787357", amountUsd: "≈ $51.419 USD", logo: tokenLogo("NACHO-krc20") },
+      { name: "SCAMCOIN", symbol: "$0.00000001", amount: "500000", amountUsd: "≈ $0.005 USD", logo: tokenLogo("SCAMCOIN") },
+      { name: "ZEAL", symbol: "$0.230", amount: "2000000.2314", amountUsd: "≈ $204.435 USD", logo: tokenLogo("ZEAL"), chainLogo: kaspaChainLogo, standard: "KCC20" },
+      { name: "RUGPULL", symbol: "$0.000001", amount: "999999", amountUsd: "≈ $1.00 USD", logo: tokenLogo("RUGPULL") },
     ];
     return (
-      <View style={storyStyles.cardList}>
-        {tokens.map((t, i) => (
-          <TokenItem key={i} variant="card" token={t} />
-        ))}
+      // Constrained to Figma's 393px frame width, centred (round 6,
+      // 2026-09-26 — reviewer: page/card stories were rendering
+      // full-width (1200px+) on the Storybook canvas, not comparable to
+      // Figma).
+      <View style={storyStyles.cardCanvas}>
+        <View style={storyStyles.cardList}>
+          {tokens.map((t, i) => (
+            <TokenItem key={i} variant="card" token={t} />
+          ))}
+        </View>
       </View>
     );
   },
@@ -311,7 +337,13 @@ const storyStyles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: background.bg0,
   },
+  cardCanvas: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: background.bg100,
+  },
   cardList: {
+    width: 393,
     backgroundColor: background.bg0,
     padding: 20,
     gap: 8,

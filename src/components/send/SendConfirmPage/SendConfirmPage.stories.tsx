@@ -27,10 +27,15 @@ const meta: Meta<typeof SendConfirmPage> = {
     estFeeUsd: "≈ $1.345 USD",
     onConfirm: () => {},
   },
+  // Constrained to Figma's 393px frame width, centred (round 6,
+  // 2026-09-26 — reviewer: page stories were rendering full-width
+  // (1200px+) on the Storybook canvas, not comparable to Figma).
   decorators: [
     (Story) => (
-      <View style={styles.decorator}>
-        <Story />
+      <View style={styles.canvas}>
+        <View style={styles.frame}>
+          <Story />
+        </View>
       </View>
     ),
   ],
@@ -90,7 +95,13 @@ export const ConfirmDisabled: Story = {
 };
 
 const styles = StyleSheet.create({
-  decorator: {
+  canvas: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: background.bg100,
+  },
+  frame: {
+    width: 393,
     flex: 1,
     backgroundColor: background.bg0,
   },
