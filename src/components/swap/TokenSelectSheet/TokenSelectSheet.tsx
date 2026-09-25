@@ -56,6 +56,16 @@ export interface TokenInfo {
    * no lookup.
    */
   standard?: TokenStandard;
+  /**
+   * Which `ChainFilterConfig.key`(s) this token belongs to, for pages that
+   * actually filter their list by the selected chip (e.g.
+   * SendSelectTokenPage) — a token can belong to more than one (Figma
+   * node `14741:392168` "Variants": a Kaspa-native KRC20 token shows under
+   * BOTH the "Kaspa" and "KRC20" filter tabs). Independent of `standard` —
+   * this is a network/category filter, not the KCC20 verified-badge rule.
+   * TokenSelectSheet's own Swap sheet doesn't use this field.
+   */
+  chainKeys?: ChainFilter[];
 }
 
 export type ChainFilter = string | null;
