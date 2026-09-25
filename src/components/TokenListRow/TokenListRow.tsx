@@ -10,13 +10,13 @@ export interface TokenListRowProps {
   /** Price line shown under the name, e.g. "$0.230". */
   priceLabel?: string;
   logo?: ImageSourcePropType;
-  /** Chain/network badge image on the icon. Whether it actually renders is
-   * driven by `standard`, not by passing/omitting this alone — see
-   * TokenIcon (D-071). */
+  /** Chain/network badge image on the icon — only used when `standard`
+   * also allows the badge to show, see TokenIcon (D-071). */
   chainLogo?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
-  /** Token standard — KRC20 never shows the chain corner badge, every other
-   * value (including KCC20) shows it when `chainLogo` is provided (D-071). */
+  /** Token standard — KRC20 and Native never show the chain corner badge;
+   * KCC20/ERC20 show it only when `chainLogo` is also provided (D-071,
+   * see TokenIcon for the full rule). */
   standard?: TokenStandard;
   /** Formatted token amount, e.g. "1,000,000". */
   amount: string;

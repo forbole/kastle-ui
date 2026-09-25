@@ -4,10 +4,15 @@ import { Layer2AssetImage } from "../Layer2AssetImage";
 
 /**
  * Token standard. Drives whether the chain corner badge on a token icon
- * renders (D-071, 2026-09-25): KRC20 never shows it; every other standard
- * (KCC20, ERC20, Native — including tokens that omit this prop entirely)
- * keeps the default behaviour of showing it whenever `chainLogo` is
- * provided.
+ * renders (D-071, 2026-09-25): KRC20 and Native never show it; every other
+ * standard (KCC20, ERC20) shows it, but only when a `chainLogo` is actually
+ * provided — omitting `chainLogo` never falls back to a grey placeholder
+ * circle (reviewer correction, 2026-09-25: `Layer2AssetImage` falls back to
+ * its own `fallback` image for the badge when `chainImage` is undefined,
+ * which without this rule showed a stray grey circle on native-KAS-style
+ * tokens that pass no chainLogo). Figma: Home list row 1 ("KAS", native,
+ * Figma node `14745:450124`) and Send select's "Kaspa" row
+ * (`14741:396213`) both show NO badge.
  *
  * ⚠️ Correction (team-lead, 2026-09-25): the Home list's "KAS"/"KAS" pair
  * on rows 1–2 (Figma node `14745:450124`) is NOT a KCC20/KRC20 example —
@@ -48,7 +53,7 @@ export const TokenIcon: React.FC<TokenIconProps> = ({
   size = 40,
   chainBadgeSize = 18,
 }) => {
-  const hideChainBadge = standard === "KRC20";
+  const hideChainBadge = standard === "KRC20" || standard === "Native" || !chainLogo;
 
   return (
     <Layer2AssetImage
