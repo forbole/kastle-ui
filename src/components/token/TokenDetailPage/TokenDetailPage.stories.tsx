@@ -85,6 +85,53 @@ export const NativeKAS: Story = {
   ),
 };
 
+// ---------------------------------------------------------------------------
+// variant="basic" | "full" (round 5 queued item B, 2026-09-26)
+// ---------------------------------------------------------------------------
+
+/** Default 3-row list (Network / Covenant ID / Security) — same as the
+ * stories above, named explicitly so the two variants are easy to find
+ * side by side. */
+export const BasicInfo: Story = {
+  name: "Basic info",
+  render: (args) => (
+    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
+  ),
+};
+
+/**
+ * Complete Token Info list — Nicole's source frame `14590:112169` →
+ * leftmost "KCC20" section frame (node `14576:67578`, token "TTTT").
+ * Network stays "Kaspa" (not the frame's drawn "Kasplex") per the earlier
+ * KCC20/KRC20 → "Kaspa" decision; Covenant ID uses the page's own default
+ * example value, not the frame's literal placeholder text "Covenant ID".
+ * Security row still appends at the end (KCC20-only rule, unchanged from
+ * basic) even though this specific frame doesn't draw one.
+ */
+export const FullInfo: Story = {
+  name: "Full info",
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="TTTT"
+      priceLabel="$0.052"
+      isVerified
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+      variant="full"
+      totalMintedPercent="10%"
+      totalMintedFraction="(2.5B / 25B)"
+      mintCount="24% (480 /2,400)"
+      holderCount="9,998,095"
+      transferCount="9,998,095"
+      preallocationAmount="1,000,000"
+      defaultMintAmount="9,998,095"
+      decimal="8"
+      minter="kaspa:qpzp...pnwz"
+    />
+  ),
+};
+
 const storyStyles = StyleSheet.create({
   decorator: {
     flex: 1,

@@ -71,6 +71,53 @@ export interface TokenDetailPageProps {
    */
   covenantIdLabel?: string;
 
+  /**
+   * "basic" (default) — the 3-row Network/Covenant ID/Security list Figma
+   * currently draws for Token Details (`14745:449924`/`14745:450123`).
+   * "full" — the complete Token Info list (round 5 queued item B,
+   * 2026-09-26; Nicole's source frame `14590:112169` → leftmost "KCC20"
+   * section frame, node `14576:67578`): Network, Covenant ID, Total
+   * Minted, Mint Count, Holder Count, Transfer Count, Preallocation
+   * Amount, Default Mint Amount, Decimal, Minter, then Security (same
+   * KCC20-only rule as basic, appended at the end — this exact frame
+   * doesn't draw a Security row, but the rule is unchanged from basic per
+   * the dispatch). All full-variant fields below are optional and
+   * data-free props — this component renders whatever it's given and
+   * skips any row whose value isn't passed, so Leo can wire whichever
+   * APIs actually exist without every row needing to be ready at once.
+   */
+  variant?: "basic" | "full";
+  /**
+   * Total Minted row's percentage value, e.g. "10%" — rendered in
+   * `colors.success` (Figma binds this exact text to
+   * `text/success-color`, `#2dd4bf` — an exact match to `colors.success`
+   * in theme.ts). Full variant only.
+   */
+  totalMintedPercent?: string;
+  /**
+   * Total Minted row's secondary line under the percentage, e.g.
+   * "(2.5B / 25B)" — `typography.t600` 12px (Figma:
+   * `typography/typography600`, `#9eb7c4`, exact match). Full variant
+   * only; only rendered when `totalMintedPercent` is also set.
+   */
+  totalMintedFraction?: string;
+  /** Full variant only, e.g. "24% (480 /2,400)" — Figma draws this as one
+   * plain string on a single line, unlike Total Minted's two-line/coloured
+   * treatment. */
+  mintCount?: string;
+  /** Full variant only, e.g. "9,998,095". */
+  holderCount?: string;
+  /** Full variant only, e.g. "9,998,095". */
+  transferCount?: string;
+  /** Full variant only, e.g. "1,000,000". */
+  preallocationAmount?: string;
+  /** Full variant only, e.g. "9,998,095". */
+  defaultMintAmount?: string;
+  /** Full variant only, e.g. "8". */
+  decimal?: string;
+  /** Full variant only, e.g. "kaspa:qpzp...pnwz" (caller formats the ellipsis). */
+  minter?: string;
+
   /** Controlled tab — "history" | "assetInfo". */
   activeTab: "history" | "assetInfo";
   onTabChange: (tab: "history" | "assetInfo") => void;
@@ -89,9 +136,13 @@ export interface TokenDetailPageProps {
  *
  * Today's Figma (nodes `14745:449924` verified, `14745:450123` unverified)
  * is much shorter than the original checklist: just Network, Covenant ID,
- * Security — no Token Type / Mint Count / Transfer Count rows.
- * Built to match Figma as drawn, per "Figma is source of truth" (Nicole,
+ * Security — no Token Type / Mint Count / Transfer Count rows. Built to
+ * match Figma as drawn, per "Figma is source of truth" (Nicole,
  * 2026-09-25), not the longer checklist list from the earlier round.
+ *
+ * `variant="full"` (round 5 queued item B, 2026-09-26) brings the longer
+ * list back for screens that need it — see `variant`'s own doc comment on
+ * `TokenDetailPageProps` for the row list and Figma node.
  */
 export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   name,
@@ -106,6 +157,16 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   network,
   covenantId,
   covenantIdLabel = "Covenant ID",
+  variant = "basic",
+  totalMintedPercent,
+  totalMintedFraction,
+  mintCount,
+  holderCount,
+  transferCount,
+  preallocationAmount,
+  defaultMintAmount,
+  decimal,
+  minter,
   activeTab,
   onTabChange,
   historyContent,
@@ -119,6 +180,76 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // only exists on Token Details at all now — the Security row itself is
   // hidden (not just its value) for Native/KRC20/ERC20, not only KCC20.
   const showSecurityRow = standard === "KCC20";
+
+  // Token Info rows, built as an array (round 5 queued item B, 2026-09-26)
+  // so the border-between-rows logic (every row but the last) works the
+  // same regardless of which rows are actually present, instead of the
+  // old hardcoded "covenantId gets a border only if Security follows" —
+  // that only worked because basic was always exactly 2-or-3 rows.
+  const infoRows: { key: string; node: React.ReactNode }[] = [
+    { key: "network", node: <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} /> },
+    { key: "covenantId", node: <DetailKVRow label={covenantIdLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
+  ];
+  if (variant === "full") {
+    if (totalMintedPercent !== undefined) {
+      infoRows.push({
+        key: "totalMinted",
+        node: (
+          <DetailKVRow
+            label="Total Minted"
+            value=""
+            valueNode={
+              <View style={styles.totalMintedValue}>
+                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.totalMintedPercent]}>
+                  {totalMintedPercent}
+                </Text>
+                {!!totalMintedFraction && (
+                  <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.totalMintedFraction]}>
+                    {totalMintedFraction}
+                  </Text>
+                )}
+              </View>
+            }
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
+    }
+    if (mintCount !== undefined) {
+      infoRows.push({ key: "mintCount", node: <DetailKVRow label="Mint Count" value={mintCount} paddingVertical={spacing.s3_5} /> });
+    }
+    if (holderCount !== undefined) {
+      infoRows.push({ key: "holderCount", node: <DetailKVRow label="Holder Count" value={holderCount} paddingVertical={spacing.s3_5} /> });
+    }
+    if (transferCount !== undefined) {
+      infoRows.push({ key: "transferCount", node: <DetailKVRow label="Transfer Count" value={transferCount} paddingVertical={spacing.s3_5} /> });
+    }
+    if (preallocationAmount !== undefined) {
+      infoRows.push({ key: "preallocationAmount", node: <DetailKVRow label="Preallocation Amount" value={preallocationAmount} paddingVertical={spacing.s3_5} /> });
+    }
+    if (defaultMintAmount !== undefined) {
+      infoRows.push({ key: "defaultMintAmount", node: <DetailKVRow label="Default Mint Amount" value={defaultMintAmount} paddingVertical={spacing.s3_5} /> });
+    }
+    if (decimal !== undefined) {
+      infoRows.push({ key: "decimal", node: <DetailKVRow label="Decimal" value={decimal} paddingVertical={spacing.s3_5} /> });
+    }
+    if (minter !== undefined) {
+      infoRows.push({ key: "minter", node: <DetailKVRow label="Minter" value={minter} paddingVertical={spacing.s3_5} /> });
+    }
+  }
+  if (showSecurityRow) {
+    infoRows.push({
+      key: "security",
+      node: (
+        <DetailKVRow
+          label="Security"
+          value={showVerified ? "Verified" : "Unverified"}
+          valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
+          paddingVertical={spacing.s3_5}
+        />
+      ),
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -178,22 +309,11 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               Token Info
             </Text>
             <View style={styles.infoCard}>
-              <View style={[styles.infoRow, styles.infoRowBorder]}>
-                <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} />
-              </View>
-              <View style={[styles.infoRow, showSecurityRow && styles.infoRowBorder]}>
-                <DetailKVRow label={covenantIdLabel} value={covenantId} paddingVertical={spacing.s3_5} />
-              </View>
-              {showSecurityRow && (
-                <View style={styles.infoRow}>
-                  <DetailKVRow
-                    label="Security"
-                    value={showVerified ? "Verified" : "Unverified"}
-                    valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
-                    paddingVertical={spacing.s3_5}
-                  />
+              {infoRows.map((row, i) => (
+                <View key={row.key} style={[styles.infoRow, i < infoRows.length - 1 && styles.infoRowBorder]}>
+                  {row.node}
                 </View>
-              )}
+              ))}
             </View>
           </View>
         ) : (
@@ -294,5 +414,22 @@ const styles = StyleSheet.create({
   infoRowBorder: {
     borderBottomWidth: borderWidth.bw1,
     borderBottomColor: border.b200,
+  },
+  // Total Minted row (full variant only) — built via DetailKVRow's
+  // `valueNode` instead of its default plain-text `value`, since this row
+  // needs a colour DetailKVRow's own props don't expose (success-tinted
+  // percentage) plus a secondary line in a different grey than
+  // DetailKVRow's built-in `valueSubtext` uses (typography.t600 here vs
+  // DetailKVRow's default typography.t700) — DetailKVRow is a shared
+  // production component (ActivityDetailSheet and others), so this stays
+  // local rather than changing its default subtext colour globally.
+  totalMintedValue: {
+    alignItems: "flex-end",
+  },
+  totalMintedPercent: {
+    color: colors.success,
+  },
+  totalMintedFraction: {
+    color: typography.t600,
   },
 });
