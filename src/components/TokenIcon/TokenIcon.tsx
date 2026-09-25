@@ -7,10 +7,15 @@ import { Layer2AssetImage } from "../Layer2AssetImage";
  * renders (D-071, 2026-09-25): KRC20 never shows it; every other standard
  * (KCC20, ERC20, Native — including tokens that omit this prop entirely)
  * keeps the default behaviour of showing it whenever `chainLogo` is
- * provided. Verified against the Home token list (Figma node
- * `14745:450124`): the "KAS" / "KAS" same-name pair on rows 1–2 is both
- * verified, but only row 2 carries the corner badge — confirming the badge
- * is an independent, standard-driven flag, not tied to `isVerified`.
+ * provided.
+ *
+ * ⚠️ Correction (team-lead, 2026-09-25): the Home list's "KAS"/"KAS" pair
+ * on rows 1–2 (Figma node `14745:450124`) is NOT a KCC20/KRC20 example —
+ * row 2's corner badge is the black Kasplex "K" (KAS bridged onto Kasplex
+ * L2), row 1 is plain native KAS on Kaspa L1. Do not cite that pair as
+ * D-071 evidence (an earlier version of this comment did). The real KCC20
+ * example on that same frame is row 3, "NACHO" — verified, with the teal
+ * Kaspa corner badge.
  */
 export type TokenStandard = "KCC20" | "KRC20" | "ERC20" | "Native";
 
