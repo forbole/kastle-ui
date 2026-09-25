@@ -671,8 +671,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s2,
   },
+  // Round 6 (2026-09-26, team-lead — iPad responsiveness pass): `width:
+  // 114` was a bare fixed number, flagged as a "fixed width that doesn't
+  // scale". Figma has no tablet frame for this row (mobile-only, 393px),
+  // so there's no ground-truth wide-screen value to match — flagged as a
+  // judgment call in the PR. Converted to flexBasis/flexShrink/minWidth:
+  // at the 393px viewport this computes identically to the old fixed 114
+  // (flexGrow: 0 means it never grows past its basis, same as a bare
+  // width, since the sibling tokenAmountColumnCard is flex:1 and absorbs
+  // all extra space) — zero visual change on phone. minWidth: 90 is the
+  // only behavioural difference: on a very narrow viewport this column
+  // can now shrink instead of forcing overflow, which a bare `width`
+  // can't do.
   tokenMetaCard: {
-    width: 114,
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: 114,
+    minWidth: 90,
     gap: spacing.s1_5,
   },
   // Figma's sub-text under both the name ("$0.230") and the amount

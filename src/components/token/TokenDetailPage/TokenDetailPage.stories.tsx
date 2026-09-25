@@ -4,13 +4,7 @@ import { View, StyleSheet } from "react-native";
 import { background } from "../../../config/theme";
 import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
 
-// ⚠️ No real Kaspa brand logo exists in this repo (checked assets/ — only
-// icon.png/splash/favicon). Round 6, 2026-09-26 — reviewer: every logo
-// was the same placeholder "A" image, making D-071 hard to review
-// visually. picsum.photos seeded placeholder — same approach
-// Banner.stories.tsx already uses in this repo — NOT a real brand asset.
-const kaspaChainLogo = { uri: "https://picsum.photos/seed/kaspa-chain/64" };
-const tttLogo = { uri: "https://picsum.photos/seed/TTTT/80" };
+const placeholderLogo = require("../../../../assets/icon.png");
 
 const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">) => {
   const [tab, setTab] = useState<"history" | "assetInfo">("assetInfo");
@@ -28,21 +22,21 @@ const meta: Meta<typeof TokenDetailPage> = {
   args: {
     name: "NACHO",
     priceLabel: "$0.00041",
-    logo: { uri: "https://picsum.photos/seed/NACHO/80" },
-    chainLogo: kaspaChainLogo,
-    chipIcon: kaspaChainLogo,
+    logo: placeholderLogo,
+    chainLogo: placeholderLogo,
+    chipIcon: placeholderLogo,
     network: "Kaspa",
     covenantId: "84b93d7f...48dj6",
   },
-  // Constrained to Figma's 393px frame width, centred (round 6,
-  // 2026-09-26 — reviewer: page stories were rendering full-width
-  // (1200px+) on the Storybook canvas, not comparable to Figma).
+  // No custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: a
+  // fixed 393px frame here broke the iPad viewport in Storybook's own
+  // viewport addon). TokenDetailPage's own container is flex:1 with no
+  // fixed width, so it already fills whatever viewport is selected —
+  // same as NameDetailPage.stories.tsx, which has no decorator either.
   decorators: [
     (Story) => (
-      <View style={storyStyles.canvas}>
-        <View style={storyStyles.frame}>
-          <Story />
-        </View>
+      <View style={storyStyles.screen}>
+        <Story />
       </View>
     ),
   ],
@@ -119,7 +113,7 @@ export const FullInfo: Story = {
     <TokenDetailPageDemo
       {...args}
       name="TTTT"
-      logo={tttLogo}
+      logo={placeholderLogo}
       priceLabel="$0.052"
       isVerified
       standard="KCC20"
@@ -139,13 +133,7 @@ export const FullInfo: Story = {
 };
 
 const storyStyles = StyleSheet.create({
-  canvas: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: background.bg100,
-  },
-  frame: {
-    width: 393,
+  screen: {
     flex: 1,
     backgroundColor: background.bg0,
   },

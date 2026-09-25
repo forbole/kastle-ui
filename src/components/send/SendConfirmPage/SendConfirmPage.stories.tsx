@@ -27,15 +27,15 @@ const meta: Meta<typeof SendConfirmPage> = {
     estFeeUsd: "≈ $1.345 USD",
     onConfirm: () => {},
   },
-  // Constrained to Figma's 393px frame width, centred (round 6,
-  // 2026-09-26 — reviewer: page stories were rendering full-width
-  // (1200px+) on the Storybook canvas, not comparable to Figma).
+  // No custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: a
+  // fixed 393px frame here broke the iPad viewport in Storybook's own
+  // viewport addon). SendConfirmPage's own container is flex:1 with no
+  // fixed width, so it already fills whatever viewport is selected —
+  // same as NameDetailPage.stories.tsx, which has no decorator either.
   decorators: [
     (Story) => (
-      <View style={styles.canvas}>
-        <View style={styles.frame}>
-          <Story />
-        </View>
+      <View style={styles.screen}>
+        <Story />
       </View>
     ),
   ],
@@ -95,13 +95,7 @@ export const ConfirmDisabled: Story = {
 };
 
 const styles = StyleSheet.create({
-  canvas: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: background.bg100,
-  },
-  frame: {
-    width: 393,
+  screen: {
     flex: 1,
     backgroundColor: background.bg0,
   },
