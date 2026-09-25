@@ -21,6 +21,7 @@ import {
 } from "../../../config/theme";
 import { SwipeToConfirm } from "../../SwipeToConfirm";
 import { NetworkTypeChip } from "../../NetworkTypeChip";
+import { TokenStandard } from "../../AssetImage";
 
 export interface SendConfirmPageProps {
   /** Top illustration (Figma's "sign" scroll+feather art) — caller-supplied,
@@ -35,11 +36,16 @@ export interface SendConfirmPageProps {
    * Chip label shown on BOTH "Send from" and "Send to" rows — Figma shows
    * the identical label on both (e.g. "Kaspa-KCC20" / "Kaspa-KRC20", hyphen
    * form per Nicole's round-3 decision), not two different ones.
-   * NetworkTypeChip's colour (verified against this exact screen) is used
-   * as-is — that component only has one colour now, no tone prop.
    */
   chipLabel: string;
-  chipIcon?: ImageSourcePropType;
+  /**
+   * Drives the chip's colour (round 5, 2026-09-26): KCC20 gets its own
+   * raw-hex colour, everything else the token-bound "info" colour — see
+   * NetworkTypeChip's doc comment for the full provenance (re-read live
+   * against this exact screen: `14741:398568` KCC20, `14741:398569`
+   * KRC20).
+   */
+  standard?: TokenStandard;
 
   /** Formatted send amount, e.g. "1,608.32787 NACHO". */
   amount: string;
@@ -93,7 +99,7 @@ export const SendConfirmPage: React.FC<SendConfirmPageProps> = ({
   senderAddress,
   recipientAddress,
   chipLabel,
-  chipIcon,
+  standard,
   amount,
   amountUsd,
   estFeeAmount,
@@ -125,7 +131,9 @@ export const SendConfirmPage: React.FC<SendConfirmPageProps> = ({
               <Text allowFontScaling={false} style={styles.rowTitle}>
                 Send from
               </Text>
-              <NetworkTypeChip label={chipLabel} icon={chipIcon} />
+              {/* No icon — Figma's Send Confirm chip markup has no leading
+                  image (round 5, 2026-09-26), unlike Token Details' chip. */}
+              <NetworkTypeChip label={chipLabel} standard={standard} />
             </View>
             <Text allowFontScaling={false} style={styles.rowAddress}>
               {senderAddress}
@@ -138,7 +146,7 @@ export const SendConfirmPage: React.FC<SendConfirmPageProps> = ({
               <Text allowFontScaling={false} style={styles.rowTitle}>
                 Send to
               </Text>
-              <NetworkTypeChip label={chipLabel} icon={chipIcon} />
+              <NetworkTypeChip label={chipLabel} standard={standard} />
             </View>
             <Text allowFontScaling={false} style={styles.rowAddress}>
               {recipientAddress}

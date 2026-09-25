@@ -157,7 +157,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             </View>
           </View>
           <View style={styles.headerRight}>
-            <NetworkTypeChip label={chipLabel} icon={chipIcon} />
+            <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
           </View>
         </View>
 
