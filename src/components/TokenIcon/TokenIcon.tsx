@@ -7,20 +7,11 @@ import { Layer2AssetImage } from "../Layer2AssetImage";
  * renders (D-071, 2026-09-25): KRC20 and Native never show it; every other
  * standard (KCC20, ERC20) shows it, but only when a `chainLogo` is actually
  * provided — omitting `chainLogo` never falls back to a grey placeholder
- * circle (reviewer correction, 2026-09-25: `Layer2AssetImage` falls back to
- * its own `fallback` image for the badge when `chainImage` is undefined,
- * which without this rule showed a stray grey circle on native-KAS-style
- * tokens that pass no chainLogo). Figma: Home list row 1 ("KAS", native,
- * Figma node `14745:450124`) and Send select's "Kaspa" row
- * (`14741:396213`) both show NO badge.
- *
- * ⚠️ Correction (team-lead, 2026-09-25): the Home list's "KAS"/"KAS" pair
- * on rows 1–2 (Figma node `14745:450124`) is NOT a KCC20/KRC20 example —
- * row 2's corner badge is the black Kasplex "K" (KAS bridged onto Kasplex
- * L2), row 1 is plain native KAS on Kaspa L1. Do not cite that pair as
- * D-071 evidence (an earlier version of this comment did). The real KCC20
- * example on that same frame is row 3, "NACHO" — verified, with the teal
- * Kaspa corner badge.
+ * circle (`Layer2AssetImage` falls back to its own `fallback` image for the
+ * badge when `chainImage` is undefined otherwise). Figma: Home list row 1
+ * ("KAS", native, node `14745:450124`) and Send select's "Kaspa" row
+ * (`14741:396213`) both show no badge; the same frame's row 3, "NACHO"
+ * (verified, KCC20), shows the teal Kaspa corner badge.
  */
 export type TokenStandard = "KCC20" | "KRC20" | "ERC20" | "Native";
 
