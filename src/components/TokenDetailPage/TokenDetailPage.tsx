@@ -201,7 +201,14 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.bw1,
     borderColor: border.b200,
     backgroundColor: white["5%"],
-    padding: spacing.s4,
+    // Figma's header row has pl-[spacing/3] (12) on the left content
+    // section and pr-[spacing/3] (12) on the right chip section — 12, not
+    // 16, on both outer horizontal edges (confirmed via get_design_context,
+    // round 3 padding audit, 2026-09-26). Vertical padding left unchanged
+    // — Figma's row height there is content/fixed-height driven (py-0 on
+    // the inner flex divs), not directly comparable to a single number.
+    paddingHorizontal: spacing.s3,
+    paddingVertical: spacing.s4,
   },
   headerText: {
     flex: 1,
