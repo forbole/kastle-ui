@@ -89,6 +89,21 @@ export interface ChainFilterConfig {
   logo: ImageSourcePropType;
 }
 
+/**
+ * Additive multi-select toggle for the network filter chips: tapping an
+ * inactive chip adds it, tapping an active chip removes it — several chips
+ * can be active at once, and an empty array means no filter (no chip
+ * highlighted, full list shows). This is the actual production toggle
+ * behaviour (`TokenSelectSheet`'s own `handleChainFilterPress`); exported
+ * here so any other screen using these chips (e.g.
+ * `SendSelectTokenPage`) shares this exact logic instead of re-implementing
+ * its own (round 5, 2026-09-26 — SendSelectTokenPage previously had a
+ * single-select variant of this that didn't match production).
+ */
+export function toggleChainFilter(current: ChainFilter[], key: ChainFilter): ChainFilter[] {
+  return current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
+}
+
 export interface RenderItemParams {
   onPress: (token: TokenInfo) => void;
 }
@@ -337,10 +352,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
   const handleChainFilterPress = useCallback(
     (key: ChainFilter) => {
-      const current = activeChainFilterRef.current;
-      const next = current.includes(key)
-        ? current.filter((k) => k !== key)
-        : [...current, key];
+      const next = toggleChainFilter(activeChainFilterRef.current, key);
       if (onChainFilterChange) {
         onChainFilterChange(next);
       } else {
