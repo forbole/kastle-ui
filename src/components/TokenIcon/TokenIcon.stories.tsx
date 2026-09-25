@@ -45,9 +45,17 @@ export const NoStandard: Story = {
 };
 
 /**
- * Side-by-side — same logo, `standard` is the only thing that changes.
- * Mirrors the Home token list's "KAS"/"KAS" same-name pair (Figma node
- * `14745:450124`, rows 1–2): both verified, only one carries the badge.
+ * Side-by-side — same logo, `standard` is the only thing that changes, at
+ * the default 40px list-row size.
+ *
+ * ⚠️ Correction (team-lead, 2026-09-25): an earlier version of this story's
+ * doc comment cited the Home list's "KAS"/"KAS" pair (rows 1–2, Figma node
+ * `14745:450124`) as the real-world example this mirrors. That pair is NOT
+ * a KCC20/KRC20 example — row 2's corner badge is the black Kasplex "K"
+ * (KAS bridged onto Kasplex L2), row 1 is plain native KAS on Kaspa L1. The
+ * real KCC20 example on that frame is row 3, "NACHO" (verified, teal
+ * Kaspa badge). This story is a synthetic standard comparison, not a
+ * citation of that pair.
  */
 export const KCC20VsKRC20: Story = {
   render: () => (
@@ -58,6 +66,28 @@ export const KCC20VsKRC20: Story = {
       </View>
       <View style={styles.item}>
         <TokenIcon logo={placeholderLogo} chainLogo={placeholderLogo} standard="KRC20" />
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.label]}>KRC20</Text>
+      </View>
+    </View>
+  ),
+};
+
+/**
+ * Side-by-side at the Send-amount screen's small size (Figma node
+ * `14586:32431` — the icon next to the big amount number, ~24px). Nicole's
+ * Figma note: "Make sure KCC token has a logo identifier here while KRC
+ * doesn't" — this story is for checking the badge is still legible once
+ * shrunk down, not just at the 40px list-row size above.
+ */
+export const SendAmountSize: Story = {
+  render: () => (
+    <View style={styles.row}>
+      <View style={styles.item}>
+        <TokenIcon logo={placeholderLogo} chainLogo={placeholderLogo} standard="KCC20" size={24} chainBadgeSize={12} />
+        <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.label]}>KCC20</Text>
+      </View>
+      <View style={styles.item}>
+        <TokenIcon logo={placeholderLogo} chainLogo={placeholderLogo} standard="KRC20" size={24} chainBadgeSize={12} />
         <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.label]}>KRC20</Text>
       </View>
     </View>
