@@ -32,6 +32,9 @@ import { VerifiedBadge } from "../../VerifiedBadge";
 // Types
 // ---------------------------------------------------------------------------
 
+/** Token standard — drives the chain corner badge (D-071). */
+export type TokenStandard = "KCC20" | "KRC20" | "ERC20" | "Native";
+
 export interface TokenInfo {
   name: string;
   symbol?: string;
@@ -42,11 +45,13 @@ export interface TokenInfo {
    * nothing in its place — no label, no placeholder. */
   isVerified?: boolean;
   /**
-   * Small text after the name for same-name disambiguation across
-   * standards, e.g. "KCC20" / "KRC20" (D-064). Omit when the name is
-   * unambiguous.
+   * Token standard. Only used today to decide whether the chain corner
+   * badge on the token icon renders (D-071, 2026-09-25): KRC20 never shows
+   * it; every other standard (including KCC20, and tokens that omit this
+   * prop) keeps the existing behaviour — badge shows whenever `chainLogo`
+   * is provided. Pure rendering switch, no lookup.
    */
-  standardLabel?: string;
+  standard?: TokenStandard;
 }
 
 export type ChainFilter = string | null;
@@ -105,6 +110,11 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
 
   const formattedAmount = formatBalance(token.amount);
 
+  // D-071: KRC20 never shows the chain corner badge; every other standard
+  // (including KCC20 and tokens with no `standard` set) keeps the existing
+  // behaviour of showing it whenever a chainLogo is provided.
+  const hideChainBadge = token.standard === "KRC20";
+
   return (
     <TouchableOpacity
       style={[styles.tokenRow, isDisabled && styles.tokenRowDisabled]}
@@ -119,6 +129,7 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
         fallback={fallback}
         tokenImageSize={40}
         chainImageSize={18}
+        hideChainBadge={hideChainBadge}
       />
 
       {/* Name + symbol */}
@@ -128,11 +139,6 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
             {token.name}
           </Text>
           {token.isVerified && <VerifiedBadge size={14} />}
-          {!!token.standardLabel && (
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.standardLabel]} numberOfLines={1}>
-              {token.standardLabel}
-            </Text>
-          )}
         </View>
         {token.symbol ? (
           <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
@@ -514,9 +520,6 @@ const styles = StyleSheet.create({
   tokenName: {
     color: typography.t900,
     flexShrink: 1,
-  },
-  standardLabel: {
-    color: typography.t500,
   },
   tokenAddress: {
     color: typography.t500,
