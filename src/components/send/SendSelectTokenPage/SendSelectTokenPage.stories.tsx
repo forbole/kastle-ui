@@ -48,8 +48,14 @@ const SAMPLE_TOKENS: TokenInfo[] = [
   { name: "SZAR", symbol: "1663d3...3c5dek", amount: "3250.785432", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa"] },
   { name: "NACHO", symbol: "1663d3...3c5dek", amount: "2500000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["kasplex"] },
   { name: "GHOAD", symbol: "1663d3...3c5dek", amount: "5432.000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["kasplex", "igra"] },
-  { name: "KASPER", symbol: "1663d3...3c5dek", amount: "6789.123456", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
-  { name: "TTTT", symbol: "1663d3...3c5dek", amount: "3800000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
+  // KASPER/TTTT deliberately have no `symbol` (round 6 audit, 2026-09-26,
+  // team-lead) — demonstrates address-less rows use the same single-line
+  // centred layout as the Kaspa row (no empty second line), not a broken
+  // two-line layout with a gap. See TokenItem's `{token.symbol ? (...) :
+  // null}` — nothing renders in its place, so tokenMeta naturally shrinks
+  // to one line and the row's own alignItems:"center" centres it.
+  { name: "KASPER", amount: "6789.123456", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
+  { name: "TTTT", amount: "3800000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
   { name: "KASPY", symbol: "1663d3...3c5dek", amount: "4100000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
 ];
 

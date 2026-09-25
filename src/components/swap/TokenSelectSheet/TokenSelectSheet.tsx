@@ -647,16 +647,33 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
 
+  // gap: spacing.s1 (4) — round 6 audit (2026-09-26, team-lead): matches
+  // Figma 14741:396213/398058's name-to-address gap exactly (was already
+  // the correct numeric value as a raw `4`; switched to the token for
+  // §1A compliance, no visual change).
   tokenMeta: {
     flex: 1,
-    gap: 4,
+    gap: spacing.s1,
   },
   tokenName: {
     color: typography.t900,
     flexShrink: 1,
   },
+  // lineHeight: 16 added round 6 audit (2026-09-26, team-lead — re-checked
+  // against Figma 14741:396213/398058's address line): colour (t500,
+  // #7B9AAA) and size (bodyNormalXS, 12px) already matched exactly;
+  // lineHeight was the one real diff — bodyNormalXS has no explicit
+  // lineHeight in theme.ts (falls back to the platform default, ~14-15px
+  // for 12px Figtree), Figma's address-line instance is a fixed 16px.
+  // Added here rather than to bodyNormalXS itself, since that preset is
+  // used across the whole app — this keeps the fix scoped to the address
+  // line specifically. ⚠️ Figma also shows letterSpacing 0.06px on this
+  // line — no theme.ts letterSpacing token is that close to zero-but-not-0
+  // (letterSpacing.normal is 0); not fixed, flagging rather than
+  // inventing a token.
   tokenAddress: {
     color: typography.t500,
+    lineHeight: 16,
   },
   tokenBalance: {
     color: typography.t900,
