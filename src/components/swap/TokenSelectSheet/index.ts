@@ -3,6 +3,7 @@ export type {
   TokenSelectSheetProps,
   TokenItemProps,
   TokenInfo,
+  TokenStandard,
   ChainFilter,
   ChainFilterConfig,
   ChainFilterChipProps,
