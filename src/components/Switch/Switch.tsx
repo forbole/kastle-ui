@@ -1,6 +1,6 @@
 import React from "react";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
-import { background, borderRadius, colors, primary, spacing } from "../../config/theme";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { background, borderRadius, colors, primary, shadows, spacing } from "../../config/theme";
 
 export interface SwitchProps {
   /** Whether the switch is in the "on" state. */
@@ -33,17 +33,18 @@ const KNOB_SIZE = spacing.s5;
  * ⚠️ Knob colour: the raw CSS fallback in Figma's own generated code reads
  * `#fbfbfb`, but the design_context call's separate "styles contained in
  * design" summary resolves the SAME bound variable to `White/White 5%:
- * #FFFFFF` — the two disagree by a few units per channel. Used
- * `colors.white` (`#FFFFFF`, the more authoritative resolved-variable
- * reading) rather than a raw `#fbfbfb` neither the design's own variable
- * list nor this repo's tokens actually name.
+ * #FFFFFF` — the two disagree by a few units per channel. Re-checked
+ * theme.ts for a "background-light"/`#fbfbfb`-named token per the
+ * reviewer's request (round 6, 2026-09-26) — `grep -n "ight\|Light\|fbfbfb"
+ * config/theme.ts` finds none. Kept `colors.white` (`#FFFFFF`), the more
+ * authoritative resolved-variable reading, over a raw `#fbfbfb` neither
+ * Figma's own variable list nor this repo's tokens actually name.
  *
- * ⚠️ Knob shadow: checked every `shadows.soft1-4`/`hard1-5` preset in
- * theme.ts against Figma's `0px 1px 3px rgba(0,0,0,0.5)` — none match
- * (they're all card/sheet-scale: radius 8-40, opacity 0.1-0.2). Kept as a
- * literal per-platform shadow (`shadowColor`/`shadowOpacity`/`shadowRadius`
- * on iOS, `elevation` on Android) rather than forcing an ill-fitting token
- * onto a 20px knob.
+ * Knob shadow: `shadows.soft1-4`/`hard1-5` in theme.ts are all card/sheet
+ * scale (radius 8-40, opacity 0.1-0.2) — none matched Figma's element-scale
+ * `0px 1px 3px rgba(0,0,0,0.5)`. Reviewer-requested (round 6, 2026-09-26):
+ * added `shadows.knob` as a new preset rather than keep this hand-rolled
+ * with a raw `shadowColor` hex.
  */
 // Touch target ≥44×44 (WCAG 2.1 AA, §3B) — the track is only 48×24
 // visually. Same derivation Button.tsx uses for its own sub-44pt sizes:
@@ -87,16 +88,7 @@ const styles = StyleSheet.create({
     height: KNOB_SIZE,
     borderRadius: borderRadius.full,
     backgroundColor: colors.white,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
-      },
-      android: { elevation: 2 },
-      default: {},
-    }),
+    ...shadows.knob,
   },
   // No visual difference beyond track position today — separate style
   // hooks kept in case on/off ever need their own knob treatment.
