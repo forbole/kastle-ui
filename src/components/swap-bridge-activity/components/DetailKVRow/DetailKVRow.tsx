@@ -46,6 +46,14 @@ export interface DetailKVRowProps {
    * same in 14044:370631). Corrected 2026-08-14 — it used to render on the right.
    */
   onPressValue?: () => void;
+  /**
+   * Row vertical padding override — round 3, 2026-09-26 (lead decision):
+   * the shared default (`spacing.s3` = 12) is unchanged since this
+   * component also feeds production (`ActivityDetailSheet` and others).
+   * Token Details' own Table Component rows measure `py-[spacing/3point5]`
+   * (14) in Figma — pass `spacing.s3_5` there, not a raw number.
+   */
+  paddingVertical?: number;
 }
 
 export const DetailKVRow: React.FC<DetailKVRowProps> = ({
@@ -56,6 +64,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   valueSubtext,
   valueSubtextTone = "default",
   onPressValue,
+  paddingVertical,
 }) => {
   // `onPressValue` set → `colors.primary` (blue link); otherwise → `colors.textPrimary`.
   const resolvedValueColor = onPressValue ? colors.primary : colors.textPrimary;
@@ -129,10 +138,12 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
     </>
   );
 
+  const rowStyle = [styles.row, paddingVertical !== undefined && { paddingVertical }];
+
   if (onPressValue) {
     return (
       <TouchableOpacity
-        style={styles.row}
+        style={rowStyle}
         onPress={onPressValue}
         activeOpacity={0.7}
       >
@@ -141,7 +152,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
     );
   }
 
-  return <View style={styles.row}>{content}</View>;
+  return <View style={rowStyle}>{content}</View>;
 };
 
 const styles = StyleSheet.create({

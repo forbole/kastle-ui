@@ -10,6 +10,8 @@ import { background, primary, textStyles, typography } from "../../../config/the
 
 const placeholderLogo = require("../../../../assets/icon.png");
 
+// No `standard` on these — badge always shows via AssetImage's legacy
+// default when standard is omitted.
 const SAMPLE_TOKENS: TokenInfo[] = [
   {
     name: "KAS",
@@ -41,12 +43,32 @@ const SAMPLE_TOKENS: TokenInfo[] = [
   {
     name: "SomeToken",
     symbol: "STK",
+    logo: placeholderLogo,
     chainLogo: placeholderLogo,
   },
 ];
 
+// Filter chip label text — Nicole, round 3 (2026-09-26): filter chips
+// keep the SHORT labels ("Kaspa · KRC20 · Kasplex · Igra"), unchanged.
+// "it should be good like this, no need to change since it is just a
+// small chip." The long "{Network}-{Standard}" form is for
+// NetworkTypeChip only (Token Details header / Send Confirm), not filter
+// chips — reverts the substitution an earlier round wrongly applied here.
+//
+// KRC20 was missing from the actual array below despite this comment
+// naming it (round 5 queued item A, 2026-09-26 fix) — Figma's Swap
+// "Select Asset" (section "Swap / Bridge" 14585:23366, wording-check
+// frame 14741:397082) shows all 4 chips. `chainFilters` is
+// caller-supplied (TokenSelectSheetProps, default []) — TokenSelectSheet
+// itself has no baked-in chip list and does no local filtering by
+// chainKeys (unlike SendSelectTokenPage, which filters its own `tokens`
+// prop locally as a pure-UI convenience) — this story-level list is only
+// a demo default. kastle-mobile's real Swap integration must pass its own
+// 4-chip chainFilters (including KRC20); this fix does not, and
+// structurally cannot, change what kastle-mobile currently passes.
 const CHAIN_FILTERS = [
   { key: "evm_kas" as ChainFilter, label: "Kaspa", logo: placeholderLogo },
+  { key: "krc20" as ChainFilter, label: "KRC20", logo: placeholderLogo },
   { key: "kasplex" as ChainFilter, label: "Kasplex", logo: placeholderLogo },
   { key: "igra" as ChainFilter, label: "Igra", logo: placeholderLogo },
 ];
@@ -213,9 +235,11 @@ export const LongNamesWithAmount: Story = {
   },
 };
 
-// ---------------------------------------------------------------------------
-// Styles
-// ---------------------------------------------------------------------------
+// Round 6 (2026-09-26, Nicole): "KCC20 vs KRC20" deleted — "not useful".
+// Round 6 (2026-09-26, Nicole): "Card variant (Home)" moved out — card
+// variant belongs to Home, not Swap. See
+// src/components/home/AssetList/AssetList.stories.tsx (component itself,
+// TokenItem, is unchanged and stays here).
 
 const storyStyles = StyleSheet.create({
   decorator: {

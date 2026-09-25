@@ -1,0 +1,189 @@
+import React, { useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
+import { View, StyleSheet } from "react-native";
+import { background } from "../../../config/theme";
+import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
+
+const placeholderLogo = require("../../../../assets/icon.png");
+
+const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">) => {
+  const [tab, setTab] = useState<"history" | "assetInfo">("assetInfo");
+  return <TokenDetailPage {...props} activeTab={tab} onTabChange={setTab} />;
+};
+
+const meta: Meta<typeof TokenDetailPage> = {
+  title: "Token/TokenDetailPage",
+  component: TokenDetailPage,
+  parameters: {
+    layout: "fullscreen",
+    backgrounds: { default: "kastle" },
+    viewport: { defaultViewport: "iphone14" },
+  },
+  args: {
+    name: "NACHO",
+    priceLabel: "$0.00041",
+    logo: placeholderLogo,
+    chainLogo: placeholderLogo,
+    chipIcon: placeholderLogo,
+    network: "Kaspa",
+    covenantId: "84b93d7f...48dj6",
+  },
+  // No custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: a
+  // fixed 393px frame here broke the iPad viewport in Storybook's own
+  // viewport addon). TokenDetailPage's own container is flex:1 with no
+  // fixed width, so it already fills whatever viewport is selected —
+  // same as NameDetailPage.stories.tsx, which has no decorator either.
+  decorators: [
+    (Story) => (
+      <View style={storyStyles.screen}>
+        <Story />
+      </View>
+    ),
+  ],
+};
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/**
+ * KCC20 verified vs unverified (D-071, D-072), mirroring Figma's NACHO
+ * example on both nodes (14745:449924 verified, 14745:450123 unverified)
+ * — header chip stays on both ("Kaspa-KCC20", hyphen form per Nicole's
+ * round-3 decision), only the Security row's checkmark + text differ.
+ *
+ * ⚠️ Round 3 (Leo approved Nicole's proposal, 2026-09-26): the ✓ concept
+ * now only exists on Token Details at all — Home list and Select screens
+ * dropped verified entirely. On Token Details itself, the Security row is
+ * hidden (not just its value) for anything other than KCC20 — see
+ * KRC20/Native stories below, neither shows a Security row at all.
+ */
+export const VerifiedKCC20: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
+  ),
+};
+
+export const UnverifiedKCC20: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa-KCC20" />
+  ),
+};
+
+/**
+ * No Security row at all — only KCC20 gets one (round 3). ID row label
+ * reads "Contract Address" here (round 6, 2026-09-26 — team-lead):
+ * `idLabel` defaults to "Contract Address" for any non-KCC20 standard,
+ * not overridden in this story's args, so it's automatic.
+ */
+export const KRC20: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa-KRC20" />
+  ),
+};
+
+/** Native KAS — no Security row either. */
+export const NativeKAS: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="KAS"
+      isVerified={false}
+      standard="Native"
+      chipLabel="Kaspa"
+      covenantId="—"
+    />
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// variant="basic" | "full" (round 5 queued item B, 2026-09-26)
+// ---------------------------------------------------------------------------
+
+// "Basic info" was removed (round 6, 2026-09-26 — Nicole's Storybook
+// review): it was identical to VerifiedKCC20 above (default variant is
+// "basic"), so VerifiedKCC20 already covers this state.
+
+/**
+ * Complete Token Info list — Nicole's source frame `14590:112169` →
+ * leftmost "KCC20" section frame (node `14576:67578`, token "TTTT").
+ * Network stays "Kaspa" (not the frame's drawn "Kasplex") per the earlier
+ * KCC20/KRC20 → "Kaspa" decision; Covenant ID uses the page's own default
+ * example value, not the frame's literal placeholder text "Covenant ID".
+ * Security row still appends at the end (KCC20-only rule, unchanged from
+ * basic) even though this specific frame doesn't draw one.
+ */
+export const FullInfo: Story = {
+  name: "Full info",
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="TTTT"
+      logo={placeholderLogo}
+      priceLabel="$0.052"
+      isVerified
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+      variant="full"
+      totalMintedPercent="10%"
+      totalMintedFraction="(2.5B / 25B)"
+      mintCount="24% (480 /2,400)"
+      holderCount="9,998,095"
+      transferCount="9,998,095"
+      preallocationAmount="1,000,000"
+      defaultMintAmount="9,998,095"
+      decimal="8"
+      minter="kaspa:qpzp...pnwz"
+    />
+  ),
+};
+
+/**
+ * Kasplex-ERC20 full info — round 6, 2026-09-26 (team-lead): ERC20
+ * variants weren't shown on any feature page. Nicole's source section
+ * `14590:112169` → "other token" → node `14592:272324` (the Kasplex
+ * frame, same reused "TTTT" example and Token Info numbers as
+ * FullInfo/KRC20 above — checked via screenshot, all three standard
+ * frames share identical placeholder values). Figma draws the chip as
+ * plain "Kasplex" — using the hyphen convention "Kasplex-ERC20" per
+ * Nicole's round-3 decision, same as every other chip label here. ID row
+ * reads "Contract Address" (idLabel's non-KCC20 default, not overridden).
+ * No Security row (KCC20-only rule).
+ *
+ * Network: "Kasplex" — NOT forced to "Kaspa" like the KCC20/KRC20 full
+ * info stories above. That earlier decision was specifically about
+ * KCC20/KRC20 (both run on the Kaspa L1, so Figma's drawn "Kasplex" there
+ * was a labelling mistake); Kasplex-ERC20 tokens genuinely run on the
+ * Kasplex network, so the frame's own drawn value is correct here, not a
+ * mistake to override.
+ */
+export const FullInfoKasplexERC20: Story = {
+  name: "Full info — Kasplex-ERC20",
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="TTTT"
+      logo={placeholderLogo}
+      priceLabel="$0.052"
+      standard="ERC20"
+      chipLabel="Kasplex-ERC20"
+      network="Kasplex"
+      variant="full"
+      totalMintedPercent="10%"
+      totalMintedFraction="(2.5B / 25B)"
+      mintCount="24% (480 /2,400)"
+      holderCount="9,998,095"
+      transferCount="9,998,095"
+      preallocationAmount="1,000,000"
+      defaultMintAmount="9,998,095"
+      decimal="8"
+      minter="kaspa:qpzp...pnwz"
+    />
+  ),
+};
+
+const storyStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: background.bg0,
+  },
+});

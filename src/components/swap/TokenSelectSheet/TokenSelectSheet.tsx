@@ -18,25 +18,67 @@ import { Search } from "lucide-react-native";
 import {
   background,
   border,
+  borderRadius,
+  borderWidth,
   primary,
+  spacing,
   typography,
   white,
   textStyles,
   fontFamilies,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { Layer2AssetImage } from "../../Layer2AssetImage";
+import { AssetImage, TokenStandard } from "../../AssetImage";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
+/** Re-exported for callers that imported it from here before AssetImage existed. */
+export type { TokenStandard };
+
+/**
+ * ⚠️ No `isVerified` field (round 3, 2026-09-26 — Leo approved Nicole's
+ * proposal): the verified ✓ concept now only exists on Token Details, not
+ * on select screens. Removed entirely rather than deprecated/no-op —
+ * confirmed via `git show origin/main:...TokenSelectSheet.tsx` that this
+ * field never existed on main, only on this branch, so there's no
+ * external (kastle-mobile bridge) consumer to break.
+ */
 export interface TokenInfo {
   name: string;
   symbol?: string;
   amount?: string;
   logo?: ImageSourcePropType;
   chainLogo?: ImageSourcePropType;
+  /**
+   * Token standard. Only used today to decide whether the chain corner
+   * badge on the token icon renders (D-071, 2026-09-25, corrected
+   * 2026-09-26 per reviewer): KRC20 and Native never show it; KCC20/ERC20
+   * show it only when `chainLogo` is actually provided — see AssetImage's
+   * `variant="chain"` for the full rule (no grey placeholder fallback). Pure rendering switch,
+   * no lookup.
+   */
+  standard?: TokenStandard;
+  /**
+   * Which `ChainFilterConfig.key`(s) this token belongs to, for pages that
+   * actually filter their list by the selected chip (e.g.
+   * SendSelectTokenPage) — a token can belong to more than one (Figma
+   * node `14741:392168` "Variants": a Kaspa-native KRC20 token shows under
+   * BOTH the "Kaspa" and "KRC20" filter tabs). Independent of `standard` —
+   * this is a network/category filter, not the KCC20 verified-badge rule.
+   * TokenSelectSheet's own Swap sheet doesn't use this field.
+   */
+  chainKeys?: ChainFilter[];
+  /**
+   * Secondary line under `amount`, e.g. "≈ $3,466 USD" — round 5,
+   * 2026-09-26: added when merging TokenListRow (Home) into TokenItem
+   * (`variant="card"`). Optional; select-sheet rows (`variant="list"`,
+   * the default) don't show this in Figma, only Home's cards do — but
+   * the field is on the shared `TokenInfo` type either way, since
+   * whether it renders is the row's/variant's call, not the data's.
+   */
+  amountUsd?: string;
 }
 
 export type ChainFilter = string | null;
@@ -45,6 +87,21 @@ export interface ChainFilterConfig {
   key: ChainFilter;
   label: string;
   logo: ImageSourcePropType;
+}
+
+/**
+ * Additive multi-select toggle for the network filter chips: tapping an
+ * inactive chip adds it, tapping an active chip removes it — several chips
+ * can be active at once, and an empty array means no filter (no chip
+ * highlighted, full list shows). This is the actual production toggle
+ * behaviour (`TokenSelectSheet`'s own `handleChainFilterPress`); exported
+ * here so any other screen using these chips (e.g.
+ * `SendSelectTokenPage`) shares this exact logic instead of re-implementing
+ * its own (round 5, 2026-09-26 — SendSelectTokenPage previously had a
+ * single-select variant of this that didn't match production).
+ */
+export function toggleChainFilter(current: ChainFilter[], key: ChainFilter): ChainFilter[] {
+  return current.includes(key) ? current.filter((k) => k !== key) : [...current, key];
 }
 
 export interface RenderItemParams {
@@ -82,53 +139,133 @@ function formatBalance(balance?: string): string {
 
 export interface TokenItemProps {
   token: TokenInfo;
-  isDisabled: boolean;
-  onPress: (token: TokenInfo) => void;
+  /** Default false — select-sheet rows aren't disabled unless told to. Was required; made optional round 5 when merging TokenListRow (Home has no disabled concept). */
+  isDisabled?: boolean;
+  /** Default no-op — select-sheet rows are normally always interactive, but Home cards (variant="card") may be display-only. Was required; made optional round 5 for the same reason as `isDisabled`. */
+  onPress?: (token: TokenInfo) => void;
   /** Fallback image for token/chain logo when undefined or fails to load */
   fallback?: ImageSourcePropType;
+  /**
+   * Removes the row's own horizontal padding (round 3, 2026-09-26 — lead
+   * decision). Figma's dropdown-item rows have ZERO internal horizontal
+   * padding (`content-stretch flex gap-[12px] items-center py-[…]`, no
+   * `px-` class) — they're meant to span edge-to-edge within the list's
+   * own outer inset. The shared default (16px) is kept unchanged since
+   * this component also feeds the production Swap/Bridge sheet; opt in
+   * with `flush` where the host's own outer inset already accounts for
+   * it (e.g. SendSelectTokenPage). Ignored when `variant="card"` — the
+   * card has its own 12px padding, see below.
+   */
+  flush?: boolean;
+  /**
+   * "list" (default) — Select sheet rows: shared 16px horizontal padding
+   * (or 0 with `flush`), no per-row card background/border.
+   * "card" — Home list rows (round 5, 2026-09-26: merged TokenListRow
+   * into TokenItem instead of keeping it a separate component — same
+   * structure, icon · name+secondary-line · amount+secondary-line, just
+   * a different row container). Each row is its own bordered card (bg
+   * `white["5%"]`, border `border.b200`, radius `2xl`, overflow hidden),
+   * 12px horizontal padding — Figma's Home list "Generic List" row,
+   * confirmed via get_design_context in the round-3 padding audit, not
+   * the select sheet's shared 16px default. Also renders
+   * `token.amountUsd` as a secondary line under the amount, which
+   * "list" rows never show (no Figma example has both).
+   */
+  variant?: "list" | "card";
 }
 
-export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenItemProps) => {
+export const TokenItem = memo(({ token, isDisabled = false, onPress, fallback, flush = false, variant = "list" }: TokenItemProps) => {
   const handlePress = useCallback(() => {
-    onPress(token);
+    onPress?.(token);
   }, [token, onPress]);
 
   const formattedAmount = formatBalance(token.amount);
+  const isCard = variant === "card";
 
   return (
     <TouchableOpacity
-      style={[styles.tokenRow, isDisabled && styles.tokenRowDisabled]}
+      style={[
+        styles.tokenRow,
+        flush && !isCard && styles.tokenRowFlush,
+        isCard && styles.tokenRowCard,
+        isDisabled && styles.tokenRowDisabled,
+      ]}
       onPress={handlePress}
-      disabled={isDisabled}
-      activeOpacity={0.7}
+      disabled={isDisabled || !onPress}
+      activeOpacity={onPress ? 0.7 : 1}
     >
-      {/* Token logo + chain badge */}
-      <Layer2AssetImage
+      {/* Token logo + standard-driven chain badge (D-071) */}
+      <AssetImage
+        variant="chain"
         tokenImage={token.logo}
         chainImage={token.chainLogo}
         fallback={fallback}
+        standard={token.standard}
         tokenImageSize={40}
         chainImageSize={18}
       />
 
-      {/* Name + symbol */}
-      <View style={styles.tokenMeta}>
-        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
-          {token.name}
-        </Text>
-        {token.symbol ? (
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
-            {token.symbol}
-          </Text>
-        ) : null}
-      </View>
-
-      {/* Amount */}
-      {formattedAmount ? (
-        <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
-          {formattedAmount}
-        </Text>
-      ) : null}
+      {/* Name + symbol, and Amount (+ USD line) — card variant only: both
+          columns wrapped in one flex:1 row (round 6, 2026-09-26 — reviewer:
+          amount was truncating with "…"; found via get_design_context on
+          14767:29942, Home dashboard's own Generic List row, that Figma
+          nests name-col + amount-col in their own flex row with an 8px gap,
+          separate from the icon→content 12px gap the shared `tokenRow` gap
+          already provides — not a flat 3-way gap like this used to render).
+          "list" variant JSX below is untouched. */}
+      {isCard ? (
+        <View style={styles.tokenContentCard}>
+          <View style={styles.tokenMetaCard}>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName, styles.tokenNameCard]} numberOfLines={1} ellipsizeMode="tail">
+              {token.name}
+            </Text>
+            {token.symbol ? (
+              <Text allowFontScaling={false} style={styles.tokenSubTextCard} numberOfLines={1} ellipsizeMode="tail">
+                {token.symbol}
+              </Text>
+            ) : null}
+          </View>
+          <View style={styles.tokenAmountColumnCard}>
+            {formattedAmount ? (
+              <Text allowFontScaling={false} style={styles.tokenBalanceCard} numberOfLines={1}>
+                {formattedAmount}
+              </Text>
+            ) : null}
+            {!!token.amountUsd && (
+              <Text allowFontScaling={false} style={styles.tokenSubTextCard} numberOfLines={1}>
+                {token.amountUsd}
+              </Text>
+            )}
+          </View>
+        </View>
+      ) : (
+        <>
+          <View style={styles.tokenMeta}>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
+              {token.name}
+            </Text>
+            {token.symbol ? (
+              <Text
+                allowFontScaling={false}
+                style={[textStyles.bodyNormalXS, styles.tokenAddress, flush && styles.tokenAddressFlush]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {token.symbol}
+              </Text>
+            ) : null}
+          </View>
+          {formattedAmount ? (
+            // Unchanged from before the merge: the "list" variant's amount
+            // is a bare Text sibling, not wrapped in a View — kept exactly
+            // as-is so the shared default (feeding the production
+            // Swap/Bridge sheet) has zero layout risk from this change.
+            <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
+              {formattedAmount}
+            </Text>
+          ) : null}
+        </>
+      )}
     </TouchableOpacity>
   );
 });
@@ -139,14 +276,16 @@ TokenItem.displayName = "TokenItem";
 // ChainFilterChip
 // ---------------------------------------------------------------------------
 
-interface ChainFilterChipProps {
+export interface ChainFilterChipProps {
   label: string;
   logo: ImageSourcePropType;
   isActive: boolean;
   onPress: () => void;
 }
 
-const ChainFilterChip = ({ label, logo, isActive, onPress }: ChainFilterChipProps) => (
+/** Exported so other screens with the same Kaspa/KRC20/Kasplex/Igra filter
+ * row (e.g. Send select) reuse this instead of re-styling their own. */
+export const ChainFilterChip = ({ label, logo, isActive, onPress }: ChainFilterChipProps) => (
   <TouchableOpacity
     style={[styles.chip, isActive && styles.chipActive]}
     onPress={onPress}
@@ -239,10 +378,7 @@ export const TokenSelectSheet: React.FC<TokenSelectSheetProps> = ({
 
   const handleChainFilterPress = useCallback(
     (key: ChainFilter) => {
-      const current = activeChainFilterRef.current;
-      const next = current.includes(key)
-        ? current.filter((k) => k !== key)
-        : [...current, key];
+      const next = toggleChainFilter(activeChainFilterRef.current, key);
       if (onChainFilterChange) {
         onChainFilterChange(next);
       } else {
@@ -480,19 +616,75 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
+  tokenRowFlush: {
+    paddingHorizontal: 0,
+  },
+  // Home list row (round 5, 2026-09-26 — merged from TokenListRow). Figma's
+  // "Generic List" row: bg white/5%, border border.b200, radius 2xl,
+  // overflow hidden, 12px horizontal padding — confirmed via
+  // get_design_context in the round-3 padding audit, not the select
+  // sheet's shared 16px default (which this overrides). Height 68
+  // (14767:29942, Home dashboard's Generic List row, h-[68px] exact).
+  //
+  // paddingVertical corrected round 6 (2026-09-26, team-lead — measured
+  // 75px in Chrome, not 68): re-checked via get_metadata on the row's own
+  // content-group node — its real height is 44px (name instance h-17 +
+  // gap 6 + sub-text instance h-21 = 44), TALLER than the 40px icon, not
+  // equal to it as the earlier "14×2 + 40 icon = 68" comment assumed.
+  // Figma's row itself is a fixed h-68 with items-center, so icon and
+  // content each centre independently: content group sits at y=12
+  // ((68-44)/2), icon at y=14 ((68-40)/2) — two different offsets, not
+  // one shared padding. paddingVertical: spacing.s3 (12) reproduces the
+  // *content* group's offset, which is what actually determines the row
+  // height here since content (44) is the taller sibling — see
+  // tokenNameCard/tokenBalanceCard below for the matching line-height fix
+  // that gets the content group's own height down to the correct 44.
+  tokenRowCard: {
+    backgroundColor: white["5%"],
+    borderWidth: borderWidth.bw1,
+    borderColor: border.b200,
+    borderRadius: borderRadius["2xl"],
+    overflow: "hidden",
+    paddingHorizontal: spacing.s3,
+    paddingVertical: spacing.s3,
+  },
   tokenRowDisabled: {
     opacity: 0.4,
   },
 
+  // gap: spacing.s1 (4) — round 6 audit (2026-09-26, team-lead): matches
+  // Figma 14741:396213/398058's name-to-address gap exactly (was already
+  // the correct numeric value as a raw `4`; switched to the token for
+  // §1A compliance, no visual change).
   tokenMeta: {
     flex: 1,
-    gap: 4,
+    gap: spacing.s1,
   },
   tokenName: {
     color: typography.t900,
+    flexShrink: 1,
   },
+  // Kept identical to origin/main — this feeds the production Swap/Bridge
+  // sheet, unchanged here.
   tokenAddress: {
     color: typography.t500,
+  },
+  // lineHeight: 16 — round 6 reviewer FAIL fix (2026-09-26): the earlier
+  // round added this directly to tokenAddress above, which is shared with
+  // production Swap/Bridge rows (list variant, non-flush) — moved to its
+  // own flush-only style instead. Re-checked against Figma
+  // 14741:396213/398058's address line: colour (t500, #7B9AAA) and size
+  // (bodyNormalXS, 12px) already matched exactly; lineHeight was the one
+  // real diff — bodyNormalXS has no explicit lineHeight in theme.ts
+  // (falls back to the platform default, ~14-15px for 12px Figtree),
+  // Figma's address-line instance is a fixed 16px. Applied only when
+  // `flush` (SendSelectTokenPage's own usage) — production's non-flush
+  // list rows keep the exact origin/main tokenAddress above, untouched.
+  // ⚠️ Figma also shows letterSpacing 0.06px on this line — no theme.ts
+  // letterSpacing token is that close to zero-but-not-0 (letterSpacing.
+  // normal is 0); not fixed, flagging rather than inventing a token.
+  tokenAddressFlush: {
+    lineHeight: 16,
   },
   tokenBalance: {
     color: typography.t900,
@@ -500,6 +692,74 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 14,
     maxWidth: 100,
+  },
+  // Card-only geometry, all re-checked against 14767:29942's Generic List
+  // row (round 6, 2026-09-26 — reviewer's truncation bug + a full geometry
+  // pass, not just the one fix). Kept fully separate from tokenMeta/
+  // tokenBalance/tokenAddress above, which stay exactly as they were for
+  // "list" — none of these card styles are reused there.
+  //
+  // Figma nests [name-col, amount-col] in their own row with an 8px gap;
+  // name-col is a FIXED 114px width (not flexible — Figma truncates names
+  // there too, by design), amount-col is flex:1 so it gets whatever space
+  // is left and never gets squeezed by a competing flex:1 name column.
+  tokenContentCard: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
+  },
+  // Round 6 (2026-09-26, team-lead — iPad responsiveness pass): `width:
+  // 114` was a bare fixed number, flagged as a "fixed width that doesn't
+  // scale". Figma has no tablet frame for this row (mobile-only, 393px),
+  // so there's no ground-truth wide-screen value to match — flagged as a
+  // judgment call in the PR. Converted to flexBasis/flexShrink/minWidth:
+  // at the 393px viewport this computes identically to the old fixed 114
+  // (flexGrow: 0 means it never grows past its basis, same as a bare
+  // width, since the sibling tokenAmountColumnCard is flex:1 and absorbs
+  // all extra space) — zero visual change on phone. minWidth: 90 is the
+  // only behavioural difference: on a very narrow viewport this column
+  // can now shrink instead of forcing overflow, which a bare `width`
+  // can't do.
+  tokenMetaCard: {
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: 114,
+    minWidth: 90,
+    gap: spacing.s1_5,
+  },
+  // Figma's name-line instance is a fixed h-17 (get_metadata on
+  // 14767:29942's row), but bodySemiboldMD (16px) has no explicit
+  // lineHeight in theme.ts — it falls back to the platform default
+  // (~19-21px for 16px Figtree Semibold), inflating the card row's real
+  // height past 68. Card-only override, appended after tokenName in the
+  // style array so it wins; "list"'s tokenName stays exactly as it was —
+  // this key doesn't exist there.
+  tokenNameCard: {
+    lineHeight: 17,
+  },
+  // Figma's sub-text under both the name ("$0.230") and the amount
+  // ("≈ $3,466 USD") is identical styling — 14px normal, typography600 —
+  // used for both here. "list"'s tokenAddress (12px, typography500) is a
+  // different, deliberately smaller style for a different context
+  // (contract-address abbreviations), untouched.
+  tokenSubTextCard: {
+    ...textStyles.bodyNormalSM,
+    color: typography.t600,
+  },
+  // lineHeight: 17 added round 6 polish (2026-09-26) — same fix as
+  // tokenNameCard above, same reason: bodySemiboldMD has no explicit
+  // lineHeight, Figma's amount-line instance is a fixed h-17.
+  tokenBalanceCard: {
+    ...textStyles.bodySemiboldMD,
+    color: typography.t900,
+    flexShrink: 0,
+    lineHeight: 17,
+  },
+  tokenAmountColumnCard: {
+    flex: 1,
+    alignItems: "flex-end",
+    gap: spacing.s1_5,
   },
   emptyContainer: {
     paddingVertical: 32,

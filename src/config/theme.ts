@@ -250,6 +250,21 @@ export const info = {
   softBackground: "rgba(9, 115, 168, 0.24)",
 } as const;
 
+/**
+ * KCC20 network-chip colours (`NetworkTypeChip`) — Figma binds these to
+ * raw, unbound hex, not part of any semantic ramp: border/text `#6FC7BA`,
+ * bg `#182B29`. Checked every existing ramp for an exact match first
+ * (round 5, 2026-09-26): nearest candidates were `success.s700` (`#59DDCB`,
+ * diff ~35) and `success.background` (`#042F2E`, diff ~21) — neither close
+ * enough to reuse, so these are new tokens rather than a forced
+ * substitution. `text` is reused for the border too — Figma binds both to
+ * the identical value.
+ */
+export const kcc20 = {
+  text: "#6FC7BA",
+  background: "#182B29",
+} as const;
+
 /** Indicator colors */
 export const indicator = {
   /** #4B7D92 (= secondary.s600) */
