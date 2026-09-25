@@ -1,18 +1,19 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, ImageSourcePropType } from "react-native";
+import { BadgeCheck } from "lucide-react-native";
 import {
   background,
   border,
   borderRadius,
   borderWidth,
   colors,
+  primary,
   spacing,
   textStyles,
   typography,
   white,
 } from "../../../config/theme";
 import { AssetImage, TokenStandard } from "../../AssetImage";
-import { VerifiedBadge } from "../../VerifiedBadge";
 import { Segmented, SegmentedOption } from "../../Segmented";
 import { NetworkTypeChip } from "../../NetworkTypeChip";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow";
@@ -244,7 +245,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
         <DetailKVRow
           label="Security"
           value={showVerified ? "Verified" : "Unverified"}
-          valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
+          valuePrefix={showVerified ? <BadgeCheck size={16} color={primary.p500} strokeWidth={2} /> : undefined}
           paddingVertical={spacing.s3_5}
         />
       ),
@@ -289,7 +290,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
                 <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
                   {name}
                 </Text>
-                {showVerified && <VerifiedBadge size={18} />}
+                {showVerified && <BadgeCheck size={18} color={primary.p500} strokeWidth={2} />}
               </View>
               {!!priceLabel && (
                 <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
