@@ -4,6 +4,7 @@ import {
   background,
   border,
   borderRadius,
+  borderWidth,
   colors,
   spacing,
   textStyles,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.s3,
     borderRadius: borderRadius["2xl"],
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
     borderColor: border.b200,
     backgroundColor: white["5%"],
     padding: spacing.s4,
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     backgroundColor: background.bg50,
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
     borderColor: border.b200,
     borderRadius: borderRadius["2xl"],
     paddingHorizontal: spacing.s4,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
   },
   infoRow: {},
   infoRowBorder: {
-    borderBottomWidth: 1,
+    borderBottomWidth: borderWidth.bw1,
     borderBottomColor: border.b200,
   },
 });
