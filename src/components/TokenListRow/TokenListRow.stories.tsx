@@ -57,13 +57,15 @@ export const Unverified: Story = {
 };
 
 /**
- * verified × unverified × KCC20 × KRC20 (D-071, D-072) — four "KAS" rows,
- * differing only by `isVerified` and `standard`. No text label distinguishes
- * standard (D-072); only the icon's corner badge does, and only for KCC20.
+ * verified × unverified × KCC20 × KRC20 (D-071, D-072) — four "NACHO" rows,
+ * differing only by `isVerified` and `standard`. "NACHO" is Figma's real
+ * KCC20 example on the Home list (node 14745:450124, row 3, verified, teal
+ * Kaspa corner badge). No text label distinguishes standard (D-072); only
+ * the icon's corner badge does, and only for KCC20.
  */
 export const VerifiedKCC20: Story = {
   args: {
-    name: "KAS",
+    name: "NACHO",
     standard: "KCC20",
     priceLabel: "$0.230",
     amount: "1,000,000",
@@ -74,7 +76,7 @@ export const VerifiedKCC20: Story = {
 
 export const UnverifiedKCC20: Story = {
   args: {
-    name: "KAS",
+    name: "NACHO",
     standard: "KCC20",
     priceLabel: "$0.230",
     amount: "500,000",
@@ -85,7 +87,7 @@ export const UnverifiedKCC20: Story = {
 
 export const VerifiedKRC20: Story = {
   args: {
-    name: "KAS",
+    name: "NACHO",
     standard: "KRC20",
     priceLabel: "$0.230",
     amount: "1,233,608.32787357",
@@ -96,7 +98,7 @@ export const VerifiedKRC20: Story = {
 
 export const UnverifiedKRC20: Story = {
   args: {
-    name: "KAS",
+    name: "NACHO",
     standard: "KRC20",
     priceLabel: "$0.230",
     amount: "750,000",
@@ -111,9 +113,9 @@ export const MixedList: Story = {
     const tokens = sortTokensByVerified(
       [
         { name: "SCAMCOIN", amount: "500,000", isVerified: false },
-        { name: "KAS", amount: "1,000,000", isVerified: true, standard: "KCC20" as const },
-        { name: "KAS", amount: "1,233,608.32787357", isVerified: true, standard: "KRC20" as const },
-        { name: "NACHO", amount: "2,000,000.2314", isVerified: true },
+        { name: "NACHO", amount: "1,000,000", isVerified: true, standard: "KCC20" as const },
+        { name: "NACHO", amount: "1,233,608.32787357", isVerified: true, standard: "KRC20" as const },
+        { name: "ZEAL", amount: "2,000,000.2314", isVerified: true },
         { name: "RUGPULL", amount: "999,999", isVerified: false },
       ],
       (t) => t.isVerified,
