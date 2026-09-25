@@ -68,6 +68,13 @@ export const NoChainImage: Story = {
   },
 };
 
+/** Badge hidden entirely (D-071, KCC20 support) — no fallback circle either */
+export const HiddenChainBadge: Story = {
+  args: {
+    hideChainBadge: true,
+  },
+};
+
 /** Side-by-side comparison of multiple sizes */
 export const SizeComparison: Story = {
   render: () => (

@@ -25,15 +25,15 @@ import {
   fontFamilies,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { Layer2AssetImage } from "../../Layer2AssetImage";
 import { VerifiedBadge } from "../../VerifiedBadge";
+import { TokenIcon, TokenStandard } from "../../TokenIcon";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-/** Token standard — drives the chain corner badge (D-071). */
-export type TokenStandard = "KCC20" | "KRC20" | "ERC20" | "Native";
+/** Re-exported for callers that imported it from here before TokenIcon existed. */
+export type { TokenStandard };
 
 export interface TokenInfo {
   name: string;
@@ -110,11 +110,6 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
 
   const formattedAmount = formatBalance(token.amount);
 
-  // D-071: KRC20 never shows the chain corner badge; every other standard
-  // (including KCC20 and tokens with no `standard` set) keeps the existing
-  // behaviour of showing it whenever a chainLogo is provided.
-  const hideChainBadge = token.standard === "KRC20";
-
   return (
     <TouchableOpacity
       style={[styles.tokenRow, isDisabled && styles.tokenRowDisabled]}
@@ -122,14 +117,14 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
       disabled={isDisabled}
       activeOpacity={0.7}
     >
-      {/* Token logo + chain badge */}
-      <Layer2AssetImage
-        tokenImage={token.logo}
-        chainImage={token.chainLogo}
+      {/* Token logo + standard-driven chain badge (D-071) */}
+      <TokenIcon
+        logo={token.logo}
+        chainLogo={token.chainLogo}
         fallback={fallback}
-        tokenImageSize={40}
-        chainImageSize={18}
-        hideChainBadge={hideChainBadge}
+        standard={token.standard}
+        size={40}
+        chainBadgeSize={18}
       />
 
       {/* Name + symbol */}
