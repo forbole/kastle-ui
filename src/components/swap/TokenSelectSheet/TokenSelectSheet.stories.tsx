@@ -197,15 +197,18 @@ export const LongNames: Story = {
 
 /**
  * With verified badges — mirrors Figma's Token List checkmarks (KCC20
- * support). `standard: "KCC20"` is required on each verified row (Leo
- * sync, 2026-09-25: verification only exists for KCC20) — without it
- * TokenItem enforces no checkmark, regardless of isVerified.
+ * support). "STICK" (not "KAS") — KAS is native, and whether native KAS
+ * ever gets a checkmark is an open question for Nicole (Figma comment),
+ * not something this story should assert. `standard: "KCC20"` is required
+ * on each verified row (Leo sync, 2026-09-25: verification only exists
+ * for KCC20) — without it TokenItem enforces no checkmark, regardless of
+ * isVerified.
  */
 export const WithVerifiedBadges: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
     tokens: [
-      { name: "KAS", symbol: "KAS", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
+      { name: "STICK", symbol: "STICK", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
       { name: "NACHO", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
       { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
       { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo, isVerified: false },
