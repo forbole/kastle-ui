@@ -89,15 +89,9 @@ export const NativeKAS: Story = {
 // variant="basic" | "full" (round 5 queued item B, 2026-09-26)
 // ---------------------------------------------------------------------------
 
-/** Default 3-row list (Network / Covenant ID / Security) — same as the
- * stories above, named explicitly so the two variants are easy to find
- * side by side. */
-export const BasicInfo: Story = {
-  name: "Basic info",
-  render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
-  ),
-};
+// "Basic info" was removed (round 6, 2026-09-26 — Nicole's Storybook
+// review): it was identical to VerifiedKCC20 above (default variant is
+// "basic"), so VerifiedKCC20 already covers this state.
 
 /**
  * Complete Token Info list — Nicole's source frame `14590:112169` →

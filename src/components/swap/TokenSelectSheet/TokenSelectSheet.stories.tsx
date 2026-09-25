@@ -211,38 +211,31 @@ export const LongNames: Story = {
 };
 
 /**
- * Corner badges by standard (D-071) — mirrors Figma's Token List badges.
- * ⚠️ No verified checkmark here (round 3, 2026-09-26 — Leo approved
- * Nicole's proposal): the verified ✓ concept now only exists on Token
- * Details, not on select screens. `isVerified` was removed from TokenInfo
- * entirely.
+ * Merged (round 6, 2026-09-26 — Nicole's Storybook review: KCC20Badges and
+ * SameNameKCC20VsKRC20 were duplicative) — one story covering both:
+ * - Corner badges by standard (D-071), mirroring Figma's Token List
+ *   badges: STICK/NACHO/ZEAL carry the KCC20 chain badge, SCAMCOIN has no
+ *   standard and no badge. ⚠️ No verified checkmark here (round 3,
+ *   2026-09-26 — Leo approved Nicole's proposal): the verified ✓ concept
+ *   now only exists on Token Details, not on select screens.
+ * - Same-name disambiguation (D-064) — KCC20 vs KRC20 "NACHO" side by
+ *   side (D-071, D-072). No text label distinguishes the pair — per D-072
+ *   Figma's Swap select frame (14739:360273) has no standard label after
+ *   the name, so disambiguation is visual only: the KCC20 row keeps the
+ *   chain corner badge, the KRC20 row never shows it.
+ * - The 4-chip network filter (Kaspa/KRC20/Kasplex/Igra) is on by default
+ *   via meta.args.chainFilters.
  */
-export const KCC20Badges: Story = {
+export const KCC20vsKRC20: Story = {
+  name: "KCC20 vs KRC20",
   render: (args) => <SheetDemo {...args} />,
   args: {
     tokens: [
       { name: "STICK", symbol: "STICK", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "NACHO", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
-      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo },
-    ],
-  },
-};
-
-/**
- * Same-name disambiguation (D-064) — KCC20 vs KRC20 versions of "NACHO"
- * side by side (D-071, D-072, 2026-09-25). No text label distinguishes
- * the pair — per D-072 Figma's Swap select frame (14739:360273) has no
- * standard label after the name, so disambiguation is visual only: KCC20
- * rows keep the chain corner badge (Layer2AssetImage's `chainLogo`), KRC20
- * rows never show it.
- */
-export const SameNameKCC20VsKRC20: Story = {
-  render: (args) => <SheetDemo {...args} />,
-  args: {
-    tokens: [
       { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo },
       { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: placeholderLogo, chainLogo: placeholderLogo },
+      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo },
     ],
   },
 };
@@ -274,25 +267,17 @@ export const LongNamesWithAmount: Story = {
 // TokenListRow into TokenItem instead of keeping it a separate component)
 // ---------------------------------------------------------------------------
 
-/** Single Home-list card row — bordered card, 12px padding, amount + USD line. */
-export const CardVariant: Story = {
-  render: () => (
-    <View style={storyStyles.cardDecorator}>
-      <TokenItem
-        variant="card"
-        token={{ name: "STICK", symbol: "$0.230", amount: "1,000,000", amountUsd: "≈ $3,466 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" }}
-      />
-    </View>
-  ),
-};
-
 /**
- * A mixed card list, grouped by name — NOT sorted (Leo sync, 2026-09-25:
- * keep grouping, e.g. all "NACHO" rows together; no verified-first sort).
- * Rendered in exactly the order given, matching what TokenListRow's own
- * MixedList story demonstrated before the merge.
+ * Merged (round 6, 2026-09-26 — Nicole's Storybook review: CardVariant and
+ * CardVariantList were duplicative) — bordered card, 12px padding, amount
+ * + USD line, shown as a mixed list grouped by name and NOT sorted (Leo
+ * sync, 2026-09-25: keep grouping, e.g. all "NACHO" rows together; no
+ * verified-first sort). Rendered in exactly the order given, matching
+ * what TokenListRow's own MixedList story demonstrated before it was
+ * merged into TokenItem.
  */
-export const CardVariantList: Story = {
+export const CardVariantHome: Story = {
+  name: "Card variant (Home)",
   render: () => {
     const tokens: TokenInfo[] = [
       { name: "NACHO", symbol: "$0.230", amount: "1,000,000", amountUsd: "≈ $3,466 USD", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
@@ -325,10 +310,6 @@ const storyStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: background.bg0,
-  },
-  cardDecorator: {
-    backgroundColor: background.bg0,
-    padding: 20,
   },
   cardList: {
     backgroundColor: background.bg0,
