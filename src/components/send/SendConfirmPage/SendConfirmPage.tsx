@@ -33,10 +33,10 @@ export interface SendConfirmPageProps {
   recipientAddress: string;
   /**
    * Chip label shown on BOTH "Send from" and "Send to" rows — Figma shows
-   * the identical label on both (e.g. "Kaspa KCC20" / "Kaspa KRC20"), not
-   * two different ones. `tone="info"` (NetworkTypeChip's default,
-   * token-bound colour verified against this exact screen in an earlier
-   * round) is used, not `"pending"`.
+   * the identical label on both (e.g. "Kaspa-KCC20" / "Kaspa-KRC20", hyphen
+   * form per Nicole's round-3 decision), not two different ones.
+   * NetworkTypeChip's colour (verified against this exact screen) is used
+   * as-is — that component only has one colour now, no tone prop.
    */
   chipLabel: string;
   chipIcon?: ImageSourcePropType;
@@ -83,11 +83,10 @@ export interface SendConfirmPageProps {
  * style — confirmed via get_design_context, not assumed — so that pattern
  * is reused directly rather than re-derived.
  *
- * ⚠️ Chip label text: Figma's own screen currently still reads
- * "Kaspa-KCC20" (hyphenated) — the round-3 dispatch explicitly gave
- * "Kaspa KCC20" (no hyphen, per the Nicole+Leo sync naming decision) as
- * the value to use, so the caller passes that; this component just
- * renders whatever `chipLabel` it's given, doesn't hardcode either form.
+ * Chip label text: Nicole confirmed "Kaspa-KCC20" (hyphen form) on both
+ * Send-from/Send-to rows — this matches what Figma's own screen already
+ * shows, no conversion needed. This component just renders whatever
+ * `chipLabel` it's given, doesn't hardcode the text.
  */
 export const SendConfirmPage: React.FC<SendConfirmPageProps> = ({
   illustrationSource,

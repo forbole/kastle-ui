@@ -43,29 +43,45 @@ type Story = StoryObj<typeof meta>;
 /**
  * KCC20 verified vs unverified (D-071, D-072), mirroring Figma's NACHO
  * example on both nodes (14745:449924 verified, 14745:450123 unverified)
- * — header chip stays on both ("Kaspa KCC20", label text per Nicole+Leo
- * sync 2026-09-25), only the Security row's checkmark + text differ.
+ * — header chip stays on both ("Kaspa-KCC20", hyphen form per Nicole's
+ * round-3 decision), only the Security row's checkmark + text differ.
  *
- * ⚠️ No "VerifiedKRC20" story (Leo sync, 2026-09-25: verification only
- * exists for KCC20 — TokenDetailPage enforces this, so isVerified=true on
- * a KRC20 token silently shows "Unverified" rather than a wrong
- * "Verified"). Only KCC20 gets a Verified story.
+ * ⚠️ Round 3 (Leo approved Nicole's proposal, 2026-09-26): the ✓ concept
+ * now only exists on Token Details at all — Home list and Select screens
+ * dropped verified entirely. On Token Details itself, the Security row is
+ * hidden (not just its value) for anything other than KCC20 — see
+ * KRC20/Native stories below, neither shows a Security row at all.
  */
 export const VerifiedKCC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa KCC20" />
+    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
   ),
 };
 
 export const UnverifiedKCC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa KCC20" />
+    <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa-KCC20" />
   ),
 };
 
-export const UnverifiedKRC20: Story = {
+/** No Security row at all — only KCC20 gets one (round 3). */
+export const KRC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa KRC20" />
+    <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa-KRC20" />
+  ),
+};
+
+/** Native KAS — no Security row either. */
+export const NativeKAS: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="KAS"
+      isVerified={false}
+      standard="Native"
+      chipLabel="Kaspa"
+      covenantId="—"
+    />
   ),
 };
 

@@ -25,49 +25,52 @@ const meta: Meta<typeof NetworkTypeChip> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Label text per Nicole+Leo sync, 2026-09-25: "Kaspa KCC20" / "Kaspa
-// KRC20" / "Kasplex ERC20" / "Igra ERC20" / "Kaspa" (native) — replaces
-// the earlier "Kaspa Native-KCC20" / "Kaspa-KRC20" / "Kasplex" / "Igra".
-// `tone`: "info" (default) = Send Confirm's token-bound colour, "pending"
-// = Token Details' raw-hex colour, awaiting Nicole's Figma comment answer
-// — see NetworkTypeChip.tsx's doc comment for the full provenance.
+// Label text — Nicole, round 3 (2026-09-26): hyphen form everywhere for
+// NetworkTypeChip — "Kaspa-KCC20" / "Kaspa-KRC20" / "Kasplex-ERC20" /
+// "Igra-ERC20" / "Kaspa" (native). Replaces the space form from an
+// earlier round. One colour now (no more tone prop) — Token Details uses
+// the same token-bound colour as Send Confirm, see NetworkTypeChip.tsx's
+// doc comment.
 
-/** Token Details header (screen 2), tone="pending". */
+/** Token Details header (screen 2). */
 export const TokenDetailsKCC20: Story = {
-  args: { label: "Kaspa KCC20", tone: "pending", icon: placeholderLogo },
+  args: { label: "Kaspa-KCC20", icon: placeholderLogo },
 };
 
 export const TokenDetailsKRC20: Story = {
-  args: { label: "Kaspa KRC20", tone: "pending", icon: placeholderLogo },
+  args: { label: "Kaspa-KRC20", icon: placeholderLogo },
 };
 
-/** Send Confirm Send-from/Send-to rows (screen 5), tone="info" (default). */
+/** Send Confirm Send-from/Send-to rows (screen 5) — same label on both rows. */
 export const SendConfirmKCC20: Story = {
-  args: { label: "Kaspa KCC20", icon: placeholderLogo },
+  args: { label: "Kaspa-KCC20", icon: placeholderLogo },
 };
 
 export const SendConfirmKRC20: Story = {
-  args: { label: "Kaspa KRC20", icon: placeholderLogo },
+  args: { label: "Kaspa-KRC20", icon: placeholderLogo },
 };
 
 export const KasplexERC20: Story = {
-  args: { label: "Kasplex ERC20", icon: placeholderLogo },
+  args: { label: "Kasplex-ERC20", icon: placeholderLogo },
 };
 
 export const IgraERC20: Story = {
-  args: { label: "Igra ERC20", icon: placeholderLogo },
+  args: { label: "Igra-ERC20", icon: placeholderLogo },
 };
 
 export const NativeKaspa: Story = {
   args: { label: "Kaspa", icon: placeholderLogo },
 };
 
-/** Both tones side by side, same label — the colour difference is the whole point of `tone`. */
-export const InfoVsPending: Story = {
+/** All labels, side by side — one component, one style. */
+export const AllLabels: Story = {
   render: () => (
     <View style={styles.column}>
-      <NetworkTypeChip label="Kaspa KCC20" tone="info" icon={placeholderLogo} />
-      <NetworkTypeChip label="Kaspa KCC20" tone="pending" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kaspa-KCC20" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kaspa-KRC20" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kasplex-ERC20" icon={placeholderLogo} />
+      <NetworkTypeChip label="Igra-ERC20" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kaspa" icon={placeholderLogo} />
     </View>
   ),
 };
