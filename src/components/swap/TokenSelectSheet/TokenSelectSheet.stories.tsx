@@ -248,9 +248,11 @@ export const KCC20vsKRC20: Story = {
     tokens: [
       { name: "STICK", symbol: "STICK", amount: "1000000", logo: tokenLogo("STICK"), chainLogo: kaspaChainLogo, standard: "KCC20" },
       { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: tokenLogo("NACHO"), chainLogo: kaspaChainLogo },
-      // KRC20 never shows the badge (D-071) — chainLogo omitted, nothing
-      // to pass since it's never rendered.
-      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: tokenLogo("NACHO") },
+      // KRC20 never shows the badge (D-071) — chainLogo DELIBERATELY
+      // passed here anyway (round 6 polish, 2026-09-26), to prove the
+      // hide is driven by `standard === "KRC20"` itself, not merely
+      // because chainLogo happens to be missing.
+      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: tokenLogo("NACHO"), chainLogo: kaspaChainLogo },
       { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: tokenLogo("ZEAL"), chainLogo: kaspaChainLogo, standard: "KCC20" },
       { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: tokenLogo("SCAMCOIN") },
     ],

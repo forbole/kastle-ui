@@ -618,11 +618,12 @@ const styles = StyleSheet.create({
   // "Generic List" row: bg white/5%, border border.b200, radius 2xl,
   // overflow hidden, 12px horizontal padding — confirmed via
   // get_design_context in the round-3 padding audit, not the select
-  // sheet's shared 16px default (which this overrides). Height 68 added
-  // (round 6, 2026-09-26 — re-checked via get_design_context on
-  // 14767:29942, Home dashboard's own Generic List row, h-[68px] exact):
-  // content-driven height previously computed to ~64, a small but real
-  // diff.
+  // sheet's shared 16px default (which this overrides). Height 68
+  // (14767:29942, Home dashboard's Generic List row, h-[68px] exact) —
+  // round 6 polish, 2026-09-26: derived from a token instead of a fixed
+  // number — spacing.s3_5 (14) × 2 + the 40px icon = 68, matches exactly,
+  // so the row grows/shrinks correctly with its content instead of
+  // clipping at a hardcoded height.
   tokenRowCard: {
     backgroundColor: white["5%"],
     borderWidth: borderWidth.bw1,
@@ -630,7 +631,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius["2xl"],
     overflow: "hidden",
     paddingHorizontal: spacing.s3,
-    height: 68,
+    paddingVertical: spacing.s3_5,
   },
   tokenRowDisabled: {
     opacity: 0.4,
