@@ -2,16 +2,13 @@
  * Stable sort: items where `isVerified(item)` is true come first, unverified
  * items after — relative order is preserved within each group.
  *
- * Pure — no fetching, no side effects. The list itself must already be in
- * the order the caller wants within each group (e.g. by balance); this only
- * reorders the two groups relative to each other. Consumers who already
- * have a pre-sorted, pre-grouped list don't need this at all — it exists
- * for the common case of "verified first" on an otherwise-unsorted list.
- *
- * ⚠️ NOT wired up automatically by TokenListRow. Whether Home's token list
- * actually sorts verified-first, or just follows Figma's as-drawn order, is
- * an open question with Leo as of 2026-09-25 — this helper is here for
- * whichever way that's answered, not a decision that it applies.
+ * ⚠️ NOT exported from this folder's index.ts (Leo sync, 2026-09-25):
+ * Home's actual behaviour is NOT verified-first — it keeps grouping
+ * (same-name tokens stay together, e.g. all "KAS" rows, then all "NACHO"
+ * rows), so calling this helper would produce the wrong order. Left in
+ * the file, unused, rather than deleted, in case a different sort is
+ * wanted later — do not re-export or wire it into TokenListRow without
+ * confirming the decision changed.
  */
 export function sortTokensByVerified<T>(
   items: readonly T[],

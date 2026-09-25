@@ -41,11 +41,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * verified × unverified × KCC20 × KRC20 (D-071, D-072), mirroring Figma's
- * NACHO example on both nodes (14745:449924 verified, 14745:450123
- * unverified) — header chip stays on both ("Kaspa KCC20"/"Kaspa KRC20",
- * label text per Nicole+Leo sync 2026-09-25), only the Security row's
- * checkmark + text differ.
+ * KCC20 verified vs unverified (D-071, D-072), mirroring Figma's NACHO
+ * example on both nodes (14745:449924 verified, 14745:450123 unverified)
+ * — header chip stays on both ("Kaspa KCC20", label text per Nicole+Leo
+ * sync 2026-09-25), only the Security row's checkmark + text differ.
+ *
+ * ⚠️ No "VerifiedKRC20" story (Leo sync, 2026-09-25: verification only
+ * exists for KCC20 — TokenDetailPage enforces this, so isVerified=true on
+ * a KRC20 token silently shows "Unverified" rather than a wrong
+ * "Verified"). Only KCC20 gets a Verified story.
  */
 export const VerifiedKCC20: Story = {
   render: (args) => (
@@ -56,12 +60,6 @@ export const VerifiedKCC20: Story = {
 export const UnverifiedKCC20: Story = {
   render: (args) => (
     <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa KCC20" />
-  ),
-};
-
-export const VerifiedKRC20: Story = {
-  render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified standard="KRC20" chipLabel="Kaspa KRC20" />
   ),
 };
 

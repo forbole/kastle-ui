@@ -33,7 +33,10 @@ export interface TokenDetailPageProps {
   fallback?: ImageSourcePropType;
   /** Shows the verified checkmark next to the name AND drives the
    * "Security" row (Verified with a checkmark / plain "Unverified", no
-   * colour change — Figma nodes 14745:449924 / 14745:450123). */
+   * colour change — Figma nodes 14745:449924 / 14745:450123). Only ever
+   * takes effect for `standard === "KCC20"` (Leo sync, 2026-09-25:
+   * verification only exists for KCC20 — KRC20/ERC20 can never be
+   * verified) — enforced here regardless of what's passed. */
   isVerified?: boolean;
   /** Drives the header icon's chain-badge (D-071) and the header chip's icon. */
   standard: TokenStandard;
@@ -58,6 +61,15 @@ export interface TokenDetailPageProps {
    * label on both frames, value format unchanged.
    */
   covenantId: string;
+  /**
+   * Covenant ID row's label text. Default "Security" row's sibling label
+   * — kept as a prop, not hardcoded, per Leo sync 2026-09-25: Leo will
+   * confirm later whether this label varies for non-KCC20 tokens (Figma
+   * currently shows "Covenant ID" on both the verified and unverified
+   * KCC20 frames only — no KRC20/ERC20 Token Details frame exists yet to
+   * check against).
+   */
+  covenantIdLabel?: string;
 
   /** Controlled tab — "history" | "assetInfo". */
   activeTab: "history" | "assetInfo";
@@ -93,10 +105,17 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   chipIcon,
   network,
   covenantId,
+  covenantIdLabel = "Covenant ID",
   activeTab,
   onTabChange,
   historyContent,
 }) => {
+  // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
+  // ERC20 (and Native) can never show the checkmark or "Verified" status,
+  // even if the caller passes isVerified=true. Enforced here, not left to
+  // the caller.
+  const showVerified = isVerified && standard === "KCC20";
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -118,7 +137,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
                 {name}
               </Text>
-              {isVerified && <VerifiedBadge size={18} />}
+              {showVerified && <VerifiedBadge size={18} />}
             </View>
             {!!priceLabel && (
               <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
@@ -139,13 +158,13 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
                 <DetailKVRow label="Network" value={network} />
               </View>
               <View style={[styles.infoRow, styles.infoRowBorder]}>
-                <DetailKVRow label="Covenant ID" value={covenantId} />
+                <DetailKVRow label={covenantIdLabel} value={covenantId} />
               </View>
               <View style={styles.infoRow}>
                 <DetailKVRow
                   label="Security"
-                  value={isVerified ? "Verified" : "Unverified"}
-                  valuePrefix={isVerified ? <VerifiedBadge size={16} /> : undefined}
+                  value={showVerified ? "Verified" : "Unverified"}
+                  valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
                 />
               </View>
             </View>
