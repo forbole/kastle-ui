@@ -205,41 +205,62 @@ export const TokenItem = memo(({ token, isDisabled = false, onPress, fallback, f
         chainImageSize={18}
       />
 
-      {/* Name + symbol */}
-      <View style={styles.tokenMeta}>
-        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
-          {token.name}
-        </Text>
-        {token.symbol ? (
-          <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
-            {token.symbol}
-          </Text>
-        ) : null}
-      </View>
-
-      {/* Amount (+ USD line, card variant only) */}
+      {/* Name + symbol, and Amount (+ USD line) — card variant only: both
+          columns wrapped in one flex:1 row (round 6, 2026-09-26 — reviewer:
+          amount was truncating with "…"; found via get_design_context on
+          14767:29942, Home dashboard's own Generic List row, that Figma
+          nests name-col + amount-col in their own flex row with an 8px gap,
+          separate from the icon→content 12px gap the shared `tokenRow` gap
+          already provides — not a flat 3-way gap like this used to render).
+          "list" variant JSX below is untouched. */}
       {isCard ? (
-        <View style={styles.tokenAmountColumnCard}>
+        <View style={styles.tokenContentCard}>
+          <View style={styles.tokenMetaCard}>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
+              {token.name}
+            </Text>
+            {token.symbol ? (
+              <Text allowFontScaling={false} style={styles.tokenSubTextCard} numberOfLines={1} ellipsizeMode="tail">
+                {token.symbol}
+              </Text>
+            ) : null}
+          </View>
+          <View style={styles.tokenAmountColumnCard}>
+            {formattedAmount ? (
+              <Text allowFontScaling={false} style={styles.tokenBalanceCard} numberOfLines={1}>
+                {formattedAmount}
+              </Text>
+            ) : null}
+            {!!token.amountUsd && (
+              <Text allowFontScaling={false} style={styles.tokenSubTextCard} numberOfLines={1}>
+                {token.amountUsd}
+              </Text>
+            )}
+          </View>
+        </View>
+      ) : (
+        <>
+          <View style={styles.tokenMeta}>
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
+              {token.name}
+            </Text>
+            {token.symbol ? (
+              <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
+                {token.symbol}
+              </Text>
+            ) : null}
+          </View>
           {formattedAmount ? (
+            // Unchanged from before the merge: the "list" variant's amount
+            // is a bare Text sibling, not wrapped in a View — kept exactly
+            // as-is so the shared default (feeding the production
+            // Swap/Bridge sheet) has zero layout risk from this change.
             <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
               {formattedAmount}
             </Text>
           ) : null}
-          {!!token.amountUsd && (
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAmountUsd]} numberOfLines={1}>
-              {token.amountUsd}
-            </Text>
-          )}
-        </View>
-      ) : formattedAmount ? (
-        // Unchanged from before the merge: the "list" variant's amount is
-        // a bare Text sibling, not wrapped in a View — kept exactly as-is
-        // so the shared default (feeding the production Swap/Bridge
-        // sheet) has zero layout risk from this change.
-        <Text allowFontScaling={false} style={[styles.tokenBalance]} numberOfLines={1} ellipsizeMode="tail">
-          {formattedAmount}
-        </Text>
-      ) : null}
+        </>
+      )}
     </TouchableOpacity>
   );
 });
@@ -597,7 +618,11 @@ const styles = StyleSheet.create({
   // "Generic List" row: bg white/5%, border border.b200, radius 2xl,
   // overflow hidden, 12px horizontal padding — confirmed via
   // get_design_context in the round-3 padding audit, not the select
-  // sheet's shared 16px default (which this overrides).
+  // sheet's shared 16px default (which this overrides). Height 68 added
+  // (round 6, 2026-09-26 — re-checked via get_design_context on
+  // 14767:29942, Home dashboard's own Generic List row, h-[68px] exact):
+  // content-driven height previously computed to ~64, a small but real
+  // diff.
   tokenRowCard: {
     backgroundColor: white["5%"],
     borderWidth: borderWidth.bw1,
@@ -605,6 +630,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius["2xl"],
     overflow: "hidden",
     paddingHorizontal: spacing.s3,
+    height: 68,
   },
   tokenRowDisabled: {
     opacity: 0.4,
@@ -628,12 +654,44 @@ const styles = StyleSheet.create({
     fontSize: 14,
     maxWidth: 100,
   },
-  tokenAmountColumnCard: {
-    alignItems: "flex-end",
-    gap: spacing.s1,
+  // Card-only geometry, all re-checked against 14767:29942's Generic List
+  // row (round 6, 2026-09-26 — reviewer's truncation bug + a full geometry
+  // pass, not just the one fix). Kept fully separate from tokenMeta/
+  // tokenBalance/tokenAddress above, which stay exactly as they were for
+  // "list" — none of these card styles are reused there.
+  //
+  // Figma nests [name-col, amount-col] in their own row with an 8px gap;
+  // name-col is a FIXED 114px width (not flexible — Figma truncates names
+  // there too, by design), amount-col is flex:1 so it gets whatever space
+  // is left and never gets squeezed by a competing flex:1 name column.
+  tokenContentCard: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
   },
-  tokenAmountUsd: {
-    color: typography.t500,
+  tokenMetaCard: {
+    width: 114,
+    gap: spacing.s1_5,
+  },
+  // Figma's sub-text under both the name ("$0.230") and the amount
+  // ("≈ $3,466 USD") is identical styling — 14px normal, typography600 —
+  // used for both here. "list"'s tokenAddress (12px, typography500) is a
+  // different, deliberately smaller style for a different context
+  // (contract-address abbreviations), untouched.
+  tokenSubTextCard: {
+    ...textStyles.bodyNormalSM,
+    color: typography.t600,
+  },
+  tokenBalanceCard: {
+    ...textStyles.bodySemiboldMD,
+    color: typography.t900,
+    flexShrink: 0,
+  },
+  tokenAmountColumnCard: {
+    flex: 1,
+    alignItems: "flex-end",
+    gap: spacing.s1_5,
   },
   emptyContainer: {
     paddingVertical: 32,
