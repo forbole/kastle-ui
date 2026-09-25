@@ -10,32 +10,34 @@ const placeholderLogo = require("../../../../assets/icon.png");
 // Mirrors Figma node 14741:396213's actual example rows and badges, PLUS
 // chainKeys re-derived from the filter-state variants (node
 // 14741:392168 "Variants" — "Kaspa (with KCC20)" 14741:389973, "KRC20"
-// 14741:392167, "Kasplex" 14741:392166, "Igra" 14741:392165):
+// 14741:392167, "Kasplex" 14741:392166, "Igra" 14741:392165).
+//
+// ⚠️ Correction (Nicole via team-lead, round 3): STICK/KASPY/SZAR
+// previously also carried chainKeys: ["krc20"] because an earlier read of
+// 14741:392167 showed them there — Nicole says that was placeholder data
+// and she removed them from the KRC20 filter frame. They belong to the
+// "Kaspa" tab only now. Re-checked 14741:392167 fresh before this edit —
+// it still visually shows STICK/KASPY/SZAR (the Figma edit may not have
+// synced/saved yet on her end) — but implementing per her explicit
+// decision regardless, not what's currently drawn. standard stays
+// "KCC20" for all three, per the same decision.
 //   - "Kaspa" filter shows: Kaspa (native), STICK, KASPY, SZAR
-//   - "KRC20" filter shows: STICK, KASPY, SZAR (same 3, minus native)
+//   - "KRC20" filter: empty for now (no KRC20 example in this sample set)
 //   - "Kasplex" filter shows: NACHO, GHOAD
 //   - "Igra" filter shows: KASPER, TTTT, GHOAD, KASPY(!) — GHOAD appears
 //     in BOTH Kasplex and Igra with the identical amount (5,432.000000,
 //     down to the same decimals) — read straight off Figma, not "fixed",
 //     even though it looks like a copy-pasted row. KASPY appears a SECOND
 //     time here with a DIFFERENT amount (4,100,000,000 vs 1,500,000,000
-//     on Kaspa/KRC20) — modelled as a distinct row (same name, different
+//     on Kaspa) — modelled as a distinct row (same name, different
 //     network instance, same pattern as D-064's same-name disambiguation)
-//     rather than force one row into 3 categories with 2 different
+//     rather than force one row into 2 categories with 2 different
 //     balances.
-// ⚠️ standard ("KCC20"/"ERC20" below, driving the corner-badge D-071
-// rule) is UNCHANGED from the prior reviewer-accepted round — this
-// filter-tab evidence suggests STICK/KASPY/SZAR may actually be KRC20 (or
-// at least Kasplex/KRC20-non-KCC20), not KCC20, which would contradict
-// the current `standard` values. Not touching `standard` here — that
-// question was already reviewed and passed separately, and re-deriving
-// it wasn't this item's ask. Flagging the conflict in the report instead
-// of guessing which reading wins.
 const SAMPLE_TOKENS: TokenInfo[] = [
   { name: "Kaspa", amount: "2,000.9473245", logo: placeholderLogo, standard: "Native", chainKeys: ["kaspa"] },
-  { name: "STICK", symbol: "vn384gs...c83gd", amount: "2,235.454365", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa", "krc20"] },
-  { name: "KASPY", symbol: "vn384gs...c83gd", amount: "1,500,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa", "krc20"] },
-  { name: "SZAR", symbol: "1663d3...3c5dek", amount: "3,250.785432", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa", "krc20"] },
+  { name: "STICK", symbol: "vn384gs...c83gd", amount: "2,235.454365", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa"] },
+  { name: "KASPY", symbol: "vn384gs...c83gd", amount: "1,500,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa"] },
+  { name: "SZAR", symbol: "1663d3...3c5dek", amount: "3,250.785432", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", chainKeys: ["kaspa"] },
   { name: "NACHO", symbol: "1663d3...3c5dek", amount: "2,500,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["kasplex"] },
   { name: "GHOAD", symbol: "1663d3...3c5dek", amount: "5,432.000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["kasplex", "igra"] },
   { name: "KASPER", symbol: "1663d3...3c5dek", amount: "6,789.123456", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
@@ -43,18 +45,16 @@ const SAMPLE_TOKENS: TokenInfo[] = [
   { name: "KASPY", symbol: "1663d3...3c5dek", amount: "4,100,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", chainKeys: ["igra"] },
 ];
 
-// Filter chip label text per Nicole+Leo sync, 2026-09-25 ("Swap: no
-// change except filter chip labels" — applied here too, same
-// substitution): KRC20 -> "Kaspa KRC20", Kasplex -> "Kasplex ERC20",
-// Igra -> "Igra ERC20". Native "Kaspa" is unchanged. ⚠️ Not independently
-// confirmed against a live Send-select Figma frame with this exact
-// wording — inferred from the same table given for NetworkTypeChip and
-// the Swap filter chips, since these are the same four categories.
+// Filter chip label text — Nicole, round 3: filter chips keep the SHORT
+// labels ("Kaspa · KRC20 · Kasplex · Igra"), unchanged. Reverts an
+// earlier round's wrong substitution here — the long "{Network}-
+// {Standard}" form is for NetworkTypeChip only (Token Details header /
+// Send Confirm), not filter chips.
 const CHAIN_FILTERS = [
   { key: "kaspa" as ChainFilter, label: "Kaspa", logo: placeholderLogo },
-  { key: "krc20" as ChainFilter, label: "Kaspa KRC20", logo: placeholderLogo },
-  { key: "kasplex" as ChainFilter, label: "Kasplex ERC20", logo: placeholderLogo },
-  { key: "igra" as ChainFilter, label: "Igra ERC20", logo: placeholderLogo },
+  { key: "krc20" as ChainFilter, label: "KRC20", logo: placeholderLogo },
+  { key: "kasplex" as ChainFilter, label: "Kasplex", logo: placeholderLogo },
+  { key: "igra" as ChainFilter, label: "Igra", logo: placeholderLogo },
 ];
 
 const meta: Meta<typeof SendSelectTokenPage> = {
