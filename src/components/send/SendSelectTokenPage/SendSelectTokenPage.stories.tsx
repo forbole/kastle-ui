@@ -30,11 +30,18 @@ const SAMPLE_TOKENS: TokenInfo[] = [
   { name: "TTTT", symbol: "1663d3...3c5dek", amount: "3,800,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20" },
 ];
 
+// Filter chip label text per Nicole+Leo sync, 2026-09-25 ("Swap: no
+// change except filter chip labels" — applied here too, same
+// substitution): KRC20 -> "Kaspa KRC20", Kasplex -> "Kasplex ERC20",
+// Igra -> "Igra ERC20". Native "Kaspa" is unchanged. ⚠️ Not independently
+// confirmed against a live Send-select Figma frame with this exact
+// wording — inferred from the same table given for NetworkTypeChip and
+// the Swap filter chips, since these are the same four categories.
 const CHAIN_FILTERS = [
   { key: "kaspa" as ChainFilter, label: "Kaspa", logo: placeholderLogo },
-  { key: "krc20" as ChainFilter, label: "KRC20", logo: placeholderLogo },
-  { key: "kasplex" as ChainFilter, label: "Kasplex", logo: placeholderLogo },
-  { key: "igra" as ChainFilter, label: "Igra", logo: placeholderLogo },
+  { key: "krc20" as ChainFilter, label: "Kaspa KRC20", logo: placeholderLogo },
+  { key: "kasplex" as ChainFilter, label: "Kasplex ERC20", logo: placeholderLogo },
+  { key: "igra" as ChainFilter, label: "Igra ERC20", logo: placeholderLogo },
 ];
 
 const meta: Meta<typeof SendSelectTokenPage> = {
