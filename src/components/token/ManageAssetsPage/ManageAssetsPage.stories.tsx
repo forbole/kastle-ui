@@ -22,10 +22,12 @@ const tokenLogo = (seed: string) => ({ uri: `https://picsum.photos/seed/${seed}/
 // chain badge) · NACHO/KCC20 (badge, off) · NACHO/KRC20 (no badge, off) ·
 // NACHO/Kasplex-ERC20 (badge, on) · NACHO/Igra-ERC20 (badge, on).
 //
-// KAS sub-label corrected (round 6, 2026-09-26 — reviewer): Figma actually
-// shows a balance under KAS ("28.3984 KAS"), not the plain network name
-// "Kaspa" this story previously used — re-checked the frame, following it
-// exactly now.
+// KAS sub-label corrected (round 6, 2026-09-26 — team-lead, reading Figma
+// frame 14741:397082, not the reviewer): that frame shows a balance under
+// KAS ("28.3984 KAS"), not the plain network name "Kaspa" this story
+// previously used. ⚠️ Nicole is still deciding which Figma frame is
+// current for this screen — the value here is not settled, just
+// following what was pointed to at the time.
 const SAMPLE_TOKENS: ManageAssetsToken[] = [
   { id: "kas", name: "KAS", subLabel: "28.3984 KAS", logo: tokenLogo("KAS"), standard: "Native", isHidden: false },
   { id: "nacho-kcc20", name: "NACHO", subLabel: "Kaspa-KCC20", logo: tokenLogo("NACHO-kcc20"), chainLogo: kaspaChainLogo, standard: "KCC20", isHidden: true },
