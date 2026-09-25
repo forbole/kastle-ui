@@ -58,6 +58,12 @@ export interface SendSelectTokenPageProps {
  * address is passed as `TokenInfo.symbol` (already optional/conditional in
  * TokenItem) — native KAS has none, KRC20/KCC20 tokens do (Nicole's Figma
  * note). No KCC20/KRC20 text label (D-072).
+ *
+ * Network filter chips (Kaspa/KRC20/Kasplex/Igra) actually filter the list
+ * — pure, local, by `TokenInfo.chainKeys` (single-select: see
+ * filteredTokens' doc comment for why, per Figma's filter-state variants,
+ * node `14741:392168`). Works uncontrolled (internal state) or controlled
+ * (`chainFilter`/`onChainFilterChange`), same as search.
  */
 export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
   tokens = [],
@@ -80,18 +86,32 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
     [onChainFilterChange, chainFilter, internalChainFilter],
   );
 
-  // Pure, local filtering of the passed `tokens` list by name/symbol — no
-  // fetching, no data logic. Applies regardless of controlled/uncontrolled
-  // search, since it's just a substring match on what's already in props.
+  // Pure, local filtering of the passed `tokens` list by name/symbol AND
+  // by the selected network chip — no fetching, no data logic. Applies
+  // regardless of controlled/uncontrolled state, since it's just deriving
+  // a subset of what's already in props.
+  //
+  // Chain filter is single-select (Figma node 14741:392168 "Variants":
+  // each filtered frame shows exactly ONE chip highlighted, never several
+  // at once — "Kaspa (with KCC20)" / "KRC20" / "Kasplex" / "Igra" are
+  // mutually exclusive views, not an additive multi-select). Empty
+  // activeChainFilter = the "all selected (default)" frame — no
+  // constraint, every chip renders as active, full list shows.
   const filteredTokens = useMemo(() => {
     const query = activeSearch.trim().toLowerCase();
-    if (!query) return tokens;
-    return tokens.filter(
-      (t) =>
-        t.name.toLowerCase().includes(query) ||
-        (t.symbol?.toLowerCase().includes(query) ?? false),
-    );
-  }, [tokens, activeSearch]);
+    let result = tokens;
+    if (query) {
+      result = result.filter(
+        (t) =>
+          t.name.toLowerCase().includes(query) ||
+          (t.symbol?.toLowerCase().includes(query) ?? false),
+      );
+    }
+    if (activeChainFilter.length > 0) {
+      result = result.filter((t) => t.chainKeys?.some((k) => activeChainFilter.includes(k)));
+    }
+    return result;
+  }, [tokens, activeSearch, activeChainFilter]);
 
   const handleSearchChange = useCallback(
     (q: string) => {
@@ -106,9 +126,12 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
 
   const handleChainFilterPress = useCallback(
     (key: ChainFilter) => {
-      const next = activeChainFilter.includes(key)
-        ? activeChainFilter.filter((k) => k !== key)
-        : [...activeChainFilter, key];
+      // Single-select toggle: tapping the already-sole-active chip clears
+      // back to "all selected"; tapping any other chip replaces the
+      // selection with just that one. See filteredTokens' doc comment for
+      // why this is single-select, not additive multi-select.
+      const isSoleActive = activeChainFilter.length === 1 && activeChainFilter[0] === key;
+      const next = isSoleActive ? [] : [key];
       if (onChainFilterChange) {
         onChainFilterChange(next);
       } else {
@@ -183,7 +206,9 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
             <ChainFilterChip
               label={item.label}
               logo={item.logo}
-              isActive={activeChainFilter.includes(item.key)}
+              // "all selected (default)" (Figma 14741:398058/397708): no
+              // filter active -> every chip renders as active.
+              isActive={activeChainFilter.length === 0 || activeChainFilter.includes(item.key)}
               onPress={() => handleChainFilterPress(item.key)}
             />
           )}
