@@ -5,18 +5,7 @@ import { ManageAssetsPage } from "./ManageAssetsPage";
 import { ManageAssetsToken } from "./ManageAssetsPage";
 import { background } from "../../../config/theme";
 
-// ⚠️ No real Kaspa/Kasplex/Igra brand logos exist anywhere in this repo
-// (checked assets/ and every .stories.tsx — only icon.png). Round 6,
-// 2026-09-26 — reviewer: every logo was the same placeholder "A" image,
-// making D-071 (KCC20 badge vs KRC20 none vs Kasplex/Igra badges)
-// impossible to review visually. Using picsum.photos seeded placeholders
-// instead — same remote-placeholder-image approach Banner.stories.tsx
-// already uses in this repo — NOT real brand assets, just visually
-// distinct ones.
-const kaspaChainLogo = { uri: "https://picsum.photos/seed/kaspa-chain/64" };
-const kasplexChainLogo = { uri: "https://picsum.photos/seed/kasplex-chain/64" };
-const igraChainLogo = { uri: "https://picsum.photos/seed/igra-chain/64" };
-const tokenLogo = (seed: string) => ({ uri: `https://picsum.photos/seed/${seed}/80` });
+const placeholderLogo = require("../../../../assets/icon.png");
 
 // Mirrors Figma node 14767:28684's own example rows — KAS (native, no
 // chain badge) · NACHO/KCC20 (badge, off) · NACHO/KRC20 (no badge, off) ·
@@ -29,12 +18,13 @@ const tokenLogo = (seed: string) => ({ uri: `https://picsum.photos/seed/${seed}/
 // current for this screen — the value here is not settled, just
 // following what was pointed to at the time.
 const SAMPLE_TOKENS: ManageAssetsToken[] = [
-  { id: "kas", name: "KAS", subLabel: "28.3984 KAS", logo: tokenLogo("KAS"), standard: "Native", isHidden: false },
-  { id: "nacho-kcc20", name: "NACHO", subLabel: "Kaspa-KCC20", logo: tokenLogo("NACHO-kcc20"), chainLogo: kaspaChainLogo, standard: "KCC20", isHidden: true },
-  // KRC20 never shows the badge (D-071) — chainLogo omitted.
-  { id: "nacho-krc20", name: "NACHO", subLabel: "Kaspa-KRC20", logo: tokenLogo("NACHO-krc20"), standard: "KRC20", isHidden: true },
-  { id: "nacho-kasplex", name: "NACHO", subLabel: "Kasplex-ERC20", logo: tokenLogo("NACHO-kasplex"), chainLogo: kasplexChainLogo, standard: "ERC20", isHidden: false },
-  { id: "nacho-igra", name: "NACHO", subLabel: "Igra-ERC20", logo: tokenLogo("NACHO-igra"), chainLogo: igraChainLogo, standard: "ERC20", isHidden: false },
+  { id: "kas", name: "KAS", subLabel: "28.3984 KAS", logo: placeholderLogo, standard: "Native", isHidden: false },
+  { id: "nacho-kcc20", name: "NACHO", subLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true },
+  // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
+  // prove the hide is driven by `standard`, not by missing data.
+  { id: "nacho-krc20", name: "NACHO", subLabel: "Kaspa-KRC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: true },
+  { id: "nacho-kasplex", name: "NACHO", subLabel: "Kasplex-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
+  { id: "nacho-igra", name: "NACHO", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
 ];
 
 const meta: Meta<typeof ManageAssetsPage> = {
@@ -45,15 +35,15 @@ const meta: Meta<typeof ManageAssetsPage> = {
     backgrounds: { default: "kastle" },
     viewport: { defaultViewport: "iphone14" },
   },
-  // Constrained to Figma's 393px frame width, centred (round 6,
-  // 2026-09-26 — reviewer: page stories were rendering full-width
-  // (1200px+) on the Storybook canvas, not comparable to Figma).
+  // No custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: a
+  // fixed 393px frame here broke the iPad viewport in Storybook's own
+  // viewport addon). ManageAssetsPage's own container is flex:1 with no
+  // fixed width, so it already fills whatever viewport is selected —
+  // same as NameDetailPage.stories.tsx, which has no decorator either.
   decorators: [
     (Story) => (
-      <View style={styles.canvas}>
-        <View style={styles.frame}>
-          <Story />
-        </View>
+      <View style={styles.screen}>
+        <Story />
       </View>
     ),
   ],
@@ -118,11 +108,12 @@ export const AllHidden: Story = {
 export const SameNameAllStandards: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState<ManageAssetsToken[]>([
-      { id: "1", name: "NACHO", subLabel: "Kaspa-KCC20", logo: tokenLogo("NACHO-kcc20"), chainLogo: kaspaChainLogo, standard: "KCC20", isHidden: false },
-      // KRC20 never shows the badge (D-071) — chainLogo omitted.
-      { id: "2", name: "NACHO", subLabel: "Kaspa-KRC20", logo: tokenLogo("NACHO-krc20"), standard: "KRC20", isHidden: false },
-      { id: "3", name: "NACHO", subLabel: "Kasplex-ERC20", logo: tokenLogo("NACHO-kasplex"), chainLogo: kasplexChainLogo, standard: "ERC20", isHidden: false },
-      { id: "4", name: "NACHO", subLabel: "Igra-ERC20", logo: tokenLogo("NACHO-igra"), chainLogo: igraChainLogo, standard: "ERC20", isHidden: false },
+      { id: "1", name: "NACHO", subLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: false },
+      // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
+      // prove the hide is driven by `standard`, not by missing data.
+      { id: "2", name: "NACHO", subLabel: "Kaspa-KRC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: false },
+      { id: "3", name: "NACHO", subLabel: "Kasplex-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
+      { id: "4", name: "NACHO", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
     ]);
     return (
       <ManageAssetsPage
@@ -147,13 +138,7 @@ export const Loading: Story = {
 };
 
 const styles = StyleSheet.create({
-  canvas: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: background.bg100,
-  },
-  frame: {
-    width: 393,
+  screen: {
     flex: 1,
     backgroundColor: background.bg0,
   },

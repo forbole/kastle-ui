@@ -89,6 +89,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   return (
     <View style={styles.container}>
       <FlatList
+        style={styles.list}
         data={tokens}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
@@ -148,6 +149,14 @@ const styles = StyleSheet.create({
   // Reviewer correction: total left inset must read 20 (Figma
   // 14767:28684 — "List Wrapper" x=8 + logo/row x=12 = 20), not 32.
   // listContent.paddingHorizontal (8) + row.paddingHorizontal (12) = 20.
+  // `style` (flex:1) added — round 6, 2026-09-26, team-lead: background
+  // was stopping after the last row instead of filling the page height.
+  // FlatList/ScrollView need an explicit `style` for outer sizing;
+  // `contentContainerStyle` alone only controls the inner content layout,
+  // not how much of the parent's height the list itself claims.
+  list: {
+    flex: 1,
+  },
   listContent: {
     paddingHorizontal: spacing.s2,
     paddingTop: spacing.s4,
