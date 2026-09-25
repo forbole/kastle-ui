@@ -1,4 +1,4 @@
-export { TokenSelectSheet, TokenItem, ChainFilterChip } from "./TokenSelectSheet";
+export { TokenSelectSheet, TokenItem, ChainFilterChip, toggleChainFilter } from "./TokenSelectSheet";
 export type {
   TokenSelectSheetProps,
   TokenItemProps,

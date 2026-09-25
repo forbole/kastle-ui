@@ -16,6 +16,7 @@ import {
   ChainFilterConfig,
   ChainFilterChip,
   RenderItemParams,
+  toggleChainFilter,
 } from "../../swap/TokenSelectSheet";
 
 export interface SendSelectTokenPageProps {
@@ -62,9 +63,14 @@ export interface SendSelectTokenPageProps {
  * KRC20 text label (D-072).
  *
  * Network filter chips (Kaspa/KRC20/Kasplex/Igra) actually filter the list
- * — pure, local, by `TokenInfo.chainKeys` (single-select: see
- * filteredTokens' doc comment for why, per Figma's filter-state variants,
- * node `14741:392168`). Works uncontrolled (internal state) or controlled
+ * — pure, local, by `TokenInfo.chainKeys`. Toggle behaviour (round 5,
+ * 2026-09-26 — corrected to match production): additive multi-select via
+ * the shared `toggleChainFilter` (same function `TokenSelectSheet`'s own
+ * chips use), NOT the single-select "replace with just this one" this
+ * screen had before — several chips can be active at once, empty = no
+ * filter, no chip highlighted (was previously drawn as "all chips active"
+ * by default, which doesn't match production's empty-array default
+ * either). Works uncontrolled (internal state) or controlled
  * (`chainFilter`/`onChainFilterChange`), same as search.
  */
 export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
@@ -89,16 +95,17 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
   );
 
   // Pure, local filtering of the passed `tokens` list by name/symbol AND
-  // by the selected network chip — no fetching, no data logic. Applies
+  // by the selected network chip(s) — no fetching, no data logic. Applies
   // regardless of controlled/uncontrolled state, since it's just deriving
   // a subset of what's already in props.
   //
-  // Chain filter is single-select (Figma node 14741:392168 "Variants":
-  // each filtered frame shows exactly ONE chip highlighted, never several
-  // at once — "Kaspa (with KCC20)" / "KRC20" / "Kasplex" / "Igra" are
-  // mutually exclusive views, not an additive multi-select). Empty
-  // activeChainFilter = the "all selected (default)" frame — no
-  // constraint, every chip renders as active, full list shows.
+  // Chain filter is additive multi-select (round 5, 2026-09-26 — matches
+  // production TokenSelectSheet's own chips, via the shared
+  // `toggleChainFilter`): several chips can be active at once, a token
+  // matches if any of its `chainKeys` is in the active set. Empty
+  // activeChainFilter = no filter, no chip highlighted, full list shows —
+  // same default as production, not the "all chips active" look this
+  // screen drew before.
   const filteredTokens = useMemo(() => {
     const query = activeSearch.trim().toLowerCase();
     let result = tokens;
@@ -128,12 +135,9 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
 
   const handleChainFilterPress = useCallback(
     (key: ChainFilter) => {
-      // Single-select toggle: tapping the already-sole-active chip clears
-      // back to "all selected"; tapping any other chip replaces the
-      // selection with just that one. See filteredTokens' doc comment for
-      // why this is single-select, not additive multi-select.
-      const isSoleActive = activeChainFilter.length === 1 && activeChainFilter[0] === key;
-      const next = isSoleActive ? [] : [key];
+      // Shared with production TokenSelectSheet's own chips (round 5,
+      // 2026-09-26) — see toggleChainFilter's doc comment.
+      const next = toggleChainFilter(activeChainFilter, key);
       if (onChainFilterChange) {
         onChainFilterChange(next);
       } else {
@@ -208,9 +212,10 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
             <ChainFilterChip
               label={item.label}
               logo={item.logo}
-              // "all selected (default)" (Figma 14741:398058/397708): no
-              // filter active -> every chip renders as active.
-              isActive={activeChainFilter.length === 0 || activeChainFilter.includes(item.key)}
+              // No filter active -> no chip highlighted (round 5,
+              // 2026-09-26 — matches production TokenSelectSheet's own
+              // chips; was previously "all chips active" by default here).
+              isActive={activeChainFilter.includes(item.key)}
               onPress={() => handleChainFilterPress(item.key)}
             />
           )}

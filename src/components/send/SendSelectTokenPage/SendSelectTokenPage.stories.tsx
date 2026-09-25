@@ -82,12 +82,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default — mirrors Figma's "all selected (default)" frame (node
- * 14741:398058/397708): every filter chip shows active, full list shows.
+ * Default — no chip active, full list shows (round 5, 2026-09-26:
+ * corrected to match production TokenSelectSheet's own default, which is
+ * an empty filter array with no chip highlighted — this used to draw
+ * every chip as active by default, which doesn't match production).
  * Genuinely interactive in Storybook — SendSelectTokenPage is uncontrolled
  * here (no chainFilter/onChainFilterChange passed), so tapping a chip
  * actually filters the list via its internal state; no story-level
- * wiring needed.
+ * wiring needed. Tapping multiple chips now ADDS to the selection
+ * (additive multi-select, shared `toggleChainFilter` logic), not a
+ * single-select replace.
  */
 export const Default: Story = {
   render: (args) => <SendSelectTokenPage {...args} />,
@@ -96,7 +100,9 @@ export const Default: Story = {
 /**
  * Chain filter pre-selected AND controlled from the story (React state
  * here instead of the component's internal state) — demonstrates the
- * controlled path still filters correctly, single-select per chip.
+ * controlled path still filters correctly. Multi-select (round 5,
+ * 2026-09-26): tapping a second chip here adds it rather than replacing
+ * "kasplex".
  */
 export const WithChainFilter: Story = {
   render: (args) => {
