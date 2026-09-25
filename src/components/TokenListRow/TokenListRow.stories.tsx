@@ -31,14 +31,16 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * Verified token — checkmark next to name (mirrors Figma Home list, node
- * 14745:450124). `standard: "KCC20"` is required for the checkmark to
- * render at all (Leo sync, 2026-09-25: verification only exists for
- * KCC20) — omitting it would silently show no checkmark despite
- * isVerified=true.
+ * 14745:450124). "STICK" (not "KAS") — KAS is native, and whether native
+ * KAS ever gets a checkmark is an open question for Nicole (Figma
+ * comment), not something this story should assert. `standard: "KCC20"`
+ * is required for the checkmark to render at all (Leo sync, 2026-09-25:
+ * verification only exists for KCC20) — omitting it would silently show
+ * no checkmark despite isVerified=true.
  */
 export const Verified: Story = {
   args: {
-    name: "KAS",
+    name: "STICK",
     standard: "KCC20",
     priceLabel: "$0.230",
     amount: "1,000,000",
