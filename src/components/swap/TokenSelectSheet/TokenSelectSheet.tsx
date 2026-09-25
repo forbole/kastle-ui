@@ -25,7 +25,6 @@ import {
   fontFamilies,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { VerifiedBadge } from "../../VerifiedBadge";
 import { TokenIcon, TokenStandard } from "../../TokenIcon";
 
 // ---------------------------------------------------------------------------
@@ -35,18 +34,20 @@ import { TokenIcon, TokenStandard } from "../../TokenIcon";
 /** Re-exported for callers that imported it from here before TokenIcon existed. */
 export type { TokenStandard };
 
+/**
+ * ⚠️ No `isVerified` field (round 3, 2026-09-26 — Leo approved Nicole's
+ * proposal): the verified ✓ concept now only exists on Token Details, not
+ * on select screens. Removed entirely rather than deprecated/no-op —
+ * confirmed via `git show origin/main:...TokenSelectSheet.tsx` that this
+ * field never existed on main, only on this branch, so there's no
+ * external (kastle-mobile bridge) consumer to break.
+ */
 export interface TokenInfo {
   name: string;
   symbol?: string;
   amount?: string;
   logo?: ImageSourcePropType;
   chainLogo?: ImageSourcePropType;
-  /** Shows the verified checkmark next to the name. Unverified renders
-   * nothing in its place — no label, no placeholder. Only ever renders for
-   * `standard === "KCC20"` (Leo sync, 2026-09-25: verification only exists
-   * for KCC20 — KRC20/ERC20 can never be verified) — TokenItem enforces
-   * this regardless of what's passed here. */
-  isVerified?: boolean;
   /**
    * Token standard. Only used today to decide whether the chain corner
    * badge on the token icon renders (D-071, 2026-09-25, corrected
@@ -115,23 +116,29 @@ export interface TokenItemProps {
   onPress: (token: TokenInfo) => void;
   /** Fallback image for token/chain logo when undefined or fails to load */
   fallback?: ImageSourcePropType;
+  /**
+   * Removes the row's own horizontal padding (round 3, 2026-09-26 — lead
+   * decision). Figma's dropdown-item rows have ZERO internal horizontal
+   * padding (`content-stretch flex gap-[12px] items-center py-[…]`, no
+   * `px-` class) — they're meant to span edge-to-edge within the list's
+   * own outer inset. The shared default (16px) is kept unchanged since
+   * this component also feeds the production Swap/Bridge sheet; opt in
+   * with `flush` where the host's own outer inset already accounts for
+   * it (e.g. SendSelectTokenPage).
+   */
+  flush?: boolean;
 }
 
-export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenItemProps) => {
+export const TokenItem = memo(({ token, isDisabled, onPress, fallback, flush = false }: TokenItemProps) => {
   const handlePress = useCallback(() => {
     onPress(token);
   }, [token, onPress]);
 
   const formattedAmount = formatBalance(token.amount);
 
-  // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
-  // ERC20 (and Native) can never show the checkmark, even if the caller
-  // passes isVerified=true. Enforced here, not left to the caller.
-  const showVerified = token.isVerified && token.standard === "KCC20";
-
   return (
     <TouchableOpacity
-      style={[styles.tokenRow, isDisabled && styles.tokenRowDisabled]}
+      style={[styles.tokenRow, flush && styles.tokenRowFlush, isDisabled && styles.tokenRowDisabled]}
       onPress={handlePress}
       disabled={isDisabled}
       activeOpacity={0.7}
@@ -152,7 +159,6 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
           <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
             {token.name}
           </Text>
-          {showVerified && <VerifiedBadge size={14} />}
         </View>
         {token.symbol ? (
           <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
@@ -519,6 +525,9 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  tokenRowFlush: {
+    paddingHorizontal: 0,
   },
   tokenRowDisabled: {
     opacity: 0.4,

@@ -106,23 +106,19 @@ export const WithChainFilter: Story = {
 };
 
 /**
- * KCC20 verified vs unverified, plus KRC20 unverified. Figma's own example
- * rows here don't include a verified checkmark at all, but TokenItem
- * (reused for rows) supports isVerified — this story exercises it since
- * the dispatch asked for it explicitly.
- *
- * ⚠️ No verified KRC20 row (Leo sync, 2026-09-25: verification only
- * exists for KCC20 — TokenItem enforces this, so isVerified=true on a
- * KRC20 token silently shows no checkmark rather than a wrong one).
+ * Same-name disambiguation by standard (D-064) — no verified checkmark on
+ * this screen at all (round 3, 2026-09-26 — Leo approved Nicole's
+ * proposal: verified only exists on Token Details now; `isVerified` was
+ * removed from TokenInfo). Only the icon's corner badge (D-071)
+ * distinguishes KCC20 from KRC20.
  */
-export const VerifiedUnverifiedByStandard: Story = {
+export const SameNameByStandard: Story = {
   render: (args) => (
     <SendSelectTokenPage
       {...args}
       tokens={[
-        { name: "NACHO", symbol: "1663d3...3c5dek", amount: "2,500,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
-        { name: "NACHO", symbol: "1663d3...3c5dek", amount: "500,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: false },
-        { name: "NACHO", symbol: "1663d3...3c5dek", amount: "750,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isVerified: false },
+        { name: "NACHO", symbol: "1663d3...3c5dek", amount: "2,500,000,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+        { name: "NACHO", symbol: "1663d3...3c5dek", amount: "750,000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20" },
       ]}
     />
   ),

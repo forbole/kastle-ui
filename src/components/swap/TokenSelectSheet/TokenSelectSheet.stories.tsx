@@ -198,22 +198,20 @@ export const LongNames: Story = {
 };
 
 /**
- * With verified badges — mirrors Figma's Token List checkmarks (KCC20
- * support). "STICK" (not "KAS") — KAS is native, and whether native KAS
- * ever gets a checkmark is an open question for Nicole (Figma comment),
- * not something this story should assert. `standard: "KCC20"` is required
- * on each verified row (Leo sync, 2026-09-25: verification only exists
- * for KCC20) — without it TokenItem enforces no checkmark, regardless of
- * isVerified.
+ * Corner badges by standard (D-071) — mirrors Figma's Token List badges.
+ * ⚠️ No verified checkmark here (round 3, 2026-09-26 — Leo approved
+ * Nicole's proposal): the verified ✓ concept now only exists on Token
+ * Details, not on select screens. `isVerified` was removed from TokenInfo
+ * entirely.
  */
-export const WithVerifiedBadges: Story = {
+export const KCC20Badges: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
     tokens: [
-      { name: "STICK", symbol: "STICK", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
-      { name: "NACHO", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
-      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isVerified: true },
-      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo, isVerified: false },
+      { name: "STICK", symbol: "STICK", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+      { name: "NACHO", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20" },
+      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo },
     ],
   },
 };
@@ -225,20 +223,13 @@ export const WithVerifiedBadges: Story = {
  * standard label after the name, so disambiguation is visual only: KCC20
  * rows keep the chain corner badge (Layer2AssetImage's `chainLogo`), KRC20
  * rows never show it.
- *
- * ⚠️ No verified KRC20 row (Leo sync, 2026-09-25: verification only
- * exists for KCC20 — TokenItem enforces this, so isVerified=true on a
- * KRC20 token silently shows no checkmark rather than a wrong one). Only
- * the KCC20 side gets a verified/unverified pair; KRC20 only needs one
- * (always unverified) state.
  */
 export const SameNameKCC20VsKRC20: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
     tokens: [
-      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: true },
-      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "500000", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: false },
-      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: false },
+      { name: "NACHO", standard: "KCC20", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo },
+      { name: "NACHO", standard: "KRC20", symbol: "NACHO", amount: "1233608.32787357", logo: placeholderLogo, chainLogo: placeholderLogo },
     ],
   },
 };
