@@ -181,13 +181,13 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
     <View style={styles.container}>
       {/* Search */}
       <View style={styles.searchContainer}>
-        <Search size={18} color={typography.t500} />
+        <Search size={16} color={typography.t600} />
         <TextInput
           style={styles.searchInput}
           value={activeSearch}
           onChangeText={handleSearchChange}
           placeholder="Search Token"
-          placeholderTextColor={typography.t500}
+          placeholderTextColor={typography.t600}
           autoCorrect={false}
           autoCapitalize="none"
           clearButtonMode="while-editing"
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: background.bg50,
     borderWidth: borderWidth.bw1,
-    borderColor: border.b400,
+    borderColor: border.b300,
     borderRadius: borderRadius.xl,
     height: spacing.s10,
     paddingHorizontal: spacing.s3,

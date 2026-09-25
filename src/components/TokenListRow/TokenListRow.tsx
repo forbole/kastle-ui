@@ -150,7 +150,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s3,
-    paddingHorizontal: spacing.s4,
+    // Figma's "Generic List" row content has px-[spacing/3] (12), not 16 —
+    // confirmed via get_design_context (round 3 padding audit, 2026-09-26).
+    paddingHorizontal: spacing.s3,
     paddingVertical: spacing.s3,
   },
   meta: {
