@@ -46,10 +46,11 @@ export interface TokenInfo {
   isVerified?: boolean;
   /**
    * Token standard. Only used today to decide whether the chain corner
-   * badge on the token icon renders (D-071, 2026-09-25): KRC20 never shows
-   * it; every other standard (including KCC20, and tokens that omit this
-   * prop) keeps the existing behaviour — badge shows whenever `chainLogo`
-   * is provided. Pure rendering switch, no lookup.
+   * badge on the token icon renders (D-071, 2026-09-25, corrected
+   * 2026-09-26 per reviewer): KRC20 and Native never show it; KCC20/ERC20
+   * show it only when `chainLogo` is actually provided — see TokenIcon for
+   * the full rule (no grey placeholder fallback). Pure rendering switch,
+   * no lookup.
    */
   standard?: TokenStandard;
 }
