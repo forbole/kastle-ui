@@ -11,7 +11,7 @@ import {
   typography,
   white,
 } from "../../config/theme";
-import { TokenIcon, TokenStandard } from "../TokenIcon";
+import { AssetImage, TokenStandard } from "../AssetImage";
 import { VerifiedBadge } from "../VerifiedBadge";
 import { Segmented, SegmentedOption } from "../Segmented";
 import { NetworkTypeChip } from "../NetworkTypeChip";
@@ -28,7 +28,7 @@ export interface TokenDetailPageProps {
   /** Price line under the name, e.g. "$0.00041". */
   priceLabel?: string;
   logo?: ImageSourcePropType;
-  /** Chain badge image — shown per `standard`, see TokenIcon (D-071). */
+  /** Chain badge image — shown per `standard`, see AssetImage's `variant="chain"` (D-071). */
   chainLogo?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
   /** Shows the verified checkmark next to the name AND drives the
@@ -141,7 +141,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             children, which is what this used to be. */}
         <View style={styles.headerCard}>
           <View style={styles.headerLeft}>
-            <TokenIcon logo={logo} chainLogo={chainLogo} fallback={fallback} standard={standard} size={44} chainBadgeSize={20} />
+            <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
             <View style={styles.headerText}>
               <View style={styles.nameRow}>
                 <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>

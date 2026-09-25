@@ -25,13 +25,13 @@ import {
   fontFamilies,
 } from "../../../config/theme";
 import { ActionSheet } from "../../ActionSheet";
-import { TokenIcon, TokenStandard } from "../../TokenIcon";
+import { AssetImage, TokenStandard } from "../../AssetImage";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-/** Re-exported for callers that imported it from here before TokenIcon existed. */
+/** Re-exported for callers that imported it from here before AssetImage existed. */
 export type { TokenStandard };
 
 /**
@@ -52,8 +52,8 @@ export interface TokenInfo {
    * Token standard. Only used today to decide whether the chain corner
    * badge on the token icon renders (D-071, 2026-09-25, corrected
    * 2026-09-26 per reviewer): KRC20 and Native never show it; KCC20/ERC20
-   * show it only when `chainLogo` is actually provided — see TokenIcon for
-   * the full rule (no grey placeholder fallback). Pure rendering switch,
+   * show it only when `chainLogo` is actually provided — see AssetImage's
+   * `variant="chain"` for the full rule (no grey placeholder fallback). Pure rendering switch,
    * no lookup.
    */
   standard?: TokenStandard;
@@ -144,13 +144,14 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback, flush = f
       activeOpacity={0.7}
     >
       {/* Token logo + standard-driven chain badge (D-071) */}
-      <TokenIcon
-        logo={token.logo}
-        chainLogo={token.chainLogo}
+      <AssetImage
+        variant="chain"
+        tokenImage={token.logo}
+        chainImage={token.chainLogo}
         fallback={fallback}
         standard={token.standard}
-        size={40}
-        chainBadgeSize={18}
+        tokenImageSize={40}
+        chainImageSize={18}
       />
 
       {/* Name + symbol */}

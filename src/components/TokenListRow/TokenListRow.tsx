@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View, ImageSourcePropType } from "react-native";
 import { spacing, textStyles, typography } from "../../config/theme";
-import { TokenIcon, TokenStandard } from "../TokenIcon";
+import { AssetImage, TokenStandard } from "../AssetImage";
 
 export interface TokenListRowProps {
   /** Token name, e.g. "KAS", "NACHO". */
@@ -10,12 +10,12 @@ export interface TokenListRowProps {
   priceLabel?: string;
   logo?: ImageSourcePropType;
   /** Chain/network badge image on the icon — only used when `standard`
-   * also allows the badge to show, see TokenIcon (D-071). */
+   * also allows the badge to show, see AssetImage's `variant="chain"` (D-071). */
   chainLogo?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
   /** Token standard — KRC20 and Native never show the chain corner badge;
    * KCC20/ERC20 show it only when `chainLogo` is also provided (D-071,
-   * see TokenIcon for the full rule). */
+   * see AssetImage's `variant="chain"` for the full rule). */
   standard?: TokenStandard;
   /** Formatted token amount, e.g. "1,000,000". */
   amount: string;
@@ -74,7 +74,7 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
       disabled={!onPress}
       activeOpacity={onPress ? 0.7 : 1}
     >
-      <TokenIcon logo={logo} chainLogo={chainLogo} fallback={fallback} standard={standard} />
+      <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} />
 
       <View style={styles.meta}>
         <View style={styles.nameRow}>
