@@ -133,23 +133,32 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             header card is below it in "KNS list" (y 180+). */}
         <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
 
-        {/* Header card — icon, name + verified badge, price, standard chip. */}
+        {/* Header card — two sections, matching Figma's actual layout
+            (round 3 padding decision #3, 2026-09-26): icon+text block with
+            its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
+            chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
+            (10/12) — not one flat row with a single `gap` between three
+            children, which is what this used to be. */}
         <View style={styles.headerCard}>
-          <TokenIcon logo={logo} chainLogo={chainLogo} fallback={fallback} standard={standard} size={44} chainBadgeSize={20} />
-          <View style={styles.headerText}>
-            <View style={styles.nameRow}>
-              <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
-                {name}
-              </Text>
-              {showVerified && <VerifiedBadge size={18} />}
+          <View style={styles.headerLeft}>
+            <TokenIcon logo={logo} chainLogo={chainLogo} fallback={fallback} standard={standard} size={44} chainBadgeSize={20} />
+            <View style={styles.headerText}>
+              <View style={styles.nameRow}>
+                <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
+                  {name}
+                </Text>
+                {showVerified && <VerifiedBadge size={18} />}
+              </View>
+              {!!priceLabel && (
+                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
+                  {priceLabel}
+                </Text>
+              )}
             </View>
-            {!!priceLabel && (
-              <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
-                {priceLabel}
-              </Text>
-            )}
           </View>
-          <NetworkTypeChip label={chipLabel} icon={chipIcon} />
+          <View style={styles.headerRight}>
+            <NetworkTypeChip label={chipLabel} icon={chipIcon} />
+          </View>
         </View>
 
         {activeTab === "assetInfo" ? (
@@ -159,10 +168,10 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             </Text>
             <View style={styles.infoCard}>
               <View style={[styles.infoRow, styles.infoRowBorder]}>
-                <DetailKVRow label="Network" value={network} />
+                <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} />
               </View>
               <View style={[styles.infoRow, showSecurityRow && styles.infoRowBorder]}>
-                <DetailKVRow label={covenantIdLabel} value={covenantId} />
+                <DetailKVRow label={covenantIdLabel} value={covenantId} paddingVertical={spacing.s3_5} />
               </View>
               {showSecurityRow && (
                 <View style={styles.infoRow}>
@@ -170,6 +179,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
                     label="Security"
                     value={showVerified ? "Verified" : "Unverified"}
                     valuePrefix={showVerified ? <VerifiedBadge size={16} /> : undefined}
+                    paddingVertical={spacing.s3_5}
                   />
                 </View>
               )}
@@ -199,22 +209,36 @@ const styles = StyleSheet.create({
   },
 
   // ── Header card ──────────────────────────────────────────────────────────
+  // Two sections (round 3 padding decision #3, 2026-09-26), matching
+  // Figma's real layout instead of one flat row with a single `gap`:
+  // headerLeft (icon+text) has its own pl-[spacing/3]/pr-[spacing/2]
+  // (12/8); headerRight (chip) has its own pl-[spacing/2point5]/
+  // pr-[spacing/3] (10/12) — confirmed via get_design_context.
   headerCard: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.s3,
     borderRadius: borderRadius["2xl"],
     borderWidth: borderWidth.bw1,
     borderColor: border.b200,
     backgroundColor: white["5%"],
-    // Figma's header row has pl-[spacing/3] (12) on the left content
-    // section and pr-[spacing/3] (12) on the right chip section — 12, not
-    // 16, on both outer horizontal edges (confirmed via get_design_context,
-    // round 3 padding audit, 2026-09-26). Vertical padding left unchanged
-    // — Figma's row height there is content/fixed-height driven (py-0 on
-    // the inner flex divs), not directly comparable to a single number.
-    paddingHorizontal: spacing.s3,
+    // Vertical padding left unchanged — Figma's row height there is
+    // content/fixed-height driven (py-0 on the inner flex divs), not
+    // directly comparable to a single number.
     paddingVertical: spacing.s4,
+  },
+  headerLeft: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s3,
+    paddingLeft: spacing.s3,
+    paddingRight: spacing.s2,
+  },
+  headerRight: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingLeft: spacing.s2_5,
+    paddingRight: spacing.s3,
   },
   headerText: {
     flex: 1,
