@@ -64,6 +64,29 @@ export const KRC20: Story = {
   },
 };
 
+/**
+ * Kasplex-ERC20 — round 6, 2026-09-26 (team-lead): ERC20 variants weren't
+ * shown on any feature page. `standard="ERC20"` gets the same token-bound
+ * "info" chip colour as KRC20 (no live Kasplex/Igra chip instance found
+ * anywhere to read a colour from — see NetworkTypeChip's own doc comment).
+ */
+export const KasplexERC20: Story = {
+  name: "Kasplex-ERC20",
+  args: {
+    chipLabel: "Kasplex-ERC20",
+    standard: "ERC20",
+  },
+};
+
+/** Igra-ERC20 — same standard as Kasplex-ERC20, different network name only. */
+export const IgraERC20: Story = {
+  name: "Igra-ERC20",
+  args: {
+    chipLabel: "Igra-ERC20",
+    standard: "ERC20",
+  },
+};
+
 /** Native KAS — no KCC20/KRC20-support-specific chip text; still shows the plain network chip. */
 export const KAS: Story = {
   args: {
