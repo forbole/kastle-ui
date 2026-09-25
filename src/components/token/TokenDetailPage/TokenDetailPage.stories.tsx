@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
-import { background } from "../../config/theme";
+import { background } from "../../../config/theme";
 import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
 
-const placeholderLogo = require("../../../assets/icon.png");
+const placeholderLogo = require("../../../../assets/icon.png");
 
 const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">) => {
   const [tab, setTab] = useState<"history" | "assetInfo">("assetInfo");
@@ -12,7 +12,7 @@ const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "on
 };
 
 const meta: Meta<typeof TokenDetailPage> = {
-  title: "Components/TokenDetailPage",
+  title: "Token/TokenDetailPage",
   component: TokenDetailPage,
   parameters: {
     layout: "fullscreen",
