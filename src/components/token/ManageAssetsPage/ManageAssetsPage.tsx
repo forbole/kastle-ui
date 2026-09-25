@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
-import { borderRadius, colors, spacing, textStyles, typography } from "../../../config/theme";
+import { colors, spacing, textStyles, typography } from "../../../config/theme";
 import { AssetImage, TokenStandard } from "../../AssetImage";
 import { Switch } from "../../Switch";
 
@@ -138,8 +138,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundScreen,
   },
+  // Reviewer correction: total left inset must read 20 (Figma
+  // 14767:28684 — "List Wrapper" x=8 + logo/row x=12 = 20), not 32.
+  // listContent.paddingHorizontal (8) + row.paddingHorizontal (12) = 20.
   listContent: {
-    paddingHorizontal: spacing.s5,
+    paddingHorizontal: spacing.s2,
     paddingTop: spacing.s4,
     paddingBottom: spacing.s10,
   },
@@ -155,7 +158,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: spacing.s3,
     paddingVertical: spacing.s3_5,
-    borderRadius: borderRadius.lg,
   },
   rowLeft: {
     flexDirection: "row",
