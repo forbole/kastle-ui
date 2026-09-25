@@ -216,7 +216,7 @@ export const TokenItem = memo(({ token, isDisabled = false, onPress, fallback, f
       {isCard ? (
         <View style={styles.tokenContentCard}>
           <View style={styles.tokenMetaCard}>
-            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
+            <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName, styles.tokenNameCard]} numberOfLines={1} ellipsizeMode="tail">
               {token.name}
             </Text>
             {token.symbol ? (
@@ -619,11 +619,21 @@ const styles = StyleSheet.create({
   // overflow hidden, 12px horizontal padding — confirmed via
   // get_design_context in the round-3 padding audit, not the select
   // sheet's shared 16px default (which this overrides). Height 68
-  // (14767:29942, Home dashboard's Generic List row, h-[68px] exact) —
-  // round 6 polish, 2026-09-26: derived from a token instead of a fixed
-  // number — spacing.s3_5 (14) × 2 + the 40px icon = 68, matches exactly,
-  // so the row grows/shrinks correctly with its content instead of
-  // clipping at a hardcoded height.
+  // (14767:29942, Home dashboard's Generic List row, h-[68px] exact).
+  //
+  // paddingVertical corrected round 6 (2026-09-26, team-lead — measured
+  // 75px in Chrome, not 68): re-checked via get_metadata on the row's own
+  // content-group node — its real height is 44px (name instance h-17 +
+  // gap 6 + sub-text instance h-21 = 44), TALLER than the 40px icon, not
+  // equal to it as the earlier "14×2 + 40 icon = 68" comment assumed.
+  // Figma's row itself is a fixed h-68 with items-center, so icon and
+  // content each centre independently: content group sits at y=12
+  // ((68-44)/2), icon at y=14 ((68-40)/2) — two different offsets, not
+  // one shared padding. paddingVertical: spacing.s3 (12) reproduces the
+  // *content* group's offset, which is what actually determines the row
+  // height here since content (44) is the taller sibling — see
+  // tokenNameCard/tokenBalanceCard below for the matching line-height fix
+  // that gets the content group's own height down to the correct 44.
   tokenRowCard: {
     backgroundColor: white["5%"],
     borderWidth: borderWidth.bw1,
@@ -631,7 +641,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius["2xl"],
     overflow: "hidden",
     paddingHorizontal: spacing.s3,
-    paddingVertical: spacing.s3_5,
+    paddingVertical: spacing.s3,
   },
   tokenRowDisabled: {
     opacity: 0.4,
@@ -690,6 +700,16 @@ const styles = StyleSheet.create({
     minWidth: 90,
     gap: spacing.s1_5,
   },
+  // Figma's name-line instance is a fixed h-17 (get_metadata on
+  // 14767:29942's row), but bodySemiboldMD (16px) has no explicit
+  // lineHeight in theme.ts — it falls back to the platform default
+  // (~19-21px for 16px Figtree Semibold), inflating the card row's real
+  // height past 68. Card-only override, appended after tokenName in the
+  // style array so it wins; "list"'s tokenName stays exactly as it was —
+  // this key doesn't exist there.
+  tokenNameCard: {
+    lineHeight: 17,
+  },
   // Figma's sub-text under both the name ("$0.230") and the amount
   // ("≈ $3,466 USD") is identical styling — 14px normal, typography600 —
   // used for both here. "list"'s tokenAddress (12px, typography500) is a
@@ -699,10 +719,14 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: typography.t600,
   },
+  // lineHeight: 17 added round 6 polish (2026-09-26) — same fix as
+  // tokenNameCard above, same reason: bodySemiboldMD has no explicit
+  // lineHeight, Figma's amount-line instance is a fixed h-17.
   tokenBalanceCard: {
     ...textStyles.bodySemiboldMD,
     color: typography.t900,
     flexShrink: 0,
+    lineHeight: 17,
   },
   tokenAmountColumnCard: {
     flex: 1,
