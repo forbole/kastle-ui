@@ -21,7 +21,6 @@ const meta: Meta<typeof SendConfirmPage> = {
     illustrationSource: placeholderLogo,
     senderAddress: "kaspa:feevxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr7vur7",
     recipientAddress: "kaspa:feevxs00fycp9v7tjcjsgcj5jttkqe7t7vdfxfradj8283gk7cu9tr3u8tgas",
-    chipIcon: placeholderLogo,
     amount: "1,608.32787 NACHO",
     amountUsd: "≈ $24,000 USD",
     estFeeAmount: "0.423354 NACHO",
@@ -40,17 +39,23 @@ const meta: Meta<typeof SendConfirmPage> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** KCC20 — Figma node 14741:398568. Chip label "Kaspa-KCC20" — hyphen form, confirmed by Nicole (round 3). */
+/**
+ * KCC20 — Figma node 14741:398568. Chip label "Kaspa-KCC20" — hyphen form,
+ * confirmed by Nicole (round 3). Chip colour: raw-hex teal (round 5) — see
+ * NetworkTypeChip's doc comment.
+ */
 export const KCC20: Story = {
   args: {
     chipLabel: "Kaspa-KCC20",
+    standard: "KCC20",
   },
 };
 
-/** KRC20 — Figma node 14741:398569. */
+/** KRC20 — Figma node 14741:398569. Chip colour: token-bound "info" (round 5). */
 export const KRC20: Story = {
   args: {
     chipLabel: "Kaspa-KRC20",
+    standard: "KRC20",
   },
 };
 
@@ -58,6 +63,7 @@ export const KRC20: Story = {
 export const KAS: Story = {
   args: {
     chipLabel: "Kaspa",
+    standard: "Native",
     amount: "1,000 KAS",
     amountUsd: "≈ $230 USD",
     estFeeAmount: "0.0001 KAS",
@@ -69,6 +75,7 @@ export const KAS: Story = {
 export const WithFeeBreakdownTrigger: Story = {
   args: {
     chipLabel: "Kaspa-KCC20",
+    standard: "KCC20",
     onEstFeePress: () => {},
   },
 };
@@ -77,6 +84,7 @@ export const WithFeeBreakdownTrigger: Story = {
 export const ConfirmDisabled: Story = {
   args: {
     chipLabel: "Kaspa-KCC20",
+    standard: "KCC20",
     isConfirmDisabled: true,
   },
 };
