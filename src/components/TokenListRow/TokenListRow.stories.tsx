@@ -110,6 +110,26 @@ export const UnverifiedKRC20: Story = {
 };
 
 /**
+ * Same-name disambiguation via `standardLabel` (round 3, 2026-09-26) —
+ * mirrors Figma's own reference set exactly: 4 consecutive "NACHO" rows,
+ * one per standard/network, found in the "Asset hide option" section's
+ * Actionsheet (node `14767:28683` "default" → "without chain identifier"
+ * → Dropdown Items `14767:28725`/`28763`/`28783` + one more for
+ * "Kaspa-KRC20"). Real label text, read off the actual nodes, not
+ * invented: "Kaspa-KCC20", "Kaspa-KRC20", "Kasplex-ERC20", "Igra-ERC20".
+ */
+export const SameNameStandardLabels: Story = {
+  render: () => (
+    <View style={styles.list}>
+      <TokenListRow name="NACHO" standardLabel="Kaspa-KCC20" standard="KCC20" amount="2,000,000,000" logo={placeholderLogo} chainLogo={placeholderLogo} isVerified />
+      <TokenListRow name="NACHO" standardLabel="Kaspa-KRC20" standard="KRC20" amount="2,000,000,000" logo={placeholderLogo} chainLogo={placeholderLogo} />
+      <TokenListRow name="NACHO" standardLabel="Kasplex-ERC20" standard="ERC20" amount="2,000,000,000" logo={placeholderLogo} chainLogo={placeholderLogo} />
+      <TokenListRow name="NACHO" standardLabel="Igra-ERC20" standard="ERC20" amount="2,000,000,000" logo={placeholderLogo} chainLogo={placeholderLogo} />
+    </View>
+  ),
+};
+
+/**
  * A mixed list, grouped by name — NOT verified-first (Leo sync,
  * 2026-09-25: keep grouping, e.g. all "NACHO" rows together; do not sort
  * unverified to the bottom). Rendered in exactly the order given, no

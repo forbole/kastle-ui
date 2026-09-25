@@ -18,6 +18,23 @@ export interface TokenListRowProps {
    * KCC20/ERC20 show it only when `chainLogo` is also provided (D-071,
    * see TokenIcon for the full rule). */
   standard?: TokenStandard;
+  /**
+   * Small "{Network}-{Standard}" disambiguation line under the name, e.g.
+   * "Kaspa-KCC20" / "Kaspa-KRC20" / "Kasplex-ERC20" / "Igra-ERC20" —
+   * round 3, 2026-09-26: Nicole confirmed this is now drawn in Figma.
+   * Found in the "Asset hide option" section's Actionsheet (node
+   * `14767:28730` "Content", under "expanded" → "default" →
+   * "without chain identifier"), NOT the primary Home Dashboard list
+   * frame (`14767:29942`, "Verify indication" section) — that one still
+   * shows no sub-label, same as before. Applying it here anyway: same
+   * visual system (identical `typography.t500`/12px/lineHeight-16 token
+   * as `priceLabel`, verified via get_design_context — `#7B9AAA` =
+   * `secondary.s700` = `typography.t500`, exact match, not approximated),
+   * and it directly serves D-064's same-name disambiguation need, which
+   * IS the Home list's problem. Optional and purely additive — omitting
+   * it changes nothing.
+   */
+  standardLabel?: string;
   /** Formatted token amount, e.g. "1,000,000". */
   amount: string;
   /** Formatted USD equivalent, e.g. "≈ $3,466 USD". */
@@ -56,6 +73,7 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
   chainLogo,
   fallback,
   standard,
+  standardLabel,
   amount,
   amountUsd,
   isVerified = false,
@@ -91,6 +109,15 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
             numberOfLines={1}
           >
             {priceLabel}
+          </Text>
+        )}
+        {!!standardLabel && (
+          <Text
+            allowFontScaling={false}
+            style={[textStyles.bodyNormalXS, styles.standardLabel]}
+            numberOfLines={1}
+          >
+            {standardLabel}
           </Text>
         )}
       </View>
@@ -140,6 +167,9 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   priceLabel: {
+    color: typography.t500,
+  },
+  standardLabel: {
     color: typography.t500,
   },
   amountColumn: {
