@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
-import { borderRadius, spacing, textStyles } from "../../config/theme";
+import { borderRadius, borderWidth, spacing, textStyles } from "../../config/theme";
 
 export interface NetworkTypeChipProps {
   /** e.g. "Kaspa Native-KCC20", "Kaspa-KRC20", "Kaspa-KCC20", "Kasplex", "Igra". */
@@ -58,7 +58,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s1,
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
+    // TODO(token): pending Nicole — #6FC7BA/#182B29 are literal Figma hex,
+    // not bound to a Figma variable or an existing theme.ts token. See the
+    // component doc comment above for the full provenance. Replace with a
+    // real token once she answers the Figma comment.
     borderColor: "#6FC7BA",
     backgroundColor: "#182B29",
     borderRadius: borderRadius.full,
@@ -67,11 +71,17 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   icon: {
+    // TODO(token): pending Nicole — 14/14/7 are read off the Figma badge
+    // sub-node directly, not a spacing/borderRadius token (14 sits between
+    // spacing.s3_5 and s4; 7 is exactly half of 14, not on the radius
+    // scale). Leaving as literal px until confirmed.
     width: 14,
     height: 14,
     borderRadius: 7,
   },
   label: {
+    // TODO(token): pending Nicole — 16 matches no line-height already in
+    // use on bodyNormalXS elsewhere; literal px until confirmed.
     lineHeight: 16,
     color: "#6FC7BA",
   },

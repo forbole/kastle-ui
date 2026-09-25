@@ -8,7 +8,7 @@ import {
   Keyboard,
 } from "react-native";
 import { Search } from "lucide-react-native";
-import { background, border, colors, typography, textStyles } from "../../../config/theme";
+import { background, border, borderRadius, borderWidth, colors, spacing, typography, textStyles } from "../../../config/theme";
 import {
   TokenItem,
   TokenInfo,
@@ -79,6 +79,19 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
     () => (onChainFilterChange !== undefined ? (chainFilter ?? []) : internalChainFilter),
     [onChainFilterChange, chainFilter, internalChainFilter],
   );
+
+  // Pure, local filtering of the passed `tokens` list by name/symbol — no
+  // fetching, no data logic. Applies regardless of controlled/uncontrolled
+  // search, since it's just a substring match on what's already in props.
+  const filteredTokens = useMemo(() => {
+    const query = activeSearch.trim().toLowerCase();
+    if (!query) return tokens;
+    return tokens.filter(
+      (t) =>
+        t.name.toLowerCase().includes(query) ||
+        (t.symbol?.toLowerCase().includes(query) ?? false),
+    );
+  }, [tokens, activeSearch]);
 
   const handleSearchChange = useCallback(
     (q: string) => {
@@ -179,7 +192,7 @@ export const SendSelectTokenPage: React.FC<SendSelectTokenPageProps> = ({
 
       {/* Token list */}
       <FlatList
-        data={tokens}
+        data={filteredTokens}
         renderItem={renderRow}
         keyExtractor={keyExtractor}
         ListEmptyComponent={ListEmptyComponent}
@@ -201,40 +214,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.backgroundScreen,
-    paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingHorizontal: spacing.s5,
+    paddingTop: spacing.s4,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: background.bg50,
-    borderWidth: 1,
+    borderWidth: borderWidth.bw1,
     borderColor: border.b400,
-    borderRadius: 12,
-    height: 40,
-    paddingHorizontal: 12,
-    gap: 8,
+    borderRadius: borderRadius.xl,
+    height: spacing.s10,
+    paddingHorizontal: spacing.s3,
+    gap: spacing.s2,
   },
   searchInput: {
     flex: 1,
     color: typography.t900,
-    fontSize: 15,
+    ...textStyles.bodyNormalMD,
     padding: 0,
     margin: 0,
   },
   chipsRow: {
     flexDirection: "row",
-    gap: 8,
-    paddingVertical: 16,
+    gap: spacing.s2,
+    paddingVertical: spacing.s4,
   },
   list: {
     flex: 1,
   },
   listContent: {
-    paddingBottom: 8,
+    paddingBottom: spacing.s2,
   },
   emptyContainer: {
-    paddingVertical: 32,
+    paddingVertical: spacing.s8,
     alignItems: "center",
   },
   emptyText: {
