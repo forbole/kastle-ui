@@ -43,30 +43,31 @@ type Story = StoryObj<typeof meta>;
 /**
  * verified × unverified × KCC20 × KRC20 (D-071, D-072), mirroring Figma's
  * NACHO example on both nodes (14745:449924 verified, 14745:450123
- * unverified) — header chip stays on both ("Kaspa-KCC20"/"Kaspa-KRC20"),
- * only the Security row's checkmark + text differ.
+ * unverified) — header chip stays on both ("Kaspa KCC20"/"Kaspa KRC20",
+ * label text per Nicole+Leo sync 2026-09-25), only the Security row's
+ * checkmark + text differ.
  */
 export const VerifiedKCC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
+    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa KCC20" />
   ),
 };
 
 export const UnverifiedKCC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa-KCC20" />
+    <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa KCC20" />
   ),
 };
 
 export const VerifiedKRC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified standard="KRC20" chipLabel="Kaspa-KRC20" />
+    <TokenDetailPageDemo {...args} isVerified standard="KRC20" chipLabel="Kaspa KRC20" />
   ),
 };
 
 export const UnverifiedKRC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa-KRC20" />
+    <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa KRC20" />
   ),
 };
 

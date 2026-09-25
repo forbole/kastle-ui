@@ -37,9 +37,10 @@ export interface TokenDetailPageProps {
   isVerified?: boolean;
   /** Drives the header icon's chain-badge (D-071) and the header chip's icon. */
   standard: TokenStandard;
-  /** Header chip label, e.g. "Kaspa-KCC20" / "Kaspa-KRC20". Figma keeps
-   * this chip on BOTH verified and unverified Token Details — D-072 only
-   * removed the Swap select's text label, not this one. */
+  /** Header chip label, e.g. "Kaspa KCC20" / "Kaspa KRC20" (text per
+   * Nicole+Leo sync, 2026-09-25). Figma keeps this chip on BOTH verified
+   * and unverified Token Details — D-072 only removed the Swap select's
+   * text label, not this one. */
   chipLabel: string;
   /** Header chip's small leading icon — a Kaspa network glyph in Figma
    * (`03783f92...svg`, `#6FC7BA` fill on white), NOT the token's own logo.
@@ -125,7 +126,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               </Text>
             )}
           </View>
-          <NetworkTypeChip label={chipLabel} icon={chipIcon} />
+          <NetworkTypeChip label={chipLabel} tone="pending" icon={chipIcon} />
         </View>
 
         {activeTab === "assetInfo" ? (
