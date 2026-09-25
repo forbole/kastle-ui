@@ -191,6 +191,30 @@ export const LongNames: Story = {
   },
 };
 
+/** With verified badges — mirrors Figma's Token List checkmarks (KCC20 support) */
+export const WithVerifiedBadges: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    tokens: [
+      { name: "KAS", symbol: "KAS", amount: "1000000", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: true },
+      { name: "NACHO", symbol: "NACHO", amount: "2000000.2314", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: true },
+      { name: "ZEAL", symbol: "ZEAL", amount: "2000000", logo: placeholderLogo, chainLogo: placeholderLogo, isVerified: true },
+      { name: "SCAMCOIN", symbol: "SCAM", amount: "500000", logo: placeholderLogo, isVerified: false },
+    ],
+  },
+};
+
+/** Same-name disambiguation (D-064) — KCC20 vs KRC20 versions of "KAS" side by side */
+export const SameNameDisambiguation: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    tokens: [
+      { name: "KAS", standardLabel: "KCC20", symbol: "KAS", amount: "1000000", logo: placeholderLogo, isVerified: true },
+      { name: "KAS", standardLabel: "KRC20", symbol: "KAS", amount: "1233608.32787357", logo: placeholderLogo, isVerified: true },
+    ],
+  },
+};
+
 /** Long token name with a large balance amount */
 export const LongNamesWithAmount: Story = {
   render: (args) => <SheetDemo {...args} />,
