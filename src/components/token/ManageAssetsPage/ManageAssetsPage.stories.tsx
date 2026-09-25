@@ -11,14 +11,14 @@ const placeholderLogo = require("../../../../assets/icon.png");
 // chain badge) · NACHO/KCC20 (badge, off) · NACHO/KRC20 (no badge, off) ·
 // NACHO/Kasplex-ERC20 (badge, on) · NACHO/Igra-ERC20 (badge, on).
 //
-// KAS sub-label corrected (round 6, 2026-09-26 — team-lead, reading Figma
-// frame 14741:397082, not the reviewer): that frame shows a balance under
-// KAS ("28.3984 KAS"), not the plain network name "Kaspa" this story
-// previously used. ⚠️ Nicole is still deciding which Figma frame is
-// current for this screen — the value here is not settled, just
-// following what was pointed to at the time.
+// KAS sub-label settled back to "Kaspa" (round 6, 2026-09-26 — team-lead
+// default, Nicole didn't object): matches 14767:28684 (the newer frame)
+// and the other rows' own pattern of showing the standard/network name,
+// not a balance. An earlier pass briefly set this to "28.3984 KAS" per a
+// different frame (14741:397082) while Nicole was still deciding which
+// frame was current — that's resolved now, this is the settled value.
 const SAMPLE_TOKENS: ManageAssetsToken[] = [
-  { id: "kas", name: "KAS", subLabel: "28.3984 KAS", logo: placeholderLogo, standard: "Native", isHidden: false },
+  { id: "kas", name: "KAS", subLabel: "Kaspa", logo: placeholderLogo, standard: "Native", isHidden: false },
   { id: "nacho-kcc20", name: "NACHO", subLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true },
   // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
   // prove the hide is driven by `standard`, not by missing data.
