@@ -155,11 +155,9 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback, flush = f
 
       {/* Name + symbol */}
       <View style={styles.tokenMeta}>
-        <View style={styles.tokenNameRow}>
-          <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
-            {token.name}
-          </Text>
-        </View>
+        <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
+          {token.name}
+        </Text>
         {token.symbol ? (
           <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">
             {token.symbol}
@@ -536,11 +534,6 @@ const styles = StyleSheet.create({
   tokenMeta: {
     flex: 1,
     gap: 4,
-  },
-  tokenNameRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
   },
   tokenName: {
     color: typography.t900,
