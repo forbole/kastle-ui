@@ -130,8 +130,19 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
         {/* Tabs — above the header card, matching Figma's actual order
             (reviewer correction, 2026-09-26): the segmented control sits in
             the fixed top region (14745:449924's "Top nav", y 0-156), the
-            header card is below it in "KNS list" (y 180+). */}
-        <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
+            header card is below it in "KNS list" (y 180+).
+            Hug-width + horizontally centred (round 5 item 5, 2026-09-26):
+            confirmed via get_metadata on the "Token Header" frame — parent
+            width 393, "segmented control" instance x=104 width=185
+            ((393-185)/2 = 104, exact centre), NOT full-width. `Segmented`
+            itself stays unstyled for width (its `outer` View has no
+            alignSelf, same as CustomRpcScreen's usage) — the wrapping
+            `alignItems: "center"` here is what centres it, following the
+            same wrapper-controls-alignment convention CustomRpcScreen uses
+            for its own (left-aligned) Segmented. */}
+        <View style={styles.segmentedWrap}>
+          <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
+        </View>
 
         {/* Header card — two sections, matching Figma's actual layout
             (round 3 padding decision #3, 2026-09-26): icon+text block with
@@ -206,6 +217,11 @@ const styles = StyleSheet.create({
     paddingTop: spacing.s4,
     paddingBottom: spacing.s10,
     gap: spacing.s4,
+  },
+
+  // ── Tabs ─────────────────────────────────────────────────────────────────
+  segmentedWrap: {
+    alignItems: "center",
   },
 
   // ── Header card ──────────────────────────────────────────────────────────
