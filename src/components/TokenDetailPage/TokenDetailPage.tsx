@@ -112,7 +112,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               </Text>
             )}
           </View>
-          <NetworkTypeChip label={chipLabel} variant="success" icon={chipIcon} />
+          <NetworkTypeChip label={chipLabel} icon={chipIcon} />
         </View>
 
         {/* Tabs */}

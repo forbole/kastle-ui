@@ -25,29 +25,50 @@ const meta: Meta<typeof NetworkTypeChip> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Send Confirm, current design — network only, no token standard (Figma 14740:385080) */
-export const Kaspa: Story = {
-  args: { label: "Kaspa", variant: "info" },
-};
+// The 4 labels from Figma's "option 1" component set (node 14592:271520,
+// comment "new badge added") — the source for this ONE chip per
+// team-lead, 2026-09-25 ("Build ONE chip component from it"). See
+// NetworkTypeChip.tsx's top comment for colour provenance — measured from
+// the Token Details live instance, not "option 1" itself (that node's
+// children are component definitions the Figma tools reject).
 
-/** Send Confirm, KCC20 — network + token standard (Figma 14740:384946) */
-export const KaspaNativeKCC20: Story = {
-  args: { label: "Kaspa Native-KCC20", variant: "info" },
-};
-
-/** Send Confirm, KRC20 — network + token standard (Figma 14740:385348) */
-export const KaspaKRC20: Story = {
-  args: { label: "Kaspa-KRC20", variant: "info" },
-};
-
-/** Token Details header chip, KCC20 — with leading icon (Figma node 14745:449924) */
+/** Token Details header (screen 2), e.g. node 14745:449924. */
 export const TokenDetailsKCC20: Story = {
-  args: { label: "Kaspa-KCC20", variant: "success", icon: placeholderLogo },
+  args: { label: "Kaspa-KCC20", icon: placeholderLogo },
 };
 
-/** Token Details header chip, KRC20 */
 export const TokenDetailsKRC20: Story = {
-  args: { label: "Kaspa-KRC20", variant: "success", icon: placeholderLogo },
+  args: { label: "Kaspa-KRC20", icon: placeholderLogo },
+};
+
+/** Send Confirm Send-from/Send-to rows (screen 5), e.g. nodes 14740:384946 / 14740:385348. */
+export const SendConfirmKCC20: Story = {
+  args: { label: "Kaspa Native-KCC20", icon: placeholderLogo },
+};
+
+export const SendConfirmKRC20: Story = {
+  args: { label: "Kaspa-KRC20", icon: placeholderLogo },
+};
+
+/** The other two "option 1" labels — no live Figma instance found using these yet, built for completeness. */
+export const Kasplex: Story = {
+  args: { label: "Kasplex", icon: placeholderLogo },
+};
+
+export const Igra: Story = {
+  args: { label: "Igra", icon: placeholderLogo },
+};
+
+/** All 4 "option 1" labels, side by side — one component, one style. */
+export const AllStandards: Story = {
+  render: () => (
+    <View style={styles.column}>
+      <NetworkTypeChip label="Kaspa Native-KCC20" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kaspa-KRC20" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kasplex" icon={placeholderLogo} />
+      <NetworkTypeChip label="Igra" icon={placeholderLogo} />
+    </View>
+  ),
 };
 
 const styles = StyleSheet.create({
@@ -58,5 +79,9 @@ const styles = StyleSheet.create({
     backgroundColor: background.bg0,
     padding: spacing.s5,
     gap: spacing.s3,
+  },
+  column: {
+    gap: spacing.s3,
+    alignItems: "flex-start",
   },
 });
