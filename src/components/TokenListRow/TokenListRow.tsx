@@ -25,7 +25,10 @@ export interface TokenListRowProps {
   /** Shows the verified checkmark next to the name. Unverified renders
    * nothing in its place — no label, no placeholder, no colour change
    * (Figma's Home list, node 14745:450124 row 4, shows an unverified row
-   * with the same text colour as verified rows, just without the check). */
+   * with the same text colour as verified rows, just without the check).
+   * Only ever renders for `standard === "KCC20"` (Leo sync, 2026-09-25:
+   * verification only exists for KCC20 — KRC20/ERC20 can never be
+   * verified) — enforced here regardless of what's passed. */
   isVerified?: boolean;
   onPress?: () => void;
 }
@@ -36,10 +39,15 @@ export interface TokenListRowProps {
  * kastle-mobile's shell, out of scope here (repo boundary: nav/shell live
  * in kastle-mobile, not kastle-ui).
  *
- * Sort order (verified-first vs. as-received) is an open question with Leo
- * as of 2026-09-25 — this component does not sort or reorder anything
- * itself. Pass an already-ordered list, or use the exported
- * `sortTokensByVerified` pure helper once that question is settled.
+ * Sort order (Leo sync, 2026-09-25 — settles the earlier "open question"):
+ * NOT verified-first. Home keeps grouping — same-name tokens stay grouped
+ * together (e.g. all "KAS" rows, then all "NACHO" rows), in whatever order
+ * the caller's list is already in. This component still does not sort or
+ * reorder anything itself — pass an already-grouped list. The
+ * `sortTokensByVerified` helper (previously exported from this folder) is
+ * no longer exported — it implemented the now-rejected verified-first
+ * behaviour; kept in the file, unused, in case a different sort is wanted
+ * later, but not part of the public API.
  */
 export const TokenListRow: React.FC<TokenListRowProps> = ({
   name,
@@ -53,6 +61,8 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
   isVerified = false,
   onPress,
 }) => {
+  const showVerified = isVerified && standard === "KCC20";
+
   return (
     <TouchableOpacity
       style={styles.row}
@@ -72,7 +82,7 @@ export const TokenListRow: React.FC<TokenListRowProps> = ({
           >
             {name}
           </Text>
-          {isVerified && <VerifiedBadge size={14} />}
+          {showVerified && <VerifiedBadge size={14} />}
         </View>
         {!!priceLabel && (
           <Text

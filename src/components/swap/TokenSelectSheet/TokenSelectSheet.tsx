@@ -42,7 +42,10 @@ export interface TokenInfo {
   logo?: ImageSourcePropType;
   chainLogo?: ImageSourcePropType;
   /** Shows the verified checkmark next to the name. Unverified renders
-   * nothing in its place — no label, no placeholder. */
+   * nothing in its place — no label, no placeholder. Only ever renders for
+   * `standard === "KCC20"` (Leo sync, 2026-09-25: verification only exists
+   * for KCC20 — KRC20/ERC20 can never be verified) — TokenItem enforces
+   * this regardless of what's passed here. */
   isVerified?: boolean;
   /**
    * Token standard. Only used today to decide whether the chain corner
@@ -111,6 +114,11 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
 
   const formattedAmount = formatBalance(token.amount);
 
+  // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
+  // ERC20 (and Native) can never show the checkmark, even if the caller
+  // passes isVerified=true. Enforced here, not left to the caller.
+  const showVerified = token.isVerified && token.standard === "KCC20";
+
   return (
     <TouchableOpacity
       style={[styles.tokenRow, isDisabled && styles.tokenRowDisabled]}
@@ -134,7 +142,7 @@ export const TokenItem = memo(({ token, isDisabled, onPress, fallback }: TokenIt
           <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.tokenName]} numberOfLines={1} ellipsizeMode="tail">
             {token.name}
           </Text>
-          {token.isVerified && <VerifiedBadge size={14} />}
+          {showVerified && <VerifiedBadge size={14} />}
         </View>
         {token.symbol ? (
           <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tokenAddress]} numberOfLines={1} ellipsizeMode="tail">

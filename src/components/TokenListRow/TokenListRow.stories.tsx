@@ -2,7 +2,6 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { TokenListRow } from "./TokenListRow";
-import { sortTokensByVerified } from "./sortTokensByVerified";
 import { background } from "../../config/theme";
 
 const placeholderLogo = require("../../../assets/icon.png");
@@ -30,10 +29,17 @@ const meta: Meta<typeof TokenListRow> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Verified token — checkmark next to name (mirrors Figma Home list, node 14745:450124). */
+/**
+ * Verified token — checkmark next to name (mirrors Figma Home list, node
+ * 14745:450124). `standard: "KCC20"` is required for the checkmark to
+ * render at all (Leo sync, 2026-09-25: verification only exists for
+ * KCC20) — omitting it would silently show no checkmark despite
+ * isVerified=true.
+ */
 export const Verified: Story = {
   args: {
     name: "KAS",
+    standard: "KCC20",
     priceLabel: "$0.230",
     amount: "1,000,000",
     amountUsd: "≈ $3,466 USD",
@@ -57,11 +63,16 @@ export const Unverified: Story = {
 };
 
 /**
- * verified × unverified × KCC20 × KRC20 (D-071, D-072) — four "NACHO" rows,
- * differing only by `isVerified` and `standard`. "NACHO" is Figma's real
- * KCC20 example on the Home list (node 14745:450124, row 3, verified, teal
- * Kaspa corner badge). No text label distinguishes standard (D-072); only
- * the icon's corner badge does, and only for KCC20.
+ * KCC20 verified vs unverified — "NACHO" is Figma's real KCC20 example on
+ * the Home list (node 14745:450124, row 3, verified, teal Kaspa corner
+ * badge). No text label distinguishes standard (D-072); only the icon's
+ * corner badge does, and only for KCC20.
+ *
+ * ⚠️ No "VerifiedKRC20" story (Leo sync, 2026-09-25: verification only
+ * exists for KCC20 — KRC20/ERC20 can never be verified; TokenListRow
+ * enforces this, so passing isVerified=true on a KRC20 row silently shows
+ * no checkmark rather than a wrong one). Only KCC20 gets a Verified
+ * story; KRC20 only ever needs the one Unverified state below.
  */
 export const VerifiedKCC20: Story = {
   args: {
@@ -85,17 +96,6 @@ export const UnverifiedKCC20: Story = {
   },
 };
 
-export const VerifiedKRC20: Story = {
-  args: {
-    name: "NACHO",
-    standard: "KRC20",
-    priceLabel: "$0.230",
-    amount: "1,233,608.32787357",
-    amountUsd: "≈ $51.419 USD",
-    isVerified: true,
-  },
-};
-
 export const UnverifiedKRC20: Story = {
   args: {
     name: "NACHO",
@@ -107,19 +107,21 @@ export const UnverifiedKRC20: Story = {
   },
 };
 
-/** A mixed list, as-received order (sort order is an open question with Leo — see sortTokensByVerified's doc comment). */
+/**
+ * A mixed list, grouped by name — NOT verified-first (Leo sync,
+ * 2026-09-25: keep grouping, e.g. all "NACHO" rows together; do not sort
+ * unverified to the bottom). Rendered in exactly the order given, no
+ * sorting call — this is what TokenListRow expects from its caller.
+ */
 export const MixedList: Story = {
   render: () => {
-    const tokens = sortTokensByVerified(
-      [
-        { name: "SCAMCOIN", amount: "500,000", isVerified: false },
-        { name: "NACHO", amount: "1,000,000", isVerified: true, standard: "KCC20" as const },
-        { name: "NACHO", amount: "1,233,608.32787357", isVerified: true, standard: "KRC20" as const },
-        { name: "ZEAL", amount: "2,000,000.2314", isVerified: true },
-        { name: "RUGPULL", amount: "999,999", isVerified: false },
-      ],
-      (t) => t.isVerified,
-    );
+    const tokens = [
+      { name: "NACHO", amount: "1,000,000", isVerified: true, standard: "KCC20" as const },
+      { name: "NACHO", amount: "1,233,608.32787357", isVerified: false, standard: "KRC20" as const },
+      { name: "SCAMCOIN", amount: "500,000", isVerified: false },
+      { name: "ZEAL", amount: "2,000,000.2314", isVerified: true, standard: "KCC20" as const },
+      { name: "RUGPULL", amount: "999,999", isVerified: false },
+    ];
     return (
       <View style={styles.list}>
         {tokens.map((t, i) => (
