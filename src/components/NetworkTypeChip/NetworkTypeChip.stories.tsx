@@ -27,50 +27,48 @@ type Story = StoryObj<typeof meta>;
 
 // Label text — Nicole, round 3 (2026-09-26): hyphen form everywhere for
 // NetworkTypeChip — "Kaspa-KCC20" / "Kaspa-KRC20" / "Kasplex-ERC20" /
-// "Igra-ERC20" / "Kaspa" (native). Replaces the space form from an
-// earlier round. One colour now (no more tone prop) — Token Details uses
-// the same token-bound colour as Send Confirm, see NetworkTypeChip.tsx's
-// doc comment.
+// "Igra-ERC20" / "Kaspa" (native).
+//
+// Round 5 (2026-09-26): one story PER STANDARD, not per page — the same
+// chip is used on both Token Details and Send Confirm, and "Token Details
+// KCC20" / "Send Confirm KCC20" were literally the same render. Colour is
+// per-standard now too (see NetworkTypeChip.tsx's doc comment): KCC20 gets
+// its own raw-hex colour, everything else the token-bound "info" colour.
 
-/** Token Details header (screen 2). */
-export const TokenDetailsKCC20: Story = {
-  args: { label: "Kaspa-KCC20", icon: placeholderLogo },
+/** Kaspa-KCC20 — its own raw-hex colour (no exact theme.ts token match). */
+export const KCC20: Story = {
+  args: { label: "Kaspa-KCC20", icon: placeholderLogo, standard: "KCC20" },
 };
 
-export const TokenDetailsKRC20: Story = {
-  args: { label: "Kaspa-KRC20", icon: placeholderLogo },
+/** Kaspa-KRC20 — token-bound "info" colour. */
+export const KRC20: Story = {
+  args: { label: "Kaspa-KRC20", icon: placeholderLogo, standard: "KRC20" },
 };
 
-/** Send Confirm Send-from/Send-to rows (screen 5) — same label on both rows. */
-export const SendConfirmKCC20: Story = {
-  args: { label: "Kaspa-KCC20", icon: placeholderLogo },
-};
-
-export const SendConfirmKRC20: Story = {
-  args: { label: "Kaspa-KRC20", icon: placeholderLogo },
-};
-
+/** Kasplex-ERC20 — no live instance found yet; defaults to the same token-bound colour as KRC20. */
 export const KasplexERC20: Story = {
-  args: { label: "Kasplex-ERC20", icon: placeholderLogo },
+  args: { label: "Kasplex-ERC20", icon: placeholderLogo, standard: "ERC20" },
 };
 
+/** Igra-ERC20 — same standard as Kasplex-ERC20, different network name only. */
 export const IgraERC20: Story = {
-  args: { label: "Igra-ERC20", icon: placeholderLogo },
+  args: { label: "Igra-ERC20", icon: placeholderLogo, standard: "ERC20" },
 };
 
+/** Native KAS. */
 export const NativeKaspa: Story = {
-  args: { label: "Kaspa", icon: placeholderLogo },
+  args: { label: "Kaspa", icon: placeholderLogo, standard: "Native" },
 };
 
-/** All labels, side by side — one component, one style. */
-export const AllLabels: Story = {
+/** All standards, side by side — shows the KCC20 vs everything-else colour split. */
+export const AllVariants: Story = {
   render: () => (
     <View style={styles.column}>
-      <NetworkTypeChip label="Kaspa-KCC20" icon={placeholderLogo} />
-      <NetworkTypeChip label="Kaspa-KRC20" icon={placeholderLogo} />
-      <NetworkTypeChip label="Kasplex-ERC20" icon={placeholderLogo} />
-      <NetworkTypeChip label="Igra-ERC20" icon={placeholderLogo} />
-      <NetworkTypeChip label="Kaspa" icon={placeholderLogo} />
+      <NetworkTypeChip label="Kaspa-KCC20" icon={placeholderLogo} standard="KCC20" />
+      <NetworkTypeChip label="Kaspa-KRC20" icon={placeholderLogo} standard="KRC20" />
+      <NetworkTypeChip label="Kasplex-ERC20" icon={placeholderLogo} standard="ERC20" />
+      <NetworkTypeChip label="Igra-ERC20" icon={placeholderLogo} standard="ERC20" />
+      <NetworkTypeChip label="Kaspa" icon={placeholderLogo} standard="Native" />
     </View>
   ),
 };
