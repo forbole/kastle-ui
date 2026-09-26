@@ -1,0 +1,1 @@
+const t={submitted:"Submitted",confirmed:"Confirmed",submittedSubtext:"Usually done within 48 hours",confirmedSubtext:"Confirmed by the bridge. Nothing to do",stuckSubtext:"The bridge couldn't process this in time",withdrawNotice:"Nothing was lost — withdrawing returns the full amount, including the fee, to your wallet."};export{t as B};
