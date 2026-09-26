@@ -241,7 +241,7 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
                   <StatusPill
                     status={row.pill.status}
                     label={row.pill.label}
-                    indicator="dot"
+                    icon="dot"
                   />
                 ) : undefined,
                 onPressInfo: row.tooltip

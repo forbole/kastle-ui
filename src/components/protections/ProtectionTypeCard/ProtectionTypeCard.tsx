@@ -69,7 +69,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
               <StatusPill
                 status={pill.status}
                 label={pill.label}
-                indicator="dot"
+                icon="dot"
               />
             ) : null}
             <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
