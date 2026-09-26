@@ -95,7 +95,7 @@ export const VaultCard: React.FC<VaultCardProps> = ({
               contentFit="contain"
             />
           </View>
-          <StatusPill status={pill.status} label={pill.label} indicator="dot" />
+          <StatusPill status={pill.status} label={pill.label} icon="dot" />
         </View>
 
         {/* Text block — name, amount + caption, optional timer */}

@@ -11,7 +11,7 @@ import { background, spacing } from "../../../config/theme";
 const ROWS: DetailTableRow[] = [
   {
     label: "Vault Status",
-    valueNode: <StatusPill status="success" label="Locked" indicator="dot" />,
+    valueNode: <StatusPill status="success" label="Locked" icon="dot" />,
   },
   { label: "Vault amount", value: "~ 20,000 KAS", subValue: "$200.232 USD" },
   {
