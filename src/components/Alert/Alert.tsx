@@ -24,14 +24,14 @@ export interface AlertProps {
   showIcon?: boolean;
 }
 
+// TODO(Nicole): re-apply vault-specific StatusPill/Alert styling in a scoped (opt-in) way
+// (vault Figma wants the soft-background info tint and a full-opacity body).
 const SEVERITY_CONFIG: Record<
   AlertSeverity,
   { bg: string; border: string; text: string; icon: typeof Info }
 > = {
   info: {
-    // Nicole updated the info alert to the blue soft-background tint
-    // (Figma "Info/Warning soft background" #0973a8 @ 24%, fill + stroke)
-    bg: infoColors.softBackground,
+    bg: infoColors.background,
     border: infoColors.softBackground,
     text: infoColors.i800,
     icon: Info,
@@ -123,5 +123,6 @@ const styles = StyleSheet.create({
   },
   body: {
     ...textStyles.bodyNormalSM,
+    opacity: 0.6,
   },
 });

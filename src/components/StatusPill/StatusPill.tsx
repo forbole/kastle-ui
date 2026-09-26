@@ -17,33 +17,29 @@ export interface StatusPillProps {
   icon?: "glyph" | "dot";
 }
 
-/**
- * Figma binds the badge label to the 800 tone of each status ramp
- * (Success/success800 etc.) over its own `<status> background`. The 500/600
- * tones are the brand/indicator colours and read too dark on these fills.
- */
+// TODO(Nicole): re-apply vault-specific StatusPill/Alert styling in a scoped (opt-in) way
+// (vault Figma wants 800-tone labels; changing the shared defaults restyled existing screens).
 const STATUS_CONFIG: Record<
   StatusPillStatus,
   {
     icon: typeof CircleCheck;
     label: string;
     color: string;
-    indicatorColor: string;
+    /** Dot colour (`icon="dot"`). Defaults to `color`. */
+    indicatorColor?: string;
     bg: string;
   }
 > = {
   success: {
     icon: CircleCheck,
     label: "Success",
-    color: success.s800,
-    indicatorColor: colors.success,
+    color: colors.success,
     bg: success.background,
   },
   failed: {
     icon: CircleX,
     label: "Failed",
-    color: error.e800,
-    indicatorColor: colors.danger,
+    color: colors.danger,
     bg: error.background,
   },
   pending: {
@@ -72,9 +68,9 @@ export const StatusPill: React.FC<StatusPillProps> = ({
   return (
     <View style={[styles.pill, { backgroundColor: config.bg }]}>
       {icon === "dot" ? (
-        <View style={[styles.dot, { backgroundColor: config.indicatorColor }]} />
+        <View style={[styles.dot, { backgroundColor: config.indicatorColor ?? config.color }]} />
       ) : (
-        <Icon size={12} color={config.indicatorColor} strokeWidth={2.5} />
+        <Icon size={12} color={config.color} strokeWidth={2.5} />
       )}
       <Text
         allowFontScaling={false}
