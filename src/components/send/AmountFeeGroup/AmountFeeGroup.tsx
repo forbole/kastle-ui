@@ -10,7 +10,7 @@ import {
   spacing,
 } from "../../../config/theme";
 
-export interface AmountFeeGroupProps {
+interface AmountFeeGroupBaseProps {
   /** Amount with symbol, e.g. "1,608.32787 KAS" */
   amount: string;
   /** Amount USD equivalent, caller-formatted, e.g. "≈ $24,000" (no "USD" suffix) */
@@ -20,21 +20,24 @@ export interface AmountFeeGroupProps {
   /** Fee USD equivalent, caller-formatted, e.g. "≈ $1.345" (no "USD" suffix) */
   feeUsd: string;
   /**
-   * Fee-selection variant. When true the Est. Fee amount shows a chevron and is
-   * tappable to open the Fee & Speed sheet. Only Kaspa-native KAS transactions
-   * support custom fee; Layer-2 (Kasplex / Igra) and Kaspa-network KRC20 tokens
-   * cannot, so they use the default (false) static display.
-   */
-  feeSelectable?: boolean;
-  /** Tapping the fee amount (right zone) — required when feeSelectable is true */
-  onPressFeeSelect?: () => void;
-  /**
    * Tapping the "Est. Fee" label + info icon (left zone) — opens the fee
-   * breakdown tooltip. That sheet is not built yet, so this is usually omitted;
-   * when omitted the label renders as a plain visual.
+   * breakdown sheet (EstFeeSheet). When omitted the label renders as a plain visual.
    */
   onPressFeeInfo?: () => void;
 }
+
+/**
+ * Fee-selection variant. When `feeSelectable` is true the Est. Fee amount shows a
+ * chevron and is tappable to open the Fee & Speed sheet, so `onPressFeeSelect` is
+ * required. Only Kaspa-native KAS transactions support custom fee; Layer-2
+ * (Kasplex / Igra) and Kaspa-network KRC20 tokens cannot, so they use the default
+ * (false) static display.
+ */
+export type AmountFeeGroupProps = AmountFeeGroupBaseProps &
+  (
+    | { feeSelectable: true; onPressFeeSelect: () => void }
+    | { feeSelectable?: false; onPressFeeSelect?: never }
+  );
 
 /** Amount over its USD subvalue, right-edges aligned. Long values shrink to fit. */
 const ValueStack: React.FC<{ value: string; usd: string }> = ({ value, usd }) => (
@@ -62,7 +65,7 @@ export const AmountFeeGroup: React.FC<AmountFeeGroupProps> = ({
   onPressFeeSelect,
   onPressFeeInfo,
 }) => {
-  const FeeLabelZone: React.ComponentType<any> = onPressFeeInfo ? TouchableOpacity : View;
+  const FeeLabelZone: typeof TouchableOpacity | typeof View = onPressFeeInfo ? TouchableOpacity : View;
 
   return (
     <View style={styles.container}>
@@ -76,7 +79,7 @@ export const AmountFeeGroup: React.FC<AmountFeeGroupProps> = ({
 
       {/* Est. Fee row — two independent tap zones */}
       <View style={[styles.row, styles.rowSeam]}>
-        {/* Left zone: label + info icon → fee breakdown tooltip (reserved) */}
+        {/* Left zone: label + info icon → fee breakdown (EstFeeSheet) */}
         <FeeLabelZone
           style={styles.feeLabel}
           {...(onPressFeeInfo ? { onPress: onPressFeeInfo, activeOpacity: 0.6 } : {})}

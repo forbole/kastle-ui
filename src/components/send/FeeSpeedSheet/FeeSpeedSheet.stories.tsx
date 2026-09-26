@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { FeeSpeedSheet } from "./FeeSpeedSheet";
+import { FeeSpeedSheet, FeeSpeedOption } from "./FeeSpeedSheet";
 import type { StatusPillStatus } from "../../StatusPill";
 import { background, primary, spacing, textStyles, typography, borderRadius } from "../../../config/theme";
 
-const OPTIONS = [
+const OPTIONS: FeeSpeedOption[] = [
   { id: "low", label: "Low", time: "<1 min" },
   { id: "medium", label: "Medium", time: "<10 sec" },
   { id: "high", label: "High", time: "<1 sec" },
@@ -14,7 +14,8 @@ const OPTIONS = [
 const Demo: React.FC<{
   networkStatus: { label: string; status: StatusPillStatus };
   initialSelected: string;
-}> = ({ networkStatus, initialSelected }) => {
+  options?: FeeSpeedOption[];
+}> = ({ networkStatus, initialSelected, options = OPTIONS }) => {
   const [open, setOpen] = useState(true);
   const [selectedId, setSelectedId] = useState(initialSelected);
 
@@ -28,7 +29,7 @@ const Demo: React.FC<{
       <FeeSpeedSheet
         isOpen={open}
         onClose={() => setOpen(false)}
-        options={OPTIONS}
+        options={options}
         selectedId={selectedId}
         recommendedId="medium"
         networkStatus={networkStatus}
@@ -68,6 +69,24 @@ export const Busy: Story = {
 export const Congested: Story = {
   render: () => (
     <Demo networkStatus={{ label: "Network: Congested", status: "failed" }} initialSelected="medium" />
+  ),
+};
+
+/** selectedId not in options — falls back to the recommended option (Medium) */
+export const UnknownSelection: Story = {
+  render: () => (
+    <Demo networkStatus={{ label: "Network: Smooth", status: "success" }} initialSelected="custom" />
+  ),
+};
+
+/** No options — the segmented bar is omitted rather than rendered empty */
+export const NoOptions: Story = {
+  render: () => (
+    <Demo
+      networkStatus={{ label: "Network: Smooth", status: "success" }}
+      initialSelected="medium"
+      options={[]}
+    />
   ),
 };
 

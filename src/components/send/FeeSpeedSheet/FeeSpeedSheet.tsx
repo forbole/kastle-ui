@@ -31,7 +31,10 @@ export interface FeeSpeedSheetProps {
   onClose: () => void;
   /** Speed options shown as a joined segmented bar */
   options: FeeSpeedOption[];
-  /** Currently selected option id */
+  /**
+   * Currently selected option id. If it isn't in `options`, the recommended
+   * option (else the first) is highlighted instead.
+   */
   selectedId: string;
   /** Option id to flag with the "Recommended" pill */
   recommendedId?: string;
@@ -53,6 +56,11 @@ export const FeeSpeedSheet: React.FC<FeeSpeedSheetProps> = ({
   networkStatus,
   onSelect,
 }) => {
+  // ponytail: display-only fallback, parent isn't notified until the user taps
+  const activeId = options.some((o) => o.id === selectedId)
+    ? selectedId
+    : (options.find((o) => o.id === recommendedId) ?? options[0])?.id;
+
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose} heightRatio={0.6}>
       <View style={styles.container}>
@@ -72,39 +80,42 @@ export const FeeSpeedSheet: React.FC<FeeSpeedSheetProps> = ({
           <View style={styles.divider} />
         </View>
 
-        {/* Segmented speed bar — top padding leaves room for the Recommended pill */}
-        <View style={styles.segmentedWrapper}>
-        <View style={styles.segmented}>
-          {options.map((option) => {
-            const isSelected = option.id === selectedId;
-            const isRecommended = option.id === recommendedId;
-            return (
-              <TouchableOpacity
-                key={option.id}
-                style={[styles.segment, isSelected && styles.segmentSelected]}
-                onPress={() => onSelect(option.id)}
-                activeOpacity={0.8}
-              >
-                {isRecommended ? (
-                  <View style={styles.recommendedWrapper} pointerEvents="none">
-                    <View style={styles.recommendedPill}>
-                      <Text allowFontScaling={false} style={[textStyles.bodyNormal2XS, styles.recommendedText]}>
-                        Recommended
-                      </Text>
-                    </View>
-                  </View>
-                ) : null}
-                <Text allowFontScaling={false} style={styles.segmentLabel}>
-                  {option.label}
-                </Text>
-                <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.segmentEta]}>
-                  {option.time}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-        </View>
+        {/* Segmented speed bar — top padding leaves room for the Recommended pill.
+            Skipped when there are no options (no empty bordered bar). */}
+        {options.length > 0 ? (
+          <View style={styles.segmentedWrapper}>
+            <View style={styles.segmented}>
+              {options.map((option) => {
+                const isSelected = option.id === activeId;
+                const isRecommended = option.id === recommendedId;
+                return (
+                  <TouchableOpacity
+                    key={option.id}
+                    style={[styles.segment, isSelected && styles.segmentSelected]}
+                    onPress={() => onSelect(option.id)}
+                    activeOpacity={0.8}
+                  >
+                    {isRecommended ? (
+                      <View style={styles.recommendedWrapper} pointerEvents="none">
+                        <View style={styles.recommendedPill}>
+                          <Text allowFontScaling={false} style={[textStyles.bodyNormal2XS, styles.recommendedText]}>
+                            Recommended
+                          </Text>
+                        </View>
+                      </View>
+                    ) : null}
+                    <Text allowFontScaling={false} style={styles.segmentLabel}>
+                      {option.label}
+                    </Text>
+                    <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.segmentEta]}>
+                      {option.time}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+        ) : null}
 
         {/* Spacer keeps the sheet tall, footer pinned near the bottom */}
         <View style={styles.spacer} />
