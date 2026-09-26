@@ -74,7 +74,8 @@ const meta: Meta<typeof AmountFeeGroup> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+// Render-only stories; StoryObj<typeof meta> resolves args to never for the union props.
+type Story = StoryObj;
 
 /**
  * Default — fee NOT selectable (Layer-2 Kasplex / Igra, Kaspa-network KRC20).
