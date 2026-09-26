@@ -81,7 +81,7 @@ export interface VaultDetailScreenProps {
   backupNote?: string;
   /** Fired when Done is tapped — the card hides itself either way. */
   onPressBackupDone?: () => void;
-  /** Start with the backup card already dismissed (user has backed up). */
+  /** Hide the backup card (user has backed up). */
   backupDone?: boolean;
   /** Read-only detail rows (amount, window, recovery, deposit…). */
   detailsTitle?: string;
@@ -132,8 +132,10 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
     { title: string; description: string } | null
   >(null);
   const [confirming, setConfirming] = React.useState(false);
-  // Done dismisses the backup card; the parent still hears about it.
-  const [dismissedBackup, setDismissedBackup] = React.useState(backupDone);
+  // Done dismisses the backup card locally; the parent still hears about it.
+  // `backupDone` is read every render so a late `true` from the parent hides it too.
+  const [dismissedBackup, setDismissedBackup] = React.useState(false);
+  const hideBackup = backupDone || dismissedBackup;
 
   // The action raises the confirm sheet when one is supplied.
   const handleAction = () => {
@@ -180,7 +182,7 @@ export const VaultDetailScreen: React.FC<VaultDetailScreenProps> = ({
 
         {/* Backup your vault address — hidden while withdrawing (per Figma) and
             once the user has confirmed they saved it */}
-        {status !== "withdrawing" && !dismissedBackup ? (
+        {status !== "withdrawing" && !hideBackup ? (
         <View style={styles.backupCard}>
           <View style={styles.backupHeader}>
             <View style={styles.backupTitleRow}>

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
 } from "react-native";
 import { Textarea } from "../../Textarea/Textarea";
 import { Alert, AlertSeverity } from "../../Alert/Alert";
@@ -12,7 +11,6 @@ import { BottomActionBar } from "../../BottomActionBar/BottomActionBar";
 import {
   colors,
   spacing,
-  borderRadius,
   textStyles,
 } from "../../../config/theme";
 

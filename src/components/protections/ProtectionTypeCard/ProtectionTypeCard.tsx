@@ -51,7 +51,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   onPressCta,
 }) => {
   const isActive = status === "active";
-  const Container: React.ComponentType<any> = isActive ? TouchableOpacity : View;
+  const Container: typeof TouchableOpacity | typeof View = isActive ? TouchableOpacity : View;
 
   return (
     <Container

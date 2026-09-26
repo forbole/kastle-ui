@@ -19,7 +19,6 @@ import {
   borderRadius,
   borderWidth,
   textStyles,
-  typography,
 } from "../../../config/theme";
 
 const SIGN_IMAGE = require("../../../../assets/sign.png");
