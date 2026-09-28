@@ -51,9 +51,9 @@ export const Loading: Story = {
 };
 
 /**
- * ⚠️ Just found a vault (Figma 14889:415114) — a small dot appears before
- * the Locked value. Figma draws it with no stated meaning; flagged to
- * Nicole rather than guessed at.
+ * ⚠️ Just found a vault (Figma 14889:415114) — a small `primary.p500` dot
+ * (confirmed binding) appears before the Locked value. Figma draws it with
+ * no stated meaning; flagged to Nicole rather than guessed at.
  */
 export const JustFound: Story = {
   args: {

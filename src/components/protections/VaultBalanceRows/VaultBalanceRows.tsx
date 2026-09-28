@@ -32,8 +32,9 @@ export interface VaultBalanceRowsProps {
   scanningLabel?: string;
   /**
    * ⚠️ A vault was just found (Figma 14889:415114) — shows a small dot
-   * before the Locked value. Figma draws it with no stated meaning; this is
-   * a flagged gap, not a guess at intent. Only meaningful in `state="default"`.
+   * (bound to `primary.p500`, confirmed) before the Locked value. Figma
+   * draws it with no stated meaning; this is a flagged gap, not a guess at
+   * intent. Only meaningful in `state="default"`.
    */
   lockedJustUpdated?: boolean;
   /** Tapping the Locked row (or the scanning status row) opens the vaults list. */
@@ -125,18 +126,24 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
             </Text>
           </View>
           <View style={styles.valueCol}>
-            {!loading && lockedJustUpdated ? <View style={styles.updatedDot} /> : null}
-            {loading ? (
-              <SkeletonBlock width={139} height={16} />
-            ) : (
-              <Text
-                allowFontScaling={false}
-                style={styles.value}
-                numberOfLines={1}
-              >
-                {lockedValue}
-              </Text>
-            )}
+            <View style={styles.lockedValueGroup}>
+              {!loading && lockedJustUpdated ? (
+                <View style={styles.updatedDotWrapper}>
+                  <View style={styles.updatedDot} />
+                </View>
+              ) : null}
+              {loading ? (
+                <SkeletonBlock width={139} height={16} />
+              ) : (
+                <Text
+                  allowFontScaling={false}
+                  style={styles.value}
+                  numberOfLines={1}
+                >
+                  {lockedValue}
+                </Text>
+              )}
+            </View>
             <ChevronRight
               size={16}
               color={colors.textPrimary}
@@ -206,12 +213,23 @@ const styles = StyleSheet.create({
     ...textStyles.bodyNormalSM,
     color: colors.textDimmed,
   },
-  // ⚠️ Colour matched to the brand blue in the Figma screenshot
-  // (14889:415114) — the node's own variable binding didn't resolve via the
-  // API, so this is a visual match, not a confirmed token read. Flagged.
+  // Figma 14889:415114/415727: 10×10 dot inside a 2px-padding wrapper, gap
+  // 6 to the amount (`lockedValueGroup`). `primary/primary500` is the dot's
+  // actual bound fill — confirmed from the node's own code output, not a
+  // visual match. Its meaning (why it appears) is still unstated in Figma.
+  lockedValueGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s1_5,
+  },
+  updatedDotWrapper: {
+    padding: spacing.s0_5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   updatedDot: {
-    width: spacing.s1_5,
-    height: spacing.s1_5,
+    width: spacing.s2_5,
+    height: spacing.s2_5,
     borderRadius: borderRadius.full,
     backgroundColor: primary.p500,
   },
