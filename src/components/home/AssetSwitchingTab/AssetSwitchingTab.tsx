@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet, View } from "react-native";
 import { Segmented, SegmentedOption } from "../../Segmented";
 
 export type AssetSwitchingTabOption = SegmentedOption;
@@ -27,9 +28,30 @@ export interface AssetSwitchingTabProps {
  * pill height, 14px horizontal padding, active pill = 8% white). No fork.
  * `tabs`/`activeTab`/`onTabChange` map straight onto `Segmented`'s own
  * `options`/`value`/`onChange`.
+ *
+ * Wrapped in a `View` with `alignSelf: "flex-start"` (round 18,
+ * 2026-09-28 — Nicole: the pill row was stretching to fill the full
+ * width of whatever column container held it, leaving empty space after
+ * "Text"; "it should hug the content"). `Segmented` itself has no width/
+ * flex/`alignSelf` of its own (checked its styles again before touching
+ * anything — `outer` is plain padding + border, no forced width) — the
+ * stretch came from this component rendering `Segmented` as the sole
+ * child of a plain-column flex parent, whose default `alignItems:
+ * "stretch"` was doing it. Fixed here, in the consumer that has the
+ * problem, not in the shared `Segmented`, which stays untouched.
  */
 export const AssetSwitchingTab: React.FC<AssetSwitchingTabProps> = ({
   tabs,
   activeTab,
   onTabChange,
-}) => <Segmented options={tabs} value={activeTab} onChange={onTabChange} />;
+}) => (
+  <View style={styles.wrap}>
+    <Segmented options={tabs} value={activeTab} onChange={onTabChange} />
+  </View>
+);
+
+const styles = StyleSheet.create({
+  wrap: {
+    alignSelf: "flex-start",
+  },
+});
