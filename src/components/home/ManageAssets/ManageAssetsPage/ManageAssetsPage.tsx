@@ -318,6 +318,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
           value={activeSearch}
           onChangeText={handleSearchChange}
           placeholder="Search Token"
+          accessibilityLabel="Search tokens"
           placeholderTextColor={typography.t600}
           autoCorrect={false}
           autoCapitalize="none"
@@ -367,7 +368,10 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
         contentContainerStyle={styles.listContent}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
-        ListFooterComponent={footer ? () => <>{footer}</> : undefined}
+        // An element, not an inline component — `() => <>{footer}</>` is a
+        // new component type every render, remounting the footer on each
+        // keystroke in the search field.
+        ListFooterComponent={footer ? <>{footer}</> : undefined}
         renderItem={({ item }) => (
           <View style={styles.row}>
             <View style={styles.rowLeft}>

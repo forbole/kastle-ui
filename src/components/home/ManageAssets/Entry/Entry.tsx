@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   Modal,
@@ -87,6 +87,13 @@ const ICON_HIT_SLOP_V = Math.max(0, (44 - (spacing.s3 * 2 + ICON_SIZE)) / 2);
  * scroll), and the menu is positioned `right = icon's right edge`,
  * `top = icon's bottom edge + spacing.s2` (8px) — same numbers round
  * 16's static anchoring used, now computed instead of assumed.
+ *
+ * The measurement runs in an effect keyed on `open`, not in the icon's
+ * press handler, so a host that opens it via controlled `isOpen` (before
+ * the icon was ever tapped) still gets a positioned menu. The `Modal`
+ * itself stays hidden until that measurement lands — it is never shown
+ * without its menu, which would be an invisible full-screen overlay
+ * swallowing the next tap.
  */
 export const Entry: React.FC<EntryProps> = ({ menuItems, isOpen = false, onOpenChange }) => {
   const [internalOpen, setInternalOpen] = useState(false);
@@ -103,21 +110,26 @@ export const Entry: React.FC<EntryProps> = ({ menuItems, isOpen = false, onOpenC
   };
 
   // Re-measures on every open (not cached from mount) — the icon's
-  // on-screen position can change between opens.
-  const handleIconPress = () => {
-    if (open) {
-      setOpen(false);
-      return;
-    }
+  // on-screen position can change between opens. Cleared on close so a
+  // re-open never shows the previous open's position for a frame.
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
     iconRef.current?.measureInWindow((x, y, width, height) => {
+      if (cancelled) return;
       const windowWidth = Dimensions.get("window").width;
       setAnchor({
         top: y + height + spacing.s2,
         right: Math.max(0, windowWidth - (x + width)),
       });
-      setOpen(true);
     });
-  };
+    return () => {
+      cancelled = true;
+      setAnchor(null);
+    };
+  }, [open]);
+
+  const close = () => setOpen(false);
 
   // Each item closes the menu after firing its own onPress — the host's
   // handler runs first, then the menu closes, same order a native
@@ -126,7 +138,7 @@ export const Entry: React.FC<EntryProps> = ({ menuItems, isOpen = false, onOpenC
     ...item,
     onPress: () => {
       item.onPress();
-      setOpen(false);
+      close();
     },
   }));
 
@@ -134,7 +146,7 @@ export const Entry: React.FC<EntryProps> = ({ menuItems, isOpen = false, onOpenC
     <View>
       <TouchableOpacity
         ref={iconRef}
-        onPress={handleIconPress}
+        onPress={() => setOpen(!open)}
         style={styles.iconButton}
         hitSlop={{
           left: ICON_HIT_SLOP_H,
@@ -145,27 +157,39 @@ export const Entry: React.FC<EntryProps> = ({ menuItems, isOpen = false, onOpenC
         activeOpacity={0.7}
         accessibilityRole="button"
         accessibilityLabel="More options"
+        accessibilityState={{ expanded: open }}
       >
         <Settings2 size={ICON_SIZE} color={typography.t600} />
       </TouchableOpacity>
       <Modal
-        visible={open}
+        visible={open && anchor !== null}
         transparent
         animationType="none"
-        onRequestClose={() => setOpen(false)}
+        onRequestClose={close}
       >
-        {/* Transparent, no dim — matches Figma's own screenshot, which
-            shows no backdrop behind this small popover. Still captures
-            every tap outside the menu, anywhere on screen, via the OS
-            window root the Modal renders into. */}
-        <TouchableWithoutFeedback onPress={() => setOpen(false)}>
-          <View style={StyleSheet.absoluteFillObject} />
-        </TouchableWithoutFeedback>
-        {anchor && (
-          <View style={[styles.menuAnchor, { top: anchor.top, right: anchor.right }]}>
-            <Menu items={wrappedItems} />
-          </View>
-        )}
+        {/* Escape handler sits on this wrapper, not the backdrop:
+            `TouchableWithoutFeedback` doesn't forward
+            `onAccessibilityEscape` to its child, and VoiceOver's escape
+            gesture bubbles up from whichever element has focus — here,
+            the backdrop or any menu row. */}
+        <View style={StyleSheet.absoluteFillObject} onAccessibilityEscape={close}>
+          {/* Transparent, no dim — matches Figma's own screenshot, which
+              shows no backdrop behind this small popover. Still captures
+              every tap outside the menu, anywhere on screen, via the OS
+              window root the Modal renders into. */}
+          <TouchableWithoutFeedback
+            onPress={close}
+            accessibilityRole="button"
+            accessibilityLabel="Close menu"
+          >
+            <View style={StyleSheet.absoluteFillObject} />
+          </TouchableWithoutFeedback>
+          {anchor && (
+            <View style={[styles.menuAnchor, { top: anchor.top, right: anchor.right }]}>
+              <Menu items={wrappedItems} />
+            </View>
+          )}
+        </View>
       </Modal>
     </View>
   );
