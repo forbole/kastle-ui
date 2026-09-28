@@ -71,7 +71,7 @@ const CHAIN_FILTERS = [
 ];
 
 const meta: Meta<typeof ManageAssetsPage> = {
-  title: "Home/ManageAssets/ManageAssetsPage",
+  title: "Home/Screens/ManageAssetsPage",
   component: ManageAssetsPage,
   parameters: {
     layout: "fullscreen",

@@ -17,7 +17,7 @@ const TABS: AssetSwitchingTabOption[] = [
 ];
 
 const meta: Meta<typeof AssetSwitchingTab> = {
-  title: "Home/AssetSwitchingTab",
+  title: "Home/Components/AssetSwitchingTab",
   component: AssetSwitchingTab,
   parameters: {
     backgrounds: { default: "kastle" },

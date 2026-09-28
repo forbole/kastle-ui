@@ -55,7 +55,7 @@ const TABS: AssetSwitchingTabOption[] = [
  * addon already handle sizing.
  */
 const meta: Meta<typeof TokenItem> = {
-  title: "Home/AssetList",
+  title: "Home/Components/AssetList",
   component: TokenItem,
   parameters: {
     layout: "fullscreen",
