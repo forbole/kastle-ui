@@ -138,7 +138,9 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           {description}
         </Text>
 
-        {isActive && ctaLabel ? (
+        {/* Figma 14882:407025 / 14888:413631 draw no button once discovery
+            starts — Set up only belongs to the untried / not-found states. */}
+        {isActive && ctaLabel && !discovery && !discoveryPaused ? (
           <TouchableOpacity
             style={styles.cta}
             onPress={onPressCta}
@@ -154,7 +156,10 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           <TouchableOpacity
             style={styles.findVaultRow}
             onPress={onFindVault}
-            hitSlop={4}
+            activeOpacity={0.8}
+            // Visual row is short; hitSlop (not padding) brings the tap
+            // target to the ≥44pt minimum without changing layout.
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             <Text allowFontScaling={false} style={styles.findVaultPrompt}>
               {findVaultPrompt}
@@ -211,6 +216,9 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
         ) : null}
       </Container>
 
+      {/* Result toast ("no existing vaults" / "we found your vault") is
+          app-side (kastle-mobile useToastMessage), not drawn here — this
+          inline line is the only not-found feedback this component owns. */}
       {isActive && notice ? (
         <View style={styles.noticeRow}>
           <View style={styles.noticeIconBox}>
@@ -291,12 +299,12 @@ const styles = StyleSheet.create({
     ...textStyles.bodySemiboldXS,
     color: colors.primary,
   },
-  // Divider + progress/step block — Figma 14882:407025.
+  // Divider + progress/step block — Figma 14882:407025 (gap 4, node 14883:410188).
   discoveryBlock: {
     borderTopWidth: borderWidth.bw1,
     borderTopColor: colors.border,
     paddingTop: spacing.s3,
-    gap: spacing.s1_5,
+    gap: spacing.s1,
     width: "100%",
   },
   discoveryTitle: {
@@ -334,12 +342,13 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     flexShrink: 1,
   },
-  // "No existing vaults found" — sibling row below the card, Figma 14889:414871.
+  // "No existing vaults found" — sibling row below the card, Figma
+  // 14889:414871 (card→notice gap 8, matches the Figma list gap).
   noticeRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.s1,
-    paddingTop: spacing.s1,
+    paddingTop: spacing.s2,
   },
   noticeIconBox: {
     width: spacing.s7,
