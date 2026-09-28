@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     alignItems: "center",
-    paddingTop: 20,
+    paddingTop: spacing.s5,
     paddingHorizontal: spacing.s5,
   },
 });

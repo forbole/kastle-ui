@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   iconWrapper: {
-    width: 18,
-    height: 18,
+    width: spacing.s4_5,
+    height: spacing.s4_5,
     alignItems: "center",
     justifyContent: "center",
   },

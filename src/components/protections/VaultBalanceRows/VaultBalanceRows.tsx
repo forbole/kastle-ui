@@ -210,9 +210,9 @@ const styles = StyleSheet.create({
   // (14889:415114) — the node's own variable binding didn't resolve via the
   // API, so this is a visual match, not a confirmed token read. Flagged.
   updatedDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 9999,
+    width: spacing.s1_5,
+    height: spacing.s1_5,
+    borderRadius: borderRadius.full,
     backgroundColor: primary.p500,
   },
 });
