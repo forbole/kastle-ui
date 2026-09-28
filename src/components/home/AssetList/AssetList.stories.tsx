@@ -80,8 +80,11 @@ type Story = StoryObj<typeof meta>;
  * switches the active pill via real story state) and the Manage Assets
  * entry icon (tapping it opens the menu anchored under the icon; tapping
  * "Manage assets" fires `onPress`, logged to the Actions panel via
- * `fn()`, and closes the menu — same interaction `Entry.stories.tsx`
- * demonstrates alone).
+ * `fn()`, and closes the menu — same interaction
+ * `AssetSwitchingTab.stories.tsx`'s own Default story demonstrates
+ * (Entry's own standalone story was removed, 2026-09-28, Nicole: "唔要了,
+ * 要 AssetSwitchingTab 就夠" — Entry itself is unchanged, still reused
+ * here and in `AssetSwitchingTab.stories.tsx`).
  */
 export const Default: Story = {
   render: () => {
