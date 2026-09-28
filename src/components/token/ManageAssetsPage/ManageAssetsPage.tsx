@@ -241,7 +241,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   emptyHeading = "No tokens yet",
   emptySubtext,
   noResultsHeading = "No tokens found",
-  noResultsSubtext = "Try a different name.",
+  noResultsSubtext = "Try a different name",
   searchQuery = "",
   onSearchChange,
   chainFilter = [],

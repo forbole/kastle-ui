@@ -46,10 +46,10 @@ const LOCKED_TOKENS: ManageAssetsToken[] = [
 // Mirrors Figma node 14767:28684's own example rows (minus the native KAS
 // row, now covered by `LOCKED_TOKENS`) — NACHO/KCC20 (badge, off) ·
 // NACHO/KRC20 (no badge, off) · NACHO/Kasplex-ERC20 (badge, on) ·
-// NACHO/Igra-ERC20 (badge, on). Last entry ("KASPERINOTOKEN") is a
-// deliberately long name + long balance, added to stress-test the
-// name-never-truncates-before-label rule at narrow widths (round 11,
-// 2026-09-28).
+// NACHO/Igra-ERC20 (badge, on). Last entry ("KASPER") is a 5th sample
+// token, distinct name/balance/network, added round 11 (2026-09-28) and
+// renamed from "KASPERINOTOKEN" round 15 (2026-09-28, Nicole — the
+// original name was an unrealistically long stress-test string).
 const SAMPLE_TOKENS: ManageAssetsToken[] = [
   ...LOCKED_TOKENS,
   { id: "nacho-kcc20", name: "NACHO", subLabel: "2,000 NACHO", networkLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true, chainKeys: ["kaspa"] },
@@ -58,7 +58,7 @@ const SAMPLE_TOKENS: ManageAssetsToken[] = [
   { id: "nacho-krc20", name: "NACHO", subLabel: "750,000 NACHO", networkLabel: "Kaspa-KRC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: true, chainKeys: ["krc20"] },
   { id: "nacho-kasplex", name: "NACHO", subLabel: "1,250 NACHO", networkLabel: "Kasplex", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
   { id: "nacho-igra", name: "NACHO", subLabel: "3,800 NACHO", networkLabel: "Igra", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
-  { id: "kasperino", name: "KASPERINOTOKEN", subLabel: "999,999.123456 KASPERINOTOKEN", networkLabel: "Kasplex", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
+  { id: "kasper", name: "KASPER", subLabel: "1,000 KASPER", networkLabel: "Kasplex", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
 ];
 
 // Same 4-chip set as SendSelectTokenPage.stories.tsx's CHAIN_FILTERS —
@@ -229,7 +229,7 @@ export const WithChainFilter: Story = {
 /**
  * Search pre-filled with a query that matches nothing against a non-empty
  * `tokens` list — exercises the "No tokens found" / "Try a different
- * name." copy (`noResultsHeading`/`noResultsSubtext`), distinct from the
+ * name" copy (`noResultsHeading`/`noResultsSubtext`), distinct from the
  * `Empty` story's "No tokens yet" (which is for a genuinely empty `tokens`
  * prop, not a search/filter with zero matches). Controlled search state
  * so the field starts pre-filled but stays fully editable — type a real
@@ -255,9 +255,9 @@ export const SearchNoResults: Story = {
 };
 
 /** Empty state — `EmptyState` component + the `empty-activity` illustration,
- * same as `ActivityScreen`'s empty state (default heading/subtext:
- * "No tokens yet" / "Tokens you receive will appear here."). Note: in real
- * usage the three locked chain-native rows are always present, so a truly
+ * same as `ActivityScreen`'s empty state. Heading-only by default ("No
+ * tokens yet", round 9, 2026-09-28 — `emptySubtext` has no default; pass
+ * one explicitly if a caption is wanted). Note: in real
  * empty list is a loading-failure/edge case rather than a normal state —
  * this story exercises the visual regardless. Header (search + chips)
  * still renders on an empty `tokens` list, so it's explicitly controlled
