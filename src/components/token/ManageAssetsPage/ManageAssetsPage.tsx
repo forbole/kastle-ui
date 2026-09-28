@@ -135,6 +135,13 @@ export interface ManageAssetsPageProps {
   onChainFilterChange?: (keys: ChainFilter[]) => void;
   /** Filter chip row data — omit (or pass `[]`) to hide the chip row entirely, same as Send. */
   chainFilters?: ChainFilterConfig[];
+  /**
+   * Row shown at the bottom of the list — same slot pattern as
+   * `SendSelectTokenPage.footer` (Figma shows a bottom button on this
+   * frame too; not built here, host decides what it is and wires its
+   * action).
+   */
+  footer?: React.ReactNode;
 }
 
 /**
@@ -189,8 +196,10 @@ export interface ManageAssetsPageProps {
  * pieces, same controlled-or-internal pattern for both search and filter,
  * same additive multi-select chip toggle, same "Search Token" placeholder
  * and input styling. Filtering is pure/local over the `tokens` prop
- * (name + `subLabel`, case-insensitive, combined with the chain filter);
- * it never touches `isHidden` — a filtered-out token is just not rendered,
+ * (`name` only, case-insensitive — not `subLabel`, which holds a balance
+ * string here, not searchable text; see `filteredTokens`' own comment),
+ * combined with the chain filter; it never touches `isHidden` — a
+ * filtered-out token is just not rendered,
  * its hidden/shown state is unchanged. Locked rows go through the exact
  * same filter as any other row (no special-casing) — search/filter is
  * about which rows are visible right now, `isLocked` is about whether a
@@ -210,6 +219,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   chainFilter = [],
   onChainFilterChange,
   chainFilters = [],
+  footer,
 }) => {
   const [internalSearch, setInternalSearch] = useState("");
   const [internalChainFilter, setInternalChainFilter] = useState<ChainFilter[]>([]);
@@ -221,17 +231,17 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   );
 
   // Pure, local filtering — same shape as SendSelectTokenPage's own
-  // `filteredTokens`: search matches name OR subLabel (this type's
-  // equivalent of Send's name/symbol match), chain filter is additive
-  // multi-select (a token matches if ANY of its `chainKeys` is active).
-  // Neither step reads or writes `isHidden`.
+  // `filteredTokens`. Search matches `name` only (lead decision, round 8,
+  // 2026-09-28, reversible): matching `subLabel` too was tried in round 7,
+  // but `subLabel` here holds a balance string (e.g. "2,000 NACHO"), so
+  // digit queries were matching balances instead of token names — dropped.
+  // Chain filter is additive multi-select (a token matches if ANY of its
+  // `chainKeys` is active). Neither step reads or writes `isHidden`.
   const filteredTokens = useMemo(() => {
     const query = activeSearch.trim().toLowerCase();
     let result = tokens;
     if (query) {
-      result = result.filter(
-        (t) => t.name.toLowerCase().includes(query) || t.subLabel.toLowerCase().includes(query)
-      );
+      result = result.filter((t) => t.name.toLowerCase().includes(query));
     }
     if (activeChainFilter.length > 0) {
       result = result.filter((t) => t.chainKeys?.some((k) => activeChainFilter.includes(k)));
@@ -329,6 +339,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
         contentContainerStyle={styles.listContent}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
+        ListFooterComponent={footer ? () => <>{footer}</> : undefined}
         renderItem={({ item }) => (
           <View style={styles.row}>
             <View style={styles.rowLeft}>

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { background, borderRadius, colors, primary, shadows, spacing } from "../../config/theme";
+import { background, borderRadius, colors, opacity, primary, shadows, spacing } from "../../config/theme";
 
 export interface SwitchProps {
   /** Whether the switch is in the "on" state. */
@@ -11,7 +11,11 @@ export interface SwitchProps {
    * `ChainFilterChip`).
    */
   onToggle?: () => void;
-  /** Disables interaction (still renders `isEnabled`'s colour/position). */
+  /**
+   * Disables interaction and dims the whole switch to `opacity.o40` (D-075)
+   * — still renders `isEnabled`'s colour/position underneath the dim, just
+   * faded.
+   */
   isDisabled?: boolean;
   /**
    * Accessible name read by screen readers — this component has no
@@ -52,6 +56,15 @@ const KNOB_SIZE = spacing.s5;
  * `0px 1px 3px rgba(0,0,0,0.5)`. Reviewer-requested (round 6, 2026-09-26):
  * added `shadows.knob` as a new preset rather than keep this hand-rolled
  * with a raw `shadowColor` hex.
+ *
+ * Disabled visual (D-075, Nicole 2026-09-28: "淡色40%，只淡個TOGGLE唔淡TITLE"):
+ * `opacity.o40` (0.4) applied to the whole `TouchableOpacity` — track +
+ * knob together, since both are inside it — when `isDisabled`. Deliberately
+ * NOT applied anywhere else: a row's title/logo/sub-label live outside this
+ * component (`ManageAssetsPage`'s own `Text`/`AssetImage`), so they're
+ * unaffected by construction, not by a separate opt-out. This was the one
+ * outstanding gap from the earlier rounds — a disabled-on switch used to
+ * render pixel-identical to an enabled-on one.
  */
 // Touch target ≥44×44 (WCAG 2.1 AA, §3B) — the track is only 48×24
 // visually. Same derivation Button.tsx uses for its own sub-44pt sizes:
@@ -72,7 +85,11 @@ export const Switch: React.FC<SwitchProps> = ({
       hitSlop={{ top: VERTICAL_HIT_SLOP, bottom: VERTICAL_HIT_SLOP }}
       // 0.7 — matches ChainFilterChip's activeOpacity (TokenSelectSheet.tsx), cited as the reference pattern above.
       activeOpacity={0.7}
-      style={[styles.track, isEnabled ? styles.trackOn : styles.trackOff]}
+      style={[
+        styles.track,
+        isEnabled ? styles.trackOn : styles.trackOff,
+        isDisabled && styles.disabled,
+      ]}
       accessibilityRole="switch"
       accessibilityState={{ checked: isEnabled, disabled: isDisabled }}
       accessibilityLabel={accessibilityLabel}
@@ -97,6 +114,11 @@ const styles = StyleSheet.create({
   trackOff: {
     backgroundColor: background.bg600,
     alignItems: "flex-start",
+  },
+  // Dims the track+knob together (knob is a child of the TouchableOpacity
+  // this applies to) — D-075.
+  disabled: {
+    opacity: opacity.o40,
   },
   knob: {
     width: KNOB_SIZE,

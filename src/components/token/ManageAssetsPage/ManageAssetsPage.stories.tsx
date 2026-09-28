@@ -101,39 +101,102 @@ const toggleUnlocked =
       prev.map((t) => (t.id === id && !t.isLocked ? { ...t, isHidden: !t.isHidden } : t))
     );
 
+/**
+ * Every story below that renders the header (i.e. everything except a
+ * bare `args:` story) MUST hold its own `searchQuery`/`chainFilter` state
+ * and pass both explicitly — round 7's claim that leaving them unpassed
+ * left the component "uncontrolled" was false. Cause (reviewer, round 8,
+ * 2026-09-28): `.storybook/preview.ts` has `actions: { argTypesRegex:
+ * "^on[A-Z].*" }`, which auto-injects a no-op action-logger function into
+ * EVERY untouched `on*` prop of EVERY story, including `onSearchChange`/
+ * `onChainFilterChange` we never explicitly set. Once any function is
+ * present there, `ManageAssetsPage`'s `onSearchChange !== undefined`
+ * check reads true, the component switches to controlled mode, and reads
+ * `searchQuery`/`chainFilter` from args — which sit frozen at `""`/`[]`
+ * since the injected action only logs to the Actions panel, it never
+ * updates React state. Net effect: typing/tapping visibly did nothing in
+ * every story except the two that already had explicit `useState` wiring
+ * (`WithChainFilter`, `SearchNoResults`).
+ *
+ * This helper is the fix: build a real `useState` pair per story and pass
+ * both `searchQuery`+`onSearchChange` and `chainFilter`+
+ * `onChainFilterChange` explicitly, so they override whatever the actions
+ * addon injected via `{...args}` (JSX applies the later prop). Per
+ * instructions, `.storybook/preview.ts` and `SendSelectTokenPage`'s own
+ * stories are untouched — this is scoped to this file only.
+ */
+function useManageAssetsControls(initialSearchQuery = "", initialChainFilter: ChainFilter[] = []) {
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+  const [chainFilter, setChainFilter] = useState<ChainFilter[]>(initialChainFilter);
+  return { searchQuery, setSearchQuery, chainFilter, setChainFilter };
+}
+
 /** Mixed shown/hidden — matches Figma's own example exactly, plus the
  * three locked chain-native rows. Interactive: this component is fully
  * controlled, so the story owns the `tokens` state and flips `isHidden`
- * itself on `onToggle`. Search + chip row are uncontrolled here (no
- * `searchQuery`/`chainFilter` passed) — same as SendSelectTokenPage's own
- * `Default` — so typing in the field and tapping chips actually filters
- * the list via the component's own internal state, no story-level wiring
- * needed. */
+ * itself on `onToggle`. Search + chip row are ALSO explicitly controlled
+ * from story state (see `useManageAssetsControls`'s doc comment) — typing
+ * in the field and tapping chips actually filters the list. */
 export const Default: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS);
-    return <ManageAssetsPage {...args} tokens={tokens} onToggle={toggleUnlocked(setTokens)} />;
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={tokens}
+        onToggle={toggleUnlocked(setTokens)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
   },
 };
 
-/** Every token shown (all switches on) — locked rows are already always on. */
+/** Every token shown (all switches on) — locked rows are already always
+ * on. Search + chip row explicitly controlled (see `useManageAssetsControls`). */
 export const AllShown: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS.map((t) => ({ ...t, isHidden: false })));
-    return <ManageAssetsPage {...args} tokens={tokens} onToggle={toggleUnlocked(setTokens)} />;
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={tokens}
+        onToggle={toggleUnlocked(setTokens)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
   },
 };
 
 /** Every token hidden except the three locked rows, which stay on — a
  * locked row's switch renders on regardless of `isHidden` (see
  * `ManageAssetsPage.tsx`), so `isHidden: false` here is the data-accurate
- * value, not just a visual coincidence. */
+ * value, not just a visual coincidence. Search + chip row explicitly
+ * controlled (see `useManageAssetsControls`). */
 export const AllHidden: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(
       SAMPLE_TOKENS.map((t) => ({ ...t, isHidden: t.isLocked ? false : true }))
     );
-    return <ManageAssetsPage {...args} tokens={tokens} onToggle={toggleUnlocked(setTokens)} />;
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={tokens}
+        onToggle={toggleUnlocked(setTokens)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
   },
 };
 
@@ -141,7 +204,8 @@ export const AllHidden: Story = {
  * badge is the only visual distinguisher for KCC20 vs the others (D-071),
  * sub-label carries the standard text for all 4. Locked rows prepended so
  * this story also demonstrates the un-hideable tokens alongside a full
- * same-name spread. */
+ * same-name spread. Search + chip row explicitly controlled (see
+ * `useManageAssetsControls`). */
 export const SameNameAllStandards: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState<ManageAssetsToken[]>([
@@ -153,7 +217,18 @@ export const SameNameAllStandards: Story = {
       { id: "3", name: "NACHO", subLabel: "1,250 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
       { id: "4", name: "NACHO", subLabel: "3,800 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
     ]);
-    return <ManageAssetsPage {...args} tokens={tokens} onToggle={toggleUnlocked(setTokens)} />;
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={tokens}
+        onToggle={toggleUnlocked(setTokens)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
   },
 };
 
@@ -168,12 +243,17 @@ export const SameNameAllStandards: Story = {
 export const WithChainFilter: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS);
-    const [chainFilter, setChainFilter] = useState<ChainFilter[]>(["kasplex"]);
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls(
+      "",
+      ["kasplex"]
+    );
     return (
       <ManageAssetsPage
         {...args}
         tokens={tokens}
         onToggle={toggleUnlocked(setTokens)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
         chainFilter={chainFilter}
         onChainFilterChange={setChainFilter}
       />
@@ -193,7 +273,8 @@ export const WithChainFilter: Story = {
 export const SearchNoResults: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS);
-    const [searchQuery, setSearchQuery] = useState("zzz-no-such-token");
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } =
+      useManageAssetsControls("zzz-no-such-token");
     return (
       <ManageAssetsPage
         {...args}
@@ -201,6 +282,8 @@ export const SearchNoResults: Story = {
         onToggle={toggleUnlocked(setTokens)}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
       />
     );
   },
@@ -211,16 +294,49 @@ export const SearchNoResults: Story = {
  * "No tokens yet" / "Tokens you receive will appear here."). Note: in real
  * usage the three locked chain-native rows are always present, so a truly
  * empty list is a loading-failure/edge case rather than a normal state —
- * this story exercises the visual regardless. */
+ * this story exercises the visual regardless. Header (search + chips)
+ * still renders on an empty `tokens` list, so it's explicitly controlled
+ * here too, same as every other story. */
 export const Empty: Story = {
-  args: { tokens: [], onToggle: () => {}, isLoading: false },
+  render: (args) => {
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={[]}
+        onToggle={() => {}}
+        isLoading={false}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
+  },
 };
 
 /** Loading state — settings page, loading isn't expected in practice, but
  * renders skeleton rows (not a text placeholder) as a fallback rather than
- * showing stale/empty content. `tokens` is ignored while `isLoading`. */
+ * showing stale/empty content. `tokens` is ignored while `isLoading`.
+ * Header (search + chips) stays visible during loading too (matches
+ * SendSelectTokenPage's own behaviour — it never hides search while
+ * `isLoading`), so it's explicitly controlled here as well. */
 export const Loading: Story = {
-  args: { tokens: [], onToggle: () => {}, isLoading: true },
+  render: (args) => {
+    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={[]}
+        onToggle={() => {}}
+        isLoading
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
+  },
 };
 
 const styles = StyleSheet.create({

@@ -39,8 +39,14 @@ export const Interactive: Story = {
   },
 };
 
-export const Disabled: Story = {
+/** Disabled + on — D-075: 40% opacity on the whole track+knob, not a colour change. */
+export const DisabledOn: Story = {
   args: { isEnabled: true, isDisabled: true },
+};
+
+/** Disabled + off — same 40% dim applied to the off-state colour/position. */
+export const DisabledOff: Story = {
+  args: { isEnabled: false, isDisabled: true },
 };
 
 const styles = StyleSheet.create({
