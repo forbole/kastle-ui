@@ -155,26 +155,6 @@ export const Default: Story = {
   },
 };
 
-/** Every token shown (all switches on) — locked rows are already always
- * on. Search + chip row explicitly controlled (see `useManageAssetsControls`). */
-export const AllShown: Story = {
-  render: (args) => {
-    const [tokens, setTokens] = useState(SAMPLE_TOKENS.map((t) => ({ ...t, isHidden: false })));
-    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
-    return (
-      <ManageAssetsPage
-        {...args}
-        tokens={tokens}
-        onToggle={toggleUnlocked(setTokens)}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        chainFilter={chainFilter}
-        onChainFilterChange={setChainFilter}
-      />
-    );
-  },
-};
-
 /** Every token hidden except the three locked rows, which stay on — a
  * locked row's switch renders on regardless of `isHidden` (see
  * `ManageAssetsPage.tsx`), so `isHidden: false` here is the data-accurate

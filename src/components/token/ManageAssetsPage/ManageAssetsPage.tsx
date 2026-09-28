@@ -106,6 +106,12 @@ export interface ManageAssetsPageProps {
    * (`isLocked`) mean an empty `tokens` list is a loading-failure/edge
    * case, not a normal state — exposed as overridable props anyway so the
    * host can supply different copy for that case.
+   *
+   * `emptySubtext` has no default (Nicole, round 9, 2026-09-28: "REMOVE
+   * CAPTION只留NO TOKEN YET") — heading-only by default, since `EmptyState`'s
+   * own `subtext` is now optional (renders nothing, not an empty line, when
+   * omitted). Pass it explicitly if a host wants a caption under the
+   * heading.
    */
   emptyHeading?: string;
   emptySubtext?: string;
@@ -211,7 +217,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   subtitle = "Show or hide tokens in your wallet view and total balance.",
   isLoading = false,
   emptyHeading = "No tokens yet",
-  emptySubtext = "Tokens you receive will appear here.",
+  emptySubtext,
   noResultsHeading = "No tokens found",
   noResultsSubtext = "Try a different name.",
   searchQuery = "",
