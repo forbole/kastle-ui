@@ -6,6 +6,7 @@ import {
   borderRadius,
   colors,
   opacity,
+  primary,
   spacing,
   borderWidth,
   textStyles,
@@ -18,6 +19,8 @@ export interface VaultBalanceRowsProps {
   /**
    * - `default` — both balances resolved
    * - `scanning` — searching the chain: Locked row becomes a status line
+   *   (Figma 14882:407176 / 407540) — tappable, chevron included, same
+   *   destination as the Locked row
    * - `loading` — balances still fetching: values render as skeletons
    */
   state?: VaultBalanceState;
@@ -27,7 +30,13 @@ export interface VaultBalanceRowsProps {
   lockedValue?: string;
   /** Status line shown in place of the Locked row while scanning. */
   scanningLabel?: string;
-  /** Tapping the Locked row opens the vaults list. */
+  /**
+   * ⚠️ A vault was just found (Figma 14889:415114) — shows a small dot
+   * before the Locked value. Figma draws it with no stated meaning; this is
+   * a flagged gap, not a guess at intent. Only meaningful in `state="default"`.
+   */
+  lockedJustUpdated?: boolean;
+  /** Tapping the Locked row (or the scanning status row) opens the vaults list. */
   onPressLocked?: () => void;
 }
 
@@ -42,6 +51,7 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
   lockedLabel = "Locked",
   lockedValue,
   scanningLabel = "Scanning for vaults...",
+  lockedJustUpdated = false,
   onPressLocked,
 }) => {
   const loading = state === "loading";
@@ -72,9 +82,15 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
         </View>
       </View>
 
-      {/* While scanning the Locked row has no balance yet — it reports progress */}
+      {/* While scanning the Locked row has no balance yet — it reports
+          progress. Tappable + chevroned, same as the resolved row below —
+          Figma 14882:407176/407540 shows the same right-edge chevron here. */}
       {state === "scanning" ? (
-        <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.row}
+          onPress={onPressLocked}
+          activeOpacity={0.8}
+        >
           <View style={styles.iconBox}>
             {/* icon + label share textDimmed */}
             <LoaderCircle size={16} color={colors.textDimmed} strokeWidth={2} />
@@ -88,7 +104,8 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
               {scanningLabel}
             </Text>
           </View>
-        </View>
+          <ChevronRight size={16} color={colors.textDimmed} strokeWidth={2} />
+        </TouchableOpacity>
       ) : (
         <TouchableOpacity
           style={styles.row}
@@ -108,6 +125,7 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
             </Text>
           </View>
           <View style={styles.valueCol}>
+            {!loading && lockedJustUpdated ? <View style={styles.updatedDot} /> : null}
             {loading ? (
               <SkeletonBlock width={139} height={16} />
             ) : (
@@ -187,5 +205,14 @@ const styles = StyleSheet.create({
   scanningLabel: {
     ...textStyles.bodyNormalSM,
     color: colors.textDimmed,
+  },
+  // ⚠️ Colour matched to the brand blue in the Figma screenshot
+  // (14889:415114) — the node's own variable binding didn't resolve via the
+  // API, so this is a visual match, not a confirmed token read. Flagged.
+  updatedDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 9999,
+    backgroundColor: primary.p500,
   },
 });
