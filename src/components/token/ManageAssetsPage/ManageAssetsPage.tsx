@@ -60,6 +60,20 @@ export interface ManageAssetsToken {
    * format it either way.
    */
   subLabel: string;
+  /**
+   * Muted network label rendered on the SAME line as the name, right
+   * after it (Phantom pattern, Nicole's pick, round 11, 2026-09-28) — e.g.
+   * `NACHO  Kaspa-KRC20`. Caller-supplied, pure — this component doesn't
+   * derive it from `standard`. Values (round 14, 2026-09-28 — supersedes
+   * round 12's all-short-form list): native KAS → `Kaspa` · KCC20 →
+   * `Kaspa-KCC20` · KRC20 → `Kaspa-KRC20` · any Kasplex token (incl. KAS
+   * on Kasplex) → `Kasplex` (no `-ERC20` suffix, too long) · any Igra
+   * token (incl. iKAS) → `Igra`. KCC20/KRC20 need the standard suffix to
+   * stay distinct since both live on Kaspa; Kasplex/Igra don't collide
+   * with anything else, so they stay short. Optional — omit for a row
+   * with no network label at all.
+   */
+  networkLabel?: string;
   logo?: ImageSourcePropType;
   /** Chain badge image — shown per `standard` (D-071), same as AssetImage's `variant="chain"`. */
   chainLogo?: ImageSourcePropType;
@@ -210,6 +224,14 @@ export interface ManageAssetsPageProps {
  * same filter as any other row (no special-casing) — search/filter is
  * about which rows are visible right now, `isLocked` is about whether a
  * visible row's switch can be toggled; the two are independent.
+ *
+ * Row layout is the Phantom pattern (Nicole's pick, round 11, 2026-09-28):
+ * name, then a muted `networkLabel` on the SAME line right after it
+ * (e.g. "NACHO  Kaspa-KRC20"); balance/`subLabel` stays alone on the
+ * second line. `networkLabel` values are short EXCEPT KCC20/KRC20, which
+ * need the `-KCC20`/`-KRC20` suffix since both live on Kaspa and would
+ * otherwise collide (round 14, 2026-09-28). See
+ * `ManageAssetsToken.networkLabel`'s own doc comment for the exact values.
  */
 export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   tokens,
@@ -359,9 +381,16 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
                 chainImageSize={16}
               />
               <View style={styles.rowText}>
-                <Text allowFontScaling={false} style={styles.rowName} numberOfLines={1}>
-                  {item.name}
-                </Text>
+                <View style={styles.nameRow}>
+                  <Text allowFontScaling={false} style={styles.rowName} numberOfLines={1}>
+                    {item.name}
+                  </Text>
+                  {item.networkLabel ? (
+                    <Text allowFontScaling={false} style={styles.networkLabel} numberOfLines={1}>
+                      {item.networkLabel}
+                    </Text>
+                  ) : null}
+                </View>
                 <Text allowFontScaling={false} style={styles.rowSubLabel} numberOfLines={1}>
                   {item.subLabel}
                 </Text>
@@ -371,16 +400,19 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
               isEnabled={item.isLocked ? true : !item.isHidden}
               isDisabled={item.isLocked}
               onToggle={item.isLocked ? undefined : () => onToggle(item.id)}
-              // Distinguishes rows for screen readers when name+subLabel
-              // repeat (e.g. same-name NACHO across 4 standards) — the
-              // Switch itself has no visible text to derive a label from.
-              // Locked rows (chain-native tokens) also carry a spoken hint
-              // that they can't be hidden, since the disabled Switch has no
-              // other way to convey it.
+              // Distinguishes rows for screen readers when name repeats
+              // (e.g. same-name NACHO across 4 standards) — the Switch
+              // itself has no visible text to derive a label from. Includes
+              // `networkLabel` + `subLabel` (balance). Since round 14's
+              // `-KCC20`/`-KRC20` suffix, `networkLabel` alone again
+              // disambiguates all 4 standards for a screen reader (KCC20
+              // and KRC20 no longer collide on "Kaspa"), same as the
+              // visual row. Locked rows also carry a spoken hint that they
+              // can't be hidden, since the disabled Switch has no other
+              // way to convey it.
               accessibilityLabel={
-                item.isLocked
-                  ? `${item.name} ${item.subLabel}, cannot be hidden`
-                  : `${item.name} ${item.subLabel}`
+                [item.name, item.networkLabel, item.subLabel].filter(Boolean).join(" ") +
+                (item.isLocked ? ", cannot be hidden" : "")
               }
             />
           </View>
@@ -479,13 +511,43 @@ const styles = StyleSheet.create({
     gap: spacing.s3,
     flexShrink: 1,
   },
+  // `gap: spacing.s1` (4px) — matches Figma's balance line sitting 4px
+  // below the name line (node 4852:175931: name h19, balance starts y23 =
+  // 19 + 4), confirmed round 13, 2026-09-28.
   rowText: {
     gap: spacing.s1,
     flexShrink: 1,
   },
+  // Figma (BdTDUVIHEeOjdlHSPij0xi, node 4852:175931, row 14860:397242,
+  // network label node 14871:403152 — pulled via get_variable_defs/
+  // get_metadata, round 13, 2026-09-28): name box h19, label box h14 at
+  // y2.5 — `(19-14)/2 = 2.5`, i.e. the label is vertically CENTRED on the
+  // name's line, not baseline-aligned. Corrected from round 11's
+  // `alignItems: "baseline"` guess.
+  nameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s2,
+  },
   rowName: {
+    // Figma: "📌 Text-normal/md" 16px Regular = `textStyles.bodyNormalMD`,
+    // colour `Typography/typography700` (#C1D5DE) = `typography.t700`.
     ...textStyles.bodyNormalMD,
     color: typography.t700,
+    // Name keeps priority: `flexShrink: 0` means it never gives up space
+    // to `networkLabel` — the label (flexShrink: 1 below) truncates first
+    // when the row is tight. `numberOfLines={1}` on the Text itself is the
+    // fallback if the name alone is still too long for the row.
+    flexShrink: 0,
+  },
+  // Figma: "📌 Text-normal/xs" 12px Regular = `textStyles.bodyNormalXS`,
+  // colour `Typography/typography400` (#4B7D92) = `typography.t400`
+  // ("Tertiary text" per its own theme.ts comment) — corrected from round
+  // 11's t500 guess, which was the wrong shade (t500 = #7B9AAA).
+  networkLabel: {
+    ...textStyles.bodyNormalXS,
+    color: typography.t400,
+    flexShrink: 1,
   },
   rowSubLabel: {
     ...textStyles.bodyNormalXS,

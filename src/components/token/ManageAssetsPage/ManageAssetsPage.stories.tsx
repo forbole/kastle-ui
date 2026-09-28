@@ -30,24 +30,35 @@ const placeholderLogo = require("../../../../assets/icon.png");
 // (no distinct Kasplex vs Igra badge asset exists in this repo). Supersedes
 // the plain unlocked "KAS/Kaspa" row Figma's own example (14767:28684)
 // draws — that row is the same token, now shown correctly as un-hideable.
+// `networkLabel` (Phantom pattern, round 11 2026-09-28; values settled
+// round 14 2026-09-28, superseding round 12's all-short-form list):
+// native KAS → "Kaspa" · KCC20 → "Kaspa-KCC20" · KRC20 → "Kaspa-KRC20" ·
+// any Kasplex token (incl. KAS on Kasplex) → "Kasplex" (no "-ERC20"
+// suffix, too long) · any Igra token (incl. iKAS) → "Igra". KCC20/KRC20
+// need the suffix since both live on Kaspa and would otherwise collide;
+// Kasplex/Igra don't collide with anything else, so they stay short.
 const LOCKED_TOKENS: ManageAssetsToken[] = [
-  { id: "kas-native", name: "KAS", subLabel: "28.3984 KAS", logo: placeholderLogo, standard: "Native", isHidden: false, isLocked: true, chainKeys: ["kaspa"] },
-  { id: "kas-kasplex", name: "KAS", subLabel: "243 KAS", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true, chainKeys: ["kasplex"] },
-  { id: "ikas-igra", name: "iKAS", subLabel: "18.5 iKAS", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true, chainKeys: ["igra"] },
+  { id: "kas-native", name: "KAS", subLabel: "28.3984 KAS", networkLabel: "Kaspa", logo: placeholderLogo, standard: "Native", isHidden: false, isLocked: true, chainKeys: ["kaspa"] },
+  { id: "kas-kasplex", name: "KAS", subLabel: "243 KAS", networkLabel: "Kasplex", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true, chainKeys: ["kasplex"] },
+  { id: "ikas-igra", name: "iKAS", subLabel: "18.5 iKAS", networkLabel: "Igra", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true, chainKeys: ["igra"] },
 ];
 
 // Mirrors Figma node 14767:28684's own example rows (minus the native KAS
 // row, now covered by `LOCKED_TOKENS`) — NACHO/KCC20 (badge, off) ·
 // NACHO/KRC20 (no badge, off) · NACHO/Kasplex-ERC20 (badge, on) ·
-// NACHO/Igra-ERC20 (badge, on).
+// NACHO/Igra-ERC20 (badge, on). Last entry ("KASPERINOTOKEN") is a
+// deliberately long name + long balance, added to stress-test the
+// name-never-truncates-before-label rule at narrow widths (round 11,
+// 2026-09-28).
 const SAMPLE_TOKENS: ManageAssetsToken[] = [
   ...LOCKED_TOKENS,
-  { id: "nacho-kcc20", name: "NACHO", subLabel: "2,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true, chainKeys: ["kaspa"] },
+  { id: "nacho-kcc20", name: "NACHO", subLabel: "2,000 NACHO", networkLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true, chainKeys: ["kaspa"] },
   // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
   // prove the hide is driven by `standard`, not by missing data.
-  { id: "nacho-krc20", name: "NACHO", subLabel: "750,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: true, chainKeys: ["krc20"] },
-  { id: "nacho-kasplex", name: "NACHO", subLabel: "1,250 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
-  { id: "nacho-igra", name: "NACHO", subLabel: "3,800 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
+  { id: "nacho-krc20", name: "NACHO", subLabel: "750,000 NACHO", networkLabel: "Kaspa-KRC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: true, chainKeys: ["krc20"] },
+  { id: "nacho-kasplex", name: "NACHO", subLabel: "1,250 NACHO", networkLabel: "Kasplex", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
+  { id: "nacho-igra", name: "NACHO", subLabel: "3,800 NACHO", networkLabel: "Igra", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
+  { id: "kasperino", name: "KASPERINOTOKEN", subLabel: "999,999.123456 KASPERINOTOKEN", networkLabel: "Kasplex", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
 ];
 
 // Same 4-chip set as SendSelectTokenPage.stories.tsx's CHAIN_FILTERS —
