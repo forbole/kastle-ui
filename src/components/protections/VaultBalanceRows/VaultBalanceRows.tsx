@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ChevronRight, Coins, LoaderCircle, Lock } from "lucide-react-native";
+import { ChevronRight, Coins, Lock } from "lucide-react-native";
 import { SkeletonBlock } from "../../SkeletonBlock/SkeletonBlock";
+import { Spinner } from "../../Spinner/Spinner";
 import {
   borderRadius,
   colors,
@@ -94,7 +95,7 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
         >
           <View style={styles.iconBox}>
             {/* icon + label share textDimmed */}
-            <LoaderCircle size={16} color={colors.textDimmed} strokeWidth={2} />
+            <Spinner size={16} color={colors.textDimmed} strokeWidth={2} />
           </View>
           <View style={styles.scanningCol}>
             <Text
@@ -105,7 +106,9 @@ export const VaultBalanceRows: React.FC<VaultBalanceRowsProps> = ({
               {scanningLabel}
             </Text>
           </View>
-          <ChevronRight size={16} color={colors.textDimmed} strokeWidth={2} />
+          {/* Chevron matches the resolved Locked row's token (textPrimary /
+              t900, white) per review — was textDimmed before. */}
+          <ChevronRight size={16} color={colors.textPrimary} strokeWidth={2} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
