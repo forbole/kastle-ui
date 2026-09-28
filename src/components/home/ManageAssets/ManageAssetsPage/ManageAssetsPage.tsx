@@ -10,17 +10,17 @@ import {
   spacing,
   textStyles,
   typography,
-} from "../../../config/theme";
-import { AssetImage, TokenStandard } from "../../AssetImage";
-import { EmptyState } from "../../EmptyState";
-import { SkeletonBlock } from "../../SkeletonBlock";
-import { Switch } from "../../Switch";
+} from "../../../../config/theme";
+import { AssetImage, TokenStandard } from "../../../AssetImage";
+import { EmptyState } from "../../../EmptyState";
+import { SkeletonBlock } from "../../../SkeletonBlock";
+import { Switch } from "../../../Switch";
 import {
   ChainFilter,
   ChainFilterChip,
   ChainFilterConfig,
   toggleChainFilter,
-} from "../../swap/TokenSelectSheet";
+} from "../../../swap/TokenSelectSheet";
 
 const SKELETON_ROW_COUNT = 4;
 const SKELETON_ROW_IDS = Array.from({ length: SKELETON_ROW_COUNT }, (_, i) => `skeleton-${i}`);
@@ -419,7 +419,7 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
         )}
         ListEmptyComponent={
           <EmptyState
-            image={require("../../../../assets/empty-activity.png")}
+            image={require("../../../../../assets/empty-activity.png")}
             imageHeight={160}
             imageWidth={192}
             heading={isSourceEmpty ? emptyHeading : noResultsHeading}

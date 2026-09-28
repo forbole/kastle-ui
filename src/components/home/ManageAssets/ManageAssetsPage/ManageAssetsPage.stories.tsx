@@ -3,10 +3,10 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { ManageAssetsPage } from "./ManageAssetsPage";
 import { ManageAssetsToken } from "./ManageAssetsPage";
-import { ChainFilter } from "../../swap/TokenSelectSheet";
-import { background } from "../../../config/theme";
+import { ChainFilter } from "../../../swap/TokenSelectSheet";
+import { background } from "../../../../config/theme";
 
-const placeholderLogo = require("../../../../assets/icon.png");
+const placeholderLogo = require("../../../../../assets/icon.png");
 
 // `chainKeys` follow SendSelectTokenPage.stories.tsx's own convention:
 // "kaspa" groups both native KAS and any Kaspa-L1 KCC20 token, "krc20" is
@@ -71,7 +71,7 @@ const CHAIN_FILTERS = [
 ];
 
 const meta: Meta<typeof ManageAssetsPage> = {
-  title: "Token/ManageAssetsPage",
+  title: "Home/ManageAssets/ManageAssetsPage",
   component: ManageAssetsPage,
   parameters: {
     layout: "fullscreen",
