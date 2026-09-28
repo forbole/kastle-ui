@@ -30,21 +30,12 @@ const vaultCopy = {
     "Undo theft. Withdrawals wait out a delay you set, so you have time to clawback and send funds to your recovery address if something looks wrong.",
 };
 
-/** Vault — active, with the "Set up" CTA. */
-export const Active: Story = {
-  args: {
-    ...vaultCopy,
-    status: "active",
-    ctaLabel: "Set up",
-  },
-};
-
 /**
- * Entry — before any scan has run (Figma 14889:414383). Same as `Active`
- * plus the "Set one up before? Find it now" link; dropped once a scan has
- * happened, found or not.
+ * Vault — active, before any scan has run (Figma 14889:414383): the "Set
+ * up" CTA plus the "Set one up before? Find it now" link. The link drops
+ * once a scan has happened, found or not.
  */
-export const EntryWithFindVault: Story = {
+export const Active: Story = {
   args: {
     ...vaultCopy,
     status: "active",
@@ -96,8 +87,9 @@ export const Finding: StoryObj<FindingArgs> = {
 
 /**
  * ⚠️ Paused / retrying — NOT in Figma, labelled guess pending design.
- * Same slot as `Finding`, same tokens, alert-circle instead of the
- * spinner — no red, no error wording per Nicole's call.
+ * Same slot as `Finding`, same tokens, error-toned alert-circle instead of
+ * the spinner — copy stays neutral ("Paused · retrying"), plus a Retry
+ * button (placement + Button variant both guessed, no Figma for this state).
  */
 export const Paused: Story = {
   args: {
@@ -105,6 +97,7 @@ export const Paused: Story = {
     status: "active",
     ctaLabel: "Set up",
     discoveryPaused: { title: "Finding your vaults" },
+    onRetry: () => {},
   },
 };
 

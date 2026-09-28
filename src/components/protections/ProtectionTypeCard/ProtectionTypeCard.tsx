@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { AlertCircle, ChevronRight, LoaderCircle } from "lucide-react-native";
+import { AlertCircle, ChevronRight } from "lucide-react-native";
 import { StatusPill, StatusPillStatus } from "../../StatusPill/StatusPill";
+import { Spinner } from "../../Spinner/Spinner";
+import { Button } from "../../Button/Button";
 import {
   background,
   colors,
@@ -62,11 +64,17 @@ export interface ProtectionTypeCardProps {
   discovery?: VaultDiscoveryProgress;
   /**
    * ⚠️ NOT in Figma — labelled guess (pending design). Same slot as
-   * `discovery` for a stalled/retrying scan: same divider + title, but a
-   * static row (alert-circle icon, same tone as the step label — no red,
-   * no error wording) instead of the progress bar.
+   * `discovery` for a stalled/retrying scan: same divider + title, a static
+   * alert-circle row (error-toned icon, unchanged "Paused · retrying"
+   * copy — no error wording added), and a Retry button.
    */
   discoveryPaused?: { title: string; label?: string };
+  /**
+   * ⚠️ NOT in Figma. Retry button shown in the paused block. Placement
+   * (inline, right of the label) and variant (smallest/secondary Button)
+   * are both labelled guesses pending design.
+   */
+  onRetry?: () => void;
   /**
    * Inline notice rendered BELOW the card, not inside it (Figma
    * 14889:414871) — e.g. "No existing vaults found" once a scan has
@@ -94,6 +102,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   findVaultLabel = "Find it now",
   discovery,
   discoveryPaused,
+  onRetry,
   notice,
 }) => {
   const isActive = status === "active";
@@ -180,9 +189,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
             </View>
             <View style={styles.stepRow}>
               <View style={styles.stepIconBox}>
-                {/* Static, not spinning — matches the Home "Scanning for
-                    vaults..." row, which ships the same icon un-animated. */}
-                <LoaderCircle size={16} color={colors.textPrimary} strokeWidth={2} />
+                <Spinner size={16} color={colors.textPrimary} strokeWidth={2} />
               </View>
               <Text
                 allowFontScaling={false}
@@ -202,7 +209,9 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
             </Text>
             <View style={styles.stepRow}>
               <View style={styles.stepIconBox}>
-                <AlertCircle size={16} color={colors.textPrimary} strokeWidth={2} />
+                {/* Error-toned per review — copy stays neutral ("Paused ·
+                    retrying"), only the icon colour signals it stalled. */}
+                <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
               </View>
               <Text
                 allowFontScaling={false}
@@ -211,6 +220,16 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
               >
                 {discoveryPaused.label ?? "Paused · retrying"}
               </Text>
+              {onRetry ? (
+                <Button
+                  action="secondary"
+                  variant="text"
+                  size="xs"
+                  label="Retry"
+                  onPress={onRetry}
+                  hug
+                />
+              ) : null}
             </View>
           </View>
         ) : null}
