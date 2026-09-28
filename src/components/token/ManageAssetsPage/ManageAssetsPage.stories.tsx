@@ -3,10 +3,24 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet } from "react-native";
 import { ManageAssetsPage } from "./ManageAssetsPage";
 import { ManageAssetsToken } from "./ManageAssetsPage";
+import { ChainFilter } from "../../swap/TokenSelectSheet";
 import { background } from "../../../config/theme";
 
 const placeholderLogo = require("../../../../assets/icon.png");
 
+// `chainKeys` follow SendSelectTokenPage.stories.tsx's own convention:
+// "kaspa" groups both native KAS and any Kaspa-L1 KCC20 token, "krc20" is
+// its own filter tab (Send's own sample left it empty; tagging a row here
+// so the filter has something to show), "kasplex"/"igra" are the two L2s.
+//
+// Sub-labels show real balances (e.g. "28.3984 KAS", "243 KAS", "2,000
+// NACHO") per Nicole's round-7 (2026-09-28) instruction, matching Figma.
+// ⚠️ This reverses round 6's (2026-09-26) settled choice of showing the
+// plain network name ("Kaspa") instead — that round's comment is now
+// superseded, kept only in git history. The component's own `subLabel`
+// doc comment was always caller's-choice ("pass whatever string the host
+// wants here"), so no component change was needed, only these samples.
+//
 // Chain-native gas tokens — always shown in the wallet view/total balance,
 // cannot be hidden (Nicole, 2026-09-28: "ALL HIDDEN要加入呢3個TOKEN但佢地UNABLE
 // TO HIDDEN"). One per chain: KAS on Kaspa (native, no chain badge), KAS on
@@ -17,9 +31,9 @@ const placeholderLogo = require("../../../../assets/icon.png");
 // the plain unlocked "KAS/Kaspa" row Figma's own example (14767:28684)
 // draws — that row is the same token, now shown correctly as un-hideable.
 const LOCKED_TOKENS: ManageAssetsToken[] = [
-  { id: "kas-native", name: "KAS", subLabel: "Kaspa", logo: placeholderLogo, standard: "Native", isHidden: false, isLocked: true },
-  { id: "kas-kasplex", name: "KAS", subLabel: "Kasplex-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true },
-  { id: "ikas-igra", name: "iKAS", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true },
+  { id: "kas-native", name: "KAS", subLabel: "28.3984 KAS", logo: placeholderLogo, standard: "Native", isHidden: false, isLocked: true, chainKeys: ["kaspa"] },
+  { id: "kas-kasplex", name: "KAS", subLabel: "243 KAS", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true, chainKeys: ["kasplex"] },
+  { id: "ikas-igra", name: "iKAS", subLabel: "18.5 iKAS", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, isLocked: true, chainKeys: ["igra"] },
 ];
 
 // Mirrors Figma node 14767:28684's own example rows (minus the native KAS
@@ -28,12 +42,21 @@ const LOCKED_TOKENS: ManageAssetsToken[] = [
 // NACHO/Igra-ERC20 (badge, on).
 const SAMPLE_TOKENS: ManageAssetsToken[] = [
   ...LOCKED_TOKENS,
-  { id: "nacho-kcc20", name: "NACHO", subLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true },
+  { id: "nacho-kcc20", name: "NACHO", subLabel: "2,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: true, chainKeys: ["kaspa"] },
   // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
   // prove the hide is driven by `standard`, not by missing data.
-  { id: "nacho-krc20", name: "NACHO", subLabel: "Kaspa-KRC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: true },
-  { id: "nacho-kasplex", name: "NACHO", subLabel: "Kasplex-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
-  { id: "nacho-igra", name: "NACHO", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
+  { id: "nacho-krc20", name: "NACHO", subLabel: "750,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: true, chainKeys: ["krc20"] },
+  { id: "nacho-kasplex", name: "NACHO", subLabel: "1,250 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
+  { id: "nacho-igra", name: "NACHO", subLabel: "3,800 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
+];
+
+// Same 4-chip set as SendSelectTokenPage.stories.tsx's CHAIN_FILTERS —
+// short labels ("Kaspa · KRC20 · Kasplex · Igra"), same placeholder logo.
+const CHAIN_FILTERS = [
+  { key: "kaspa" as ChainFilter, label: "Kaspa", logo: placeholderLogo },
+  { key: "krc20" as ChainFilter, label: "KRC20", logo: placeholderLogo },
+  { key: "kasplex" as ChainFilter, label: "Kasplex", logo: placeholderLogo },
+  { key: "igra" as ChainFilter, label: "Igra", logo: placeholderLogo },
 ];
 
 const meta: Meta<typeof ManageAssetsPage> = {
@@ -43,6 +66,13 @@ const meta: Meta<typeof ManageAssetsPage> = {
     layout: "fullscreen",
     backgrounds: { default: "kastle" },
     viewport: { defaultViewport: "iphone14" },
+  },
+  // Applies to every story below (each spreads `{...args}`) — same as
+  // SendSelectTokenPage.stories.tsx passing `chainFilters` via meta.args,
+  // so the chip row renders and is tappable everywhere without repeating
+  // it per story.
+  args: {
+    chainFilters: CHAIN_FILTERS,
   },
   // No custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: a
   // fixed 393px frame here broke the iPad viewport in Storybook's own
@@ -74,7 +104,11 @@ const toggleUnlocked =
 /** Mixed shown/hidden — matches Figma's own example exactly, plus the
  * three locked chain-native rows. Interactive: this component is fully
  * controlled, so the story owns the `tokens` state and flips `isHidden`
- * itself on `onToggle`. */
+ * itself on `onToggle`. Search + chip row are uncontrolled here (no
+ * `searchQuery`/`chainFilter` passed) — same as SendSelectTokenPage's own
+ * `Default` — so typing in the field and tapping chips actually filters
+ * the list via the component's own internal state, no story-level wiring
+ * needed. */
 export const Default: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS);
@@ -112,14 +146,63 @@ export const SameNameAllStandards: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState<ManageAssetsToken[]>([
       ...LOCKED_TOKENS,
-      { id: "1", name: "NACHO", subLabel: "Kaspa-KCC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: false },
+      { id: "1", name: "NACHO", subLabel: "2,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: false, chainKeys: ["kaspa"] },
       // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
       // prove the hide is driven by `standard`, not by missing data.
-      { id: "2", name: "NACHO", subLabel: "Kaspa-KRC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: false },
-      { id: "3", name: "NACHO", subLabel: "Kasplex-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
-      { id: "4", name: "NACHO", subLabel: "Igra-ERC20", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false },
+      { id: "2", name: "NACHO", subLabel: "750,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: false, chainKeys: ["krc20"] },
+      { id: "3", name: "NACHO", subLabel: "1,250 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
+      { id: "4", name: "NACHO", subLabel: "3,800 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
     ]);
     return <ManageAssetsPage {...args} tokens={tokens} onToggle={toggleUnlocked(setTokens)} />;
+  },
+};
+
+/**
+ * Chain filter pre-selected AND controlled from the story (React state
+ * here instead of the component's internal state) — same pattern as
+ * SendSelectTokenPage.stories.tsx's `WithChainFilter`. Genuinely
+ * interactive: tapping a second chip adds to the selection (additive
+ * multi-select), typing in the search field filters further on top of the
+ * active chip(s).
+ */
+export const WithChainFilter: Story = {
+  render: (args) => {
+    const [tokens, setTokens] = useState(SAMPLE_TOKENS);
+    const [chainFilter, setChainFilter] = useState<ChainFilter[]>(["kasplex"]);
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={tokens}
+        onToggle={toggleUnlocked(setTokens)}
+        chainFilter={chainFilter}
+        onChainFilterChange={setChainFilter}
+      />
+    );
+  },
+};
+
+/**
+ * Search pre-filled with a query that matches nothing against a non-empty
+ * `tokens` list — exercises the "No tokens found" / "Try a different
+ * name." copy (`noResultsHeading`/`noResultsSubtext`), distinct from the
+ * `Empty` story's "No tokens yet" (which is for a genuinely empty `tokens`
+ * prop, not a search/filter with zero matches). Controlled search state
+ * so the field starts pre-filled but stays fully editable — type a real
+ * token name to see the list reappear, or tap a chip to combine filters.
+ */
+export const SearchNoResults: Story = {
+  render: (args) => {
+    const [tokens, setTokens] = useState(SAMPLE_TOKENS);
+    const [searchQuery, setSearchQuery] = useState("zzz-no-such-token");
+    return (
+      <ManageAssetsPage
+        {...args}
+        tokens={tokens}
+        onToggle={toggleUnlocked(setTokens)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
+    );
   },
 };
 

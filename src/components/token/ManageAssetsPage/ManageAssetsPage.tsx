@@ -1,10 +1,26 @@
-import React from "react";
-import { FlatList, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
-import { borderRadius, colors, spacing, textStyles, typography } from "../../../config/theme";
+import React, { useCallback, useMemo, useState } from "react";
+import { FlatList, ImageSourcePropType, Keyboard, StyleSheet, Text, TextInput, View } from "react-native";
+import { Search } from "lucide-react-native";
+import {
+  background,
+  border,
+  borderRadius,
+  borderWidth,
+  colors,
+  spacing,
+  textStyles,
+  typography,
+} from "../../../config/theme";
 import { AssetImage, TokenStandard } from "../../AssetImage";
 import { EmptyState } from "../../EmptyState";
 import { SkeletonBlock } from "../../SkeletonBlock";
 import { Switch } from "../../Switch";
+import {
+  ChainFilter,
+  ChainFilterChip,
+  ChainFilterConfig,
+  toggleChainFilter,
+} from "../../swap/TokenSelectSheet";
 
 const SKELETON_ROW_COUNT = 4;
 const SKELETON_ROW_IDS = Array.from({ length: SKELETON_ROW_COUNT }, (_, i) => `skeleton-${i}`);
@@ -19,10 +35,11 @@ const SKELETON_ROW_IDS = Array.from({ length: SKELETON_ROW_COUNT }, (_, i) => `s
 const ManageAssetsSkeletonRow: React.FC = () => (
   <View style={styles.row}>
     <View style={styles.rowLeft}>
-      <SkeletonBlock width={40} height={40} borderRadius={20} />
+      <SkeletonBlock width={40} height={40} borderRadius={borderRadius.full} />
       <View style={styles.rowText}>
-        <SkeletonBlock width={88} height={14} borderRadius={4} />
-        <SkeletonBlock width={64} height={11} borderRadius={4} />
+        <SkeletonBlock width={88} height={14} borderRadius={borderRadius.sm} />
+        {/* 64×12 — matches ActivitySkeletonRow's own second-line bar size. */}
+        <SkeletonBlock width={64} height={12} borderRadius={borderRadius.sm} />
       </View>
     </View>
     {/* Same track size as the real `Switch` (spacing.s12 × spacing.s6, fully rounded). */}
@@ -57,6 +74,14 @@ export interface ManageAssetsToken {
    * regardless of `isHidden`, and `onToggle` does not fire for this row.
    */
   isLocked?: boolean;
+  /**
+   * Which `ChainFilterConfig.key`(s) this token belongs to, for the chain
+   * filter chip row — same field/shape as `TokenInfo.chainKeys`
+   * (`swap/TokenSelectSheet`) / `SendSelectTokenPage`, a token can belong
+   * to more than one. A token with no `chainKeys` never matches an active
+   * filter (same behaviour as Send).
+   */
+  chainKeys?: ChainFilter[];
 }
 
 export interface ManageAssetsPageProps {
@@ -72,15 +97,44 @@ export interface ManageAssetsPageProps {
   subtitle?: string;
   isLoading?: boolean;
   /**
-   * Empty-state heading/subtext (shown when `tokens` is empty and
-   * `isLoading` is false) — same `EmptyState` component + `empty-activity`
-   * illustration as `ActivityScreen`'s empty state. In practice the three
-   * always-shown chain-native tokens (`isLocked`) mean an empty list is a
-   * loading-failure/edge case, not a normal state — exposed as overridable
-   * props anyway so the host can supply different copy for that case.
+   * Empty-state heading/subtext — shown only when the `tokens` prop itself
+   * is empty (a genuinely empty wallet / load failure), never when search
+   * or the chain filter merely produced zero matches (see
+   * `noResultsHeading`/`noResultsSubtext` for that case). Same `EmptyState`
+   * component + `empty-activity` illustration as `ActivityScreen`'s empty
+   * state. In practice the three always-shown chain-native tokens
+   * (`isLocked`) mean an empty `tokens` list is a loading-failure/edge
+   * case, not a normal state — exposed as overridable props anyway so the
+   * host can supply different copy for that case.
    */
   emptyHeading?: string;
   emptySubtext?: string;
+  /**
+   * Shown instead of `emptyHeading`/`emptySubtext` when `tokens` is
+   * non-empty but the active search/chain-filter combination matches
+   * nothing.
+   */
+  noResultsHeading?: string;
+  noResultsSubtext?: string;
+  /**
+   * Live, case-insensitive filter over `tokens` — same controlled/
+   * uncontrolled pattern as `SendSelectTokenPage`'s search: pass both
+   * `searchQuery` + `onSearchChange` to control it, or neither to let the
+   * component manage its own state.
+   */
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
+  /**
+   * Additive multi-select network filter — same `ChainFilter`/
+   * `toggleChainFilter` semantics as `SendSelectTokenPage`/
+   * `TokenSelectSheet`: several chips can be active at once, empty = no
+   * filter, no chip highlighted. Controlled/uncontrolled, same pattern as
+   * `searchQuery` above.
+   */
+  chainFilter?: ChainFilter[];
+  onChainFilterChange?: (keys: ChainFilter[]) => void;
+  /** Filter chip row data — omit (or pass `[]`) to hide the chip row entirely, same as Send. */
+  chainFilters?: ChainFilterConfig[];
 }
 
 /**
@@ -128,6 +182,19 @@ export interface ManageAssetsPageProps {
  * `isLoading` should rarely if ever be true in practice; it's handled
  * anyway (skeleton rows, same shape as `ActivitySkeletonRow`) rather than
  * left to show stale/empty content.
+ *
+ * Search bar + chain filter chip row (Figma node `4852:175931`, search
+ * directly under the subtitle) copy `SendSelectTokenPage`'s behaviour
+ * exactly — same `ChainFilterChip`/`ChainFilter`/`toggleChainFilter`
+ * pieces, same controlled-or-internal pattern for both search and filter,
+ * same additive multi-select chip toggle, same "Search Token" placeholder
+ * and input styling. Filtering is pure/local over the `tokens` prop
+ * (name + `subLabel`, case-insensitive, combined with the chain filter);
+ * it never touches `isHidden` — a filtered-out token is just not rendered,
+ * its hidden/shown state is unchanged. Locked rows go through the exact
+ * same filter as any other row (no special-casing) — search/filter is
+ * about which rows are visible right now, `isLocked` is about whether a
+ * visible row's switch can be toggled; the two are independent.
  */
 export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   tokens,
@@ -136,17 +203,114 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   isLoading = false,
   emptyHeading = "No tokens yet",
   emptySubtext = "Tokens you receive will appear here.",
+  noResultsHeading = "No tokens found",
+  noResultsSubtext = "Try a different name.",
+  searchQuery = "",
+  onSearchChange,
+  chainFilter = [],
+  onChainFilterChange,
+  chainFilters = [],
 }) => {
+  const [internalSearch, setInternalSearch] = useState("");
+  const [internalChainFilter, setInternalChainFilter] = useState<ChainFilter[]>([]);
+
+  const activeSearch = onSearchChange !== undefined ? searchQuery : internalSearch;
+  const activeChainFilter: ChainFilter[] = useMemo(
+    () => (onChainFilterChange !== undefined ? (chainFilter ?? []) : internalChainFilter),
+    [onChainFilterChange, chainFilter, internalChainFilter]
+  );
+
+  // Pure, local filtering — same shape as SendSelectTokenPage's own
+  // `filteredTokens`: search matches name OR subLabel (this type's
+  // equivalent of Send's name/symbol match), chain filter is additive
+  // multi-select (a token matches if ANY of its `chainKeys` is active).
+  // Neither step reads or writes `isHidden`.
+  const filteredTokens = useMemo(() => {
+    const query = activeSearch.trim().toLowerCase();
+    let result = tokens;
+    if (query) {
+      result = result.filter(
+        (t) => t.name.toLowerCase().includes(query) || t.subLabel.toLowerCase().includes(query)
+      );
+    }
+    if (activeChainFilter.length > 0) {
+      result = result.filter((t) => t.chainKeys?.some((k) => activeChainFilter.includes(k)));
+    }
+    return result;
+  }, [tokens, activeSearch, activeChainFilter]);
+
+  const handleSearchChange = useCallback(
+    (q: string) => {
+      if (onSearchChange) {
+        onSearchChange(q);
+      } else {
+        setInternalSearch(q);
+      }
+    },
+    [onSearchChange]
+  );
+
+  const handleChainFilterPress = useCallback(
+    (key: ChainFilter) => {
+      const next = toggleChainFilter(activeChainFilter, key);
+      if (onChainFilterChange) {
+        onChainFilterChange(next);
+      } else {
+        setInternalChainFilter(next);
+      }
+    },
+    [activeChainFilter, onChainFilterChange]
+  );
+
+  // "No tokens yet" only when the source list itself is empty (genuinely
+  // empty wallet / load failure) — search/filter producing zero matches
+  // against a non-empty source gets "No tokens found" instead, even though
+  // both cases render as an empty FlatList.
+  const isSourceEmpty = tokens.length === 0;
+
+  const header = (
+    <>
+      <Text allowFontScaling={false} style={styles.subtitle}>
+        {subtitle}
+      </Text>
+      <View style={styles.searchContainer}>
+        <Search size={16} color={typography.t600} />
+        <TextInput
+          style={styles.searchInput}
+          value={activeSearch}
+          onChangeText={handleSearchChange}
+          placeholder="Search Token"
+          placeholderTextColor={typography.t600}
+          autoCorrect={false}
+          autoCapitalize="none"
+          clearButtonMode="while-editing"
+        />
+      </View>
+      {chainFilters.length > 0 && (
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={chainFilters}
+          keyExtractor={(c) => String(c.key)}
+          contentContainerStyle={styles.chipsRow}
+          renderItem={({ item }) => (
+            <ChainFilterChip
+              label={item.label}
+              logo={item.logo}
+              isActive={activeChainFilter.includes(item.key)}
+              onPress={() => handleChainFilterPress(item.key)}
+            />
+          )}
+        />
+      )}
+    </>
+  );
+
   if (isLoading) {
     return (
       <View style={styles.container}>
-        {/* Same padding as `listContent` (the real list's contentContainerStyle),
-            so the subtitle + skeleton rows land at the same insets as the
-            loaded page. */}
+        <View style={styles.headerSection}>{header}</View>
         <View style={styles.listContent}>
-          <Text allowFontScaling={false} style={styles.subtitle}>
-            {subtitle}
-          </Text>
           {SKELETON_ROW_IDS.map((id) => (
             <ManageAssetsSkeletonRow key={id} />
           ))}
@@ -157,16 +321,14 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
 
   return (
     <View style={styles.container}>
+      <View style={styles.headerSection}>{header}</View>
       <FlatList
         style={styles.list}
-        data={tokens}
+        data={filteredTokens}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <Text allowFontScaling={false} style={styles.subtitle}>
-            {subtitle}
-          </Text>
-        }
+        keyboardShouldPersistTaps="handled"
+        onScrollBeginDrag={() => Keyboard.dismiss()}
         renderItem={({ item }) => (
           <View style={styles.row}>
             <View style={styles.rowLeft}>
@@ -211,8 +373,8 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
             image={require("../../../../assets/empty-activity.png")}
             imageHeight={160}
             imageWidth={192}
-            heading={emptyHeading}
-            subtext={emptySubtext}
+            heading={isSourceEmpty ? emptyHeading : noResultsHeading}
+            subtext={isSourceEmpty ? emptySubtext : noResultsSubtext}
           />
         }
       />
@@ -236,16 +398,56 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
   },
+  // `flexGrow: 1` (reviewer, round 7, 2026-09-28): without it the FlatList's
+  // content container sizes to its own (empty) content, so EmptyState's own
+  // `flex:1` centring has no parent height to centre within — the
+  // illustration sat at the top instead of the middle of the list area, the
+  // same bug ActivityScreen doesn't have because its empty state is a
+  // separate `flex:1` branch, not a FlatList ListEmptyComponent. Harmless
+  // when the list has rows — flexGrow only ever grows to fill leftover
+  // space, never shrinks below the rows' own height.
   listContent: {
+    flexGrow: 1,
     paddingHorizontal: spacing.s2,
-    paddingTop: spacing.s4,
     paddingBottom: spacing.s10,
+  },
+  // Wraps subtitle + search + chip row — paddingHorizontal.s5 (20px)
+  // matches the rows' own total left inset (listContent's s2 + row's s3 =
+  // 20px), same as SendSelectTokenPage's container inset (s5), so the
+  // search field/chips line up with the row content below them.
+  headerSection: {
+    paddingHorizontal: spacing.s5,
+    paddingTop: spacing.s4,
   },
   subtitle: {
     ...textStyles.bodyNormalSM,
     color: typography.t600,
     textAlign: "center",
     paddingBottom: spacing.s4,
+  },
+  // Copied from SendSelectTokenPage's own searchContainer/searchInput.
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: background.bg50,
+    borderWidth: borderWidth.bw1,
+    borderColor: border.b300,
+    borderRadius: borderRadius.xl,
+    height: spacing.s10,
+    paddingHorizontal: spacing.s3,
+    gap: spacing.s2,
+  },
+  searchInput: {
+    flex: 1,
+    color: typography.t900,
+    ...textStyles.bodyNormalMD,
+    padding: 0,
+    margin: 0,
+  },
+  chipsRow: {
+    flexDirection: "row",
+    gap: spacing.s2,
+    paddingVertical: spacing.s4,
   },
   row: {
     flexDirection: "row",
