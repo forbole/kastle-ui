@@ -3,8 +3,7 @@ import { View, StyleSheet, useWindowDimensions } from "react-native";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { ProtectionsHubScreen } from "./ProtectionsHubScreen";
 import { ProtectionTypeCardProps } from "../ProtectionTypeCard/ProtectionTypeCard";
-import { Toast } from "../../Toast/Toast";
-import { background, spacing } from "../../../config/theme";
+import { background } from "../../../config/theme";
 
 const CARDS: ProtectionTypeCardProps[] = [
   {
@@ -62,48 +61,15 @@ export const NoVaultYet: Story = {
   },
 };
 
-/**
- * Discovery running in the background (Figma 14882:407025) — divider,
- * progress bar and current step replace the "Find it now" link. The bar
- * fill is driven by `step / totalSteps` in code (see ProtectionTypeCard's
- * `Finding` story for the per-step control); this composed story shows a
- * mid-scan snapshot.
- */
-export const Finding: Story = {
-  args: {
-    cards: [
-      {
-        ...CARDS[0],
-        discovery: {
-          title: "Finding your vaults",
-          step: 2,
-          stepLabel: "Looking for vault markers",
-        },
-      },
-      ...CARDS.slice(1),
-    ],
-  },
-};
-
-/**
- * ⚠️ Paused / retrying — NOT in Figma, labelled guess pending design. Same
- * slot as `Finding`; no red, no error wording per Nicole's call.
- */
-export const Paused: Story = {
-  args: {
-    cards: [
-      { ...CARDS[0], discoveryPaused: { title: "Finding your vaults" } },
-      ...CARDS.slice(1),
-    ],
-  },
-};
+// Finding / Paused are NOT repeated here — they're ProtectionTypeCard's own
+// stories (`Finding`, `Paused`), and the hub only composes the card, so a
+// second copy of the same state at this level would drift from the first.
 
 /**
  * Scan finished empty (Figma 14882:410159) — Set up stays, "Find it now" is
  * gone (we already looked), and the inline "No existing vaults found" line
- * sits below the card. The toast ("no existing vaults" · Close) is a
- * separate overlay composed here the way a real screen would show it —
- * see the Toast component's own stories for it standalone.
+ * sits below the card. The result toast ("no existing vaults" · Close) is
+ * app-side (kastle-mobile useToastMessage), not drawn here.
  */
 export const NotFound: Story = {
   args: {
@@ -112,19 +78,6 @@ export const NotFound: Story = {
       ...CARDS.slice(1),
     ],
   },
-  render: (args) => (
-    <View style={{ flex: 1 }}>
-      <ProtectionsHubScreen {...args} />
-      <View style={styles.toastOverlay}>
-        <Toast
-          variant="error"
-          title="No existing vaults"
-          closeLabel="Close"
-          onPressClose={() => {}}
-        />
-      </View>
-    </View>
-  ),
 };
 
 /** Vaults exist and all are locked — status pill, no CTA (Figma 13385:419530). */
@@ -168,14 +121,5 @@ export const TwoWithdrawing: Story = {
 const styles = StyleSheet.create({
   decorator: {
     backgroundColor: background.bg0,
-  },
-  toastOverlay: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    alignItems: "center",
-    paddingTop: spacing.s5,
-    paddingHorizontal: spacing.s5,
   },
 });
