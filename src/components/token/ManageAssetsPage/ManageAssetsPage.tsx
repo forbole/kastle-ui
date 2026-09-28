@@ -1,8 +1,34 @@
 import React from "react";
 import { FlatList, ImageSourcePropType, StyleSheet, Text, View } from "react-native";
-import { colors, spacing, textStyles, typography } from "../../../config/theme";
+import { borderRadius, colors, spacing, textStyles, typography } from "../../../config/theme";
 import { AssetImage, TokenStandard } from "../../AssetImage";
+import { EmptyState } from "../../EmptyState";
+import { SkeletonBlock } from "../../SkeletonBlock";
 import { Switch } from "../../Switch";
+
+const SKELETON_ROW_COUNT = 4;
+const SKELETON_ROW_IDS = Array.from({ length: SKELETON_ROW_COUNT }, (_, i) => `skeleton-${i}`);
+
+/**
+ * Loading fallback — mirrors a real row's geometry exactly by reusing the
+ * same `row`/`rowLeft`/`rowText` styles: 40px circle for the logo, two text
+ * bars (name + sub-label), and a switch-sized block on the right. Same
+ * animated-shimmer building block (`SkeletonBlock`) as `ActivitySkeletonRow`
+ * / `VaultBalanceRows` / `NameList`.
+ */
+const ManageAssetsSkeletonRow: React.FC = () => (
+  <View style={styles.row}>
+    <View style={styles.rowLeft}>
+      <SkeletonBlock width={40} height={40} borderRadius={20} />
+      <View style={styles.rowText}>
+        <SkeletonBlock width={88} height={14} borderRadius={4} />
+        <SkeletonBlock width={64} height={11} borderRadius={4} />
+      </View>
+    </View>
+    {/* Same track size as the real `Switch` (spacing.s12 × spacing.s6, fully rounded). */}
+    <SkeletonBlock width={spacing.s12} height={spacing.s6} borderRadius={borderRadius.full} />
+  </View>
+);
 
 export interface ManageAssetsToken {
   /** Stable identifier passed back on `onToggle` — not rendered. */
@@ -24,6 +50,13 @@ export interface ManageAssetsToken {
   standard?: TokenStandard;
   /** Whether this token is currently hidden from the wallet view/total balance — drives the switch (hidden = off). */
   isHidden: boolean;
+  /**
+   * Always shown in the wallet view and total balance — cannot be hidden.
+   * Each chain's native gas token (e.g. KAS on Kaspa, KAS on Kasplex, iKAS
+   * on Igra). When set, the row's switch renders forced on and disabled
+   * regardless of `isHidden`, and `onToggle` does not fire for this row.
+   */
+  isLocked?: boolean;
 }
 
 export interface ManageAssetsPageProps {
@@ -38,6 +71,16 @@ export interface ManageAssetsPageProps {
    */
   subtitle?: string;
   isLoading?: boolean;
+  /**
+   * Empty-state heading/subtext (shown when `tokens` is empty and
+   * `isLoading` is false) — same `EmptyState` component + `empty-activity`
+   * illustration as `ActivityScreen`'s empty state. In practice the three
+   * always-shown chain-native tokens (`isLocked`) mean an empty list is a
+   * loading-failure/edge case, not a normal state — exposed as overridable
+   * props anyway so the host can supply different copy for that case.
+   */
+  emptyHeading?: string;
+  emptySubtext?: string;
 }
 
 /**
@@ -79,13 +122,39 @@ export interface ManageAssetsPageProps {
  *
  * `tokens[]` + `onToggle(id)` is fully controlled (no internal
  * hidden/shown state) — same pattern as `TokenSelectSheet`'s chain filter.
+ *
+ * Settings page — loading not expected; skeleton is a fallback. Manage
+ * Assets reads from data already in memory once the wallet's loaded, so
+ * `isLoading` should rarely if ever be true in practice; it's handled
+ * anyway (skeleton rows, same shape as `ActivitySkeletonRow`) rather than
+ * left to show stale/empty content.
  */
 export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
   tokens,
   onToggle,
   subtitle = "Show or hide tokens in your wallet view and total balance.",
   isLoading = false,
+  emptyHeading = "No tokens yet",
+  emptySubtext = "Tokens you receive will appear here.",
 }) => {
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        {/* Same padding as `listContent` (the real list's contentContainerStyle),
+            so the subtitle + skeleton rows land at the same insets as the
+            loaded page. */}
+        <View style={styles.listContent}>
+          <Text allowFontScaling={false} style={styles.subtitle}>
+            {subtitle}
+          </Text>
+          {SKELETON_ROW_IDS.map((id) => (
+            <ManageAssetsSkeletonRow key={id} />
+          ))}
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -120,21 +189,31 @@ export const ManageAssetsPage: React.FC<ManageAssetsPageProps> = ({
               </View>
             </View>
             <Switch
-              isEnabled={!item.isHidden}
-              onToggle={() => onToggle(item.id)}
+              isEnabled={item.isLocked ? true : !item.isHidden}
+              isDisabled={item.isLocked}
+              onToggle={item.isLocked ? undefined : () => onToggle(item.id)}
               // Distinguishes rows for screen readers when name+subLabel
               // repeat (e.g. same-name NACHO across 4 standards) — the
               // Switch itself has no visible text to derive a label from.
-              accessibilityLabel={`${item.name} ${item.subLabel}`}
+              // Locked rows (chain-native tokens) also carry a spoken hint
+              // that they can't be hidden, since the disabled Switch has no
+              // other way to convey it.
+              accessibilityLabel={
+                item.isLocked
+                  ? `${item.name} ${item.subLabel}, cannot be hidden`
+                  : `${item.name} ${item.subLabel}`
+              }
             />
           </View>
         )}
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.emptyText]}>
-              {isLoading ? "Loading tokens…" : "No tokens available"}
-            </Text>
-          </View>
+          <EmptyState
+            image={require("../../../../assets/empty-activity.png")}
+            imageHeight={160}
+            imageWidth={192}
+            heading={emptyHeading}
+            subtext={emptySubtext}
+          />
         }
       />
     </View>
@@ -191,13 +270,6 @@ const styles = StyleSheet.create({
   },
   rowSubLabel: {
     ...textStyles.bodyNormalXS,
-    color: typography.t500,
-  },
-  emptyContainer: {
-    paddingVertical: spacing.s8,
-    alignItems: "center",
-  },
-  emptyText: {
     color: typography.t500,
   },
 });
