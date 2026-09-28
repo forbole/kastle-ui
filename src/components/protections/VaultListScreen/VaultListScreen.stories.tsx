@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet, useWindowDimensions } from "react-native";
 import { VaultListScreen } from "./VaultListScreen";
 import { VaultCardProps } from "../VaultCard/VaultCard";
+import { Toast } from "../../Toast/Toast";
 import { background, spacing } from "../../../config/theme";
 
 const VAULT_IMAGE = require("../../../../assets/vault.png");
@@ -113,9 +114,37 @@ export const BalanceHidden: Story = {
   },
 };
 
+/**
+ * Just landed here from a vault-discovery scan (Figma 14882:408991) — the
+ * "We found your vault" toast floats over the list. The list itself doesn't
+ * know about the toast; this story composes them the way a real screen
+ * would, matching the Toast component's "whoever renders it owns the
+ * overlay position" contract.
+ */
+export const WithFoundToast: Story = {
+  args: { vaults: [SAMPLE[2]], totalAmount: "$12,152,000.375" },
+  render: (args) => (
+    <View style={{ flex: 1 }}>
+      <VaultListScreen {...args} />
+      <View style={styles.toastOverlay}>
+        <Toast variant="success" title="We found your vault" />
+      </View>
+    </View>
+  ),
+};
+
 const styles = StyleSheet.create({
   decorator: {
     backgroundColor: background.bg0,
     paddingVertical: spacing.s6,
+  },
+  toastOverlay: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    alignItems: "center",
+    paddingTop: 20,
+    paddingHorizontal: spacing.s5,
   },
 });
