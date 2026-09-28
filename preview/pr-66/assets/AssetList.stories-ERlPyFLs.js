@@ -1,0 +1,68 @@
+import{i as b}from"./icon-DhbqID1i.js";import{j as n,V as s,s as w,a as o,b as y}from"./theme-qo1JknhX.js";import{r}from"./iframe-B_J3Iy1p.js";import{T as m}from"./TokenSelectSheet-CmCq-WZV.js";import{A as f}from"./AssetSwitchingTab-0eu_8CGU.js";import{E as T}from"./Entry--9pP4n25.js";import"./preload-helper-Zf8nSx-t.js";import"./ActionSheet-CwZKNgJG.js";import"./Animated-By0aX-69.js";import"./extends-CF3RwP-h.js";import"./index-BL2HFhuA.js";import"./index-D5qOe2hC.js";import"./index-DDuQQy7E.js";import"./index-DSzgnnKZ.js";import"./NativeEventEmitter-D0_Owwaq.js";import"./index-K9NcUoUm.js";import"./index-Bqe8kY7_.js";import"./index-5wn_UjdG.js";import"./index-ZiMnrdkK.js";import"./index-CXeNlpyY.js";import"./index-CDYvhEJm.js";import"./AssetImage-C6Y-sBXY.js";import"./search-BM4hagwL.js";import"./createLucideIcon-DQBbprBX.js";import"./registry-BNXumi8c.js";import"./index-BojJprCp.js";import"./Segmented-DMvb-nnw.js";import"./Menu-BrmCuZ5-.js";import"./settings-2-DlOBlk3S.js";const{fn:x}=__STORYBOOK_MODULE_TEST__,e=b,C=[{label:"Assets",value:"assets"},{label:"NFT",value:"nft"},{label:"Name",value:"name"},{label:"Text",value:"text"}],W={title:"Home/Components/AssetList",component:m,parameters:{layout:"fullscreen",backgrounds:{default:"kastle"},viewport:{defaultViewport:"iphone14"},docs:{description:{component:'Home dashboard\'s asset list — `TokenItem variant="card"`, shown below\nthe Assets/NFT/Name/Text tab row (`AssetSwitchingTab`) and the Manage\nAssets entry icon (`Entry`), matching how they sit together in Figma\n(`BdTDUVIHEeOjdlHSPij0xi`, frame `4854:180388`, "Token Container" —\n`AssetSwitchingTab`/`Entry` themselves are demoed alone in their own\nstories files; this demo composes the three as Nicole asked, 2026-09-28).\nBordered card, 12px padding, amount + USD line, shown as a mixed list\ngrouped by name and NOT sorted (Leo sync, 2026-09-25: keep grouping,\ne.g. all "NACHO" rows together; no verified-first sort). Rendered in\nexactly the order given, matching what TokenListRow\'s own MixedList\nstory demonstrated before it was merged into TokenItem (round 5).\n\nRow spacing (`styles.row`/`styles.container`): horizontal inset and\nthe 16px gap above the list both come from Figma\'s own "Token\nContainer" (`...;1854:59135`) — `px-[20px]` (= `spacing.s5`, same as\nthis list\'s own inset) and `gap-[16px]` (= `spacing.s4`) between its\n"Token Header" row and "Balance List". `AssetSwitchingTab` already\nhugs its own content (`alignSelf: "flex-start"`, see its own doc\ncomment), so `justifyContent: "space-between"` here is enough to push\n`Entry` to the right edge — matching Figma\'s `Token Header`, which is\n`items-center justify-between`.\n\nNo custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: page\nand card stories were locked to a fixed 393px frame, which broke the\niPad viewport in Storybook\'s own viewport addon). This View just fills\nits parent with `flex: 1`, same pattern NameDetailPage.stories.tsx\nuses — no decorator needed, `layout: "fullscreen"` + the viewport\naddon already handle sizing.'}}},decorators:[i=>n.jsx(s,{style:a.screen,children:n.jsx(i,{})})]},t={render:()=>{const[i,d]=r.useState("assets"),[l,c]=r.useState(!1),p=[{label:"Manage assets",onPress:x()}],g=[{name:"NACHO",symbol:"$0.230",amount:"1000000",amountUsd:"≈ $3,466 USD",logo:e,chainLogo:e,standard:"KCC20"},{name:"NACHO",symbol:"$0.230",amount:"1233608.32787357",amountUsd:"≈ $51.419 USD",logo:e,chainLogo:e,standard:"KRC20"},{name:"SCAMCOIN",symbol:"$0.00000001",amount:"500000",amountUsd:"≈ $0.005 USD",logo:e},{name:"ZEAL",symbol:"$0.230",amount:"2000000.2314",amountUsd:"≈ $204.435 USD",logo:e,chainLogo:e,standard:"KCC20"},{name:"RUGPULL",symbol:"$0.000001",amount:"999999",amountUsd:"≈ $1.00 USD",logo:e}];return n.jsxs(s,{style:a.container,children:[n.jsxs(s,{style:a.row,children:[n.jsx(f,{tabs:C,activeTab:i,onTabChange:d}),n.jsx(T,{menuItems:p,isOpen:l,onOpenChange:c})]}),n.jsx(s,{style:a.list,children:g.map((h,u)=>n.jsx(m,{variant:"card",token:h},u))})]})}},a=w.create({screen:{flex:1,backgroundColor:y.bg0},container:{flex:1,paddingHorizontal:o.s5,paddingTop:o.s4},row:{flexDirection:"row",alignItems:"center",justifyContent:"space-between",marginBottom:o.s4},list:{flex:1,gap:o.s2}});t.parameters={...t.parameters,docs:{...t.parameters?.docs,source:{originalSource:`{
+  render: () => {
+    const [activeTab, setActiveTab] = useState("assets");
+    const [isEntryOpen, setIsEntryOpen] = useState(false);
+    const menuItems: MenuItem[] = [{
+      label: "Manage assets",
+      onPress: fn()
+    }];
+    const tokens: TokenInfo[] = [{
+      name: "NACHO",
+      symbol: "$0.230",
+      amount: "1000000",
+      amountUsd: "≈ $3,466 USD",
+      logo: placeholderLogo,
+      chainLogo: placeholderLogo,
+      standard: "KCC20"
+    },
+    // KRC20 never shows the badge (D-071) — chainLogo passed anyway to
+    // prove the hide is driven by \`standard\`, not by missing data.
+    {
+      name: "NACHO",
+      symbol: "$0.230",
+      amount: "1233608.32787357",
+      amountUsd: "≈ $51.419 USD",
+      logo: placeholderLogo,
+      chainLogo: placeholderLogo,
+      standard: "KRC20"
+    }, {
+      name: "SCAMCOIN",
+      symbol: "$0.00000001",
+      amount: "500000",
+      amountUsd: "≈ $0.005 USD",
+      logo: placeholderLogo
+    }, {
+      name: "ZEAL",
+      symbol: "$0.230",
+      amount: "2000000.2314",
+      amountUsd: "≈ $204.435 USD",
+      logo: placeholderLogo,
+      chainLogo: placeholderLogo,
+      standard: "KCC20"
+    }, {
+      name: "RUGPULL",
+      symbol: "$0.000001",
+      amount: "999999",
+      amountUsd: "≈ $1.00 USD",
+      logo: placeholderLogo
+    }];
+    return <View style={styles.container}>
+        <View style={styles.row}>
+          <AssetSwitchingTab tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
+          <Entry menuItems={menuItems} isOpen={isEntryOpen} onOpenChange={setIsEntryOpen} />
+        </View>
+        <View style={styles.list}>
+          {tokens.map((t, i) => <TokenItem key={i} variant="card" token={t} />)}
+        </View>
+      </View>;
+  }
+}`,...t.parameters?.docs?.source},description:{story:`Mixed shown list — KCC20 (badge), KRC20 (no badge, D-071), and a
+no-standard token side by side. Above it: the tab row (tapping a tab
+switches the active pill via real story state) and the Manage Assets
+entry icon (tapping it opens the menu anchored under the icon; tapping
+"Manage assets" fires \`onPress\`, logged to the Actions panel via
+\`fn()\`, and closes the menu — same interaction
+\`AssetSwitchingTab.stories.tsx\`'s own Default story demonstrates
+(Entry's own standalone story was removed, 2026-09-28, Nicole: "唔要了,
+要 AssetSwitchingTab 就夠" — Entry itself is unchanged, still reused
+here and in \`AssetSwitchingTab.stories.tsx\`).`,...t.parameters?.docs?.description}}};const X=["Default"];export{t as Default,X as __namedExportsOrder,W as default};
