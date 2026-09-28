@@ -136,7 +136,13 @@ function useManageAssetsControls(initialSearchQuery = "", initialChainFilter: Ch
  * controlled, so the story owns the `tokens` state and flips `isHidden`
  * itself on `onToggle`. Search + chip row are ALSO explicitly controlled
  * from story state (see `useManageAssetsControls`'s doc comment) — typing
- * in the field and tapping chips actually filters the list. */
+ * in the field and tapping chips actually filters the list. Also covers
+ * same-name disambiguation across all 4 standards (D-064) — the 4 NACHO
+ * rows here already span KCC20/KRC20/Kasplex-ERC20/Igra-ERC20, so the icon
+ * corner badge (D-071, shown for KCC20/ERC20, hidden for KRC20/Native) is
+ * visible doing its job without a separate story (round 10, 2026-09-28 —
+ * `SameNameAllStandards` was near-duplicate data of this story and was
+ * removed). */
 export const Default: Story = {
   render: (args) => {
     const [tokens, setTokens] = useState(SAMPLE_TOKENS);
@@ -165,38 +171,6 @@ export const AllHidden: Story = {
     const [tokens, setTokens] = useState(
       SAMPLE_TOKENS.map((t) => ({ ...t, isHidden: t.isLocked ? false : true }))
     );
-    const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
-    return (
-      <ManageAssetsPage
-        {...args}
-        tokens={tokens}
-        onToggle={toggleUnlocked(setTokens)}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        chainFilter={chainFilter}
-        onChainFilterChange={setChainFilter}
-      />
-    );
-  },
-};
-
-/** Same-name disambiguation across all 4 standards (D-064) — icon corner
- * badge is the only visual distinguisher for KCC20 vs the others (D-071),
- * sub-label carries the standard text for all 4. Locked rows prepended so
- * this story also demonstrates the un-hideable tokens alongside a full
- * same-name spread. Search + chip row explicitly controlled (see
- * `useManageAssetsControls`). */
-export const SameNameAllStandards: Story = {
-  render: (args) => {
-    const [tokens, setTokens] = useState<ManageAssetsToken[]>([
-      ...LOCKED_TOKENS,
-      { id: "1", name: "NACHO", subLabel: "2,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KCC20", isHidden: false, chainKeys: ["kaspa"] },
-      // KRC20 never shows the badge (D-071) — chainLogo passed anyway, to
-      // prove the hide is driven by `standard`, not by missing data.
-      { id: "2", name: "NACHO", subLabel: "750,000 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "KRC20", isHidden: false, chainKeys: ["krc20"] },
-      { id: "3", name: "NACHO", subLabel: "1,250 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["kasplex"] },
-      { id: "4", name: "NACHO", subLabel: "3,800 NACHO", logo: placeholderLogo, chainLogo: placeholderLogo, standard: "ERC20", isHidden: false, chainKeys: ["igra"] },
-    ]);
     const { searchQuery, setSearchQuery, chainFilter, setChainFilter } = useManageAssetsControls();
     return (
       <ManageAssetsPage
