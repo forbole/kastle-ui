@@ -727,6 +727,18 @@ export const shadows = {
     shadowRadius: 10,
     elevation: 4,
   },
+
+  // Element-scale shadow — not card/sheet scale like soft*/hard* above.
+  // Figma: Switch knob, `0px 1px 3px rgba(0,0,0,0.5)`. Reviewer-requested
+  // (round 6, 2026-09-26): Switch previously hand-rolled this with a raw
+  // shadowColor hex instead of a theme.ts preset.
+  knob: {
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 2,
+  },
 } as const;
 
 // ---------------------------------------------------------------------------
