@@ -66,15 +66,17 @@ export const NoVaultYet: Story = {
 // second copy of the same state at this level would drift from the first.
 
 /**
- * Scan finished empty (Figma 14882:410159) — Set up stays, "Find it now" is
- * gone (we already looked), and the inline "No existing vaults found" line
- * sits below the card. The result toast ("no existing vaults" · Close) is
- * app-side (kastle-mobile useToastMessage), not drawn here.
+ * ⚠️ Scan finished empty — NOT in Figma as drawn, labelled guess. Nicole
+ * picked this presentation (result inside the card, Set up and Find it now
+ * both still offered) over the earlier toast/inline-line drafts — see
+ * `40-research/output/vault-notfound-ux-2026-09-29.md`. The result toast
+ * ("no existing vaults") is app-side (kastle-mobile useToastMessage), not
+ * drawn here.
  */
 export const NotFound: Story = {
   args: {
     cards: [
-      { ...CARDS[0], notice: { label: "No existing vaults found" } },
+      { ...CARDS[0], onFindVault: () => {}, notFoundResult: {} },
       ...CARDS.slice(1),
     ],
   },

@@ -49,9 +49,9 @@ export interface ProtectionTypeCardProps {
   onPressCta?: () => void;
   /**
    * "Set one up before? Find it now" link under the CTA (Figma 14889:414383)
-   * — only for the untried empty state, before a scan has ever run. Omit
-   * once a scan has happened (found or not-found), whether or not it
-   * succeeded.
+   * — shown for the untried empty state and again after a not-found result
+   * (`notFoundResult`); dropped only while `discovery`/`discoveryPaused` is
+   * active.
    */
   onFindVault?: () => void;
   findVaultPrompt?: string;
@@ -76,11 +76,14 @@ export interface ProtectionTypeCardProps {
    */
   onRetry?: () => void;
   /**
-   * Inline notice rendered BELOW the card, not inside it (Figma
-   * 14889:414871) — e.g. "No existing vaults found" once a scan has
-   * finished empty.
+   * ⚠️ Layout is a labelled guess — no Figma for this exact arrangement.
+   * Source: Nicole's pick + research (`vault-notfound-ux-2026-09-29`).
+   * Scan finished with no vault found — shown INSIDE the card, in the same
+   * divider slot `discovery` occupies. The CTA and "Find it now" stay
+   * visible below it (this state is otherwise identical to the untried
+   * state — the user can still set one up, or try finding again).
    */
-  notice?: { label: string };
+  notFoundResult?: { message?: string };
 }
 
 /**
@@ -103,7 +106,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   discovery,
   discoveryPaused,
   onRetry,
-  notice,
+  notFoundResult,
 }) => {
   const isActive = status === "active";
   const Container: typeof TouchableOpacity | typeof View = isActive ? TouchableOpacity : View;
@@ -113,142 +116,139 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
     : 0;
 
   return (
-    <View>
-      <Container
-        style={styles.card}
-        onPress={isActive ? onPress : undefined}
-        activeOpacity={0.85}
-      >
-        <View style={styles.header}>
-          <Text allowFontScaling={false} style={styles.title} numberOfLines={1}>
-            {title}
-          </Text>
-          {isActive ? (
-            <View style={styles.headerRight}>
-              {pill ? (
-                <StatusPill
-                  status={pill.status}
-                  label={pill.label}
-                  icon="dot"
-                />
-              ) : null}
-              <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
-            </View>
-          ) : (
-            <View style={styles.soonBadge}>
-              <Text allowFontScaling={false} style={styles.soonLabel}>
-                {soonLabel}
-              </Text>
-            </View>
-          )}
-        </View>
-
-        <Text allowFontScaling={false} style={styles.description}>
-          {description}
+    <Container
+      style={styles.card}
+      onPress={isActive ? onPress : undefined}
+      activeOpacity={0.85}
+    >
+      <View style={styles.header}>
+        <Text allowFontScaling={false} style={styles.title} numberOfLines={1}>
+          {title}
         </Text>
-
-        {/* Figma 14882:407025 / 14888:413631 draw no button once discovery
-            starts — Set up only belongs to the untried / not-found states. */}
-        {isActive && ctaLabel && !discovery && !discoveryPaused ? (
-          <TouchableOpacity
-            style={styles.cta}
-            onPress={onPressCta}
-            activeOpacity={0.85}
-          >
-            <Text allowFontScaling={false} style={styles.ctaLabel}>
-              {ctaLabel}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-
-        {isActive && onFindVault ? (
-          <TouchableOpacity
-            style={styles.findVaultRow}
-            onPress={onFindVault}
-            activeOpacity={0.8}
-            // Visual row is short; hitSlop (not padding) brings the tap
-            // target to the ≥44pt minimum without changing layout.
-            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          >
-            <Text allowFontScaling={false} style={styles.findVaultPrompt}>
-              {findVaultPrompt}
-              <Text style={styles.findVaultLabel}>{findVaultLabel}</Text>
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-
-        {isActive && discovery ? (
-          <View style={styles.discoveryBlock}>
-            <Text allowFontScaling={false} style={styles.discoveryTitle}>
-              {discovery.title}
-            </Text>
-            <View style={styles.progressRow}>
-              <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, { width: `${fillPct}%` }]} />
-              </View>
-            </View>
-            <View style={styles.stepRow}>
-              <View style={styles.stepIconBox}>
-                <Spinner size={16} color={colors.textPrimary} strokeWidth={2} />
-              </View>
-              <Text
-                allowFontScaling={false}
-                style={styles.stepLabel}
-                numberOfLines={1}
-              >
-                {discovery.stepLabel}
-              </Text>
-            </View>
+        {isActive ? (
+          <View style={styles.headerRight}>
+            {pill ? (
+              <StatusPill
+                status={pill.status}
+                label={pill.label}
+                icon="dot"
+              />
+            ) : null}
+            <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
           </View>
-        ) : null}
-
-        {isActive && !discovery && discoveryPaused ? (
-          <View style={styles.discoveryBlock}>
-            <Text allowFontScaling={false} style={styles.discoveryTitle}>
-              {discoveryPaused.title}
+        ) : (
+          <View style={styles.soonBadge}>
+            <Text allowFontScaling={false} style={styles.soonLabel}>
+              {soonLabel}
             </Text>
-            <View style={styles.stepRow}>
-              <View style={styles.stepIconBox}>
-                {/* Error-toned per review — copy stays neutral ("Paused ·
-                    retrying"), only the icon colour signals it stalled. */}
-                <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
-              </View>
-              <Text
-                allowFontScaling={false}
-                style={styles.stepLabel}
-                numberOfLines={1}
-              >
-                {discoveryPaused.label ?? "Paused · retrying"}
-              </Text>
-              {onRetry ? (
-                <Button
-                  action="secondary"
-                  variant="text"
-                  size="xs"
-                  label="Retry"
-                  onPress={onRetry}
-                  hug
-                />
-              ) : null}
-            </View>
           </View>
-        ) : null}
-      </Container>
+        )}
+      </View>
 
-      {/* Result toast ("no existing vaults" / "we found your vault") is
-          app-side (kastle-mobile useToastMessage), not drawn here — this
-          inline line is the only not-found feedback this component owns. */}
-      {isActive && notice ? (
-        <View style={styles.noticeRow}>
-          <View style={styles.noticeIconBox}>
-            <AlertCircle size={16} color={colors.textSecondary} strokeWidth={2} />
-          </View>
-          <Text allowFontScaling={false} style={styles.noticeLabel}>
-            {notice.label}
+      <Text allowFontScaling={false} style={styles.description}>
+        {description}
+      </Text>
+
+      {/* Scan finished, no vault found. Result toast ("no existing vaults")
+          is app-side (kastle-mobile useToastMessage), not drawn here — this
+          sentence is the only not-found feedback the card itself owns. No
+          icon — the sentence already says "checked"; an icon would repeat
+          the same information without adding any. */}
+      {isActive && !discovery && !discoveryPaused && notFoundResult ? (
+        <View style={styles.discoveryBlock}>
+          <Text allowFontScaling={false} style={styles.notFoundText}>
+            {notFoundResult.message ?? "We checked this wallet — no vault found."}
           </Text>
         </View>
       ) : null}
-    </View>
+
+      {/* Figma 14882:407025 / 14888:413631 draw no button once discovery
+          starts — Set up only belongs to the untried / not-found states. */}
+      {isActive && ctaLabel && !discovery && !discoveryPaused ? (
+        <TouchableOpacity
+          style={styles.cta}
+          onPress={onPressCta}
+          activeOpacity={0.85}
+        >
+          <Text allowFontScaling={false} style={styles.ctaLabel}>
+            {ctaLabel}
+          </Text>
+        </TouchableOpacity>
+      ) : null}
+
+      {isActive && onFindVault ? (
+        <TouchableOpacity
+          style={styles.findVaultRow}
+          onPress={onFindVault}
+          activeOpacity={0.8}
+          // Visual row is short; hitSlop (not padding) brings the tap
+          // target to the ≥44pt minimum without changing layout.
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        >
+          <Text allowFontScaling={false} style={styles.findVaultPrompt}>
+            {findVaultPrompt}
+            <Text style={styles.findVaultLabel}>{findVaultLabel}</Text>
+          </Text>
+        </TouchableOpacity>
+      ) : null}
+
+      {isActive && discovery ? (
+        <View style={styles.discoveryBlock}>
+          <Text allowFontScaling={false} style={styles.discoveryTitle}>
+            {discovery.title}
+          </Text>
+          <View style={styles.progressRow}>
+            <View style={styles.progressTrack}>
+              <View style={[styles.progressFill, { width: `${fillPct}%` }]} />
+            </View>
+          </View>
+          <View style={styles.stepRow}>
+            <View style={styles.stepIconBox}>
+              <Spinner size={16} color={colors.textPrimary} strokeWidth={2} />
+            </View>
+            <Text
+              allowFontScaling={false}
+              style={styles.stepLabel}
+              numberOfLines={1}
+            >
+              {discovery.stepLabel}
+            </Text>
+          </View>
+        </View>
+      ) : null}
+
+      {isActive && !discovery && discoveryPaused ? (
+        <View style={styles.discoveryBlock}>
+          <Text allowFontScaling={false} style={styles.discoveryTitle}>
+            {discoveryPaused.title}
+          </Text>
+          <View style={styles.stepRow}>
+            <View style={styles.stepIconBox}>
+              {/* Error-toned per review — copy stays neutral ("Paused ·
+                  retrying"), only the icon colour signals it stalled. */}
+              <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
+            </View>
+            <Text
+              allowFontScaling={false}
+              style={styles.stepLabel}
+              numberOfLines={1}
+            >
+              {discoveryPaused.label ?? "Paused · retrying"}
+            </Text>
+            {onRetry ? (
+              <Button
+                action="secondary"
+                variant="text"
+                size="xs"
+                label="Retry"
+                onPress={onRetry}
+                hug
+              />
+            ) : null}
+          </View>
+        </View>
+      ) : null}
+    </Container>
   );
 };
 
@@ -319,6 +319,8 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   // Divider + progress/step block — Figma 14882:407025 (gap 4, node 14883:410188).
+  // Also reused (unstyled beyond this) for the not-found sentence — same
+  // "below the description, one divider" slot, different content.
   discoveryBlock: {
     borderTopWidth: borderWidth.bw1,
     borderTopColor: colors.border,
@@ -329,6 +331,13 @@ const styles = StyleSheet.create({
   discoveryTitle: {
     ...textStyles.bodySemiboldSM,
     color: colors.textPrimary,
+  },
+  // Not-found sentence — same tone/size as the card's own `description`
+  // (bodyNormalSM / textSecondary), since it reads as a second sentence of
+  // body copy, not a heading like `discoveryTitle`.
+  notFoundText: {
+    ...textStyles.bodyNormalSM,
+    color: colors.textSecondary,
   },
   progressRow: {
     paddingVertical: spacing.s2,
@@ -359,25 +368,6 @@ const styles = StyleSheet.create({
   stepLabel: {
     ...textStyles.bodyNormalXS,
     color: colors.textPrimary,
-    flexShrink: 1,
-  },
-  // "No existing vaults found" — sibling row below the card, Figma
-  // 14889:414871 (card→notice gap 8, matches the Figma list gap).
-  noticeRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.s1,
-    paddingTop: spacing.s2,
-  },
-  noticeIconBox: {
-    width: spacing.s7,
-    height: spacing.s7,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  noticeLabel: {
-    ...textStyles.bodyNormalXS,
-    color: colors.textSecondary,
     flexShrink: 1,
   },
 });

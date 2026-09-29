@@ -101,13 +101,20 @@ export const Paused: Story = {
   },
 };
 
-/** Not found — scan finished empty (Figma 14882:410159). */
+/**
+ * ⚠️ Not found — NOT in Figma as drawn, labelled guess. Nicole picked this
+ * presentation over the Figma toast/inline-line drafts, backed by
+ * `40-research/output/vault-notfound-ux-2026-09-29.md`: the result sits
+ * INSIDE the card, in the divider slot `Finding` occupies, with Set up and
+ * Find it now both still available below it.
+ */
 export const NotFound: Story = {
   args: {
     ...vaultCopy,
     status: "active",
     ctaLabel: "Set up",
-    notice: { label: "No existing vaults found" },
+    onFindVault: () => {},
+    notFoundResult: {},
   },
 };
 
