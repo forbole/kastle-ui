@@ -102,27 +102,25 @@ export const Paused: Story = {
 };
 
 /**
- * Not found (Figma 14882:410159) — icon + message sit below Set up, no
- * divider block; Find it now stays available. Copy is the lead's own
- * ("We checked this wallet — no vault found.") — Figma's own string here
- * ("No vaults linked to this wallet") was not used, per the brief.
+ * Not found — Figma 14882:410159 exactly: description, Set up, one
+ * centred icon+message row below it, no divider, no Find it now (Figma
+ * has none in this frame). Icon is Lucide `Info` in `colors.textSecondary`
+ * — Nicole's call, overrides Figma's own red icon binding.
  */
 export const NotFound: Story = {
   args: {
     ...vaultCopy,
     status: "active",
     ctaLabel: "Set up",
-    onFindVault: () => {},
     notFoundResult: {},
   },
 };
 
 /**
  * Failed (Figma 14910:416345, NEW) — Set up stays visible, a red
- * alert-circle + message row sits below it, and a "Try again" link takes
- * the Find it now link's slot. ⚠️ "Try again" itself is not in this Figma
- * frame — added per the brief (reuses the Find it now link's styling)
- * since a dead-end failed state has no way to retry otherwise.
+ * alert-circle + message row sits below it. No link — Figma draws none
+ * (an earlier round of this story added a "Try again" link; Nicole's
+ * frame has no retry affordance, so it was removed).
  */
 export const Failed: Story = {
   args: {
@@ -130,7 +128,6 @@ export const Failed: Story = {
     status: "active",
     ctaLabel: "Set up",
     discoveryFailed: {},
-    onRetry: () => {},
   },
 };
 

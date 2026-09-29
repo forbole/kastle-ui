@@ -34,7 +34,7 @@ export interface VaultDiscoveryPausedProgress {
   title: string;
   step: number;
   totalSteps?: number;
-  /** Defaults to "Paused — retrying automatically…". */
+  /** Defaults to "Reconnecting…" (Figma's own copy on 14910:416365). */
   label?: string;
 }
 
@@ -59,9 +59,9 @@ export interface ProtectionTypeCardProps {
   onPressCta?: () => void;
   /**
    * "Set one up before? Find it now" link under the CTA (Figma 14889:414383)
-   * — shown for the untried empty state and again after a not-found result
-   * (`notFoundResult`); dropped while `discovery`/`discoveryPaused` is
-   * active, and replaced by the "Try again" link while `discoveryFailed`.
+   * — shown ONLY in the pure untried/idle state. None of `discovery`,
+   * `discoveryPaused`, `discoveryFailed` or `notFoundResult` show it —
+   * confirmed against all 5 Figma "Checking" frames, none of which have it.
    */
   onFindVault?: () => void;
   findVaultPrompt?: string;
@@ -75,27 +75,23 @@ export interface ProtectionTypeCardProps {
   /**
    * ⚠️ Auto-retrying, stalled scan (Figma 14910:416365 — "error" variant).
    * Progress bar stays visible; the step row swaps to a red alert-circle +
-   * stalled label. No button here — Figma's latest pass removed the Retry
-   * button this used to have; it auto-retries.
+   * stalled label. No button here — it auto-retries.
    */
   discoveryPaused?: VaultDiscoveryPausedProgress;
   /**
    * Scan failed outright (Figma 14910:416345, NEW — "fail" variant). Set up
-   * stays visible; a red alert-circle + message row sits below it, and a
-   * "Try again" link (`onRetry`) takes the Find it now link's slot.
-   * ⚠️ The "Try again" link itself is not in this Figma frame — added per
-   * the brief, reusing the Find it now link's own styling, since a failed
-   * state with no way to retry would be a dead end.
+   * stays visible; a red alert-circle + message row sits below it. No link
+   * — Figma draws none, and none is added here (an earlier pass added a
+   * "Try again" link; Nicole's frame has no retry affordance, removed).
    */
   discoveryFailed?: { message?: string };
-  /** Fires the Failed state's "Try again" link. */
-  onRetry?: () => void;
   /**
-   * ⚠️ Layout is a labelled guess — no Figma for this exact arrangement.
-   * Source: Nicole's pick + research (`vault-notfound-ux-2026-09-29`).
-   * Scan finished with no vault found — the icon+message row now matches
-   * Figma 14882:410159's placement (below Set up, not inside a divider
-   * block), with the CTA and "Find it now" both staying visible.
+   * ⚠️ Icon is Lucide `Info` in `colors.textSecondary` — Nicole's call,
+   * overrides Figma's own red icon binding on 14882:410159. Copy default
+   * is Figma's own string; kept in exactly this one place so a future
+   * change is a one-line swap. Shown INSIDE the card, one centred row
+   * below Set up, no divider (Figma 14882:410159's actual layout — an
+   * earlier pass had this in a divider block, which was wrong).
    */
   notFoundResult?: { message?: string };
 }
@@ -115,16 +111,18 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   onPress,
   onPressCta,
   onFindVault,
-  findVaultPrompt = "Set one up before?  ",
+  findVaultPrompt = "Set one up before? ",
   findVaultLabel = "Find it now",
   discovery,
   discoveryPaused,
   discoveryFailed,
-  onRetry,
   notFoundResult,
 }) => {
   const isActive = status === "active";
   const Container: typeof TouchableOpacity | typeof View = isActive ? TouchableOpacity : View;
+  // Find it now only belongs to the pure untried state — every other state
+  // (discovery/discoveryPaused/discoveryFailed/notFoundResult) drops it.
+  const isIdle = !discovery && !discoveryPaused && !discoveryFailed && !notFoundResult;
 
   const fillPct = (p?: { step: number; totalSteps?: number }) =>
     p ? Math.max(0, Math.min(1, p.step / (p.totalSteps ?? 5))) * 100 : 0;
@@ -177,44 +175,32 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
         </TouchableOpacity>
       ) : null}
 
-      {/* Scan finished, no vault found (Figma 14882:410159) — icon + message
-          below Set up. Result toast ("no vault found on this wallet") is
-          app-side (kastle-mobile useToastMessage), not drawn here. */}
+      {/* Scan finished, no vault found — Figma 14882:410159 exactly: one
+          centred row below Set up, no divider. Result toast ("no vault
+          found on this wallet") is app-side (kastle-mobile
+          useToastMessage), not drawn here. */}
       {isActive && !discovery && !discoveryPaused && !discoveryFailed && notFoundResult ? (
         <View style={styles.inlineResultRow}>
-          {/* Figma binds "info", not "alert-circle", for this state — kept
-              as drawn rather than matched to Paused/Failed's red icon. */}
           <Info size={16} color={colors.textSecondary} strokeWidth={2} />
           <Text allowFontScaling={false} style={styles.inlineResultText}>
-            {notFoundResult.message ?? "We checked this wallet — no vault found."}
+            {notFoundResult.message ?? "No vaults linked to this wallet"}
           </Text>
         </View>
       ) : null}
 
       {/* Scan failed outright (Figma 14910:416345, NEW) — icon + message
-          below Set up, same row shape as not-found. Result toast is
-          app-side, not drawn here. */}
+          below Set up, same row shape as not-found, no link. Result toast
+          is app-side, not drawn here. */}
       {isActive && !discovery && !discoveryPaused && discoveryFailed ? (
         <View style={styles.inlineResultRow}>
           <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
           <Text allowFontScaling={false} style={styles.inlineResultText}>
-            {discoveryFailed.message ?? "Couldn't finish checking. Your funds stay safe on-chain."}
+            {discoveryFailed.message ?? "Connection lost, retry later"}
           </Text>
         </View>
       ) : null}
 
-      {isActive && discoveryFailed && onRetry ? (
-        <TouchableOpacity
-          style={styles.findVaultRow}
-          onPress={onRetry}
-          activeOpacity={0.8}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-        >
-          <Text allowFontScaling={false} style={styles.findVaultLabel}>
-            Try again
-          </Text>
-        </TouchableOpacity>
-      ) : isActive && onFindVault && !discoveryFailed ? (
+      {isActive && onFindVault && isIdle ? (
         <TouchableOpacity
           style={styles.findVaultRow}
           onPress={onFindVault}
@@ -274,7 +260,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
               style={styles.stepLabel}
               numberOfLines={1}
             >
-              {discoveryPaused.label ?? "Paused — retrying automatically…"}
+              {discoveryPaused.label ?? "Reconnecting…"}
             </Text>
           </View>
         </View>
