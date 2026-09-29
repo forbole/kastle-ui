@@ -6,6 +6,10 @@ import { Spinner } from "../../Spinner/Spinner";
 import {
   background,
   colors,
+  fontFamilies,
+  fontSize,
+  fontWeight,
+  opacity,
   primary,
   secondary,
   spacing,
@@ -133,7 +137,11 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
 
   return (
     <Container
-      style={styles.card}
+      // Figma 12790:522248 ("protecting" — pill present): card's right
+      // padding is 8, not the usual 16, to make room for the chevron.
+      // Every other state (12757:311513 / 14889:414561 / 14910:416345 /
+      // 14882:407025) keeps the full 16 and has no chevron at all.
+      style={[styles.card, pill ? styles.cardWithChevron : null]}
       onPress={isActive ? onPress : undefined}
       activeOpacity={0.85}
     >
@@ -150,7 +158,16 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
                 icon="dot"
               />
             ) : null}
-            <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
+            {/* Chevron only once the user actually has a vault (pill set) —
+                Figma draws none on default/checking/not-found/fail. */}
+            {pill ? (
+              <ChevronRight
+                size={20}
+                color={secondary.s500}
+                strokeWidth={2}
+                opacity={opacity.o50}
+              />
+            ) : null}
           </View>
         ) : (
           <View style={styles.soonBadge}>
@@ -282,16 +299,21 @@ const styles = StyleSheet.create({
     padding: spacing.s4,
     gap: spacing.s3,
   },
+  // Figma 12790:522248: right padding 8 (not 16) once the chevron shows,
+  // so the chevron sits where the full 16px padding would otherwise be.
+  cardWithChevron: {
+    paddingRight: spacing.s2,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.s2,
   },
+  // No gap here — Figma's pill + chevron sit flush against each other.
   headerRight: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.s2,
   },
   title: {
     ...textStyles.bodySemiboldMD,
@@ -322,8 +344,15 @@ const styles = StyleSheet.create({
     // description -> CTA. An extra spacing.s1 here used to push it to 16,
     // Figma wants 12.
   },
+  // Figma 12757:307924 binds "Text-medium/sm" (weight 500), not semibold.
+  // No `bodyMediumSM` exists in textStyles, so built from primitives —
+  // same approach already used elsewhere in this repo for Medium text.
+  // This is a local Text style, not the shared Button component, so it
+  // can't affect any other screen.
   ctaLabel: {
-    ...textStyles.bodySemiboldSM,
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.medium,
     color: colors.white,
   },
   // Not-found (14882:410159) / failed (14910:416345) icon+message row —
