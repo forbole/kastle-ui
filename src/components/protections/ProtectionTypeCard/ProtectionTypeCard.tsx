@@ -253,7 +253,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           activeOpacity={0.8}
           // Visual row is short; hitSlop (not padding) brings the tap
           // target to the ≥44pt minimum without changing layout.
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          hitSlop={{ top: spacing.s3, bottom: spacing.s3, left: spacing.s3, right: spacing.s3 }}
         >
           <Text allowFontScaling={false} style={styles.findVaultPrompt}>
             {findVaultPrompt}
