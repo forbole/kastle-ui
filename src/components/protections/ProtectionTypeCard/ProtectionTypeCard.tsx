@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Animated, Easing, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AlertCircle, ChevronRight, Info } from "lucide-react-native";
 import { StatusPill, StatusPillStatus } from "../../StatusPill/StatusPill";
 import { Spinner } from "../../Spinner/Spinner";
@@ -103,6 +103,31 @@ export interface ProtectionTypeCardProps {
    */
   notFoundResult?: { message?: string };
 }
+
+/**
+ * Discovery progress fill — glides to the new width when the step changes
+ * instead of jumping (Nicole 2026-09-29: "可唔可以MOVE得SMOOTH D").
+ * `width` is a layout prop, so the native driver can't animate it.
+ * ⚠️ 400ms ease-out is not in Figma (static tool) — picked, not read off a design.
+ */
+const AnimatedProgressFill: React.FC<{ pct: number }> = ({ pct }) => {
+  const [value] = useState(() => new Animated.Value(pct));
+
+  useEffect(() => {
+    const anim = Animated.timing(value, {
+      toValue: pct,
+      duration: 400,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    });
+    anim.start();
+    return () => anim.stop();
+  }, [pct, value]);
+
+  const width = value.interpolate({ inputRange: [0, 100], outputRange: ["0%", "100%"] });
+
+  return <Animated.View style={[styles.progressFill, { width }]} />;
+};
 
 /**
  * Protection type card for the Protections hub — Vault (active) plus
@@ -244,7 +269,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           </Text>
           <View style={styles.progressRow}>
             <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: `${fillPct(discovery)}%` }]} />
+              <AnimatedProgressFill pct={fillPct(discovery)} />
             </View>
           </View>
           <View style={styles.stepRow}>
@@ -269,7 +294,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           </Text>
           <View style={styles.progressRow}>
             <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: `${fillPct(discoveryPaused)}%` }]} />
+              <AnimatedProgressFill pct={fillPct(discoveryPaused)} />
             </View>
           </View>
           <View style={styles.stepRow}>
