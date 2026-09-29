@@ -73,9 +73,13 @@ export interface ProtectionTypeCardProps {
    */
   discovery?: VaultDiscoveryProgress;
   /**
-   * ⚠️ Auto-retrying, stalled scan (Figma 14910:416365 — "error" variant).
-   * Progress bar stays visible; the step row swaps to a red alert-circle +
-   * stalled label. No button here — it auto-retries.
+   * Auto-retrying, stalled scan (Figma 14910:416365 — "error" variant).
+   * Progress bar stays visible; the step row keeps the spinner (same as
+   * Finding) + a stalled label. No button here — it auto-retries.
+   * ⚠️ Icon deviates from Figma 14910:416365, which draws a red
+   * alert-circle here — Nicole's call 2026-09-29: Paused is not a warning
+   * or error, so it stays muted (Spinner, colors.textSecondary) same as
+   * Finding. Figma is to be updated; red alert-circle is Failed's alone.
    */
   discoveryPaused?: VaultDiscoveryPausedProgress;
   /**
@@ -253,7 +257,7 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           </View>
           <View style={styles.stepRow}>
             <View style={styles.stepIconBox}>
-              <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
+              <Spinner size={16} color={colors.textSecondary} strokeWidth={2} />
             </View>
             <Text
               allowFontScaling={false}
@@ -314,7 +318,9 @@ const styles = StyleSheet.create({
     height: spacing.s9,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: spacing.s1,
+    // No marginTop — the card's own gap (spacing.s3 = 12) already spaces
+    // description -> CTA. An extra spacing.s1 here used to push it to 16,
+    // Figma wants 12.
   },
   ctaLabel: {
     ...textStyles.bodySemiboldSM,

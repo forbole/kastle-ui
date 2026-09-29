@@ -87,10 +87,11 @@ export const Finding: StoryObj<FindingArgs> = {
 
 /**
  * Paused / auto-retrying (Figma 14910:416365, "error" variant) — the
- * progress bar stays visible; the step row swaps to a red alert-circle +
- * stalled label. No button — it retries on its own, per Figma's latest pass
- * (an earlier round of this story had a Retry button; Figma has since shown
- * there is none).
+ * progress bar stays visible; the step row keeps the spinner (same as
+ * Finding) + a stalled label. No button — it retries on its own.
+ * ⚠️ Icon deviates from Figma 14910:416365 (which draws a red
+ * alert-circle) per Nicole 2026-09-29 — Paused is not a warning or error,
+ * so it stays muted. Figma is to be updated.
  */
 export const Paused: Story = {
   args: {
