@@ -85,6 +85,37 @@ export const Finding: StoryObj<FindingArgs> = {
   },
 };
 
+/** Story-only: auto-advances step 1 → 5 every 1.5s, then loops. */
+function FindingWalkthroughDemo(args: React.ComponentProps<typeof ProtectionTypeCard>) {
+  const [step, setStep] = React.useState(1);
+  React.useEffect(() => {
+    const id = setInterval(() => {
+      setStep((s) => (s % FINDING_STEPS.length) + 1);
+    }, 1500);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <ProtectionTypeCard
+      {...args}
+      discovery={{ title: "Finding your vaults", step, stepLabel: FINDING_STEPS[step - 1] }}
+    />
+  );
+}
+
+/**
+ * Finding — walkthrough. Plays all 5 steps in a loop so the progress bar
+ * movement is visible: each step adds one fifth (20% → 40% → 60% → 80% →
+ * 100%). Story-only timer; the component itself stays props-driven.
+ */
+export const FindingWalkthrough: Story = {
+  args: {
+    ...vaultCopy,
+    status: "active",
+    ctaLabel: "Set up",
+  },
+  render: (args) => <FindingWalkthroughDemo {...args} />,
+};
+
 /**
  * Paused / auto-retrying (Figma 14910:416365, "error" variant) — the
  * progress bar stays visible; the step row keeps the spinner (same as
