@@ -113,6 +113,10 @@ export const BalanceHidden: Story = {
   },
 };
 
+// Figma 14882:408991 shows "We found your vault" floating over this list
+// after a scan — that's the app's result toast (kastle-mobile
+// useToastMessage), not something this component or its stories draw.
+
 const styles = StyleSheet.create({
   decorator: {
     backgroundColor: background.bg0,
