@@ -62,7 +62,12 @@ type FindingArgs = React.ComponentProps<typeof ProtectionTypeCard> & {
  * fill is driven by `step / totalSteps` in code — the Figma frames all show
  * the same ~50% fill regardless of step; Nicole approved fixing it here.
  * Use the `step` control (1–5) to preview every step on this one story
- * instead of five near-identical stories.
+ * instead of five near-identical stories. The fill glides between steps
+ * (AnimatedProgressFill), so dragging the control shows the motion too.
+ *
+ * Data wiring: the `step` control IS the real prop — pass
+ * `discovery={{ title, step, stepLabel }}` from the discovery pipeline
+ * (1 = checking addresses … 5 = latest balance). Step labels: FINDING_STEPS.
  */
 export const Finding: StoryObj<FindingArgs> = {
   args: {
@@ -83,37 +88,6 @@ export const Finding: StoryObj<FindingArgs> = {
       />
     );
   },
-};
-
-/** Story-only: auto-advances step 1 → 5 every 1.5s, then loops. */
-function FindingWalkthroughDemo(args: React.ComponentProps<typeof ProtectionTypeCard>) {
-  const [step, setStep] = React.useState(1);
-  React.useEffect(() => {
-    const id = setInterval(() => {
-      setStep((s) => (s % FINDING_STEPS.length) + 1);
-    }, 1500);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <ProtectionTypeCard
-      {...args}
-      discovery={{ title: "Finding your vaults", step, stepLabel: FINDING_STEPS[step - 1] }}
-    />
-  );
-}
-
-/**
- * Finding — walkthrough. Plays all 5 steps in a loop so the progress bar
- * movement is visible: each step adds one fifth (20% → 40% → 60% → 80% →
- * 100%). Story-only timer; the component itself stays props-driven.
- */
-export const FindingWalkthrough: Story = {
-  args: {
-    ...vaultCopy,
-    status: "active",
-    ctaLabel: "Set up",
-  },
-  render: (args) => <FindingWalkthroughDemo {...args} />,
 };
 
 /**
