@@ -1,9 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { AlertCircle, ChevronRight } from "lucide-react-native";
+import { AlertCircle, ChevronRight, Info } from "lucide-react-native";
 import { StatusPill, StatusPillStatus } from "../../StatusPill/StatusPill";
 import { Spinner } from "../../Spinner/Spinner";
-import { Button } from "../../Button/Button";
 import {
   background,
   colors,
@@ -28,6 +27,17 @@ export interface VaultDiscoveryProgress {
   stepLabel: string;
 }
 
+/** Same bar as `VaultDiscoveryProgress` (Figma 14910:416365 keeps it visible
+ * while paused) with the step row swapped for a stalled indicator instead
+ * of a `stepLabel`. */
+export interface VaultDiscoveryPausedProgress {
+  title: string;
+  step: number;
+  totalSteps?: number;
+  /** Defaults to "Paused — retrying automatically…". */
+  label?: string;
+}
+
 export interface ProtectionTypeCardProps {
   title: string;
   description: string;
@@ -50,8 +60,8 @@ export interface ProtectionTypeCardProps {
   /**
    * "Set one up before? Find it now" link under the CTA (Figma 14889:414383)
    * — shown for the untried empty state and again after a not-found result
-   * (`notFoundResult`); dropped only while `discovery`/`discoveryPaused` is
-   * active.
+   * (`notFoundResult`); dropped while `discovery`/`discoveryPaused` is
+   * active, and replaced by the "Try again" link while `discoveryFailed`.
    */
   onFindVault?: () => void;
   findVaultPrompt?: string;
@@ -59,29 +69,33 @@ export interface ProtectionTypeCardProps {
   /**
    * Vault discovery running in the background — replaces the CTA footer
    * with a divider + progress bar + current step (Figma 14882:407025).
-   * Mutually exclusive with `onFindVault` and `discoveryPaused`.
+   * Mutually exclusive with `onFindVault`, `discoveryPaused`, `discoveryFailed`.
    */
   discovery?: VaultDiscoveryProgress;
   /**
-   * ⚠️ NOT in Figma — labelled guess (pending design). Same slot as
-   * `discovery` for a stalled/retrying scan: same divider + title, a static
-   * alert-circle row (error-toned icon, unchanged "Paused · retrying"
-   * copy — no error wording added), and a Retry button.
+   * ⚠️ Auto-retrying, stalled scan (Figma 14910:416365 — "error" variant).
+   * Progress bar stays visible; the step row swaps to a red alert-circle +
+   * stalled label. No button here — Figma's latest pass removed the Retry
+   * button this used to have; it auto-retries.
    */
-  discoveryPaused?: { title: string; label?: string };
+  discoveryPaused?: VaultDiscoveryPausedProgress;
   /**
-   * ⚠️ NOT in Figma. Retry button shown in the paused block. Placement
-   * (inline, right of the label) and variant (smallest/secondary Button)
-   * are both labelled guesses pending design.
+   * Scan failed outright (Figma 14910:416345, NEW — "fail" variant). Set up
+   * stays visible; a red alert-circle + message row sits below it, and a
+   * "Try again" link (`onRetry`) takes the Find it now link's slot.
+   * ⚠️ The "Try again" link itself is not in this Figma frame — added per
+   * the brief, reusing the Find it now link's own styling, since a failed
+   * state with no way to retry would be a dead end.
    */
+  discoveryFailed?: { message?: string };
+  /** Fires the Failed state's "Try again" link. */
   onRetry?: () => void;
   /**
    * ⚠️ Layout is a labelled guess — no Figma for this exact arrangement.
    * Source: Nicole's pick + research (`vault-notfound-ux-2026-09-29`).
-   * Scan finished with no vault found — shown INSIDE the card, in the same
-   * divider slot `discovery` occupies. The CTA and "Find it now" stay
-   * visible below it (this state is otherwise identical to the untried
-   * state — the user can still set one up, or try finding again).
+   * Scan finished with no vault found — the icon+message row now matches
+   * Figma 14882:410159's placement (below Set up, not inside a divider
+   * block), with the CTA and "Find it now" both staying visible.
    */
   notFoundResult?: { message?: string };
 }
@@ -105,15 +119,15 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   findVaultLabel = "Find it now",
   discovery,
   discoveryPaused,
+  discoveryFailed,
   onRetry,
   notFoundResult,
 }) => {
   const isActive = status === "active";
   const Container: typeof TouchableOpacity | typeof View = isActive ? TouchableOpacity : View;
-  const totalSteps = discovery?.totalSteps ?? 5;
-  const fillPct = discovery
-    ? Math.max(0, Math.min(1, discovery.step / totalSteps)) * 100
-    : 0;
+
+  const fillPct = (p?: { step: number; totalSteps?: number }) =>
+    p ? Math.max(0, Math.min(1, p.step / (p.totalSteps ?? 5))) * 100 : 0;
 
   return (
     <Container
@@ -149,21 +163,8 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
         {description}
       </Text>
 
-      {/* Scan finished, no vault found. Result toast ("no existing vaults")
-          is app-side (kastle-mobile useToastMessage), not drawn here — this
-          sentence is the only not-found feedback the card itself owns. No
-          icon — the sentence already says "checked"; an icon would repeat
-          the same information without adding any. */}
-      {isActive && !discovery && !discoveryPaused && notFoundResult ? (
-        <View style={styles.discoveryBlock}>
-          <Text allowFontScaling={false} style={styles.notFoundText}>
-            {notFoundResult.message ?? "We checked this wallet — no vault found."}
-          </Text>
-        </View>
-      ) : null}
-
       {/* Figma 14882:407025 / 14888:413631 draw no button once discovery
-          starts — Set up only belongs to the untried / not-found states. */}
+          starts — Set up only belongs to the untried / not-found / failed states. */}
       {isActive && ctaLabel && !discovery && !discoveryPaused ? (
         <TouchableOpacity
           style={styles.cta}
@@ -176,7 +177,44 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
         </TouchableOpacity>
       ) : null}
 
-      {isActive && onFindVault ? (
+      {/* Scan finished, no vault found (Figma 14882:410159) — icon + message
+          below Set up. Result toast ("no vault found on this wallet") is
+          app-side (kastle-mobile useToastMessage), not drawn here. */}
+      {isActive && !discovery && !discoveryPaused && !discoveryFailed && notFoundResult ? (
+        <View style={styles.inlineResultRow}>
+          {/* Figma binds "info", not "alert-circle", for this state — kept
+              as drawn rather than matched to Paused/Failed's red icon. */}
+          <Info size={16} color={colors.textSecondary} strokeWidth={2} />
+          <Text allowFontScaling={false} style={styles.inlineResultText}>
+            {notFoundResult.message ?? "We checked this wallet — no vault found."}
+          </Text>
+        </View>
+      ) : null}
+
+      {/* Scan failed outright (Figma 14910:416345, NEW) — icon + message
+          below Set up, same row shape as not-found. Result toast is
+          app-side, not drawn here. */}
+      {isActive && !discovery && !discoveryPaused && discoveryFailed ? (
+        <View style={styles.inlineResultRow}>
+          <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
+          <Text allowFontScaling={false} style={styles.inlineResultText}>
+            {discoveryFailed.message ?? "Couldn't finish checking. Your funds stay safe on-chain."}
+          </Text>
+        </View>
+      ) : null}
+
+      {isActive && discoveryFailed && onRetry ? (
+        <TouchableOpacity
+          style={styles.findVaultRow}
+          onPress={onRetry}
+          activeOpacity={0.8}
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        >
+          <Text allowFontScaling={false} style={styles.findVaultLabel}>
+            Try again
+          </Text>
+        </TouchableOpacity>
+      ) : isActive && onFindVault && !discoveryFailed ? (
         <TouchableOpacity
           style={styles.findVaultRow}
           onPress={onFindVault}
@@ -199,12 +237,12 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           </Text>
           <View style={styles.progressRow}>
             <View style={styles.progressTrack}>
-              <View style={[styles.progressFill, { width: `${fillPct}%` }]} />
+              <View style={[styles.progressFill, { width: `${fillPct(discovery)}%` }]} />
             </View>
           </View>
           <View style={styles.stepRow}>
             <View style={styles.stepIconBox}>
-              <Spinner size={16} color={colors.textPrimary} strokeWidth={2} />
+              <Spinner size={16} color={colors.textSecondary} strokeWidth={2} />
             </View>
             <Text
               allowFontScaling={false}
@@ -222,10 +260,13 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
           <Text allowFontScaling={false} style={styles.discoveryTitle}>
             {discoveryPaused.title}
           </Text>
+          <View style={styles.progressRow}>
+            <View style={styles.progressTrack}>
+              <View style={[styles.progressFill, { width: `${fillPct(discoveryPaused)}%` }]} />
+            </View>
+          </View>
           <View style={styles.stepRow}>
             <View style={styles.stepIconBox}>
-              {/* Error-toned per review — copy stays neutral ("Paused ·
-                  retrying"), only the icon colour signals it stalled. */}
               <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
             </View>
             <Text
@@ -233,18 +274,8 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
               style={styles.stepLabel}
               numberOfLines={1}
             >
-              {discoveryPaused.label ?? "Paused · retrying"}
+              {discoveryPaused.label ?? "Paused — retrying automatically…"}
             </Text>
-            {onRetry ? (
-              <Button
-                action="secondary"
-                variant="text"
-                size="xs"
-                label="Retry"
-                onPress={onRetry}
-                hug
-              />
-            ) : null}
           </View>
         </View>
       ) : null}
@@ -303,6 +334,21 @@ const styles = StyleSheet.create({
     ...textStyles.bodySemiboldSM,
     color: colors.white,
   },
+  // Not-found (14882:410159) / failed (14910:416345) icon+message row —
+  // no divider, just pt-8 under the CTA, centered, matching both frames.
+  inlineResultRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingTop: spacing.s2,
+    width: "100%",
+  },
+  inlineResultText: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "center",
+  },
   findVaultRow: {
     alignItems: "center",
     justifyContent: "center",
@@ -318,9 +364,8 @@ const styles = StyleSheet.create({
     ...textStyles.bodySemiboldXS,
     color: colors.primary,
   },
-  // Divider + progress/step block — Figma 14882:407025 (gap 4, node 14883:410188).
-  // Also reused (unstyled beyond this) for the not-found sentence — same
-  // "below the description, one divider" slot, different content.
+  // Divider + progress/step block — Figma 14882:407025 / 14910:416365
+  // (gap 4, node 14883:410188).
   discoveryBlock: {
     borderTopWidth: borderWidth.bw1,
     borderTopColor: colors.border,
@@ -331,13 +376,6 @@ const styles = StyleSheet.create({
   discoveryTitle: {
     ...textStyles.bodySemiboldSM,
     color: colors.textPrimary,
-  },
-  // Not-found sentence — same tone/size as the card's own `description`
-  // (bodyNormalSM / textSecondary), since it reads as a second sentence of
-  // body copy, not a heading like `discoveryTitle`.
-  notFoundText: {
-    ...textStyles.bodyNormalSM,
-    color: colors.textSecondary,
   },
   progressRow: {
     paddingVertical: spacing.s2,
@@ -365,9 +403,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  // Figma re-bound this row to typography600 (secondary) for both the
+  // Finding step label and the Paused stalled label — same token, both
+  // re-confirmed via get_variable_defs on 2026-09-29.
   stepLabel: {
     ...textStyles.bodyNormalXS,
-    color: colors.textPrimary,
+    color: colors.textSecondary,
     flexShrink: 1,
   },
 });

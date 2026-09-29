@@ -86,27 +86,26 @@ export const Finding: StoryObj<FindingArgs> = {
 };
 
 /**
- * ⚠️ Paused / retrying — NOT in Figma, labelled guess pending design.
- * Same slot as `Finding`, same tokens, error-toned alert-circle instead of
- * the spinner — copy stays neutral ("Paused · retrying"), plus a Retry
- * button (placement + Button variant both guessed, no Figma for this state).
+ * Paused / auto-retrying (Figma 14910:416365, "error" variant) — the
+ * progress bar stays visible; the step row swaps to a red alert-circle +
+ * stalled label. No button — it retries on its own, per Figma's latest pass
+ * (an earlier round of this story had a Retry button; Figma has since shown
+ * there is none).
  */
 export const Paused: Story = {
   args: {
     ...vaultCopy,
     status: "active",
     ctaLabel: "Set up",
-    discoveryPaused: { title: "Finding your vaults" },
-    onRetry: () => {},
+    discoveryPaused: { title: "Finding your vaults", step: 2, totalSteps: 5 },
   },
 };
 
 /**
- * ⚠️ Not found — NOT in Figma as drawn, labelled guess. Nicole picked this
- * presentation over the Figma toast/inline-line drafts, backed by
- * `40-research/output/vault-notfound-ux-2026-09-29.md`: the result sits
- * INSIDE the card, in the divider slot `Finding` occupies, with Set up and
- * Find it now both still available below it.
+ * Not found (Figma 14882:410159) — icon + message sit below Set up, no
+ * divider block; Find it now stays available. Copy is the lead's own
+ * ("We checked this wallet — no vault found.") — Figma's own string here
+ * ("No vaults linked to this wallet") was not used, per the brief.
  */
 export const NotFound: Story = {
   args: {
@@ -115,6 +114,23 @@ export const NotFound: Story = {
     ctaLabel: "Set up",
     onFindVault: () => {},
     notFoundResult: {},
+  },
+};
+
+/**
+ * Failed (Figma 14910:416345, NEW) — Set up stays visible, a red
+ * alert-circle + message row sits below it, and a "Try again" link takes
+ * the Find it now link's slot. ⚠️ "Try again" itself is not in this Figma
+ * frame — added per the brief (reuses the Find it now link's styling)
+ * since a dead-end failed state has no way to retry otherwise.
+ */
+export const Failed: Story = {
+  args: {
+    ...vaultCopy,
+    status: "active",
+    ctaLabel: "Set up",
+    discoveryFailed: {},
+    onRetry: () => {},
   },
 };
 
