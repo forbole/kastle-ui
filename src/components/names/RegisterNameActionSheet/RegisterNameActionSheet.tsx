@@ -20,6 +20,8 @@ export interface RegisterNameActionSheetProps {
   onRegisterKaspaDomain: () => void;
   /** Called when "Register Igra Domain" is pressed */
   onRegisterIgraDomain: () => void;
+  /** Called when "Register dotK Name" is pressed. The row is hidden when omitted. */
+  onRegisterDotkDomain?: () => void;
 }
 
 export const RegisterNameActionSheet: React.FC<RegisterNameActionSheetProps> = ({
@@ -27,6 +29,7 @@ export const RegisterNameActionSheet: React.FC<RegisterNameActionSheetProps> = (
   onClose,
   onRegisterKaspaDomain,
   onRegisterIgraDomain,
+  onRegisterDotkDomain,
 }) => {
   return (
     <ActionSheet isOpen={isOpen} onClose={onClose}>
@@ -56,6 +59,13 @@ export const RegisterNameActionSheet: React.FC<RegisterNameActionSheetProps> = (
             description={'Claim a ".igra" name on Igra L2'}
             onPress={onRegisterIgraDomain}
           />
+          {onRegisterDotkDomain && (
+            <ActionSheetListItem
+              title="Register dotK Name"
+              description={'Claim a ".k" name on Kaspa'}
+              onPress={onRegisterDotkDomain}
+            />
+          )}
         </View>
 
         {/* iOS home indicator */}
