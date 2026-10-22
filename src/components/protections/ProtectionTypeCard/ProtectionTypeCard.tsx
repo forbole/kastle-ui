@@ -1,10 +1,16 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ChevronRight } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import { Animated, Easing, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { AlertCircle, ChevronRight, Info } from "lucide-react-native";
 import { StatusPill, StatusPillStatus } from "../../StatusPill/StatusPill";
+import { Spinner } from "../../Spinner/Spinner";
 import {
   background,
   colors,
+  fontFamilies,
+  fontSize,
+  fontWeight,
+  opacity,
+  primary,
   secondary,
   spacing,
   borderRadius,
@@ -13,6 +19,28 @@ import {
 } from "../../../config/theme";
 
 export type ProtectionStatus = "active" | "soon";
+
+export interface VaultDiscoveryProgress {
+  /** Divider title, e.g. "Finding your vaults" (Figma 14883:410295). */
+  title: string;
+  /** 1-based current step. Drives the bar fill as `step / totalSteps`. */
+  step: number;
+  /** Defaults to 5 — the vault discovery pipeline has 5 steps. */
+  totalSteps?: number;
+  /** Current step's label, e.g. "Checking your addresses". */
+  stepLabel: string;
+}
+
+/** Same bar as `VaultDiscoveryProgress` (Figma 14910:416365 keeps it visible
+ * while paused) with the step row swapped for a stalled indicator instead
+ * of a `stepLabel`. */
+export interface VaultDiscoveryPausedProgress {
+  title: string;
+  step: number;
+  totalSteps?: number;
+  /** Defaults to "Reconnecting…" (Figma's own copy on 14910:416365). */
+  label?: string;
+}
 
 export interface ProtectionTypeCardProps {
   title: string;
@@ -33,7 +61,73 @@ export interface ProtectionTypeCardProps {
   onPress?: () => void;
   /** CTA button press (active). */
   onPressCta?: () => void;
+  /**
+   * "Set one up before? Find it now" link under the CTA (Figma 14889:414383)
+   * — shown ONLY in the pure untried/idle state. None of `discovery`,
+   * `discoveryPaused`, `discoveryFailed` or `notFoundResult` show it —
+   * confirmed against all 5 Figma "Checking" frames, none of which have it.
+   */
+  onFindVault?: () => void;
+  findVaultPrompt?: string;
+  findVaultLabel?: string;
+  /**
+   * Vault discovery running in the background — replaces the CTA footer
+   * with a divider + progress bar + current step (Figma 14882:407025).
+   * Mutually exclusive with `onFindVault`, `discoveryPaused`, `discoveryFailed`.
+   */
+  discovery?: VaultDiscoveryProgress;
+  /**
+   * Auto-retrying, stalled scan (Figma 14910:416365 — "error" variant).
+   * Progress bar stays visible; the step row keeps the spinner (same as
+   * Finding) + a stalled label. No button here — it auto-retries.
+   * ⚠️ Icon deviates from Figma 14910:416365, which draws a red
+   * alert-circle here — Nicole's call 2026-09-29: Paused is not a warning
+   * or error, so it stays muted (Spinner, colors.textSecondary) same as
+   * Finding. Figma is to be updated; red alert-circle is Failed's alone.
+   */
+  discoveryPaused?: VaultDiscoveryPausedProgress;
+  /**
+   * Scan failed outright (Figma 14910:416345, NEW — "fail" variant). Set up
+   * stays visible; a red alert-circle + message row sits below it. No link
+   * — Figma draws none, and none is added here (an earlier pass added a
+   * "Try again" link; Nicole's frame has no retry affordance, removed).
+   */
+  discoveryFailed?: { message?: string };
+  /**
+   * ⚠️ Icon is Lucide `Info` in `colors.textSecondary` — Nicole's call,
+   * overrides Figma's own red icon binding on 14882:410159. Copy default
+   * is Figma's own string; kept in exactly this one place so a future
+   * change is a one-line swap. Shown INSIDE the card, one centred row
+   * below Set up, no divider (Figma 14882:410159's actual layout — an
+   * earlier pass had this in a divider block, which was wrong).
+   */
+  notFoundResult?: { message?: string };
 }
+
+/**
+ * Discovery progress fill — glides to the new width when the step changes
+ * instead of jumping (Nicole 2026-09-29: "可唔可以MOVE得SMOOTH D").
+ * `width` is a layout prop, so the native driver can't animate it.
+ * ⚠️ 400ms ease-out is not in Figma (static tool) — picked, not read off a design.
+ */
+const AnimatedProgressFill: React.FC<{ pct: number }> = ({ pct }) => {
+  const [value] = useState(() => new Animated.Value(pct));
+
+  useEffect(() => {
+    const anim = Animated.timing(value, {
+      toValue: pct,
+      duration: 400,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    });
+    anim.start();
+    return () => anim.stop();
+  }, [pct, value]);
+
+  const width = value.interpolate({ inputRange: [0, 100], outputRange: ["0%", "100%"] });
+
+  return <Animated.View style={[styles.progressFill, { width }]} />;
+};
 
 /**
  * Protection type card for the Protections hub — Vault (active) plus
@@ -49,13 +143,30 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
   soonLabel = "Soon",
   onPress,
   onPressCta,
+  onFindVault,
+  findVaultPrompt = "Set one up before? ",
+  findVaultLabel = "Find it now",
+  discovery,
+  discoveryPaused,
+  discoveryFailed,
+  notFoundResult,
 }) => {
   const isActive = status === "active";
   const Container: typeof TouchableOpacity | typeof View = isActive ? TouchableOpacity : View;
+  // Find it now only belongs to the pure untried state — every other state
+  // (discovery/discoveryPaused/discoveryFailed/notFoundResult) drops it.
+  const isIdle = !discovery && !discoveryPaused && !discoveryFailed && !notFoundResult;
+
+  const fillPct = (p?: { step: number; totalSteps?: number }) =>
+    p ? Math.max(0, Math.min(1, p.step / (p.totalSteps ?? 5))) * 100 : 0;
 
   return (
     <Container
-      style={styles.card}
+      // Figma 12790:522248 ("protecting" — pill present): card's right
+      // padding is 8, not the usual 16, to make room for the chevron.
+      // Every other state (12757:311513 / 14889:414561 / 14910:416345 /
+      // 14882:407025) keeps the full 16 and has no chevron at all.
+      style={[styles.card, pill ? styles.cardWithChevron : null]}
       onPress={isActive ? onPress : undefined}
       activeOpacity={0.85}
     >
@@ -72,7 +183,16 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
                 icon="dot"
               />
             ) : null}
-            <ChevronRight size={20} color={secondary.s500} strokeWidth={2} />
+            {/* Chevron only once the user actually has a vault (pill set) —
+                Figma draws none on default/checking/not-found/fail. */}
+            {pill ? (
+              <ChevronRight
+                size={20}
+                color={secondary.s500}
+                strokeWidth={2}
+                opacity={opacity.o50}
+              />
+            ) : null}
           </View>
         ) : (
           <View style={styles.soonBadge}>
@@ -87,7 +207,9 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
         {description}
       </Text>
 
-      {isActive && ctaLabel ? (
+      {/* Figma 14882:407025 / 14888:413631 draw no button once discovery
+          starts — Set up only belongs to the untried / not-found / failed states. */}
+      {isActive && ctaLabel && !discovery && !discoveryPaused ? (
         <TouchableOpacity
           style={styles.cta}
           onPress={onPressCta}
@@ -97,6 +219,97 @@ export const ProtectionTypeCard: React.FC<ProtectionTypeCardProps> = ({
             {ctaLabel}
           </Text>
         </TouchableOpacity>
+      ) : null}
+
+      {/* Scan finished, no vault found — Figma 14882:410159 exactly: one
+          centred row below Set up, no divider. Result toast ("no vault
+          found on this wallet") is app-side (kastle-mobile
+          useToastMessage), not drawn here. */}
+      {isActive && !discovery && !discoveryPaused && !discoveryFailed && notFoundResult ? (
+        <View style={styles.inlineResultRow}>
+          <Info size={16} color={colors.textSecondary} strokeWidth={2} />
+          <Text allowFontScaling={false} style={styles.inlineResultText}>
+            {notFoundResult.message ?? "No vaults linked to this wallet"}
+          </Text>
+        </View>
+      ) : null}
+
+      {/* Scan failed outright (Figma 14910:416345, NEW) — icon + message
+          below Set up, same row shape as not-found, no link. Result toast
+          is app-side, not drawn here. */}
+      {isActive && !discovery && !discoveryPaused && discoveryFailed ? (
+        <View style={styles.inlineResultRow}>
+          <AlertCircle size={16} color={colors.danger} strokeWidth={2} />
+          <Text allowFontScaling={false} style={styles.inlineResultText}>
+            {discoveryFailed.message ?? "Connection lost, retry later"}
+          </Text>
+        </View>
+      ) : null}
+
+      {isActive && onFindVault && isIdle ? (
+        <TouchableOpacity
+          style={styles.findVaultRow}
+          onPress={onFindVault}
+          activeOpacity={0.8}
+          // Visual row is short; hitSlop (not padding) brings the tap
+          // target to the ≥44pt minimum without changing layout.
+          hitSlop={{ top: spacing.s3, bottom: spacing.s3, left: spacing.s3, right: spacing.s3 }}
+        >
+          <Text allowFontScaling={false} style={styles.findVaultPrompt}>
+            {findVaultPrompt}
+            <Text style={styles.findVaultLabel}>{findVaultLabel}</Text>
+          </Text>
+        </TouchableOpacity>
+      ) : null}
+
+      {isActive && discovery ? (
+        <View style={styles.discoveryBlock}>
+          <Text allowFontScaling={false} style={styles.discoveryTitle}>
+            {discovery.title}
+          </Text>
+          <View style={styles.progressRow}>
+            <View style={styles.progressTrack}>
+              <AnimatedProgressFill pct={fillPct(discovery)} />
+            </View>
+          </View>
+          <View style={styles.stepRow}>
+            <View style={styles.stepIconBox}>
+              <Spinner size={16} color={colors.textSecondary} strokeWidth={2} />
+            </View>
+            <Text
+              allowFontScaling={false}
+              style={styles.stepLabel}
+              numberOfLines={1}
+            >
+              {discovery.stepLabel}
+            </Text>
+          </View>
+        </View>
+      ) : null}
+
+      {isActive && !discovery && discoveryPaused ? (
+        <View style={styles.discoveryBlock}>
+          <Text allowFontScaling={false} style={styles.discoveryTitle}>
+            {discoveryPaused.title}
+          </Text>
+          <View style={styles.progressRow}>
+            <View style={styles.progressTrack}>
+              <AnimatedProgressFill pct={fillPct(discoveryPaused)} />
+            </View>
+          </View>
+          <View style={styles.stepRow}>
+            <View style={styles.stepIconBox}>
+              <Spinner size={16} color={colors.textSecondary} strokeWidth={2} />
+            </View>
+            <Text
+              allowFontScaling={false}
+              style={styles.stepLabel}
+              numberOfLines={1}
+            >
+              {discoveryPaused.label ?? "Reconnecting…"}
+            </Text>
+          </View>
+        </View>
       ) : null}
     </Container>
   );
@@ -111,16 +324,21 @@ const styles = StyleSheet.create({
     padding: spacing.s4,
     gap: spacing.s3,
   },
+  // Figma 12790:522248: right padding 8 (not 16) once the chevron shows,
+  // so the chevron sits where the full 16px padding would otherwise be.
+  cardWithChevron: {
+    paddingRight: spacing.s2,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.s2,
   },
+  // No gap here — Figma's pill + chevron sit flush against each other.
   headerRight: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.s2,
   },
   title: {
     ...textStyles.bodySemiboldMD,
@@ -147,10 +365,96 @@ const styles = StyleSheet.create({
     height: spacing.s9,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: spacing.s1,
+    // No marginTop — the card's own gap (spacing.s3 = 12) already spaces
+    // description -> CTA. An extra spacing.s1 here used to push it to 16,
+    // Figma wants 12.
   },
+  // Figma 12757:307924 binds "Text-medium/sm" (weight 500), not semibold.
+  // No `bodyMediumSM` exists in textStyles, so built from primitives —
+  // same approach already used elsewhere in this repo for Medium text.
+  // This is a local Text style, not the shared Button component, so it
+  // can't affect any other screen.
   ctaLabel: {
-    ...textStyles.bodySemiboldSM,
+    fontFamily: fontFamilies["500"],
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.medium,
     color: colors.white,
+  },
+  // Not-found (14882:410159) / failed (14910:416345) icon+message row —
+  // no divider, just pt-8 under the CTA, centered, matching both frames.
+  inlineResultRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.s2,
+    paddingTop: spacing.s2,
+    width: "100%",
+  },
+  inlineResultText: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "center",
+  },
+  findVaultRow: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: spacing.s2,
+    width: "100%",
+  },
+  findVaultPrompt: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    textAlign: "center",
+  },
+  findVaultLabel: {
+    ...textStyles.bodySemiboldXS,
+    color: colors.primary,
+  },
+  // Divider + progress/step block — Figma 14882:407025 / 14910:416365
+  // (gap 4, node 14883:410188).
+  discoveryBlock: {
+    borderTopWidth: borderWidth.bw1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.s3,
+    gap: spacing.s1,
+    width: "100%",
+  },
+  discoveryTitle: {
+    ...textStyles.bodySemiboldSM,
+    color: colors.textPrimary,
+  },
+  progressRow: {
+    paddingVertical: spacing.s2,
+    width: "100%",
+  },
+  progressTrack: {
+    height: spacing.s2,
+    borderRadius: borderRadius.full,
+    backgroundColor: background.bg600,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: spacing.s2,
+    borderRadius: borderRadius.full,
+    backgroundColor: primary.p400,
+  },
+  stepRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s1,
+  },
+  stepIconBox: {
+    width: spacing.s7,
+    height: spacing.s7,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  // Figma re-bound this row to typography600 (secondary) for both the
+  // Finding step label and the Paused stalled label — same token, both
+  // re-confirmed via get_variable_defs on 2026-09-29.
+  stepLabel: {
+    ...textStyles.bodyNormalXS,
+    color: colors.textSecondary,
+    flexShrink: 1,
   },
 });
