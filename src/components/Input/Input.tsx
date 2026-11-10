@@ -32,6 +32,8 @@ export interface InputProps {
   onFocus?: () => void;
   autoCapitalize?: TextInputProps["autoCapitalize"];
   autoCorrect?: boolean;
+  /** Focus the field as soon as it mounts (e.g. a search overlay). */
+  autoFocus?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -47,6 +49,7 @@ export const Input: React.FC<InputProps> = ({
   onFocus,
   autoCapitalize = "none",
   autoCorrect = false,
+  autoFocus = false,
 }) => {
   const [focused, setFocused] = useState(false);
   const invalid = !!error;
@@ -72,6 +75,7 @@ export const Input: React.FC<InputProps> = ({
           secureTextEntry={secureTextEntry}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
+          autoFocus={autoFocus}
           allowFontScaling={false}
           onFocus={() => {
             setFocused(true);
