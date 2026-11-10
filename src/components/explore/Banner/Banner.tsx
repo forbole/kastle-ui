@@ -101,7 +101,9 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "auto",
     marginHorizontal: spacing.s3,
     borderRadius: borderRadius["2xl"],
     overflow: "hidden",
@@ -110,7 +112,9 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.bw1,
   },
   inner: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "auto",
     flexDirection: "row",
     alignItems: "stretch",
     gap: spacing.s3,
