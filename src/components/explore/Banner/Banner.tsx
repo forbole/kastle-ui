@@ -100,8 +100,13 @@ export const Banner: React.FC<BannerProps> = ({ banner, onCtaPress }) => {
 };
 
 const styles = StyleSheet.create({
+  // container + inner: native `flex: 1` is flexGrow 1, flexShrink 0, flexBasis 0 (Yoga, no web
+  // defaults), so both start at zero height; under a host with a defined height that basis sticks
+  // and `overflow: "hidden"` clips text and CTA. `auto` measures content, fills the host, shrinks into it.
   container: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "auto",
     marginHorizontal: spacing.s3,
     borderRadius: borderRadius["2xl"],
     overflow: "hidden",
@@ -110,7 +115,9 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.bw1,
   },
   inner: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "auto",
     flexDirection: "row",
     alignItems: "stretch",
     gap: spacing.s3,
