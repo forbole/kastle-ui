@@ -92,7 +92,7 @@ const Row: React.FC<{
       activeOpacity={0.7}
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={item.name}
+      accessibilityLabel={`${item.name}${item.subtitle ? `, ${item.subtitle}` : ""}`}
     >
       <Logo item={item} />
       <View style={styles.content}>
@@ -284,8 +284,10 @@ const styles = StyleSheet.create({
   },
   rowPress: {
     flex: 1,
+    alignSelf: "stretch",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: spacing.s3,
   },
   content: {
