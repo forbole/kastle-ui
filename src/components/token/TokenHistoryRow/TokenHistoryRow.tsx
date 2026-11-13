@@ -34,7 +34,7 @@ export interface TokenHistoryRowProps {
   title: string;
   /** Pre-formatted by the host, extension style: "D MMM｜HH:mm" with a full-width bar (U+FF5C, no spaces), e.g. "12 Nov｜11:04". The year is added only outside the current year ("12 Nov 2025｜11:04"). */
   dateLabel: string;
-  /** Amount as displayed, including sign, e.g. "+1,000,000" or "-1,000.88". Ellipsizes at the tail if too long. */
+  /** Amount as displayed, including sign, e.g. "+1,000,000" or "-1,000.88". Always shown in full; the title gives way first. */
   amountLabel: string;
   /** Sets the amount colour: `"in"` = success.s400 (#14B8A6), `"out"` = error.e500 (#EF4444), `"neutral"` = textPrimary. Default `"neutral"`. */
   direction?: TokenHistoryDirection;
@@ -136,7 +136,6 @@ export const TokenHistoryRow: React.FC<TokenHistoryRowProps> = ({
               allowFontScaling={false}
               style={[styles.amountNumber, { color: amountColor }]}
               numberOfLines={1}
-              ellipsizeMode="tail"
             >
               {amountLabel}
             </Text>
@@ -179,8 +178,10 @@ const styles = StyleSheet.create({
     gap: spacing.s2,
   },
   middle: {
-    // A long title ellipsizes before it can squeeze the amount column.
-    flexShrink: 1,
+    // Takes the leftover width; a long title (address) ellipsizes here so the
+    // amount and its ticker always show in full.
+    flex: 1,
+    minWidth: 0,
     gap: spacing.s1,
   },
   title: {
@@ -194,9 +195,10 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   right: {
-    flex: 1,
-    // Amount column keeps at least this much room whatever the title length.
-    minWidth: spacing.s24,
+    // Never shrinks: the full amount + ticker is always shown.
+    flexShrink: 0,
+    // Amount lines up with the title (top), not the row's vertical center.
+    alignSelf: "flex-start",
     alignItems: "flex-end",
     gap: spacing.s1,
   },
@@ -204,12 +206,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "baseline",
     justifyContent: "flex-end",
-    width: "100%",
   },
   amountNumber: {
     fontFamily: fontFamilies["500"],
     fontWeight: fontWeight.medium,
     fontSize: fontSize.sm,
-    flexShrink: 1,
   },
 });

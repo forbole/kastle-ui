@@ -72,7 +72,7 @@ export const WithChainBadge: Story = {
   ),
 };
 
-/** Figma wraps this to two lines; we ellipsize instead so the min-height 64 card never overflows. */
+/** The amount + ticker always show in full; the title (address) ellipsizes first to make room. */
 export const LongAmount: Story = {
   args: {
     title: "Received",
