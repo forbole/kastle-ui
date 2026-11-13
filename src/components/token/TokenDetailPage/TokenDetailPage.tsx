@@ -36,6 +36,11 @@ export interface TokenDetailPageProps {
    * the order given. Pure display: the page does no formatting or hiding.
    */
   extraRows?: { label: string; value: string }[];
+  /**
+   * Rows between Network and the ID row (label / value, caller-formatted),
+   * e.g. Standard, Decimals — the extension's order. Pure display.
+   */
+  rowsAfterNetwork?: { label: string; value: string }[];
   logo?: ImageSourcePropType;
   /** Chain badge image — shown per `standard`, see AssetImage's `variant="chain"` (D-071). */
   chainLogo?: ImageSourcePropType;
@@ -165,6 +170,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   subtitle,
   priceLabel,
   extraRows,
+  rowsAfterNetwork,
   logo,
   chainLogo,
   fallback,
@@ -207,6 +213,10 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // that only worked because basic was always exactly 2-or-3 rows.
   const infoRows: { key: string; node: React.ReactNode }[] = [
     { key: "network", node: <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} /> },
+    ...(rowsAfterNetwork ?? []).map((row) => ({
+      key: `after-network-${row.label}`,
+      node: <DetailKVRow label={row.label} value={row.value} paddingVertical={spacing.s3_5} />,
+    })),
     { key: "covenantId", node: <DetailKVRow label={idLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
   ];
   if (variant === "full") {

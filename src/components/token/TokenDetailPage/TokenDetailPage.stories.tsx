@@ -129,7 +129,7 @@ export const UnverifiedKCC20: Story = {
   ),
 };
 
-/** KCC20 as the app shows it today: symbol as title, full name under it, plus Standard / Price / Value rows via `extraRows`. */
+/** KCC20 as the app shows it: symbol as title, full name under it; Standard / Decimals after Network (extension order), Price / Value before Security. */
 export const WithPriceAndValue: Story = {
   render: (args) => (
     <TokenDetailPageDemo
@@ -139,8 +139,11 @@ export const WithPriceAndValue: Story = {
       isVerified
       standard="KCC20"
       chipLabel="Kaspa-KCC20"
-      extraRows={[
+      rowsAfterNetwork={[
         { label: "Standard", value: "KCC-20" },
+        { label: "Decimals", value: "6" },
+      ]}
+      extraRows={[
         { label: "Price", value: "$0.00041" },
         { label: "Value", value: "$12.40" },
       ]}
