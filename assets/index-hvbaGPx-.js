@@ -1,0 +1,1 @@
+import{D as e}from"./index-Ds1ldf_V.js";import{r as s}from"./iframe-B3K_C_b5.js";function m(){var n=s.useState(()=>e.get("window")),o=n[0],t=n[1];return s.useEffect(()=>{function i(a){var r=a.window;r!=null&&t(r)}return e.addEventListener("change",i),t(e.get("window")),()=>{e.removeEventListener("change",i)}},[]),o}export{m as u};
