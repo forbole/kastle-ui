@@ -86,36 +86,45 @@ const Row: React.FC<{
   onPress: () => void;
   onRemove?: () => void;
 }> = ({ item, onPress, onRemove }) => (
-  <TouchableOpacity style={styles.row} activeOpacity={0.7} onPress={onPress}>
-    <Logo item={item} />
-    <View style={styles.content}>
-      <Text
-        allowFontScaling={false}
-        numberOfLines={1}
-        style={[textStyles.bodyNormalMD, styles.title]}
-      >
-        {item.name}
-      </Text>
-      {item.subtitle ? (
+  <View style={styles.row}>
+    <TouchableOpacity
+      style={styles.rowPress}
+      activeOpacity={0.7}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={item.name}
+    >
+      <Logo item={item} />
+      <View style={styles.content}>
         <Text
           allowFontScaling={false}
           numberOfLines={1}
-          style={[textStyles.bodyNormalXS, styles.subtitle]}
+          style={[textStyles.bodyNormalMD, styles.title]}
         >
-          {item.subtitle}
+          {item.name}
         </Text>
-      ) : null}
-    </View>
+        {item.subtitle ? (
+          <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            style={[textStyles.bodyNormalXS, styles.subtitle]}
+          >
+            {item.subtitle}
+          </Text>
+        ) : null}
+      </View>
+    </TouchableOpacity>
     {onRemove ? (
       <TouchableOpacity
         onPress={onRemove}
-        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+        hitSlop={spacing.s3_5}
+        accessibilityRole="button"
         accessibilityLabel={`Remove ${item.name} from recent`}
       >
         <X size={16} color={typography.t500} strokeWidth={2} />
       </TouchableOpacity>
     ) : null}
-  </TouchableOpacity>
+  </View>
 );
 
 const SkeletonRow: React.FC = () => (
@@ -272,6 +281,12 @@ const styles = StyleSheet.create({
     minHeight: 72, // no spacing token for 72 (s72 = 288)
     paddingVertical: spacing.s3_5,
     borderRadius: borderRadius.lg,
+  },
+  rowPress: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.s3,
   },
   content: {
     flex: 1,

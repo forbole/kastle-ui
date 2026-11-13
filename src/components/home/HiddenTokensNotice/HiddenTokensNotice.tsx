@@ -31,7 +31,11 @@ export const HiddenTokensNotice: React.FC<HiddenTokensNoticeProps> = ({
       >
         {label}
       </Text>
-      <LinkButton label="Manage" onPress={onManagePress} />
+      <LinkButton
+        label="Manage"
+        onPress={onManagePress}
+        hitSlop={{ top: spacing.s1, bottom: spacing.s1 }}
+      />
     </View>
   );
 };
