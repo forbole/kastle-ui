@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { View, StyleSheet } from "react-native";
-import { background } from "../../../config/theme";
+import { View, StyleSheet, FlatList } from "react-native";
+import { background, spacing } from "../../../config/theme";
+import { TokenHistoryRow, TokenHistoryDirection } from "../TokenHistoryRow";
 import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
 
+// Neutral token placeholder (no NACHO asset in the repo); chain badge / chip icon is the real Kaspa mark.
 const placeholderLogo = require("../../../../assets/icon.png");
+const kaspaChainLogo = require("../../../../assets/kaspa-logo.png");
 
 const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">) => {
   const [tab, setTab] = useState<"history" | "assetInfo">("assetInfo");
@@ -23,8 +26,8 @@ const meta: Meta<typeof TokenDetailPage> = {
     name: "NACHO",
     priceLabel: "$0.00041",
     logo: placeholderLogo,
-    chainLogo: placeholderLogo,
-    chipIcon: placeholderLogo,
+    chainLogo: kaspaChainLogo,
+    chipIcon: kaspaChainLogo,
     network: "Kaspa",
     covenantId: "84b93d7f...48dj6",
   },
@@ -46,31 +49,107 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * KCC20 verified vs unverified (D-071, D-072), mirroring Figma's NACHO
- * example on both nodes (14745:449924 verified, 14745:450123 unverified)
- * — header chip stays on both ("Kaspa-KCC20", hyphen form per Nicole's
- * round-3 decision), only the Security row's checkmark + text differ.
- *
- * ⚠️ Round 3 (Leo approved Nicole's proposal, 2026-09-26): the ✓ concept
- * now only exists on Token Details at all — Home list and Select screens
- * dropped verified entirely. On Token Details itself, the Security row is
- * hidden (not just its value) for anything other than KCC20 — see
- * KRC20/Native stories below, neither shows a Security row at all.
+ * Verified KCC20 — mirrors Figma's NACHO example (node 14745:449924). Header
+ * chip stays on verified and unverified ("Kaspa-KCC20", hyphen form per
+ * Nicole's round-3 decision). No badge next to the name; the Security row
+ * ("Verified" + checkmark) is the only verified marker. KCC20 always shows
+ * the row — see UnverifiedKCC20. KRC20 / NativeKAS have no Security row.
  */
-export const VerifiedKCC20: Story = {
+export const Default: Story = {
+  name: "Default (verified KCC20)",
   render: (args) => (
     <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
   ),
 };
 
+interface HistoryItem {
+  id: string;
+  title: string;
+  amount: string;
+  direction: TokenHistoryDirection;
+}
+
+// Titles follow the extension's row: "Received from <short addr>" / "Sent to <short addr>".
+const historyRows: HistoryItem[] = Array.from({ length: 60 }, (_, i) =>
+  i % 2
+    ? { id: String(i), title: "Sent to kaspa:qp9m…w4hc", amount: "-1,000.88 NACHO", direction: "out" }
+    : { id: String(i), title: "Received from kaspa:qr3x…k7x2", amount: "+37,986 NACHO", direction: "in" },
+);
+
+/**
+ * History tab — rows are the real `TokenHistoryRow` (token logo + chain
+ * badge, "Received from …" title, date, green incoming amount) like the
+ * extension's token history. `historyContent` is a FlatList that scrolls by
+ * itself inside a flex:1 View (no ScrollView around it). Segmented control
+ * stays fixed, full width. Logo is the neutral placeholder: no NACHO asset
+ * in this repo.
+ */
+export const HistoryTab: Story = {
+  render: (args) => {
+    const Demo = () => {
+      const [tab, setTab] = useState<"history" | "assetInfo">("history");
+      return (
+        <TokenDetailPage
+          {...args}
+          isVerified
+          standard="KCC20"
+          chipLabel="Kaspa-KCC20"
+          activeTab={tab}
+          onTabChange={setTab}
+          historyContent={
+            <FlatList
+              data={historyRows}
+              keyExtractor={(r) => r.id}
+              contentContainerStyle={storyStyles.historyList}
+              renderItem={({ item }) => (
+                <TokenHistoryRow
+                  title={item.title}
+                  dateLabel="12 Nov｜18:03"
+                  amountLabel={item.amount}
+                  direction={item.direction}
+                  fiatLabel="≈ $19.235 USD"
+                  logo={placeholderLogo}
+                  chainLogo={kaspaChainLogo}
+                  standard="KCC20"
+                />
+              )}
+            />
+          }
+        />
+      );
+    };
+    return <Demo />;
+  },
+};
+
+/** Unverified KCC20 — Security row still shows, reading "Unverified" with no checkmark. */
 export const UnverifiedKCC20: Story = {
   render: (args) => (
     <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa-KCC20" />
   ),
 };
 
+/** KCC20 as the app shows it today: symbol as title, full name under it, plus Standard / Price / Value rows via `extraRows`. */
+export const WithPriceAndValue: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="NACHO"
+      subtitle="Nacho the Kat"
+      isVerified
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+      extraRows={[
+        { label: "Standard", value: "KCC-20" },
+        { label: "Price", value: "$0.00041" },
+        { label: "Value", value: "$12.40" },
+      ]}
+    />
+  ),
+};
+
 /**
- * No Security row at all — only KCC20 gets one (round 3). ID row label
+ * No Security row at all — only KCC20 gets one. ID row label
  * reads "Contract Address" here (round 6, 2026-09-26 — team-lead):
  * `idLabel` defaults to "Contract Address" for any non-KCC20 standard,
  * not overridden in this story's args, so it's automatic.
@@ -100,8 +179,8 @@ export const NativeKAS: Story = {
 // ---------------------------------------------------------------------------
 
 // "Basic info" was removed (round 6, 2026-09-26 — Nicole's Storybook
-// review): it was identical to VerifiedKCC20 above (default variant is
-// "basic"), so VerifiedKCC20 already covers this state.
+// review): it was identical to Default above (default variant is
+// "basic"), so Default already covers this state.
 
 /**
  * Complete Token Info list — Nicole's source frame `14590:112169` →
@@ -109,8 +188,8 @@ export const NativeKAS: Story = {
  * Network stays "Kaspa" (not the frame's drawn "Kasplex") per the earlier
  * KCC20/KRC20 → "Kaspa" decision; Covenant ID uses the page's own default
  * example value, not the frame's literal placeholder text "Covenant ID".
- * Security row still appends at the end (KCC20-only rule, unchanged from
- * basic) even though this specific frame doesn't draw one.
+ * Security row ("Verified") still appends at the end (KCC20 always shows
+ * it), even though this specific frame doesn't draw one.
  */
 export const FullInfo: Story = {
   name: "Full info",
@@ -185,5 +264,9 @@ const storyStyles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: background.bg0,
+  },
+  historyList: {
+    paddingHorizontal: spacing.s5,
+    paddingBottom: spacing.s10,
   },
 });
