@@ -85,6 +85,11 @@ export const Empty: Story = {
   args: { query: "ORANGE", state: "empty" },
 };
 
+/** `filled` with zero results falls back to the `empty` copy, not a blank body. */
+export const FilledNoResults: Story = {
+  args: { query: "NACHO", state: "filled", results: [] },
+};
+
 /** Long names must ellipsise on one line, never wrap or push the row apart. */
 export const LongName: Story = {
   args: {
