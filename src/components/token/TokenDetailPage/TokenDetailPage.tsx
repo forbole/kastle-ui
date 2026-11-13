@@ -20,24 +20,31 @@ import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow";
 
 const TABS: SegmentedOption[] = [
   { label: "History", value: "history" },
-  { label: "Asset Info", value: "assetInfo" },
+  { label: "Token info", value: "assetInfo" },
 ];
 
 export interface TokenDetailPageProps {
   /** Token name shown in the header, e.g. "NACHO". */
   name: string;
+  /** Optional second line under the name (e.g. the token's full name when `name` carries the symbol). */
+  subtitle?: string;
   /** Price line under the name, e.g. "$0.00041". */
   priceLabel?: string;
+  /**
+   * Extra Token Info rows (label / value, caller-formatted), e.g. Standard,
+   * Price, Value. Rendered after the standard rows and before Security, in
+   * the order given. Pure display: the page does no formatting or hiding.
+   */
+  extraRows?: { label: string; value: string }[];
   logo?: ImageSourcePropType;
   /** Chain badge image — shown per `standard`, see AssetImage's `variant="chain"` (D-071). */
   chainLogo?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
-  /** Shows the verified checkmark next to the name AND drives the
-   * "Security" row (Verified with a checkmark / plain "Unverified", no
-   * colour change — Figma nodes 14745:449924 / 14745:450123). Only ever
-   * takes effect for `standard === "KCC20"` (Leo sync, 2026-09-25:
-   * verification only exists for KCC20 — KRC20/ERC20 can never be
-   * verified) — enforced here regardless of what's passed. */
+  /** Drives the "Security" row's value: "Verified" with a checkmark when
+   * true, plain "Unverified" when false. The row itself shows for KCC20
+   * only. Verification only exists for KCC20 (Leo sync, 2026-09-25) —
+   * KRC20/ERC20 never show the row. No badge is drawn next to the token
+   * name in the header (Nicole, 2026-11-13). */
   isVerified?: boolean;
   /** Drives the header icon's chain-badge (D-071) and the header chip's icon. */
   standard: TokenStandard;
@@ -126,6 +133,14 @@ export interface TokenDetailPageProps {
    * Content shown under the "History" tab. Left as a slot — history is a
    * transaction list, which is data, not pure UI; this component doesn't
    * fetch or own that data.
+   *
+   * CONTRACT: this node is rendered in a `flex: 1` View, NOT inside a
+   * ScrollView. It must be its own scroller (e.g. a FlatList with its own
+   * `onEndReached`) and fill the available height. Do not pass a
+   * non-scrolling tall column — it will be clipped. Per Figma (node
+   * 2192:366853) the History tab shows only the segmented control above the
+   * list; the token header card appears on the Token Info tab only. The
+   * caller pads its own rows (20 horizontal) — this wrapper adds no padding.
    */
   historyContent?: React.ReactNode;
 }
@@ -147,7 +162,9 @@ export interface TokenDetailPageProps {
  */
 export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   name,
+  subtitle,
   priceLabel,
+  extraRows,
   logo,
   chainLogo,
   fallback,
@@ -177,9 +194,10 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // even if the caller passes isVerified=true. Enforced here, not left to
   // the caller.
   const showVerified = isVerified && standard === "KCC20";
-  // Leo approved Nicole's proposal, round 3 (2026-09-26): the ✓ concept
-  // only exists on Token Details at all now — the Security row itself is
-  // hidden (not just its value) for Native/KRC20/ERC20, not only KCC20.
+  // Leo approved Nicole's proposal, round 3 (2026-09-26): the Security row
+  // is hidden (not just its value) for Native/KRC20/ERC20. For KCC20 it is
+  // always shown: "Verified" + checkmark, or plain "Unverified" (Nicole,
+  // 2026-11-13).
   const showSecurityRow = standard === "KCC20";
 
   // Token Info rows, built as an array (round 5 queued item B, 2026-09-26)
@@ -238,6 +256,12 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
       infoRows.push({ key: "minter", node: <DetailKVRow label="Minter" value={minter} paddingVertical={spacing.s3_5} /> });
     }
   }
+  extraRows?.forEach((row) => {
+    infoRows.push({
+      key: `extra-${row.label}`,
+      node: <DetailKVRow label={row.label} value={row.value} paddingVertical={spacing.s3_5} />,
+    });
+  });
   if (showSecurityRow) {
     infoRows.push({
       key: "security",
@@ -254,57 +278,51 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Tabs — above the header card, matching Figma's actual order
-            (reviewer correction, 2026-09-26): the segmented control sits in
-            the fixed top region (14745:449924's "Top nav", y 0-156), the
-            header card is below it in "KNS list" (y 180+).
-            Hug-width + horizontally centred (round 5 item 5, 2026-09-26):
-            confirmed via get_metadata on the "Token Header" frame — parent
-            width 393, "segmented control" instance x=104 width=185
-            ((393-185)/2 = 104, exact centre), NOT full-width. `Segmented`
-            itself stays unstyled for width (its `outer` View has no
-            alignSelf, same as CustomRpcScreen's usage) — the wrapping
-            `alignItems: "center"` here is what centres it, following the
-            same wrapper-controls-alignment convention CustomRpcScreen uses
-            for its own (left-aligned) Segmented. */}
-        <View style={styles.segmentedWrap}>
-          <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
-        </View>
+      {/* Tabs — fixed (non-scrolling) top region, full width with 20px side
+          gutters, like the extension's History | Token info bar
+          (kastle components/AssetTabs.tsx, flex-grow tabs). */}
+      <View style={styles.segmentedWrap}>
+        <Segmented isFullWidth options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
+      </View>
 
-        {/* Header card — two sections, matching Figma's actual layout
-            (round 3 padding decision #3, 2026-09-26): icon+text block with
-            its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
-            chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
-            (10/12) — not one flat row with a single `gap` between three
-            children, which is what this used to be. */}
-        <View style={styles.headerCard}>
-          <View style={styles.headerLeft}>
-            <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
-            <View style={styles.headerText}>
-              <View style={styles.nameRow}>
-                <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
-                  {name}
-                </Text>
-                {showVerified && <BadgeCheck size={18} color={primary.p500} strokeWidth={2} />}
+      {activeTab === "assetInfo" ? (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header card — two sections, matching Figma's actual layout
+              (round 3 padding decision #3, 2026-09-26): icon+text block with
+              its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
+              chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
+              (10/12) — not one flat row with a single `gap` between three
+              children, which is what this used to be. */}
+          <View style={styles.headerCard}>
+            <View style={styles.headerLeft}>
+              <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
+              <View style={styles.headerText}>
+                <View style={styles.nameRow}>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
+                    {name}
+                  </Text>
+                </View>
+                {!!subtitle && (
+                  <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
+                    {subtitle}
+                  </Text>
+                )}
+                {!!priceLabel && (
+                  <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
+                    {priceLabel}
+                  </Text>
+                )}
               </View>
-              {!!priceLabel && (
-                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
-                  {priceLabel}
-                </Text>
-              )}
+            </View>
+            <View style={styles.headerRight}>
+              <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
             </View>
           </View>
-          <View style={styles.headerRight}>
-            <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
-          </View>
-        </View>
 
-        {activeTab === "assetInfo" ? (
           <View style={styles.section}>
             <Text allowFontScaling={false} style={styles.sectionTitle}>
               Token Info
@@ -317,10 +335,11 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               ))}
             </View>
           </View>
-        ) : (
-          historyContent
-        )}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        // History: no ScrollView — historyContent is its own scroller.
+        <View style={styles.historyWrap}>{historyContent}</View>
+      )}
     </View>
   );
 };
@@ -335,14 +354,18 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s4,
     paddingBottom: spacing.s10,
     gap: spacing.s4,
   },
 
   // ── Tabs ─────────────────────────────────────────────────────────────────
   segmentedWrap: {
-    alignItems: "center",
+    paddingHorizontal: spacing.s5,
+    paddingTop: spacing.s4,
+    paddingBottom: spacing.s4,
+  },
+  historyWrap: {
+    flex: 1,
   },
 
   // ── Header card ──────────────────────────────────────────────────────────

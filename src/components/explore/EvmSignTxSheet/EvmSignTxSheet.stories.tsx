@@ -113,6 +113,29 @@ export const WithoutRawDetails: Story = {
   },
 };
 
+export const WithOutputs: Story = {
+  render: (args) => <SheetDemo {...args} />,
+  args: {
+    toAddress: undefined,
+    outputs: [
+      {
+        label: "To",
+        value: "0x4ae705…F7C2B",
+        subValue: "25.00 KAS",
+        fullAddress: "0x4ae7053F44AB45C98E5e5C3C4F0B2D3A1E9F7C2B",
+      },
+      {
+        label: "Unrecognized contract",
+        value: "0x9b21c4…3d0aE1",
+        subValue: "1.50 KAS",
+        fullAddress: "0x9b21c4e8F0a7D3b5C6e1A2f4B8d9E0c7a53d0aE1",
+        warning: true,
+      },
+    ],
+    outputsNote: "One output goes to a contract we could not identify.",
+  },
+};
+
 export const NoIcon: Story = {
   render: (args) => <SheetDemo {...args} />,
   args: {
