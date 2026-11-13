@@ -64,6 +64,20 @@ export interface AssetSearchOverlayProps {
 const SKELETON_ROWS = 3;
 
 const Logo: React.FC<{ item: AssetSearchItem }> = ({ item }) => {
+  // No logo: a neutral bg300 shape, same token AssetImage's dual placeholder
+  // uses — mid-tone, so it reads on both light and dark surfaces, fetches nothing.
+  if (!item.logo) {
+    return (
+      <View
+        style={[
+          item.logoShape === "square" ? styles.squareLogo : styles.circleLogo,
+          styles.logoPlaceholder,
+        ]}
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      />
+    );
+  }
   if (item.logoShape === "square") {
     return (
       <Image source={item.logo} style={styles.squareLogo} resizeMode="cover" />
@@ -311,6 +325,14 @@ const styles = StyleSheet.create({
     width: spacing.s10,
     height: 46, // no spacing token for 46
     borderRadius: spacing.s2_5,
+  },
+  circleLogo: {
+    width: spacing.s10,
+    height: spacing.s10,
+    borderRadius: borderRadius.full,
+  },
+  logoPlaceholder: {
+    backgroundColor: background.bg300,
   },
   empty: {
     color: typography.t500,

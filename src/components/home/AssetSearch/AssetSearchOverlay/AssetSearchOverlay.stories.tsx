@@ -90,6 +90,19 @@ export const FilledNoResults: Story = {
   args: { query: "NACHO", state: "filled", results: [] },
 };
 
+/** Rows without `logo` show a neutral placeholder (circle and square), never an empty slot. */
+export const MissingLogo: Story = {
+  args: {
+    query: "NACHO",
+    state: "filled",
+    results: [
+      { id: "m1", name: "UNKNOWN", subtitle: "Asset" },
+      { id: "m2", name: "Untitled #7", subtitle: "NFT", logoShape: "square" },
+      ...RESULTS.slice(0, 1),
+    ],
+  },
+};
+
 /** Long names must ellipsise on one line, never wrap or push the row apart. */
 export const LongName: Story = {
   args: {
