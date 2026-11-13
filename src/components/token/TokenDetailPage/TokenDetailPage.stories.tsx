@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
-import { View, StyleSheet } from "react-native";
-import { background } from "../../../config/theme";
+import { View, StyleSheet, FlatList, Text } from "react-native";
+import { background, borderRadius, colors, spacing, textStyles } from "../../../config/theme";
 import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
 
 const placeholderLogo = require("../../../../assets/icon.png");
@@ -27,6 +27,8 @@ const meta: Meta<typeof TokenDetailPage> = {
     chipIcon: placeholderLogo,
     network: "Kaspa",
     covenantId: "84b93d7f...48dj6",
+    balanceLabel: "1,250.5 NACHO",
+    balanceFiatLabel: "$512.70",
   },
   // No custom width decorator (round 6, 2026-09-26 — Nicole/reviewer: a
   // fixed 393px frame here broke the iPad viewport in Storybook's own
@@ -46,23 +48,81 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * KCC20 verified vs unverified (D-071, D-072), mirroring Figma's NACHO
- * example on both nodes (14745:449924 verified, 14745:450123 unverified)
- * — header chip stays on both ("Kaspa-KCC20", hyphen form per Nicole's
- * round-3 decision), only the Security row's checkmark + text differ.
- *
- * ⚠️ Round 3 (Leo approved Nicole's proposal, 2026-09-26): the ✓ concept
- * now only exists on Token Details at all — Home list and Select screens
- * dropped verified entirely. On Token Details itself, the Security row is
- * hidden (not just its value) for anything other than KCC20 — see
- * KRC20/Native stories below, neither shows a Security row at all.
+ * Verified KCC20 with balance — mirrors Figma's NACHO example (node
+ * 14745:449924). Header chip stays on verified and unverified ("Kaspa-KCC20",
+ * hyphen form per Nicole's round-3 decision). The Security row ("Verified" +
+ * checkmark) shows only for verified tokens and is hidden otherwise
+ * (Figma note 14750:450484, 09-02 rule) — see UnverifiedKCC20 / KRC20 /
+ * NativeKAS below, none of which show a Security row.
  */
-export const VerifiedKCC20: Story = {
+export const Default: Story = {
+  name: "Default (with balance)",
   render: (args) => (
     <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
   ),
 };
 
+/** Balances hidden — caller passes masked text, component just renders it. */
+export const BalanceHidden: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" balanceLabel="*****" balanceFiatLabel="*****" />
+  ),
+};
+
+/** No balance props — no Balance row. */
+export const NoBalance: Story = {
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      isVerified
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+      balanceLabel={undefined}
+      balanceFiatLabel={undefined}
+    />
+  ),
+};
+
+const historyRows = Array.from({ length: 60 }, (_, i) => ({ id: String(i), title: i % 2 ? "Sent" : "Received", amount: i % 2 ? "-1,000.88" : "+1,000.7 NACHO" }));
+
+/**
+ * History tab — `historyContent` is a FlatList that scrolls by itself inside
+ * a flex:1 View (no ScrollView around it). Segmented control stays fixed.
+ * Figma 2192:366853: no header card on this tab.
+ */
+export const HistoryTab: Story = {
+  render: (args) => {
+    const Demo = () => {
+      const [tab, setTab] = useState<"history" | "assetInfo">("history");
+      return (
+        <TokenDetailPage
+          {...args}
+          isVerified
+          standard="KCC20"
+          chipLabel="Kaspa-KCC20"
+          activeTab={tab}
+          onTabChange={setTab}
+          historyContent={
+            <FlatList
+              data={historyRows}
+              keyExtractor={(r) => r.id}
+              contentContainerStyle={storyStyles.historyList}
+              renderItem={({ item }) => (
+                <View style={storyStyles.historyRow}>
+                  <Text allowFontScaling={false} style={storyStyles.historyTitle}>{item.title}</Text>
+                  <Text allowFontScaling={false} style={storyStyles.historyAmount}>{item.amount}</Text>
+                </View>
+              )}
+            />
+          }
+        />
+      );
+    };
+    return <Demo />;
+  },
+};
+
+/** Unverified — no Security row (shown only when verified). */
 export const UnverifiedKCC20: Story = {
   render: (args) => (
     <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa-KCC20" />
@@ -70,7 +130,7 @@ export const UnverifiedKCC20: Story = {
 };
 
 /**
- * No Security row at all — only KCC20 gets one (round 3). ID row label
+ * No Security row at all — only verified KCC20 gets one. ID row label
  * reads "Contract Address" here (round 6, 2026-09-26 — team-lead):
  * `idLabel` defaults to "Contract Address" for any non-KCC20 standard,
  * not overridden in this story's args, so it's automatic.
@@ -100,8 +160,8 @@ export const NativeKAS: Story = {
 // ---------------------------------------------------------------------------
 
 // "Basic info" was removed (round 6, 2026-09-26 — Nicole's Storybook
-// review): it was identical to VerifiedKCC20 above (default variant is
-// "basic"), so VerifiedKCC20 already covers this state.
+// review): it was identical to Default above (default variant is
+// "basic"), so Default already covers this state.
 
 /**
  * Complete Token Info list — Nicole's source frame `14590:112169` →
@@ -109,8 +169,8 @@ export const NativeKAS: Story = {
  * Network stays "Kaspa" (not the frame's drawn "Kasplex") per the earlier
  * KCC20/KRC20 → "Kaspa" decision; Covenant ID uses the page's own default
  * example value, not the frame's literal placeholder text "Covenant ID".
- * Security row still appends at the end (KCC20-only rule, unchanged from
- * basic) even though this specific frame doesn't draw one.
+ * Security row ("Verified") still appends at the end because this story
+ * is verified, even though this specific frame doesn't draw one.
  */
 export const FullInfo: Story = {
   name: "Full info",
@@ -185,5 +245,25 @@ const storyStyles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: background.bg0,
+  },
+  historyRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: spacing.s4,
+    borderRadius: borderRadius["2xl"],
+    backgroundColor: background.bg50,
+  },
+  historyList: {
+    paddingHorizontal: spacing.s5,
+    gap: spacing.s2,
+    paddingBottom: spacing.s10,
+  },
+  historyTitle: {
+    ...textStyles.bodySemiboldMD,
+    color: colors.textPrimary,
+  },
+  historyAmount: {
+    ...textStyles.bodyNormalSM,
+    color: colors.textPrimary,
   },
 });

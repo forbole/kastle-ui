@@ -20,7 +20,7 @@ import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow";
 
 const TABS: SegmentedOption[] = [
   { label: "History", value: "history" },
-  { label: "Asset Info", value: "assetInfo" },
+  { label: "Token Info", value: "assetInfo" },
 ];
 
 export interface TokenDetailPageProps {
@@ -33,8 +33,8 @@ export interface TokenDetailPageProps {
   chainLogo?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
   /** Shows the verified checkmark next to the name AND drives the
-   * "Security" row (Verified with a checkmark / plain "Unverified", no
-   * colour change — Figma nodes 14745:449924 / 14745:450123). Only ever
+   * "Security" row, which renders ONLY when verified (Verified + checkmark;
+   * unverified = no row at all, per Figma note node 14750:450484, 09-02 rule). Only ever
    * takes effect for `standard === "KCC20"` (Leo sync, 2026-09-25:
    * verification only exists for KCC20 — KRC20/ERC20 can never be
    * verified) — enforced here regardless of what's passed. */
@@ -119,6 +119,20 @@ export interface TokenDetailPageProps {
   /** Full variant only, e.g. "kaspa:qpzp...pnwz" (caller formats the ellipsis). */
   minter?: string;
 
+  /**
+   * Balance row — first row of Token Info, e.g. "1,250.5 NACHO". The caller
+   * passes the already-masked text (e.g. "*****") when the user has hidden
+   * balances; this component does not know about the hide setting. Omit to
+   * show no Balance row.
+   */
+  balanceLabel?: string;
+  /**
+   * Fiat value shown under `balanceLabel`, e.g. "$512.70" — rendered as
+   * "≈ $512.70". Only rendered when `balanceLabel` is also set. Caller
+   * passes masked text when hidden.
+   */
+  balanceFiatLabel?: string;
+
   /** Controlled tab — "history" | "assetInfo". */
   activeTab: "history" | "assetInfo";
   onTabChange: (tab: "history" | "assetInfo") => void;
@@ -126,6 +140,14 @@ export interface TokenDetailPageProps {
    * Content shown under the "History" tab. Left as a slot — history is a
    * transaction list, which is data, not pure UI; this component doesn't
    * fetch or own that data.
+   *
+   * CONTRACT: this node is rendered in a `flex: 1` View, NOT inside a
+   * ScrollView. It must be its own scroller (e.g. a FlatList with its own
+   * `onEndReached`) and fill the available height. Do not pass a
+   * non-scrolling tall column — it will be clipped. Per Figma (node
+   * 2192:366853) the History tab shows only the segmented control above the
+   * list; the token header card appears on the Token Info tab only. The
+   * caller pads its own rows (20 horizontal) — this wrapper adds no padding.
    */
   historyContent?: React.ReactNode;
 }
@@ -168,6 +190,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   defaultMintAmount,
   decimal,
   minter,
+  balanceLabel,
+  balanceFiatLabel,
   activeTab,
   onTabChange,
   historyContent,
@@ -180,17 +204,33 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // Leo approved Nicole's proposal, round 3 (2026-09-26): the ✓ concept
   // only exists on Token Details at all now — the Security row itself is
   // hidden (not just its value) for Native/KRC20/ERC20, not only KCC20.
-  const showSecurityRow = standard === "KCC20";
+  // Figma note node 14750:450484 (section 14745:450122, 09-02 rule): the
+  // Security row shows "Verified" only for verified tokens, hidden otherwise.
+  const showSecurityRow = showVerified;
 
   // Token Info rows, built as an array (round 5 queued item B, 2026-09-26)
   // so the border-between-rows logic (every row but the last) works the
   // same regardless of which rows are actually present, instead of the
   // old hardcoded "covenantId gets a border only if Security follows" —
   // that only worked because basic was always exactly 2-or-3 rows.
-  const infoRows: { key: string; node: React.ReactNode }[] = [
+  const infoRows: { key: string; node: React.ReactNode }[] = [];
+  if (balanceLabel) {
+    infoRows.push({
+      key: "balance",
+      node: (
+        <DetailKVRow
+          label="Balance"
+          value={balanceLabel}
+          valueSubtext={balanceFiatLabel ? `≈ ${balanceFiatLabel}` : undefined}
+          paddingVertical={spacing.s3_5}
+        />
+      ),
+    });
+  }
+  infoRows.push(
     { key: "network", node: <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} /> },
     { key: "covenantId", node: <DetailKVRow label={idLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
-  ];
+  );
   if (variant === "full") {
     if (totalMintedPercent !== undefined) {
       infoRows.push({
@@ -244,8 +284,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
       node: (
         <DetailKVRow
           label="Security"
-          value={showVerified ? "Verified" : "Unverified"}
-          valuePrefix={showVerified ? <BadgeCheck size={16} color={primary.p500} strokeWidth={2} /> : undefined}
+          value="Verified"
+          valuePrefix={<BadgeCheck size={16} color={primary.p500} strokeWidth={2} />}
           paddingVertical={spacing.s3_5}
         />
       ),
@@ -254,57 +294,47 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Tabs — above the header card, matching Figma's actual order
-            (reviewer correction, 2026-09-26): the segmented control sits in
-            the fixed top region (14745:449924's "Top nav", y 0-156), the
-            header card is below it in "KNS list" (y 180+).
-            Hug-width + horizontally centred (round 5 item 5, 2026-09-26):
-            confirmed via get_metadata on the "Token Header" frame — parent
-            width 393, "segmented control" instance x=104 width=185
-            ((393-185)/2 = 104, exact centre), NOT full-width. `Segmented`
-            itself stays unstyled for width (its `outer` View has no
-            alignSelf, same as CustomRpcScreen's usage) — the wrapping
-            `alignItems: "center"` here is what centres it, following the
-            same wrapper-controls-alignment convention CustomRpcScreen uses
-            for its own (left-aligned) Segmented. */}
-        <View style={styles.segmentedWrap}>
-          <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
-        </View>
+      {/* Tabs — fixed (non-scrolling) top region, centred hug-width per
+          Figma ("segmented control" instance x=104 width=185 in a 393 frame).
+          `Segmented` has no width styling of its own; this wrapper centres it. */}
+      <View style={styles.segmentedWrap}>
+        <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
+      </View>
 
-        {/* Header card — two sections, matching Figma's actual layout
-            (round 3 padding decision #3, 2026-09-26): icon+text block with
-            its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
-            chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
-            (10/12) — not one flat row with a single `gap` between three
-            children, which is what this used to be. */}
-        <View style={styles.headerCard}>
-          <View style={styles.headerLeft}>
-            <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
-            <View style={styles.headerText}>
-              <View style={styles.nameRow}>
-                <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
-                  {name}
-                </Text>
-                {showVerified && <BadgeCheck size={18} color={primary.p500} strokeWidth={2} />}
+      {activeTab === "assetInfo" ? (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header card — two sections, matching Figma's actual layout
+              (round 3 padding decision #3, 2026-09-26): icon+text block with
+              its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
+              chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
+              (10/12) — not one flat row with a single `gap` between three
+              children, which is what this used to be. */}
+          <View style={styles.headerCard}>
+            <View style={styles.headerLeft}>
+              <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
+              <View style={styles.headerText}>
+                <View style={styles.nameRow}>
+                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
+                    {name}
+                  </Text>
+                  {showVerified && <BadgeCheck size={18} color={primary.p500} strokeWidth={2} />}
+                </View>
+                {!!priceLabel && (
+                  <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
+                    {priceLabel}
+                  </Text>
+                )}
               </View>
-              {!!priceLabel && (
-                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
-                  {priceLabel}
-                </Text>
-              )}
+            </View>
+            <View style={styles.headerRight}>
+              <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
             </View>
           </View>
-          <View style={styles.headerRight}>
-            <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
-          </View>
-        </View>
 
-        {activeTab === "assetInfo" ? (
           <View style={styles.section}>
             <Text allowFontScaling={false} style={styles.sectionTitle}>
               Token Info
@@ -317,10 +347,11 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               ))}
             </View>
           </View>
-        ) : (
-          historyContent
-        )}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        // History: no ScrollView — historyContent is its own scroller.
+        <View style={styles.historyWrap}>{historyContent}</View>
+      )}
     </View>
   );
 };
@@ -335,7 +366,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s4,
     paddingBottom: spacing.s10,
     gap: spacing.s4,
   },
@@ -343,6 +373,11 @@ const styles = StyleSheet.create({
   // ── Tabs ─────────────────────────────────────────────────────────────────
   segmentedWrap: {
     alignItems: "center",
+    paddingTop: spacing.s4,
+    paddingBottom: spacing.s4,
+  },
+  historyWrap: {
+    flex: 1,
   },
 
   // ── Header card ──────────────────────────────────────────────────────────
