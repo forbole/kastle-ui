@@ -4,7 +4,9 @@ import { View, StyleSheet } from "react-native";
 import { TokenHistoryRow } from "./TokenHistoryRow";
 import { background, spacing } from "../../../config/theme";
 
+// Neutral token placeholder (no NACHO asset in the repo); chain badge is the real Kaspa mark.
 const placeholderLogo = require("../../../../assets/icon.png");
+const kaspaChainLogo = require("../../../../assets/kaspa-logo.png");
 
 const meta: Meta<typeof TokenHistoryRow> = {
   title: "Token/Components/TokenHistoryRow",
@@ -15,7 +17,7 @@ const meta: Meta<typeof TokenHistoryRow> = {
   },
   args: {
     logo: placeholderLogo,
-    dateLabel: "8 Oct 2026 | 02:03",
+    dateLabel: "12 Nov｜11:04",
     fiatLabel: "≈ $9,486.17 USD",
   },
   decorators: [
@@ -46,13 +48,37 @@ export const Deployed: Story = {
   args: { title: "Deployed TTTT", amountLabel: "-1,000", direction: "out" },
 };
 
-/** Figma wraps this to two lines; we ellipsize instead so the 64px card never overflows. */
+/** Extension row: counterparty in the title, chain badge on the logo. Incoming (teal) and outgoing (red). */
+export const WithChainBadge: Story = {
+  args: {
+    chainLogo: kaspaChainLogo,
+    standard: "KCC20",
+  },
+  render: (args) => (
+    <>
+      <TokenHistoryRow
+        {...args}
+        title="Received from kaspa:qr3x…k7x2"
+        amountLabel="+37,986 NACHO"
+        direction="in"
+      />
+      <TokenHistoryRow
+        {...args}
+        title="Sent to kaspa:qp9m…w4hc"
+        amountLabel="-1,000.88 NACHO"
+        direction="out"
+      />
+    </>
+  ),
+};
+
+/** Figma wraps this to two lines; we ellipsize instead so the min-height 64 card never overflows. */
 export const LongAmount: Story = {
   args: {
     title: "Received",
     amountLabel: "+32,115,033,564,12345678",
     direction: "in",
-    dateLabel: "28 Sep 2026 | 23:59",
+    dateLabel: "28 Sep｜23:59",
   },
 };
 
@@ -62,7 +88,7 @@ export const LongTitle: Story = {
     title: "Deployed Some Extremely Long Token Name",
     amountLabel: "-1,000",
     direction: "out",
-    dateLabel: "28 Sep 2026 | 23:59",
+    dateLabel: "28 Sep｜23:59",
   },
 };
 
