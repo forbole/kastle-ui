@@ -46,7 +46,7 @@ export interface AssetSearchOverlayProps {
    * loading — `results` found so far, then skeleton rows under them. The
    *           search is global and Home preloads only 20 tokens, so a wider
    *           search fetches more (Figma note 9339:270035).
-   * filled  — `results` rows.
+   * filled  — `results` rows; with none, the same copy as `empty`.
    * empty   — "Result not found".
    */
   state: "default" | "loading" | "filled" | "empty";
@@ -142,6 +142,16 @@ const SkeletonRow: React.FC = () => (
   </View>
 );
 
+/** "Result not found" — the `empty` state, and `filled` with no rows. */
+const EmptyState: React.FC = () => (
+  <Text
+    allowFontScaling={false}
+    style={[textStyles.bodyNormalSM, styles.empty]}
+  >
+    Result not found
+  </Text>
+);
+
 /**
  * Full-screen asset search overlay for Home (Figma `BdTDUVIHEeOjdlHSPij0xi`,
  * section "Asset search" 8696:214282). Pure UI — the parent owns the query,
@@ -206,7 +216,7 @@ export const AssetSearchOverlay: React.FC<AssetSearchOverlayProps> = ({
         </>
       )}
 
-      {(state === "filled" || state === "loading") && (
+      {(state === "loading" || (state === "filled" && results.length > 0)) && (
         <View style={styles.list}>
           {results.map((item) => (
             <Row key={item.id} item={item} onPress={() => onSelect(item)} />
@@ -218,13 +228,8 @@ export const AssetSearchOverlay: React.FC<AssetSearchOverlayProps> = ({
         </View>
       )}
 
-      {state === "empty" && (
-        <Text
-          allowFontScaling={false}
-          style={[textStyles.bodyNormalSM, styles.empty]}
-        >
-          Result not found
-        </Text>
+      {(state === "empty" || (state === "filled" && results.length === 0)) && (
+        <EmptyState />
       )}
     </ScrollView>
   </View>
