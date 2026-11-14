@@ -3,13 +3,16 @@ import type { Meta, StoryObj } from "@storybook/react-native-web-vite";
 import { View, StyleSheet, FlatList } from "react-native";
 import { background, spacing } from "../../../config/theme";
 import { TokenHistoryRow, TokenHistoryDirection } from "../TokenHistoryRow";
+import { SubscriptPrice } from "../SubscriptPrice";
 import { TokenDetailPage, TokenDetailPageProps } from "./TokenDetailPage";
 
 // Neutral token placeholder (no NACHO asset in the repo); chain badge / chip icon is the real Kaspa mark.
 const placeholderLogo = require("../../../../assets/icon.png");
 const kaspaChainLogo = require("../../../../assets/kaspa-logo.png");
 
-const TokenDetailPageDemo = (props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">) => {
+const TokenDetailPageDemo = (
+  props: Omit<TokenDetailPageProps, "activeTab" | "onTabChange">,
+) => {
   const [tab, setTab] = useState<"history" | "assetInfo">("assetInfo");
   return <TokenDetailPage {...props} activeTab={tab} onTabChange={setTab} />;
 };
@@ -58,7 +61,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   name: "Default (verified KCC20)",
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified standard="KCC20" chipLabel="Kaspa-KCC20" />
+    <TokenDetailPageDemo
+      {...args}
+      isVerified
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+    />
   ),
 };
 
@@ -72,8 +80,18 @@ interface HistoryItem {
 // Titles follow the extension's row: "Received from <short addr>" / "Sent to <short addr>".
 const historyRows: HistoryItem[] = Array.from({ length: 60 }, (_, i) =>
   i % 2
-    ? { id: String(i), title: "Sent to kaspa:qp9m…w4hc", amount: "-1,000.88 NACHO", direction: "out" }
-    : { id: String(i), title: "Received from kaspa:qr3x…k7x2", amount: "+37,986 NACHO", direction: "in" },
+    ? {
+        id: String(i),
+        title: "Sent to kaspa:qp9m…w4hc",
+        amount: "-1,000.88 NACHO",
+        direction: "out",
+      }
+    : {
+        id: String(i),
+        title: "Received from kaspa:qr3x…k7x2",
+        amount: "+37,986 NACHO",
+        direction: "in",
+      },
 );
 
 /**
@@ -125,7 +143,12 @@ export const HistoryTab: Story = {
 /** Unverified KCC20 — Security row still shows, reading "Unverified" with no checkmark. */
 export const UnverifiedKCC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified={false} standard="KCC20" chipLabel="Kaspa-KCC20" />
+    <TokenDetailPageDemo
+      {...args}
+      isVerified={false}
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+    />
   ),
 };
 
@@ -159,7 +182,12 @@ export const WithPriceAndValue: Story = {
  */
 export const KRC20: Story = {
   render: (args) => (
-    <TokenDetailPageDemo {...args} isVerified={false} standard="KRC20" chipLabel="Kaspa-KRC20" />
+    <TokenDetailPageDemo
+      {...args}
+      isVerified={false}
+      standard="KRC20"
+      chipLabel="Kaspa-KRC20"
+    />
   ),
 };
 
@@ -259,6 +287,40 @@ export const FullInfoKasplexERC20: Story = {
       defaultMintAmount="9,998,095"
       decimal="8"
       minter="kaspa:qpzp...pnwz"
+    />
+  ),
+};
+
+/**
+ * EVM token, full version — Figma 11447:124705. Opt-in props only (every
+ * default stays as above): hug-width tabs (`segmentedFullWidth={false}`),
+ * the design's 8%-white / 40-radius active tab, and no Security row
+ * (`showSecurity={false}`, full variant only). No 8%-white token exists in
+ * theme.ts, so the design's value is passed literally. Rows use the 14/21
+ * white label (`rowSize="sm"` + `rowLabelTone="primary"`) and the header
+ * price is `SubscriptPrice` (`$0.0₅52`) via `priceNode`.
+ */
+export const FullInfoEvmDesign: Story = {
+  name: "Full info — EVM design (11447:124705)",
+  render: (args) => (
+    <TokenDetailPageDemo
+      {...args}
+      name="TTTT"
+      logo={placeholderLogo}
+      priceNode={<SubscriptPrice value={0.00000052} />}
+      isVerified
+      standard="KCC20"
+      chipLabel="Kaspa-KCC20"
+      variant="full"
+      showSecurity={false}
+      segmentedFullWidth={false}
+      segmentedActiveBackground="rgba(255,255,255,0.08)"
+      segmentedActiveBorderRadius={40}
+      holderCount="9,998,095"
+      transferCount="9,998,095"
+      decimal="18"
+      rowSize="sm"
+      rowLabelTone="primary"
     />
   ),
 };

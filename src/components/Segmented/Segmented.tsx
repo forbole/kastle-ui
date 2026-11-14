@@ -1,6 +1,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { background, colors, spacing, borderRadius, borderWidth, border, fontSize, fontWeight, fontFamilies } from "../../config/theme";
+import {
+  background,
+  colors,
+  spacing,
+  borderRadius,
+  borderWidth,
+  border,
+  fontSize,
+  fontWeight,
+  fontFamilies,
+} from "../../config/theme";
 
 export interface SegmentedOption {
   label: string;
@@ -13,10 +23,41 @@ export interface SegmentedProps {
   onChange: (value: string) => void;
   /** Extension look (AssetTabs): stretch to the parent's width, equal-width tabs, bg50 container with 12 radius, 8-radius selected tab on bg300. Default hug-width pill, unchanged. */
   isFullWidth?: boolean;
+  /**
+   * Selected-segment fill override. Omitted → today's fill, unchanged:
+   * `colors.backgroundSurfaceStrong` (pill) or `background.bg300` (`isFullWidth`).
+   * Token-detail design (Figma 11447:124705) wants `rgba(255,255,255,0.08)`.
+   */
+  activeBackground?: string;
+  /**
+   * Selected-segment corner radius override. Omitted → today's radius, unchanged:
+   * `borderRadius.full` (pill) or `borderRadius.lg` (`isFullWidth`).
+   * Token-detail design (Figma 11447:124705) wants 40.
+   */
+  activeBorderRadius?: number;
 }
 
 /** Generic pill segmented control (e.g. Mainnet / Testnet). Matches Figma's "segmented control" component. */
-export const Segmented: React.FC<SegmentedProps> = ({ options, value, onChange, isFullWidth = false }) => {
+export const Segmented: React.FC<SegmentedProps> = ({
+  options,
+  value,
+  onChange,
+  isFullWidth = false,
+  activeBackground,
+  activeBorderRadius,
+}) => {
+  // Only built when an override is passed, so default props add no style entry.
+  const activeOverride =
+    activeBackground !== undefined || activeBorderRadius !== undefined
+      ? {
+          ...(activeBackground !== undefined && {
+            backgroundColor: activeBackground,
+          }),
+          ...(activeBorderRadius !== undefined && {
+            borderRadius: activeBorderRadius,
+          }),
+        }
+      : undefined;
   return (
     <View style={[styles.outer, isFullWidth && styles.outerFull]}>
       <View style={[styles.group, isFullWidth && styles.fill]}>
@@ -30,10 +71,17 @@ export const Segmented: React.FC<SegmentedProps> = ({ options, value, onChange, 
               style={[
                 styles.segment,
                 isFullWidth && styles.segmentFull,
-                active && (isFullWidth ? styles.segmentActiveFull : styles.segmentActive),
+                active &&
+                  (isFullWidth
+                    ? styles.segmentActiveFull
+                    : styles.segmentActive),
+                active && activeOverride,
               ]}
             >
-              <Text allowFontScaling={false} style={[styles.label, isFullWidth && styles.labelFull]}>
+              <Text
+                allowFontScaling={false}
+                style={[styles.label, isFullWidth && styles.labelFull]}
+              >
                 {opt.label}
               </Text>
             </TouchableOpacity>
