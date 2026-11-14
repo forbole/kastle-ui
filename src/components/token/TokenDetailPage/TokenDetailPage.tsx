@@ -170,6 +170,24 @@ export interface TokenDetailPageProps {
    * keeps today's KCC20-only rule. `variant="basic"` ignores this prop.
    */
   showSecurity?: boolean;
+  /**
+   * Forwarded as `size` to every Token Info `DetailKVRow`. Omitted →
+   * DetailKVRow's default `"md"` (today's look). `"sm"` is the 14/21 label
+   * of Figma 11447:124705.
+   */
+  rowSize?: "sm" | "md";
+  /**
+   * Forwarded as `labelTone` to every Token Info `DetailKVRow`. Omitted →
+   * DetailKVRow's default `"secondary"` (today's grey). `"primary"` is the
+   * white label of Figma 11447:124705.
+   */
+  rowLabelTone?: "primary" | "secondary";
+  /**
+   * Price line as a node (e.g. `<SubscriptPrice value={0.00000052} />`).
+   * Rendered in place of `priceLabel` when set; omitted → `priceLabel`'s
+   * plain text, unchanged.
+   */
+  priceNode?: React.ReactNode;
 }
 
 /**
@@ -220,6 +238,9 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   segmentedActiveBackground,
   segmentedActiveBorderRadius,
   showSecurity = true,
+  rowSize,
+  rowLabelTone,
+  priceNode,
 }) => {
   // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
   // ERC20 (and Native) can never show the checkmark or "Verified" status,
@@ -247,6 +268,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           label="Network"
           value={network}
           paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
         />
       ),
     },
@@ -257,6 +280,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           label={row.label}
           value={row.value}
           paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
         />
       ),
     })),
@@ -267,6 +292,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           label={idLabel}
           value={covenantId}
           paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
         />
       ),
     },
@@ -301,6 +328,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               </View>
             }
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -313,6 +342,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Mint Count"
             value={mintCount}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -325,6 +356,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Holder Count"
             value={holderCount}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -337,6 +370,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Transfer Count"
             value={transferCount}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -349,6 +384,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Preallocation Amount"
             value={preallocationAmount}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -361,6 +398,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Default Mint Amount"
             value={defaultMintAmount}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -373,6 +412,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Decimal"
             value={decimal}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -385,6 +426,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             label="Minter"
             value={minter}
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
@@ -398,6 +441,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           label={row.label}
           value={row.value}
           paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
         />
       ),
     });
@@ -415,6 +460,8 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             ) : undefined
           }
           paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
         />
       ),
     });
@@ -478,7 +525,9 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
                     {subtitle}
                   </Text>
                 )}
-                {!!priceLabel && (
+                {priceNode != null ? (
+                  priceNode
+                ) : !!priceLabel ? (
                   <Text
                     allowFontScaling={false}
                     style={[textStyles.bodyNormalSM, styles.priceLabel]}
@@ -486,7 +535,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
                   >
                     {priceLabel}
                   </Text>
-                )}
+                ) : null}
               </View>
             </View>
             <View style={styles.headerRight}>

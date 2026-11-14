@@ -62,14 +62,15 @@ export interface DetailKVRowProps {
   paddingVertical?: number;
   /**
    * Label colour. `"secondary"` → `colors.textSecondary` (#9EB7C4);
-   * `"primary"` → `colors.textPrimary` (#FFFFFF). Default follows `size`:
-   * `"secondary"` for `md` (today's look), `"primary"` for `sm`.
+   * `"primary"` → `colors.textPrimary` (#FFFFFF). Default `"secondary"`
+   * (today's look) at every `size` — independent of `size`; pass
+   * `labelTone="primary"` explicitly for the white label.
    */
   labelTone?: "primary" | "secondary";
   /**
    * Row text scale. `"md"` (default) is today's look, unchanged.
    * `"sm"` (Figma 11447:124705, token detail Table rows): label
-   * `textStyles.bodyNormalSM` (14 / 21) in `colors.textPrimary`, subtext in
+   * `textStyles.bodyNormalSM` (14 / 21) (colour from `labelTone`), subtext in
    * `typography.t600` (#9EB7C4). The value keeps its own style in both sizes.
    */
   size?: "sm" | "md";
@@ -85,7 +86,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   onPressValue,
   paddingVertical,
   size = "md",
-  labelTone = size === "sm" ? "primary" : "secondary",
+  labelTone = "secondary",
 }) => {
   const isSmall = size === "sm";
   // `onPressValue` set → `colors.primary` (blue link); otherwise → `colors.textPrimary`.
