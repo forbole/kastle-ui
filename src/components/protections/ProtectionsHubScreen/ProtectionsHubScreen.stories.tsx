@@ -51,11 +51,48 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * No vault yet (Figma 12744:292828) — the Vault card sells the feature:
- * full caption + Set up.
+ * No vault yet, never scanned (Figma 14889:414383) — the Vault card sells
+ * the feature: full caption + Set up, plus the "Find it now" link for
+ * someone who thinks they already have one.
  */
 export const NoVaultYet: Story = {
-  args: { cards: CARDS },
+  args: {
+    cards: [{ ...CARDS[0], onFindVault: () => {} }, ...CARDS.slice(1)],
+  },
+};
+
+/**
+ * Discovery running (Figma 14882:407025), step 1 — Nicole asked for this
+ * composed at hub level too (an earlier round of this file said Finding/
+ * Paused wouldn't be repeated here since they're ProtectionTypeCard's own
+ * stories; this one overrides that call). Paused is still not repeated —
+ * Nicole didn't ask for it here.
+ */
+export const Finding: Story = {
+  args: {
+    cards: [
+      {
+        ...CARDS[0],
+        discovery: { title: "Finding your vaults", step: 1, stepLabel: "Checking your addresses" },
+      },
+      ...CARDS.slice(1),
+    ],
+  },
+};
+
+/**
+ * Scan finished, no vault found — Figma 14882:410159 exactly: icon +
+ * message below Set up, no divider, no Find it now. The result toast ("no
+ * vault found on this wallet") is app-side (kastle-mobile
+ * useToastMessage), not drawn here.
+ */
+export const NotFound: Story = {
+  args: {
+    cards: [
+      { ...CARDS[0], notFoundResult: {} },
+      ...CARDS.slice(1),
+    ],
+  },
 };
 
 /** Vaults exist and all are locked — status pill, no CTA (Figma 13385:419530). */

@@ -34,8 +34,9 @@ export const Default: Story = {
 };
 
 /**
- * Scanning (Figma 13385:267708) — Available resolved; the Locked row reports
- * "Scanning for vaults..." in textSecondary with no balance yet.
+ * Scanning (Figma 14882:407176 / 407540) — Available resolved; the Locked
+ * row reports "Scanning for vaults..." with no balance yet. Tappable, with
+ * a chevron, same as the resolved row.
  */
 export const Scanning: Story = {
   args: {
@@ -47,6 +48,20 @@ export const Scanning: Story = {
 /** Loading (Figma 13385:269388) — both balances render as skeletons. */
 export const Loading: Story = {
   args: { state: "loading" },
+};
+
+/**
+ * ⚠️ Just found a vault (Figma 14889:415114) — a small `primary.p500` dot
+ * (confirmed binding) appears before the Locked value. Figma draws it with
+ * no stated meaning; flagged to Nicole rather than guessed at.
+ */
+export const JustFound: Story = {
+  args: {
+    state: "default",
+    availableValue: "$500.54",
+    lockedValue: "$12,000.3787",
+    lockedJustUpdated: true,
+  },
 };
 
 const styles = StyleSheet.create({
