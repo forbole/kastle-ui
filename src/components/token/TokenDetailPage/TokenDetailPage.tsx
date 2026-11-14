@@ -1,5 +1,11 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, ImageSourcePropType } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ImageSourcePropType,
+} from "react-native";
 import { BadgeCheck } from "lucide-react-native";
 import {
   background,
@@ -148,6 +154,22 @@ export interface TokenDetailPageProps {
    * caller pads its own rows (20 horizontal) — this wrapper adds no padding.
    */
   historyContent?: React.ReactNode;
+
+  /**
+   * Tabs stretch to the page width (extension AssetTabs look) — default `true`,
+   * today's behaviour. `false` renders Segmented's hug-width pill instead.
+   */
+  segmentedFullWidth?: boolean;
+  /** Forwarded to `Segmented.activeBackground`. Omitted → Segmented's default fill. */
+  segmentedActiveBackground?: string;
+  /** Forwarded to `Segmented.activeBorderRadius`. Omitted → Segmented's default radius. */
+  segmentedActiveBorderRadius?: number;
+  /**
+   * `variant="full"` only: `false` omits the Security row even for KCC20
+   * (Figma 11447:124705 draws no Security row). Default `true` — the row
+   * keeps today's KCC20-only rule. `variant="basic"` ignores this prop.
+   */
+  showSecurity?: boolean;
 }
 
 /**
@@ -194,6 +216,10 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   activeTab,
   onTabChange,
   historyContent,
+  segmentedFullWidth = true,
+  segmentedActiveBackground,
+  segmentedActiveBorderRadius,
+  showSecurity = true,
 }) => {
   // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
   // ERC20 (and Native) can never show the checkmark or "Verified" status,
@@ -204,7 +230,9 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // is hidden (not just its value) for Native/KRC20/ERC20. For KCC20 it is
   // always shown: "Verified" + checkmark, or plain "Unverified" (Nicole,
   // 2026-11-13).
-  const showSecurityRow = standard === "KCC20";
+  // `showSecurity={false}` opts the full variant out of the row entirely.
+  const showSecurityRow =
+    standard === "KCC20" && (variant !== "full" || showSecurity);
 
   // Token Info rows, built as an array (round 5 queued item B, 2026-09-26)
   // so the border-between-rows logic (every row but the last) works the
@@ -212,12 +240,36 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // old hardcoded "covenantId gets a border only if Security follows" —
   // that only worked because basic was always exactly 2-or-3 rows.
   const infoRows: { key: string; node: React.ReactNode }[] = [
-    { key: "network", node: <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} /> },
+    {
+      key: "network",
+      node: (
+        <DetailKVRow
+          label="Network"
+          value={network}
+          paddingVertical={spacing.s3_5}
+        />
+      ),
+    },
     ...(rowsAfterNetwork ?? []).map((row) => ({
       key: `after-network-${row.label}`,
-      node: <DetailKVRow label={row.label} value={row.value} paddingVertical={spacing.s3_5} />,
+      node: (
+        <DetailKVRow
+          label={row.label}
+          value={row.value}
+          paddingVertical={spacing.s3_5}
+        />
+      ),
     })),
-    { key: "covenantId", node: <DetailKVRow label={idLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
+    {
+      key: "covenantId",
+      node: (
+        <DetailKVRow
+          label={idLabel}
+          value={covenantId}
+          paddingVertical={spacing.s3_5}
+        />
+      ),
+    },
   ];
   if (variant === "full") {
     if (totalMintedPercent !== undefined) {
@@ -229,11 +281,20 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             value=""
             valueNode={
               <View style={styles.totalMintedValue}>
-                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.totalMintedPercent]}>
+                <Text
+                  allowFontScaling={false}
+                  style={[textStyles.bodyNormalSM, styles.totalMintedPercent]}
+                >
                   {totalMintedPercent}
                 </Text>
                 {!!totalMintedFraction && (
-                  <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.totalMintedFraction]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[
+                      textStyles.bodyNormalXS,
+                      styles.totalMintedFraction,
+                    ]}
+                  >
                     {totalMintedFraction}
                   </Text>
                 )}
@@ -245,31 +306,100 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
       });
     }
     if (mintCount !== undefined) {
-      infoRows.push({ key: "mintCount", node: <DetailKVRow label="Mint Count" value={mintCount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "mintCount",
+        node: (
+          <DetailKVRow
+            label="Mint Count"
+            value={mintCount}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
     if (holderCount !== undefined) {
-      infoRows.push({ key: "holderCount", node: <DetailKVRow label="Holder Count" value={holderCount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "holderCount",
+        node: (
+          <DetailKVRow
+            label="Holder Count"
+            value={holderCount}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
     if (transferCount !== undefined) {
-      infoRows.push({ key: "transferCount", node: <DetailKVRow label="Transfer Count" value={transferCount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "transferCount",
+        node: (
+          <DetailKVRow
+            label="Transfer Count"
+            value={transferCount}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
     if (preallocationAmount !== undefined) {
-      infoRows.push({ key: "preallocationAmount", node: <DetailKVRow label="Preallocation Amount" value={preallocationAmount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "preallocationAmount",
+        node: (
+          <DetailKVRow
+            label="Preallocation Amount"
+            value={preallocationAmount}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
     if (defaultMintAmount !== undefined) {
-      infoRows.push({ key: "defaultMintAmount", node: <DetailKVRow label="Default Mint Amount" value={defaultMintAmount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "defaultMintAmount",
+        node: (
+          <DetailKVRow
+            label="Default Mint Amount"
+            value={defaultMintAmount}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
     if (decimal !== undefined) {
-      infoRows.push({ key: "decimal", node: <DetailKVRow label="Decimal" value={decimal} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "decimal",
+        node: (
+          <DetailKVRow
+            label="Decimal"
+            value={decimal}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
     if (minter !== undefined) {
-      infoRows.push({ key: "minter", node: <DetailKVRow label="Minter" value={minter} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "minter",
+        node: (
+          <DetailKVRow
+            label="Minter"
+            value={minter}
+            paddingVertical={spacing.s3_5}
+          />
+        ),
+      });
     }
   }
   extraRows?.forEach((row) => {
     infoRows.push({
       key: `extra-${row.label}`,
-      node: <DetailKVRow label={row.label} value={row.value} paddingVertical={spacing.s3_5} />,
+      node: (
+        <DetailKVRow
+          label={row.label}
+          value={row.value}
+          paddingVertical={spacing.s3_5}
+        />
+      ),
     });
   });
   if (showSecurityRow) {
@@ -279,7 +409,11 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
         <DetailKVRow
           label="Security"
           value={showVerified ? "Verified" : "Unverified"}
-          valuePrefix={showVerified ? <BadgeCheck size={16} color={primary.p500} strokeWidth={2} /> : undefined}
+          valuePrefix={
+            showVerified ? (
+              <BadgeCheck size={16} color={primary.p500} strokeWidth={2} />
+            ) : undefined
+          }
           paddingVertical={spacing.s3_5}
         />
       ),
@@ -292,7 +426,14 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           gutters, like the extension's History | Token info bar
           (kastle components/AssetTabs.tsx, flex-grow tabs). */}
       <View style={styles.segmentedWrap}>
-        <Segmented isFullWidth options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
+        <Segmented
+          isFullWidth={segmentedFullWidth}
+          activeBackground={segmentedActiveBackground}
+          activeBorderRadius={segmentedActiveBorderRadius}
+          options={TABS}
+          value={activeTab}
+          onChange={(v) => onTabChange(v as "history" | "assetInfo")}
+        />
       </View>
 
       {activeTab === "assetInfo" ? (
@@ -309,27 +450,51 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
               children, which is what this used to be. */}
           <View style={styles.headerCard}>
             <View style={styles.headerLeft}>
-              <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
+              <AssetImage
+                variant="chain"
+                tokenImage={logo}
+                chainImage={chainLogo}
+                fallback={fallback}
+                standard={standard}
+                tokenImageSize={44}
+                chainImageSize={20}
+              />
               <View style={styles.headerText}>
                 <View style={styles.nameRow}>
-                  <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[textStyles.bodySemiboldLG, styles.name]}
+                    numberOfLines={1}
+                  >
                     {name}
                   </Text>
                 </View>
                 {!!subtitle && (
-                  <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[textStyles.bodyNormalSM, styles.priceLabel]}
+                    numberOfLines={1}
+                  >
                     {subtitle}
                   </Text>
                 )}
                 {!!priceLabel && (
-                  <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[textStyles.bodyNormalSM, styles.priceLabel]}
+                    numberOfLines={1}
+                  >
                     {priceLabel}
                   </Text>
                 )}
               </View>
             </View>
             <View style={styles.headerRight}>
-              <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
+              <NetworkTypeChip
+                label={chipLabel}
+                icon={chipIcon}
+                standard={standard}
+              />
             </View>
           </View>
 
@@ -339,7 +504,13 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             </Text>
             <View style={styles.infoCard}>
               {infoRows.map((row, i) => (
-                <View key={row.key} style={[styles.infoRow, i < infoRows.length - 1 && styles.infoRowBorder]}>
+                <View
+                  key={row.key}
+                  style={[
+                    styles.infoRow,
+                    i < infoRows.length - 1 && styles.infoRowBorder,
+                  ]}
+                >
                   {row.node}
                 </View>
               ))}

@@ -1,7 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ExternalLink, TriangleAlert } from "lucide-react-native";
-import { colors, spacing, textStyles, typography, warning } from "../../../../config/theme";
+import {
+  colors,
+  spacing,
+  textStyles,
+  typography,
+  warning,
+} from "../../../../config/theme";
 
 export interface DetailKVRowProps {
   label: string;
@@ -54,6 +60,19 @@ export interface DetailKVRowProps {
    * (14) in Figma — pass `spacing.s3_5` there, not a raw number.
    */
   paddingVertical?: number;
+  /**
+   * Label colour. `"secondary"` → `colors.textSecondary` (#9EB7C4);
+   * `"primary"` → `colors.textPrimary` (#FFFFFF). Default follows `size`:
+   * `"secondary"` for `md` (today's look), `"primary"` for `sm`.
+   */
+  labelTone?: "primary" | "secondary";
+  /**
+   * Row text scale. `"md"` (default) is today's look, unchanged.
+   * `"sm"` (Figma 11447:124705, token detail Table rows): label
+   * `textStyles.bodyNormalSM` (14 / 21) in `colors.textPrimary`, subtext in
+   * `typography.t600` (#9EB7C4). The value keeps its own style in both sizes.
+   */
+  size?: "sm" | "md";
 }
 
 export const DetailKVRow: React.FC<DetailKVRowProps> = ({
@@ -65,7 +84,10 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
   valueSubtextTone = "default",
   onPressValue,
   paddingVertical,
+  size = "md",
+  labelTone = size === "sm" ? "primary" : "secondary",
 }) => {
+  const isSmall = size === "sm";
   // `onPressValue` set → `colors.primary` (blue link); otherwise → `colors.textPrimary`.
   const resolvedValueColor = onPressValue ? colors.primary : colors.textPrimary;
 
@@ -78,6 +100,7 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
       style={[
         textStyles.bodyNormalXS,
         styles.valueSubtext,
+        isSmall && styles.valueSubtextSm,
         isWarningSubtext && styles.valueSubtextWarning,
       ]}
     >
@@ -104,7 +127,16 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
 
   const content = (
     <>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalMDRelaxed, styles.label]}>{label}</Text>
+      <Text
+        allowFontScaling={false}
+        style={[
+          isSmall ? textStyles.bodyNormalSM : textStyles.bodyNormalMDRelaxed,
+          styles.label,
+          labelTone === "primary" && styles.labelPrimary,
+        ]}
+      >
+        {label}
+      </Text>
       <View style={styles.valueColumn}>
         <View style={styles.valueWrap}>
           {onPressValue && (
@@ -127,7 +159,11 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
               // wrapping there is correct.)
               numberOfLines={1}
               ellipsizeMode="tail"
-              style={[textStyles.bodyNormalMDRelaxed, styles.value, { color: resolvedValueColor }]}
+              style={[
+                textStyles.bodyNormalMDRelaxed,
+                styles.value,
+                { color: resolvedValueColor },
+              ]}
             >
               {value}
             </Text>
@@ -138,7 +174,10 @@ export const DetailKVRow: React.FC<DetailKVRowProps> = ({
     </>
   );
 
-  const rowStyle = [styles.row, paddingVertical !== undefined && { paddingVertical }];
+  const rowStyle = [
+    styles.row,
+    paddingVertical !== undefined && { paddingVertical },
+  ];
 
   if (onPressValue) {
     return (
@@ -166,6 +205,9 @@ const styles = StyleSheet.create({
   label: {
     color: colors.textSecondary,
     flexShrink: 0,
+  },
+  labelPrimary: {
+    color: colors.textPrimary,
   },
   valueColumn: {
     flexDirection: "column",
@@ -212,6 +254,9 @@ const styles = StyleSheet.create({
   valueSubtext: {
     color: typography.t700,
     textAlign: "right",
+  },
+  valueSubtextSm: {
+    color: typography.t600, // #9EB7C4
   },
   // Mirrors `ActivityDetailSheet.stories.tsx` → `styles.alertRow` verbatim, so the
   // two renderings of this line are identical.
