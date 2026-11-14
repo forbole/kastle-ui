@@ -17,17 +17,23 @@ import {
   typography,
   white,
   borderRadius,
+  fontFamilies,
+  fontSize,
+  fontWeight,
 } from "../../../config/theme";
 import { Info, ChevronUp, ChevronDown, TriangleAlert } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
+import { SignOutputsCard, SignOutputRow } from "../SignOutputsCard";
 
 export interface KaspaSignTransactionRow {
   label: string;
   value: string;
   subValue?: string;
+  /** Bold label + larger amount for the headline summary row (e.g. "Change to your balance") */
+  isEmphasized?: boolean;
   /** If provided, shows an info icon that opens a detail sheet on tap */
   info?: {
     title: string;
@@ -47,7 +53,11 @@ export interface KaspaSignTxSheetProps {
   networkBadge?: string;
   /** Sender address */
   fromAddress?: string;
-  /** Transaction detail rows */
+  /** Output rows (label on top, shortened address below, amount right). One card, rendered in order. */
+  outputs?: SignOutputRow[];
+  /** One-line explainer under the outputs card, e.g. for an unrecognized script */
+  outputsNote?: string;
+  /** Summary rows (change, fee, total…) in a card below the outputs, rendered in order */
   rows?: KaspaSignTransactionRow[];
   /** Raw JSON string shown in the expandable "Raw Details" section */
   rawDetails?: string;
@@ -89,12 +99,12 @@ const TransactionRow: React.FC<{
   >
     {/* Label column */}
     <View style={styles.tableLabel}>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableLabelText]}>{row.label}</Text>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableLabelText, row.isEmphasized && textStyles.bodySemiboldSM]}>{row.label}</Text>
       {row.info && <InfoIcon />}
     </View>
     {/* Value column */}
     <View style={styles.tableValue}>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableValueText]}>{row.value}</Text>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableValueText, row.isEmphasized && styles.tableValueEmphasized]}>{row.value}</Text>
       {row.subValue ? (
         <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tableSubValueText]}>{row.subValue}</Text>
       ) : null}
@@ -114,6 +124,8 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
   appIcon,
   networkBadge = "Kaspa",
   fromAddress,
+  outputs = [],
+  outputsNote,
   rows = [],
   rawDetails,
   estFees,
@@ -123,6 +135,7 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
   const [rawExpanded, setRawExpanded] = useState(false);
   const [activeInfoRow, setActiveInfoRow] = useState<KaspaSignTransactionRow | null>(null);
   const [estFeeOpen, setEstFeeOpen] = useState(false);
+  const [activeOutput, setActiveOutput] = useState<SignOutputRow | null>(null);
   const [isSigning, setIsSigning] = useState(false);
   const swipeRef = useRef<SwipeToConfirmRef>(null);
 
@@ -188,6 +201,13 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
               </View>
             ) : null}
 
+            {/* Outputs */}
+            <SignOutputsCard
+              rows={outputs}
+              note={outputsNote}
+              onRowPress={setActiveOutput}
+            />
+
             {/* Transaction table */}
             {rows.length > 0 ? (
               <View style={styles.tableCard}>
@@ -252,6 +272,14 @@ export const KaspaSignTxSheet: React.FC<KaspaSignTxSheetProps> = ({
           onClose={() => setActiveInfoRow(null)}
           title={activeInfoRow?.info?.title ?? ""}
           description={activeInfoRow?.info?.description ?? ""}
+        />
+
+        {/* Output full-address sub-sheet */}
+        <InfoSheet
+          isOpen={!!activeOutput}
+          onClose={() => setActiveOutput(null)}
+          title={activeOutput?.label ?? ""}
+          description={activeOutput?.fullAddress ?? ""}
         />
 
         {/* Est. Fee sub-sheet */}
@@ -435,6 +463,11 @@ const styles = StyleSheet.create({
   tableValueText: {
     color: typography.t900,
     textAlign: "right",
+  },
+  tableValueEmphasized: {
+    fontFamily: fontFamilies["700"],
+    fontWeight: fontWeight.bold,
+    fontSize: fontSize.md,
   },
   tableSubValueText: {
     color: typography.t600,
