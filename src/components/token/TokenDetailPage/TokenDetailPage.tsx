@@ -24,11 +24,6 @@ import { Segmented, SegmentedOption } from "../../Segmented";
 import { NetworkTypeChip } from "../../NetworkTypeChip";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow";
 
-const TABS: SegmentedOption[] = [
-  { label: "History", value: "history" },
-  { label: "Token info", value: "assetInfo" },
-];
-
 export interface TokenDetailPageProps {
   /** Token name shown in the header, e.g. "NACHO". */
   name: string;
@@ -188,6 +183,15 @@ export interface TokenDetailPageProps {
    * plain text, unchanged.
    */
   priceNode?: React.ReactNode;
+  /**
+   * Label of the first (History) tab. Omitted → `"History"` (today's label).
+   */
+  historyTabLabel?: string;
+  /**
+   * Label of the second (Token Info) tab. Omitted → `"Token info"` (today's
+   * label). Figma 11447:124705 draws it as `"Asset Info"`.
+   */
+  infoTabLabel?: string;
 }
 
 /**
@@ -241,7 +245,13 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   rowSize,
   rowLabelTone,
   priceNode,
+  historyTabLabel = "History",
+  infoTabLabel = "Token info",
 }) => {
+  const tabs: SegmentedOption[] = [
+    { label: historyTabLabel, value: "history" },
+    { label: infoTabLabel, value: "assetInfo" },
+  ];
   // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
   // ERC20 (and Native) can never show the checkmark or "Verified" status,
   // even if the caller passes isVerified=true. Enforced here, not left to
@@ -477,7 +487,7 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
           isFullWidth={segmentedFullWidth}
           activeBackground={segmentedActiveBackground}
           activeBorderRadius={segmentedActiveBorderRadius}
-          options={TABS}
+          options={tabs}
           value={activeTab}
           onChange={(v) => onTabChange(v as "history" | "assetInfo")}
         />
