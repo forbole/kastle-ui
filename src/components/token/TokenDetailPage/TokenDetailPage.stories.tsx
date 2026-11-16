@@ -298,7 +298,8 @@ export const FullInfoKasplexERC20: Story = {
  * (`showSecurity={false}`, full variant only). No 8%-white token exists in
  * theme.ts, so the design's value is passed literally. Rows use the 14/21
  * white label (`rowSize="sm"` + `rowLabelTone="primary"`) and the header
- * price is `SubscriptPrice` (`$0.0₅52`) via `priceNode`.
+ * price is `SubscriptPrice` (`$0.0₅52`) via `priceNode`. The second tab reads
+ * "Asset Info" (`infoTabLabel`).
  */
 export const FullInfoEvmDesign: Story = {
   name: "Full info — EVM design (11447:124705)",
@@ -321,6 +322,7 @@ export const FullInfoEvmDesign: Story = {
       decimal="18"
       rowSize="sm"
       rowLabelTone="primary"
+      infoTabLabel="Asset Info"
     />
   ),
 };
