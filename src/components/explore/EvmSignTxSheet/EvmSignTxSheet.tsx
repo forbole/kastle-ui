@@ -16,17 +16,23 @@ import {
   typography,
   white,
   borderRadius,
+  fontFamilies,
+  fontSize,
+  fontWeight,
 } from "../../../config/theme";
 import { Info, ChevronUp, ChevronDown } from "lucide-react-native";
 import { ActionSheet } from "../../ActionSheet";
 import { InfoSheet } from "../../InfoSheet";
 import { EstFeeSheet, EstFeeRow } from "../../EstFeeSheet";
 import { SwipeToConfirm, SwipeToConfirmRef } from "../../SwipeToConfirm";
+import { SignOutputsCard, SignOutputRow } from "../SignOutputsCard";
 
 export interface EvmSignTransactionRow {
   label: string;
   value: string;
   subValue?: string;
+  /** Bold label + larger amount for the headline summary row */
+  isEmphasized?: boolean;
   /** If provided, shows an info icon that opens a detail sheet on tap */
   info?: {
     title: string;
@@ -48,7 +54,11 @@ export interface EvmSignTxSheetProps {
   fromAddress?: string;
   /** To address (hex) — can be a contract or a plain recipient */
   toAddress?: string;
-  /** Transaction detail rows */
+  /** Output rows (label on top, shortened address below, amount right). One card, rendered in order. */
+  outputs?: SignOutputRow[];
+  /** One-line explainer under the outputs card */
+  outputsNote?: string;
+  /** Summary rows (fee, total…) in a card below the outputs, rendered in order */
   rows?: EvmSignTransactionRow[];
   /** Raw JSON / hex data shown in the expandable "Raw Details" section */
   rawDetails?: string;
@@ -97,12 +107,12 @@ const TransactionRow: React.FC<{
   >
     {/* Label column */}
     <View style={styles.tableLabel}>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableLabelText]}>{row.label}</Text>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableLabelText, row.isEmphasized && textStyles.bodySemiboldSM]}>{row.label}</Text>
       {row.info && <InfoIcon />}
     </View>
     {/* Value column */}
     <View style={styles.tableValue}>
-      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableValueText]}>{row.value}</Text>
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.tableValueText, row.isEmphasized && styles.tableValueEmphasized]}>{row.value}</Text>
       {row.subValue ? (
         <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.tableSubValueText]}>{row.subValue}</Text>
       ) : null}
@@ -123,6 +133,8 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
   networkBadge = "Kasplex",
   fromAddress,
   toAddress,
+  outputs = [],
+  outputsNote,
   rows = [],
   rawDetails,
   estFees,
@@ -132,6 +144,7 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
   const [activeInfoRow, setActiveInfoRow] =
     useState<EvmSignTransactionRow | null>(null);
   const [estFeeOpen, setEstFeeOpen] = useState(false);
+  const [activeOutput, setActiveOutput] = useState<SignOutputRow | null>(null);
   const [isSigning, setIsSigning] = useState(false);
   const swipeRef = useRef<SwipeToConfirmRef>(null);
 
@@ -207,6 +220,13 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
                 />
               ) : null}
 
+              {/* Outputs */}
+              <SignOutputsCard
+                rows={outputs}
+                note={outputsNote}
+                onRowPress={setActiveOutput}
+              />
+
               {/* Transaction table */}
               {rows.length > 0 ? (
                 <View style={styles.tableCard}>
@@ -266,6 +286,14 @@ export const EvmSignTxSheet: React.FC<EvmSignTxSheetProps> = ({
             onClose={() => setActiveInfoRow(null)}
             title={activeInfoRow?.info?.title ?? ""}
             description={activeInfoRow?.info?.description ?? ""}
+          />
+
+          {/* Output full-address sub-sheet */}
+          <InfoSheet
+            isOpen={!!activeOutput}
+            onClose={() => setActiveOutput(null)}
+            title={activeOutput?.label ?? ""}
+            description={activeOutput?.fullAddress ?? ""}
           />
 
           {/* Est. Fee sub-sheet */}
@@ -446,6 +474,11 @@ const styles = StyleSheet.create({
   tableValueText: {
     color: typography.t900,
     textAlign: "right",
+  },
+  tableValueEmphasized: {
+    fontFamily: fontFamilies["700"],
+    fontWeight: fontWeight.bold,
+    fontSize: fontSize.md,
   },
   tableSubValueText: {
     color: typography.t600,

@@ -1,5 +1,11 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, ImageSourcePropType } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ImageSourcePropType,
+} from "react-native";
 import { BadgeCheck } from "lucide-react-native";
 import {
   background,
@@ -18,26 +24,33 @@ import { Segmented, SegmentedOption } from "../../Segmented";
 import { NetworkTypeChip } from "../../NetworkTypeChip";
 import { DetailKVRow } from "../../swap-bridge-activity/components/DetailKVRow";
 
-const TABS: SegmentedOption[] = [
-  { label: "History", value: "history" },
-  { label: "Asset Info", value: "assetInfo" },
-];
-
 export interface TokenDetailPageProps {
   /** Token name shown in the header, e.g. "NACHO". */
   name: string;
+  /** Optional second line under the name (e.g. the token's full name when `name` carries the symbol). */
+  subtitle?: string;
   /** Price line under the name, e.g. "$0.00041". */
   priceLabel?: string;
+  /**
+   * Extra Token Info rows (label / value, caller-formatted), e.g. Standard,
+   * Price, Value. Rendered after the standard rows and before Security, in
+   * the order given. Pure display: the page does no formatting or hiding.
+   */
+  extraRows?: { label: string; value: string }[];
+  /**
+   * Rows between Network and the ID row (label / value, caller-formatted),
+   * e.g. Standard, Decimals — the extension's order. Pure display.
+   */
+  rowsAfterNetwork?: { label: string; value: string }[];
   logo?: ImageSourcePropType;
   /** Chain badge image — shown per `standard`, see AssetImage's `variant="chain"` (D-071). */
   chainLogo?: ImageSourcePropType;
   fallback?: ImageSourcePropType;
-  /** Shows the verified checkmark next to the name AND drives the
-   * "Security" row (Verified with a checkmark / plain "Unverified", no
-   * colour change — Figma nodes 14745:449924 / 14745:450123). Only ever
-   * takes effect for `standard === "KCC20"` (Leo sync, 2026-09-25:
-   * verification only exists for KCC20 — KRC20/ERC20 can never be
-   * verified) — enforced here regardless of what's passed. */
+  /** Drives the "Security" row's value: "Verified" with a checkmark when
+   * true, plain "Unverified" when false. The row itself shows for KCC20
+   * only. Verification only exists for KCC20 (Leo sync, 2026-09-25) —
+   * KRC20/ERC20 never show the row. No badge is drawn next to the token
+   * name in the header (Nicole, 2026-11-13). */
   isVerified?: boolean;
   /** Drives the header icon's chain-badge (D-071) and the header chip's icon. */
   standard: TokenStandard;
@@ -126,8 +139,59 @@ export interface TokenDetailPageProps {
    * Content shown under the "History" tab. Left as a slot — history is a
    * transaction list, which is data, not pure UI; this component doesn't
    * fetch or own that data.
+   *
+   * CONTRACT: this node is rendered in a `flex: 1` View, NOT inside a
+   * ScrollView. It must be its own scroller (e.g. a FlatList with its own
+   * `onEndReached`) and fill the available height. Do not pass a
+   * non-scrolling tall column — it will be clipped. Per Figma (node
+   * 2192:366853) the History tab shows only the segmented control above the
+   * list; the token header card appears on the Token Info tab only. The
+   * caller pads its own rows (20 horizontal) — this wrapper adds no padding.
    */
   historyContent?: React.ReactNode;
+
+  /**
+   * Tabs stretch to the page width (extension AssetTabs look) — default `true`,
+   * today's behaviour. `false` renders Segmented's hug-width pill instead.
+   */
+  segmentedFullWidth?: boolean;
+  /** Forwarded to `Segmented.activeBackground`. Omitted → Segmented's default fill. */
+  segmentedActiveBackground?: string;
+  /** Forwarded to `Segmented.activeBorderRadius`. Omitted → Segmented's default radius. */
+  segmentedActiveBorderRadius?: number;
+  /**
+   * `variant="full"` only: `false` omits the Security row even for KCC20
+   * (Figma 11447:124705 draws no Security row). Default `true` — the row
+   * keeps today's KCC20-only rule. `variant="basic"` ignores this prop.
+   */
+  showSecurity?: boolean;
+  /**
+   * Forwarded as `size` to every Token Info `DetailKVRow`. Omitted →
+   * DetailKVRow's default `"md"` (today's look). `"sm"` is the 14/21 label
+   * of Figma 11447:124705.
+   */
+  rowSize?: "sm" | "md";
+  /**
+   * Forwarded as `labelTone` to every Token Info `DetailKVRow`. Omitted →
+   * DetailKVRow's default `"secondary"` (today's grey). `"primary"` is the
+   * white label of Figma 11447:124705.
+   */
+  rowLabelTone?: "primary" | "secondary";
+  /**
+   * Price line as a node (e.g. `<SubscriptPrice value={0.00000052} />`).
+   * Rendered in place of `priceLabel` when set; omitted → `priceLabel`'s
+   * plain text, unchanged.
+   */
+  priceNode?: React.ReactNode;
+  /**
+   * Label of the first (History) tab. Omitted → `"History"` (today's label).
+   */
+  historyTabLabel?: string;
+  /**
+   * Label of the second (Token Info) tab. Omitted → `"Token info"` (today's
+   * label). Figma 11447:124705 draws it as `"Asset Info"`.
+   */
+  infoTabLabel?: string;
 }
 
 /**
@@ -147,7 +211,10 @@ export interface TokenDetailPageProps {
  */
 export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   name,
+  subtitle,
   priceLabel,
+  extraRows,
+  rowsAfterNetwork,
   logo,
   chainLogo,
   fallback,
@@ -171,16 +238,32 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   activeTab,
   onTabChange,
   historyContent,
+  segmentedFullWidth = true,
+  segmentedActiveBackground,
+  segmentedActiveBorderRadius,
+  showSecurity = true,
+  rowSize,
+  rowLabelTone,
+  priceNode,
+  historyTabLabel = "History",
+  infoTabLabel = "Token info",
 }) => {
+  const tabs: SegmentedOption[] = [
+    { label: historyTabLabel, value: "history" },
+    { label: infoTabLabel, value: "assetInfo" },
+  ];
   // Leo sync, 2026-09-25: verified only ever exists for KCC20 — KRC20/
   // ERC20 (and Native) can never show the checkmark or "Verified" status,
   // even if the caller passes isVerified=true. Enforced here, not left to
   // the caller.
   const showVerified = isVerified && standard === "KCC20";
-  // Leo approved Nicole's proposal, round 3 (2026-09-26): the ✓ concept
-  // only exists on Token Details at all now — the Security row itself is
-  // hidden (not just its value) for Native/KRC20/ERC20, not only KCC20.
-  const showSecurityRow = standard === "KCC20";
+  // Leo approved Nicole's proposal, round 3 (2026-09-26): the Security row
+  // is hidden (not just its value) for Native/KRC20/ERC20. For KCC20 it is
+  // always shown: "Verified" + checkmark, or plain "Unverified" (Nicole,
+  // 2026-11-13).
+  // `showSecurity={false}` opts the full variant out of the row entirely.
+  const showSecurityRow =
+    standard === "KCC20" && (variant !== "full" || showSecurity);
 
   // Token Info rows, built as an array (round 5 queued item B, 2026-09-26)
   // so the border-between-rows logic (every row but the last) works the
@@ -188,8 +271,42 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
   // old hardcoded "covenantId gets a border only if Security follows" —
   // that only worked because basic was always exactly 2-or-3 rows.
   const infoRows: { key: string; node: React.ReactNode }[] = [
-    { key: "network", node: <DetailKVRow label="Network" value={network} paddingVertical={spacing.s3_5} /> },
-    { key: "covenantId", node: <DetailKVRow label={idLabel} value={covenantId} paddingVertical={spacing.s3_5} /> },
+    {
+      key: "network",
+      node: (
+        <DetailKVRow
+          label="Network"
+          value={network}
+          paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
+        />
+      ),
+    },
+    ...(rowsAfterNetwork ?? []).map((row) => ({
+      key: `after-network-${row.label}`,
+      node: (
+        <DetailKVRow
+          label={row.label}
+          value={row.value}
+          paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
+        />
+      ),
+    })),
+    {
+      key: "covenantId",
+      node: (
+        <DetailKVRow
+          label={idLabel}
+          value={covenantId}
+          paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
+        />
+      ),
+    },
   ];
   if (variant === "full") {
     if (totalMintedPercent !== undefined) {
@@ -201,43 +318,145 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
             value=""
             valueNode={
               <View style={styles.totalMintedValue}>
-                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.totalMintedPercent]}>
+                <Text
+                  allowFontScaling={false}
+                  style={[textStyles.bodyNormalSM, styles.totalMintedPercent]}
+                >
                   {totalMintedPercent}
                 </Text>
                 {!!totalMintedFraction && (
-                  <Text allowFontScaling={false} style={[textStyles.bodyNormalXS, styles.totalMintedFraction]}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[
+                      textStyles.bodyNormalXS,
+                      styles.totalMintedFraction,
+                    ]}
+                  >
                     {totalMintedFraction}
                   </Text>
                 )}
               </View>
             }
             paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
           />
         ),
       });
     }
     if (mintCount !== undefined) {
-      infoRows.push({ key: "mintCount", node: <DetailKVRow label="Mint Count" value={mintCount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "mintCount",
+        node: (
+          <DetailKVRow
+            label="Mint Count"
+            value={mintCount}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
     if (holderCount !== undefined) {
-      infoRows.push({ key: "holderCount", node: <DetailKVRow label="Holder Count" value={holderCount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "holderCount",
+        node: (
+          <DetailKVRow
+            label="Holder Count"
+            value={holderCount}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
     if (transferCount !== undefined) {
-      infoRows.push({ key: "transferCount", node: <DetailKVRow label="Transfer Count" value={transferCount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "transferCount",
+        node: (
+          <DetailKVRow
+            label="Transfer Count"
+            value={transferCount}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
     if (preallocationAmount !== undefined) {
-      infoRows.push({ key: "preallocationAmount", node: <DetailKVRow label="Preallocation Amount" value={preallocationAmount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "preallocationAmount",
+        node: (
+          <DetailKVRow
+            label="Preallocation Amount"
+            value={preallocationAmount}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
     if (defaultMintAmount !== undefined) {
-      infoRows.push({ key: "defaultMintAmount", node: <DetailKVRow label="Default Mint Amount" value={defaultMintAmount} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "defaultMintAmount",
+        node: (
+          <DetailKVRow
+            label="Default Mint Amount"
+            value={defaultMintAmount}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
     if (decimal !== undefined) {
-      infoRows.push({ key: "decimal", node: <DetailKVRow label="Decimal" value={decimal} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "decimal",
+        node: (
+          <DetailKVRow
+            label="Decimal"
+            value={decimal}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
     if (minter !== undefined) {
-      infoRows.push({ key: "minter", node: <DetailKVRow label="Minter" value={minter} paddingVertical={spacing.s3_5} /> });
+      infoRows.push({
+        key: "minter",
+        node: (
+          <DetailKVRow
+            label="Minter"
+            value={minter}
+            paddingVertical={spacing.s3_5}
+            size={rowSize}
+            labelTone={rowLabelTone}
+          />
+        ),
+      });
     }
   }
+  extraRows?.forEach((row) => {
+    infoRows.push({
+      key: `extra-${row.label}`,
+      node: (
+        <DetailKVRow
+          label={row.label}
+          value={row.value}
+          paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
+        />
+      ),
+    });
+  });
   if (showSecurityRow) {
     infoRows.push({
       key: "security",
@@ -245,8 +464,14 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
         <DetailKVRow
           label="Security"
           value={showVerified ? "Verified" : "Unverified"}
-          valuePrefix={showVerified ? <BadgeCheck size={16} color={primary.p500} strokeWidth={2} /> : undefined}
+          valuePrefix={
+            showVerified ? (
+              <BadgeCheck size={16} color={primary.p500} strokeWidth={2} />
+            ) : undefined
+          }
           paddingVertical={spacing.s3_5}
+          size={rowSize}
+          labelTone={rowLabelTone}
         />
       ),
     });
@@ -254,73 +479,107 @@ export const TokenDetailPage: React.FC<TokenDetailPageProps> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Tabs — above the header card, matching Figma's actual order
-            (reviewer correction, 2026-09-26): the segmented control sits in
-            the fixed top region (14745:449924's "Top nav", y 0-156), the
-            header card is below it in "KNS list" (y 180+).
-            Hug-width + horizontally centred (round 5 item 5, 2026-09-26):
-            confirmed via get_metadata on the "Token Header" frame — parent
-            width 393, "segmented control" instance x=104 width=185
-            ((393-185)/2 = 104, exact centre), NOT full-width. `Segmented`
-            itself stays unstyled for width (its `outer` View has no
-            alignSelf, same as CustomRpcScreen's usage) — the wrapping
-            `alignItems: "center"` here is what centres it, following the
-            same wrapper-controls-alignment convention CustomRpcScreen uses
-            for its own (left-aligned) Segmented. */}
-        <View style={styles.segmentedWrap}>
-          <Segmented options={TABS} value={activeTab} onChange={(v) => onTabChange(v as "history" | "assetInfo")} />
-        </View>
+      {/* Tabs — fixed (non-scrolling) top region, full width with 20px side
+          gutters, like the extension's History | Token info bar
+          (kastle components/AssetTabs.tsx, flex-grow tabs). */}
+      <View style={styles.segmentedWrap}>
+        <Segmented
+          isFullWidth={segmentedFullWidth}
+          activeBackground={segmentedActiveBackground}
+          activeBorderRadius={segmentedActiveBorderRadius}
+          options={tabs}
+          value={activeTab}
+          onChange={(v) => onTabChange(v as "history" | "assetInfo")}
+        />
+      </View>
 
-        {/* Header card — two sections, matching Figma's actual layout
-            (round 3 padding decision #3, 2026-09-26): icon+text block with
-            its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
-            chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
-            (10/12) — not one flat row with a single `gap` between three
-            children, which is what this used to be. */}
-        <View style={styles.headerCard}>
-          <View style={styles.headerLeft}>
-            <AssetImage variant="chain" tokenImage={logo} chainImage={chainLogo} fallback={fallback} standard={standard} tokenImageSize={44} chainImageSize={20} />
-            <View style={styles.headerText}>
-              <View style={styles.nameRow}>
-                <Text allowFontScaling={false} style={[textStyles.bodySemiboldLG, styles.name]} numberOfLines={1}>
-                  {name}
-                </Text>
-                {showVerified && <BadgeCheck size={18} color={primary.p500} strokeWidth={2} />}
+      {activeTab === "assetInfo" ? (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Header card — two sections, matching Figma's actual layout
+              (round 3 padding decision #3, 2026-09-26): icon+text block with
+              its own pl-[spacing/3]/pr-[spacing/2] (12/8), and a separate
+              chip block with its own pl-[spacing/2point5]/pr-[spacing/3]
+              (10/12) — not one flat row with a single `gap` between three
+              children, which is what this used to be. */}
+          <View style={styles.headerCard}>
+            <View style={styles.headerLeft}>
+              <AssetImage
+                variant="chain"
+                tokenImage={logo}
+                chainImage={chainLogo}
+                fallback={fallback}
+                standard={standard}
+                tokenImageSize={44}
+                chainImageSize={20}
+              />
+              <View style={styles.headerText}>
+                <View style={styles.nameRow}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[textStyles.bodySemiboldLG, styles.name]}
+                    numberOfLines={1}
+                  >
+                    {name}
+                  </Text>
+                </View>
+                {!!subtitle && (
+                  <Text
+                    allowFontScaling={false}
+                    style={[textStyles.bodyNormalSM, styles.priceLabel]}
+                    numberOfLines={1}
+                  >
+                    {subtitle}
+                  </Text>
+                )}
+                {priceNode != null ? (
+                  priceNode
+                ) : !!priceLabel ? (
+                  <Text
+                    allowFontScaling={false}
+                    style={[textStyles.bodyNormalSM, styles.priceLabel]}
+                    numberOfLines={1}
+                  >
+                    {priceLabel}
+                  </Text>
+                ) : null}
               </View>
-              {!!priceLabel && (
-                <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.priceLabel]} numberOfLines={1}>
-                  {priceLabel}
-                </Text>
-              )}
+            </View>
+            <View style={styles.headerRight}>
+              <NetworkTypeChip
+                label={chipLabel}
+                icon={chipIcon}
+                standard={standard}
+              />
             </View>
           </View>
-          <View style={styles.headerRight}>
-            <NetworkTypeChip label={chipLabel} icon={chipIcon} standard={standard} />
-          </View>
-        </View>
 
-        {activeTab === "assetInfo" ? (
           <View style={styles.section}>
             <Text allowFontScaling={false} style={styles.sectionTitle}>
               Token Info
             </Text>
             <View style={styles.infoCard}>
               {infoRows.map((row, i) => (
-                <View key={row.key} style={[styles.infoRow, i < infoRows.length - 1 && styles.infoRowBorder]}>
+                <View
+                  key={row.key}
+                  style={[
+                    styles.infoRow,
+                    i < infoRows.length - 1 && styles.infoRowBorder,
+                  ]}
+                >
                   {row.node}
                 </View>
               ))}
             </View>
           </View>
-        ) : (
-          historyContent
-        )}
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        // History: no ScrollView — historyContent is its own scroller.
+        <View style={styles.historyWrap}>{historyContent}</View>
+      )}
     </View>
   );
 };
@@ -335,14 +594,25 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: spacing.s5,
-    paddingTop: spacing.s4,
     paddingBottom: spacing.s10,
     gap: spacing.s4,
   },
 
   // ── Tabs ─────────────────────────────────────────────────────────────────
   segmentedWrap: {
+    paddingHorizontal: spacing.s5,
+    paddingTop: spacing.s4,
+    paddingBottom: spacing.s4,
+    // Hug-width and centred, per Figma 11447:124705: the segmented instance sits
+    // at x=104 with width=185 inside a 393 frame ((393-185)/2 = 104, exact
+    // centre), NOT stretched to the 20px gutters. Without this the control
+    // stretches because `Segmented`'s `outer` carries no alignSelf and inherits
+    // the default `stretch`. The `isFullWidth` path is unaffected — its
+    // `outerFull` sets `alignSelf: "stretch"`, which wins over this.
     alignItems: "center",
+  },
+  historyWrap: {
+    flex: 1,
   },
 
   // ── Header card ──────────────────────────────────────────────────────────

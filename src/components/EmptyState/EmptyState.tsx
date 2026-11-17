@@ -25,7 +25,9 @@ export interface EmptyStateProps {
    */
   imageWidth?: number;
   heading: string;
-  subtext: string;
+  /** Optional — omit for a heading-only empty state (e.g. no leftover
+   * caption line/gap below the heading when there's nothing useful to say). */
+  subtext?: string;
   /** Primary CTA, e.g. Retry button. */
   cta?: EmptyStateCta;
 }
@@ -47,7 +49,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     <Text allowFontScaling={false} style={[textStyles.bodySemiboldMD, styles.heading]}>
       {heading}
     </Text>
-    <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.subtext]}>{subtext}</Text>
+    {subtext ? (
+      <Text allowFontScaling={false} style={[textStyles.bodyNormalSM, styles.subtext]}>{subtext}</Text>
+    ) : null}
     {cta && (
       <TouchableOpacity
         style={styles.cta}
