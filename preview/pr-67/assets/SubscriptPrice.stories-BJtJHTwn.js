@@ -1,0 +1,5 @@
+import{j as s,V as t,s as o,b as c,a as i}from"./theme-CYzR7QY_.js";import{S as n}from"./SubscriptPrice-Dvu9Lepm.js";import"./iframe-CjwuzOz5.js";import"./preload-helper-Zf8nSx-t.js";import"./index-Cz_8FiFD.js";const b={title:"Token/SubscriptPrice",component:n,parameters:{backgrounds:{default:"kastle"}},args:{value:52e-8},decorators:[a=>s.jsx(t,{style:p.frame,children:s.jsx(a,{})})]},e={},r={args:{value:.041}},p=o.create({frame:{padding:i.s5,backgroundColor:c.bg0}});e.parameters={...e.parameters,docs:{...e.parameters?.docs,source:{originalSource:"{}",...e.parameters?.docs?.source},description:{story:"Design value (Figma 11447:124705): renders `$0.0₅52`.",...e.parameters?.docs?.description}}};r.parameters={...r.parameters,docs:{...r.parameters?.docs,source:{originalSource:`{
+  args: {
+    value: 0.041
+  }
+}`,...r.parameters?.docs?.source},description:{story:"At or above 0.01 the price renders plainly, no subscript.",...r.parameters?.docs?.description}}};const f=["Default","PlainPrice"];export{e as Default,r as PlainPrice,f as __namedExportsOrder,b as default};
