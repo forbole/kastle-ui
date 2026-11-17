@@ -603,6 +603,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.s5,
     paddingTop: spacing.s4,
     paddingBottom: spacing.s4,
+    // Hug-width and centred, per Figma 11447:124705: the segmented instance sits
+    // at x=104 with width=185 inside a 393 frame ((393-185)/2 = 104, exact
+    // centre), NOT stretched to the 20px gutters. Without this the control
+    // stretches because `Segmented`'s `outer` carries no alignSelf and inherits
+    // the default `stretch`. The `isFullWidth` path is unaffected — its
+    // `outerFull` sets `alignSelf: "stretch"`, which wins over this.
+    alignItems: "center",
   },
   historyWrap: {
     flex: 1,
